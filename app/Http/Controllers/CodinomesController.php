@@ -16,13 +16,15 @@ class CodinomesController extends Controller
         ServerLog::log('start -----> CodinomesController > listen');
         $bot = new BotApi(env('TG_TOKEN'));
         $update = $this->getUpdate();
-        ServerLog::log('update json: '.$updateData);
-        
+        if($update->getMessage() && $update->getMessage()->getText()==='/ping') {
+            $bot->sendMessage($update->getMessage()->getChat()->getId(), 'pong!');
+        }
     }
 
-    private function getUpdate() {
+    private function getUpdate() : Update {
         $client = new Client(env('TG_TOKEN'));
         $updateData = $client->getRawBody();
+        ServerLog::log('update json: '.$updateData);
         return Update::fromResponse(BotApi::jsonValidate($updateData, true));
     }
 
