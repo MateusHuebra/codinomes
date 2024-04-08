@@ -15,7 +15,7 @@ class Start implements Event {
             $tgUser = $message->getFrom();
             $user = User::find($tgUser->getId());
             if(!$user && $message->getChat()->getType()==='private') {
-                $user = User::createUserFromTGUser($tgUser);
+                $user = User::createFromTGUser($tgUser);
                 $keyboard = GetLanguages::getKeyboard(true);
                 $bot->sendMessage($user->id, AppString::get('start.welcome'), null, false, null, $keyboard);
                 return;

@@ -20,7 +20,7 @@ class Chat extends Model
         'language'
     ];
 
-    static function createUserFromTGUser(TGChat $tgChat) {
+    static function createFromTGChat(TGChat $tgChat) {
         return self::create([
             'id' => $tgChat->getId(),
             'username' => $tgChat->getUsername(),

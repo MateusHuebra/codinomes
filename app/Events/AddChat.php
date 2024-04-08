@@ -13,7 +13,7 @@ class AddChat implements Event {
         return function (Message $message) use ($bot) {
             AppString::setLanguage($message);
             $tgChat = $message->getChat();
-            $chat = Chat::createUserFromTGChat($tgChat);
+            $chat = Chat::createFromTGChat($tgChat);
             $keyboard = GetLanguages::getKeyboard(true);
             $bot->sendMessage($chat->id, AppString::get('language.choose_chat'), null, false, null, $keyboard);
         };
