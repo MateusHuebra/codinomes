@@ -3,23 +3,15 @@
 namespace App\Events;
 
 use App\Services\Telegram\BotApi;
-use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
+use App\Services\AppString;
+use TelegramBot\Api\Types\Message;
 
 class Ping implements Event {
 
     static function getEvent(BotApi $bot) : callable {
-        return function ($message) use ($bot) {
-            $keyboard = new InlineKeyboardMarkup([
-                [
-                    [
-                        'text' => 'Start',
-                        'callback_data' => json_encode([
-                            'event' => 'start'
-                            ])
-                    ]
-                ]
-            ]);
-            $bot->sendMessage($message->getChat()->getId(), 'pong!', null, false, null, $keyboard);
+        return function (Message $message) use ($bot) {
+            AppString::setLanguage($message);
+            $bot->sendMessage($message->getChat()->getId(), 'pong');
         };
     }
 
