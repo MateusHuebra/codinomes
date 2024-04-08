@@ -15,6 +15,7 @@ class SetLanguage implements Event {
         return function (CallbackQuery $update) use ($bot) {
             $data = CDM::toArray($update->getData());
             if($data[CDM::TYPE]===CDM::USER) {
+                /*
                 if(!$user = User::find($update->getFrom()->getId())) {
                     try {
                         $bot->answerCallbackQuery($update->getId(), AppString::get('error.user_not_registered'));
@@ -23,6 +24,8 @@ class SetLanguage implements Event {
                     }
                     return;
                 }
+                */
+                $user = User::find($update->getFrom()->getId());
                 $user->language = $data[CDM::LANGUAGE];
                 $user->save();
                 AppString::$language = $user->language;
