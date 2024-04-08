@@ -2,43 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use TelegramBot\Api\Types\User as TGUser;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    use HasFactory;
+    
+    public $timestamps = false;
+    public $incrementing = false;
+    
     protected $fillable = [
+        'id',
+        'username',
         'name',
-        'email',
-        'password',
+        'language',
+        'status'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    static function createUserFromTGUser(TGUser $tgUser) {
+        return self::create([
+            'id' => $tgUser->getId(),
+            'username' => $tgUser->getUsername(),
+            'name' => substr($tgUser->getFirstName(), 0, 32),
+            'language' => $tgUser->getLanguageCode(),
+            'status' => 'actived'
+        ]);
+    }
 }

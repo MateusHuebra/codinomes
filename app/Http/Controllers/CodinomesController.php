@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TelegramUpdate;
 use Illuminate\Http\Request;
 use App\Services\Telegram\BotApi;
 use TelegramBot\Api\Client;
 use App\Services\ServerLog;
 use App\UpdateHandlers\Commands;
 use App\UpdateHandlers\CallbackQueries;
+use TelegramBot\Api\Types\Update;
 
 class CodinomesController extends Controller
 {
@@ -16,7 +18,11 @@ class CodinomesController extends Controller
         ServerLog::log('start -----> CodinomesController > listen');
         $bot = new BotApi(env('TG_TOKEN'));
         $client = new Client(env('TG_TOKEN'));
-        ServerLog::log('update raw data: '.$client->getRawBody());
+        $updateRawData = $client->getRawBody();
+        $update = Update::fromResponse(BotApi::jsonValidate($updateRawData, true));
+        ServerLog::log('update raw data: '.$updateRawData);
+
+        TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
 
         $client = $this->addEventsByUpdateType($client, $bot, [
             Commands::class,
