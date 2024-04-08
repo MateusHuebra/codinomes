@@ -1,0 +1,18 @@
+{
+    "language": {
+        "self": [
+            "English 🇺🇸"
+        ],
+        "changed": [
+            "Language successful changed to English 🇺🇸"
+        ]
+    },
+    "start": {
+        "welcome": [
+            "Welcome to Codinomes!!\nChoose your language"
+        ],
+        "questions": [
+            "Have questions? Check out /help"
+        ]
+    }
+}
