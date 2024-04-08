@@ -14,5 +14,15 @@
         "questions": [
             "Have questions? Check out /help"
         ]
+    },
+    "settings": {
+        "loading": [
+            "Loading"
+        ]
+    },
+    "error": {
+        "user_not_registered": [
+            "You need to DM me to have access to that"
+        ]
     }
 }

@@ -14,5 +14,15 @@
         "questions": [
             "Se tiver alguma dúvida, dê uma olhada em /ajuda"
         ]
+    },
+    "settings": {
+        "loading": [
+            "Carregando"
+        ]
+    },
+    "error": {
+        "user_not_registered": [
+            "Você precisa me chamar no privado para ter acesso a isso"
+        ]
     }
 }
