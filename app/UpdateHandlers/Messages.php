@@ -3,6 +3,7 @@
 namespace App\UpdateHandlers;
 
 use App\Events\AddChat;
+use App\Events\DeleteChat;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
 use TelegramBot\Api\Client;
@@ -22,7 +23,10 @@ class Messages implements UpdateHandler {
                     }
                 }
             } else if($message->getLeftChatMember()) {
-
+                if($message->getLeftChatMember()->getId() == env('TG_BOTID')) {
+                    call_user_func(DeleteChat::getEvent($bot), $message);
+                    return;
+                }
             }
         }, function () {
             return true;
