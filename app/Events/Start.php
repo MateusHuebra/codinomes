@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Models\User;
-use App\Services\CallbackDataManager as CDM;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Message;

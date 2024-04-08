@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TelegramUpdate;
 use Illuminate\Http\Request;
+use App\Models\TelegramUpdate;
 use App\Services\Telegram\BotApi;
-use TelegramBot\Api\Client;
 use App\Services\ServerLog;
 use App\UpdateHandlers\Commands;
 use App\UpdateHandlers\CallbackQueries;
+use App\UpdateHandlers\Messages;
 use TelegramBot\Api\Types\Update;
+use TelegramBot\Api\Client;
 
 class CodinomesController extends Controller
 {
@@ -26,7 +27,8 @@ class CodinomesController extends Controller
 
         $client = $this->addEventsByUpdateType($client, $bot, [
             Commands::class,
-            CallbackQueries::class
+            CallbackQueries::class,
+            Messages::class
         ]);
 
         $client->run();

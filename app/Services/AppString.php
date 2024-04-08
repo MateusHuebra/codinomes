@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use TelegramBot\Api\Types\Message;
@@ -51,8 +52,7 @@ class AppString {
         if($chat->getType()==='private') {
             self::$language = User::find($chat->getId())->language??self::$language;
         } else if($chat->getType()==='supergroup') {
-            self::$language = User::find($message->getFrom()->getId())->language??self::$language;
-            //TODO change to chat language
+            self::$language = Chat::find($message->getChat()->getId())->language??User::find($chat->getId())->language??self::$language;
         }
         
     }

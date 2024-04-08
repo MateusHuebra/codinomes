@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Chat;
 use App\Models\User;
 use App\Services\CallbackDataManager as CDM;
 use App\Services\Telegram\BotApi;
@@ -33,6 +34,20 @@ class SetLanguage implements Event {
 
                 if($data[CDM::FIRST_TIME]) {
                     $bot->sendMessage($user->id, AppString::get('start.questions'));
+                }
+            } else if($message->getChat()->getType()==='supergroup') {
+                $chat = Chat::find($message->getChat()->getId());
+                $chat->language = $data[CDM::LANGUAGE];
+                $chat->save();
+                AppString::$language = $chat->language;
+                try {
+                    $bot->editMessageText($chat->id, $message->getMessageId(), AppString::get('language.changed'));
+                } catch(Exception $e) {
+                    $bot->sendMessage($chat->id, AppString::get('language.changed'));
+                }
+
+                if($data[CDM::FIRST_TIME]) {
+                    $bot->sendMessage($chat->id, AppString::get('start.questions'));
                 }
             }
         };

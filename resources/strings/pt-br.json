@@ -8,6 +8,9 @@
         ],
         "choose": [
             "Escolha o seu idioma"
+        ],
+        "choose_chat": [
+            "Escolha o idioma do grupo"
         ]
     },
     "start": {
