@@ -13,22 +13,28 @@ class SetLanguage implements Event {
 
     static function getEvent(BotApi $bot) : callable {
         return function (CallbackQuery $update) use ($bot) {
-            try {
-                $bot->answerCallbackQuery($update->getId(), '!');
-            } catch(Exception $e) {
-                //
-            }
             $data = CDM::toArray($update->getData());
             if($data[CDM::TYPE]===CDM::USER) {
-                $user = User::find($data[CDM::USER_ID]);
+                if(!$user = User::find($update->getFrom()->getId())) {
+                    try {
+                        $bot->answerCallbackQuery($update->getId(), AppString::get('error.user_not_registered'));
+                    } catch(Exception $e) {
+                        $bot->sendMessage($data[CDM::USER_ID], AppString::get('error.user_not_registered'));
+                    }
+                    return;
+                }
                 $user->language = $data[CDM::LANGUAGE];
                 $user->save();
-                TextString::$language = $user->language;
+                AppString::$language = $user->language;
 
                 if(isset($data[CDM::FIRST_TIME]) && $data[CDM::FIRST_TIME]==CDM::TRUE) {
-                    $bot->sendMessage($data[CDM::USER_ID], AppString::get('start.questions'));
+                    $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('start.questions'));
                 } else {
-                    $bot->sendMessage($data[CDM::USER_ID], AppString::get('language.changed'));
+                    try {
+                        $bot->answerCallbackQuery($update->getId(), AppString::get('language.changed'));
+                    } catch(Exception $e) {
+                        $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('language.changed'));
+                    }
                 }
             }
         };

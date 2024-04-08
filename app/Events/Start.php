@@ -26,7 +26,7 @@ class Start implements Event {
                                 CDM::EVENT => CDM::SET_LANGUAGE,
                                 CDM::LANGUAGE => $language,
                                 CDM::TYPE => CDM::USER,
-                                CDM::USER_ID => $user->id,
+                                CDM::CHAT_ID => $user->id,
                                 CDM::FIRST_TIME => CDM::TRUE
                             ])
                         ]];
