@@ -5,11 +5,14 @@
         ],
         "changed": [
             "Idioma mudado com sucesso para Português 🇧🇷"
+        ],
+        "choose": [
+            "Escolha o seu idioma"
         ]
     },
     "start": {
         "welcome": [
-            "Boas vindas ao Codinomes!!\nEscolhe o seu idioma"
+            "Boas vindas ao Codinomes!!\nEscolha o seu idioma"
         ],
         "questions": [
             "Se tiver alguma dúvida, dê uma olhada em /ajuda"
