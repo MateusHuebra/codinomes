@@ -30,14 +30,14 @@ class SetLanguage implements Event {
                 $user->save();
                 AppString::$language = $user->language;
 
+                try {
+                    $bot->answerCallbackQuery($update->getId(), AppString::get('language.changed'));
+                } catch(Exception $e) {
+                    $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('language.changed'));
+                }
+                
                 if(isset($data[CDM::FIRST_TIME]) && $data[CDM::FIRST_TIME]==CDM::TRUE) {
                     $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('start.questions'));
-                } else {
-                    try {
-                        $bot->answerCallbackQuery($update->getId(), AppString::get('language.changed'));
-                    } catch(Exception $e) {
-                        $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('language.changed'));
-                    }
                 }
             }
         };
