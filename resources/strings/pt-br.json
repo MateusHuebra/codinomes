@@ -29,6 +29,9 @@
     "error": {
         "user_not_registered": [
             "Você precisa me chamar no privado para ter acesso a isso"
+        ],
+        "admin_only": [
+            "Apenas administradores do grupo podem fazer isso"
         ]
     }
 }

@@ -31,25 +31,28 @@ class SetLanguage implements Event {
                 } catch(Exception $e) {
                     $bot->sendMessage($user->id, AppString::get('language.changed'));
                 }
-
-                if($data[CDM::FIRST_TIME]) {
-                    $bot->sendMessage($user->id, AppString::get('start.questions'));
-                }
+                
             } else if($message->getChat()->getType()==='supergroup') {
                 $chat = Chat::find($message->getChat()->getId());
-                $chat->language = $data[CDM::LANGUAGE];
-                $chat->save();
-                AppString::$language = $chat->language;
-                try {
-                    $bot->editMessageText($chat->id, $message->getMessageId(), AppString::get('language.changed'));
-                } catch(Exception $e) {
-                    $bot->sendMessage($chat->id, AppString::get('language.changed'));
+                if($data[CDM::FIRST_TIME] || $chat->isTgUserAdmin($update->getFrom(), $bot)) {
+                    $chat->language = $data[CDM::LANGUAGE];
+                    $chat->save();
+                    AppString::$language = $chat->language;
+                    try {
+                        $bot->editMessageText($chat->id, $message->getMessageId(), AppString::get('language.changed'));
+                    } catch(Exception $e) {
+                        $bot->sendMessage($chat->id, AppString::get('language.changed'));
+                    }
+                } else {
+                    $bot->sendMessage($chat->id, AppString::get('error.admin_only'));
                 }
 
-                if($data[CDM::FIRST_TIME]) {
-                    $bot->sendMessage($chat->id, AppString::get('start.questions'));
-                }
             }
+
+            if($data[CDM::FIRST_TIME]) {
+                $bot->sendMessage($chat->id, AppString::get('start.questions'));
+            }
+
         };
     }
 

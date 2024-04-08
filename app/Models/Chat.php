@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Chat as TGChat;
+use TelegramBot\Api\Types\User;
 
 class Chat extends Model
 {
@@ -20,7 +22,17 @@ class Chat extends Model
         'language'
     ];
 
-    static function createFromTGChat(TGChat $tgChat) {
+    public function isTgUserAdmin(User $tgUser, BotApi $bot) : bool {
+        $admins = $bot->getChatAdministrators($this->id);
+        foreach ($admins as $admin) {
+            if($admin->getUser()->getId() == $tgUser->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static function createFromTGChat(TGChat $tgChat) : Chat {
         return self::create([
             'id' => $tgChat->getId(),
             'username' => $tgChat->getUsername(),

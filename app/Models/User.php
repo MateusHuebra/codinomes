@@ -21,7 +21,7 @@ class User extends Model
         'status'
     ];
 
-    static function createFromTGUser(TGUser $tgUser) {
+    static function createFromTGUser(TGUser $tgUser) : User {
         return self::create([
             'id' => $tgUser->getId(),
             'username' => $tgUser->getUsername(),
