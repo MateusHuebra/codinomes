@@ -13,31 +13,26 @@ class SetLanguage implements Event {
 
     static function getEvent(BotApi $bot) : callable {
         return function (CallbackQuery $update) use ($bot) {
+            $message = $update->getMessage();
+            try {
+                $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
+            } catch(Exception $e) {
+                //
+            }
             $data = CDM::toArray($update->getData());
-            if($data[CDM::TYPE]===CDM::USER) {
-                /*
-                if(!$user = User::find($update->getFrom()->getId())) {
-                    try {
-                        $bot->answerCallbackQuery($update->getId(), AppString::get('error.user_not_registered'));
-                    } catch(Exception $e) {
-                        $bot->sendMessage($data[CDM::USER_ID], AppString::get('error.user_not_registered'));
-                    }
-                    return;
-                }
-                */
+            if($message->getChat()->getType()==='private') {
                 $user = User::find($update->getFrom()->getId());
                 $user->language = $data[CDM::LANGUAGE];
                 $user->save();
                 AppString::$language = $user->language;
-
                 try {
-                    $bot->answerCallbackQuery($update->getId(), AppString::get('language.changed'));
+                    $bot->editMessageText($user->id, $message->getMessageId(), AppString::get('language.changed'));
                 } catch(Exception $e) {
-                    $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('language.changed'));
+                    $bot->sendMessage($user->id, AppString::get('language.changed'));
                 }
-                
-                if(isset($data[CDM::FIRST_TIME]) && $data[CDM::FIRST_TIME]==CDM::TRUE) {
-                    $bot->sendMessage($data[CDM::CHAT_ID], AppString::get('start.questions'));
+
+                if($data[CDM::FIRST_TIME]) {
+                    $bot->sendMessage($user->id, AppString::get('start.questions'));
                 }
             }
         };

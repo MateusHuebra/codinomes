@@ -22,8 +22,6 @@ class CallbackDataManager {
     const USER = 'u';
     const CHAT = 'c';
 
-    const TRUE = 1;
-
     static function toString(array $dataArray) : String {
         $stringArray = [];
         foreach ($dataArray as $key => $value) {
