@@ -14,12 +14,11 @@ class GetLanguages implements Event {
     static function getEvent(BotApi $bot) : callable {
         return function (Message $message) use ($bot) {
             AppString::setLanguage($message);
+            $keyboard = GetLanguages::getKeyboard();
             if($message->getChat()->getType()==='private') {
-                $keyboard = GetLanguages::getKeyboard();
                 $bot->sendMessage($message->getChat()->getId(), AppString::get('language.choose'), null, false, null, $keyboard);
-                return;
-            } else {
-                //TODO chat language
+            } else if($message->getChat()->getType()==='supergroup') {
+                $bot->sendMessage($message->getChat()->getId(), AppString::get('language.choose_chat'), null, false, null, $keyboard);
             }
         };
     }
