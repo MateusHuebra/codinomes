@@ -92,6 +92,7 @@ class Menu implements Event {
                 throw new Exception;
             }
         } catch(Exception $e) {
+            echo $e->getMessage();
             $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
         }
     }
