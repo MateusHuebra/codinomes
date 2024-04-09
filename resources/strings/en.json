@@ -39,6 +39,9 @@
         ],
         "master_occupied": [
             "This team already have a master"
+        ],
+        "updated": [
+            "Updated"
         ]
     },
     "settings": {

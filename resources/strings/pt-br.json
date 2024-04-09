@@ -39,6 +39,9 @@
         ],
         "master_occupied": [
             "Esse time já possui um mestre"
+        ],
+        "updated": [
+            "Atualizado"
         ]
     },
     "settings": {

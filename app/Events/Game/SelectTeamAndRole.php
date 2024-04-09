@@ -18,9 +18,6 @@ class SelectTeamAndRole implements Event {
             $message = $update->getMessage();
             $chatId = $message->getChat()->getId();
             AppString::setLanguage($message);
-            try {
-                $bot->answerCallbackQuery($update->getId(), AppString::get('settings.settings'));
-            } catch(Exception $e) {}
 
             $user = User::find($update->getFrom()->getId());
             if(!$user || $user->status != 'actived') {
@@ -51,8 +48,11 @@ class SelectTeamAndRole implements Event {
             $user->team = $data[CDM::TEAM];
             $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
             $user->save();
-
+            
             Menu::send($game, $bot, Menu::EDIT, $message->getMessageId());
+            try {
+                $bot->answerCallbackQuery($update->getId(), AppString::get('game.updated'));
+            } catch(Exception $e) {}
         };
     }
 
