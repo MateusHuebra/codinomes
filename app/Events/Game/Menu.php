@@ -22,8 +22,8 @@ class Menu implements Event {
         };
     }
     
-    static function send(int $gameId, BotApi $bot, string $action = null, int $messageId = null) {
-        $game = Game::find($gameId);
+    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) {
+        $game->refresh();
         $users = $game->users;
         $masterA = $users->where('team', 'a')->where('role', 'master')->first();
         $agentsA = $users->where('team', 'a')->where('role', 'agent');

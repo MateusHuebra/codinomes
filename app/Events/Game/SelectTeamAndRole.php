@@ -48,8 +48,8 @@ class SelectTeamAndRole implements Event {
             $user->team = $data[CDM::TEAM];
             $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
             $user->save();
-            
-            Menu::send($game->id, $bot, Menu::EDIT, $message->getMessageId());
+
+            Menu::send($game, $bot, Menu::EDIT, $message->getMessageId());
             try {
                 $bot->answerCallbackQuery($update->getId(), AppString::get('game.updated'));
             } catch(Exception $e) {}
