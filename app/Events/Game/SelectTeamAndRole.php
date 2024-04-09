@@ -18,6 +18,9 @@ class SelectTeamAndRole implements Event {
             $message = $update->getMessage();
             $chatId = $message->getChat()->getId();
             AppString::setLanguage($message);
+            try {
+                $bot->answerCallbackQuery($update->getId(), AppString::get('settings.settings'));
+            } catch(Exception $e) {}
 
             $user = User::find($update->getFrom()->getId());
             if(!$user || $user->status != 'actived') {
