@@ -11,6 +11,7 @@ use App\UpdateHandlers\CallbackQueries;
 use App\UpdateHandlers\Messages;
 use TelegramBot\Api\Types\Update;
 use TelegramBot\Api\Client;
+use Throwable;
 
 class CodinomesController extends Controller
 {
@@ -31,7 +32,14 @@ class CodinomesController extends Controller
             Messages::class
         ]);
 
-        $client->run();
+        try {
+            $client->run();
+        } catch(Throwable $e) {
+            $errorMessage = '\#Exception at '.ServerLog::$updateId.':```java'.PHP_EOL;
+            $errorMessage.= $e->getMessage().PHP_EOL.PHP_EOL;
+            $errorMessage.= $e->getFile().' line '.$e->getLine().'```';
+            $bot->sendMessage(env('TG_MYID'), $errorMessage, 'MarkdownV2');
+        }
         ServerLog::log('end -----> CodinomesController > listen');
     }
 
