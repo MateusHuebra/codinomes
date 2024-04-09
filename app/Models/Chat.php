@@ -32,7 +32,7 @@ class Chat extends Model
         return false;
     }
 
-    static function createFromTGChat(TGChat $tgChat) : Chat {
+    static function createFromTGModel(TGChat $tgChat) : Chat {
         return self::create([
             'id' => $tgChat->getId(),
             'username' => $tgChat->getUsername(),

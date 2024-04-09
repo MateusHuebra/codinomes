@@ -14,26 +14,23 @@ class Start implements Event {
         return function (Message $message) use ($bot) {
             AppString::setLanguage($message);
             if($message->getChat()->getType()==='private') {
-                $tgUser = $message->getFrom();
-                $user = User::find($tgUser->getId());
-                if(!$user) {
-                    $user = User::createFromTGUser($tgUser);
-                    $keyboard = GetLanguages::getKeyboard(true);
-                    $bot->sendMessage($user->id, AppString::get('start.welcome'), null, false, null, $keyboard);
-                    return;
-                }
+                self::checkIfUserOrChatExists($message->getFrom(), User::class, $bot, 'start.welcome');
+                
             } else if($message->getChat()->getType()==='supergroup') {
-                $tgChat = $message->getChat();
-                $chat = Chat::find($tgChat->getId());
-                if(!$chat) {
-                    $chat = Chat::createFromTGChat($tgChat);
-                    $keyboard = GetLanguages::getKeyboard(true);
-                    $bot->sendMessage($chat->id, AppString::get('language.choose_chat'), null, false, null, $keyboard);
-                    return;
-                }
+                self::checkIfUserOrChatExists($message->getChat(), Chat::class, $bot, 'language.choose_chat');
             }
             $bot->sendMessage($message->getChat()->getId(), AppString::get('start.questions'), null, false, $message->getMessageId(), null, false, null, null, true);
         };
+    }
+
+    private static function checkIfUserOrChatExists($tgModel, string $modelClass, BotApi $bot, string $stringPath) {
+        $model = $modelClass::find($tgModel->getId());
+        if(!$model) {
+            $model = $modelClass::createFromTGModel($tgModel);
+            $keyboard = GetLanguages::getKeyboard(true);
+            $bot->sendMessage($model->id, AppString::get($stringPath), null, false, null, $keyboard);
+            return;
+        }
     }
 
 }

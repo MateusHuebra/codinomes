@@ -16,10 +16,13 @@ class GetLanguages implements Event {
             AppString::setLanguage($message);
             $keyboard = GetLanguages::getKeyboard();
             if($message->getChat()->getType()==='private') {
-                $bot->sendMessage($message->getChat()->getId(), AppString::get('language.choose'), null, false, null, $keyboard);
+                $stringPath = 'language.choose';
             } else if($message->getChat()->getType()==='supergroup') {
-                $bot->sendMessage($message->getChat()->getId(), AppString::get('language.choose_chat'), null, false, null, $keyboard);
+                $stringPath = 'language.choose_chat';
+            } else {
+                return;
             }
+            $bot->sendMessage($message->getChat()->getId(), AppString::get($stringPath), null, false, null, $keyboard);
         };
     }
 

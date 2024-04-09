@@ -9,6 +9,8 @@ use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
 use TelegramBot\Api\Types\CallbackQuery;
+use Illuminate\Database\Eloquent\Model;
+use TelegramBot\Api\Types\Message;
 
 class SetLanguage implements Event {
 
@@ -23,26 +25,12 @@ class SetLanguage implements Event {
             $data = CDM::toArray($update->getData());
             if($message->getChat()->getType()==='private') {
                 $user = User::find($update->getFrom()->getId());
-                $user->language = $data[CDM::LANGUAGE];
-                $user->save();
-                AppString::$language = $user->language;
-                try {
-                    $bot->editMessageText($user->id, $message->getMessageId(), AppString::get('language.changed'));
-                } catch(Exception $e) {
-                    $bot->sendMessage($user->id, AppString::get('language.changed'));
-                }
+                self::setUserOrChatLanguage($user, $data, $bot, $message);
                 
             } else if($message->getChat()->getType()==='supergroup') {
                 $chat = Chat::find($message->getChat()->getId());
                 if($data[CDM::FIRST_TIME] || $chat->isTgUserAdmin($update->getFrom(), $bot)) {
-                    $chat->language = $data[CDM::LANGUAGE];
-                    $chat->save();
-                    AppString::$language = $chat->language;
-                    try {
-                        $bot->editMessageText($chat->id, $message->getMessageId(), AppString::get('language.changed'));
-                    } catch(Exception $e) {
-                        $bot->sendMessage($chat->id, AppString::get('language.changed'));
-                    }
+                    self::setUserOrChatLanguage($chat, $data, $bot, $message);
                 } else {
                     $bot->sendMessage($chat->id, AppString::get('error.admin_only'));
                 }
@@ -54,6 +42,17 @@ class SetLanguage implements Event {
             }
 
         };
+    }
+
+    private static function setUserOrChatLanguage(Model $model, Array $data, BotApi $bot, Message $message) {
+        $model->language = $data[CDM::LANGUAGE];
+        $model->save();
+        AppString::$language = $model->language;
+        try {
+            $bot->editMessageText($model->id, $message->getMessageId(), AppString::get('language.changed'));
+        } catch(Exception $e) {
+            $bot->sendMessage($model->id, AppString::get('language.changed'));
+        }
     }
 
 }
