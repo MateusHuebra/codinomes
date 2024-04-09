@@ -92,7 +92,10 @@ class Menu implements Event {
                 throw new Exception;
             }
         } catch(Exception $e) {
-            echo $e->getMessage();
+            if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current
+            content and reply markup of the message') {
+                return;
+            }
             $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
         }
     }
