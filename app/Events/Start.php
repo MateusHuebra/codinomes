@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Events\Language\Get as GetLanguage;
 use App\Models\Chat;
 use App\Models\User;
 use App\Services\Telegram\BotApi;
@@ -27,7 +28,7 @@ class Start implements Event {
         $model = $modelClass::find($tgModel->getId());
         if(!$model) {
             $model = $modelClass::createFromTGModel($tgModel);
-            $keyboard = GetLanguages::getKeyboard(true);
+            $keyboard = GetLanguage::getKeyboard(true);
             $bot->sendMessage($model->id, AppString::get($stringPath), null, false, null, $keyboard);
             return;
         }

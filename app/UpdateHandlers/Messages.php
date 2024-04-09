@@ -2,8 +2,8 @@
 
 namespace App\UpdateHandlers;
 
-use App\Events\AddChat;
-use App\Events\DeleteChat;
+use App\Events\Chat\Add as AddChat;
+use App\Events\Chat\Delete as DeleteChat;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
 use TelegramBot\Api\Client;

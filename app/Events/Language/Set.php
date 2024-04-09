@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Language;
 
+use App\Events\Event;
 use App\Models\Chat;
 use App\Models\User;
 use App\Services\CallbackDataManager as CDM;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
-use Exception;
 use TelegramBot\Api\Types\CallbackQuery;
 use Illuminate\Database\Eloquent\Model;
 use TelegramBot\Api\Types\Message;
+use Exception;
 
-class SetLanguage implements Event {
+class Set implements Event {
 
     static function getEvent(BotApi $bot) : callable {
         return function (CallbackQuery $update) use ($bot) {

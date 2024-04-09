@@ -2,7 +2,7 @@
 
 namespace App\UpdateHandlers;
 
-use App\Events\SetLanguage;
+use App\Events\Language\Set as SetLanguage;
 use App\Events\Start;
 use App\Events\Ping;
 use App\Services\CallbackDataManager as CDM;

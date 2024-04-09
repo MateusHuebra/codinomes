@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Language;
 
-use App\Models\User;
+use App\Events\Event;
 use App\Services\CallbackDataManager as CDM;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Message;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
-class GetLanguages implements Event {
+class Get implements Event {
 
     static function getEvent(BotApi $bot) : callable {
         return function (Message $message) use ($bot) {
             AppString::setLanguage($message);
-            $keyboard = GetLanguages::getKeyboard();
+            $keyboard = self::getKeyboard();
             if($message->getChat()->getType()==='private') {
                 $stringPath = 'language.choose';
             } else if($message->getChat()->getType()==='supergroup') {
