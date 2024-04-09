@@ -42,6 +42,12 @@
         ],
         "updated": [
             "Updated"
+        ],
+        "master": [
+            "master"
+        ],
+        "agents": [
+            "agents"
         ]
     },
     "settings": {

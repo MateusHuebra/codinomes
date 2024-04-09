@@ -47,7 +47,7 @@ class Menu implements Event {
         $keyboard = new InlineKeyboardMarkup([
             [
                 [
-                    'text' => Game::A_EMOJI.' mestre',
+                    'text' => Game::A_EMOJI.' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
@@ -55,25 +55,25 @@ class Menu implements Event {
                     ])
                 ],
                 [
-                    'text' => 'mestre '.Game::B_EMOJI,
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                        CDM::TEAM => 'b',
-                        CDM::ROLE => CDM::MASTER
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => Game::A_EMOJI.' agentes',
+                    'text' => AppString::get('game.agents').' '.Game::A_EMOJI,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
                         CDM::ROLE => CDM::AGENT
                     ])
+                ]
+            ],
+            [
+                [
+                    'text' => Game::B_EMOJI.' '.AppString::get('game.master'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'b',
+                        CDM::ROLE => CDM::MASTER
+                    ])
                 ],
                 [
-                    'text' => 'agentes '.Game::B_EMOJI,
+                    'text' => AppString::get('game.agents').' '.Game::B_EMOJI,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'b',

@@ -42,6 +42,12 @@
         ],
         "updated": [
             "Atualizado"
+        ],
+        "master": [
+            "mestre"
+        ],
+        "agents": [
+            "agentes"
         ]
     },
     "settings": {
