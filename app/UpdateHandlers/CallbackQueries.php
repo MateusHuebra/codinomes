@@ -5,6 +5,7 @@ namespace App\UpdateHandlers;
 use App\Events\Language\Set as SetLanguage;
 use App\Events\Start;
 use App\Events\Ping;
+use App\Events\Game\SelectTeamAndRole;
 use App\Services\CallbackDataManager as CDM;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
@@ -25,6 +26,9 @@ class CallbackQueries implements UpdateHandler {
             } else if($data[CDM::EVENT] === 'ping') {
                 call_user_func(Ping::getEvent($bot), $message);
 
+            } else if($data[CDM::EVENT] === CDM::SELECT_TEAM_AND_ROLE) {
+                call_user_func(SelectTeamAndRole::getEvent($bot), $update);
+            
             } else if($data[CDM::EVENT] === CDM::SET_LANGUAGE) {
                 call_user_func(SetLanguage::getEvent($bot), $update);
             }

@@ -9,18 +9,18 @@ class CallbackDataManager {
 
     //EVENTS
     const SET_LANGUAGE = 'sl';
+    const SELECT_TEAM_AND_ROLE = 'tr';
 
     //ATTRIBUTES
     const EVENT = 'e';
     const LANGUAGE = 'l';
-    const TYPE = 't';
     const FIRST_TIME = 'ft';
-    const USER_ID = 'ui';
-    const CHAT_ID = 'ci';
 
     //TYPES
-    const USER = 'u';
-    const CHAT = 'c';
+    const ROLE = 'r';
+    const TEAM = 't';
+    const MASTER = 'm';
+    const AGENT = 'a';
 
     static function toString(array $dataArray) : String {
         $stringArray = [];

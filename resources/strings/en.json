@@ -21,6 +21,26 @@
             "Have questions? Check out /help"
         ]
     },
+    "game": {
+        "already_exists": [
+            "There's already a game going on in this group"
+        ],
+        "teams_lists": [
+            "*TEAM {a}:\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}:\nMaster:* {master_b}\n*Agents:* {agents_b}\n\nChoose your team and role:"
+        ],
+        "empty": [
+            "empty"
+        ],
+        "stopped": [
+            "Game cancelled"
+        ],
+        "no_game": [
+            "No game going on now"
+        ],
+        "master_occupied": [
+            "This team already have a master"
+        ]
+    },
     "settings": {
         "loading": [
             "Loading"

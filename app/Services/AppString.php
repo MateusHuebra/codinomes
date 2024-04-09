@@ -15,7 +15,7 @@ class AppString {
     public static $language = 'pt-br';
     public static $allLanguages = ['pt-br', 'en'];
 
-    static function get(string $path, array $variables = null, $language = null) {
+    static function get(string $path, array $variables = null, $language = null, $parseVariables = false) {
         if(!$language) {
             $language = self::$language;
         }
@@ -35,10 +35,14 @@ class AppString {
         
         if($variables) {
             foreach ($variables as $index => $variable) {
+                if($parseVariables) {
+                    $variable = self::parseMarkdownV2($variable);
+                }
                 $string = str_replace('{'.$index.'}', $variable, $string);
             }
         }
 
+        
         return $string;
 
     }
