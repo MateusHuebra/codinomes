@@ -32,7 +32,10 @@
             "empty"
         ],
         "stopped": [
-            "Game cancelled"
+            "Game canceled"
+        ],
+        "stopped_by_time": [
+            "Game canceled due to inactivity"
         ],
         "no_game": [
             "No game going on now"

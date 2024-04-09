@@ -15,7 +15,7 @@ class AppString {
     public static $language = 'pt-br';
     public static $allLanguages = ['pt-br', 'en'];
 
-    static function get(string $path, array $variables = null, $language = null, $parseVariables = false) {
+    static function get(string $path, array $variables = null, $language = null, $parseVariables = false) : String {
         if(!$language) {
             $language = self::$language;
         }

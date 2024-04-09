@@ -19,4 +19,14 @@ class Game extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function stop() {
+        foreach($this->users as $user) {
+            $user->game_id = null;
+            $user->team = null;
+            $user->role = null;
+            $user->save();
+        }
+        $this->delete();
+    }
 }

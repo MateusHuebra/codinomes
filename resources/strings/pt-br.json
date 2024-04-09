@@ -34,6 +34,9 @@
         "stopped": [
             "Jogo cancelado"
         ],
+        "stopped_by_time": [
+            "Jogo cancelado por inatividade"
+        ],
         "no_game": [
             "Nenhum jogo em andamento"
         ],

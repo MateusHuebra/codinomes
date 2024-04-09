@@ -17,13 +17,7 @@ class Stop implements Event {
             if(!$game) {
                 return;
             }
-            foreach($game->users as $user) {
-                $user->game_id = null;
-                $user->team = null;
-                $user->role = null;
-                $user->save();
-            }
-            $game->delete();
+            $game->stop();
 
             $bot->sendMessage($message->getChat()->getId(), AppString::get('game.stopped'));
         };
