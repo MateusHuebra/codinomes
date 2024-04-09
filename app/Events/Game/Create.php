@@ -22,7 +22,7 @@ class Create implements Event {
             $game->chat_id = $message->getChat()->getId();
             $game->save();
 
-            Menu::send($game, $bot);
+            Menu::send($game->id, $bot);
         };
     }
 
