@@ -88,7 +88,7 @@ class Menu implements Event {
             }
             if ($action == self::EDIT) {
                 $bot->editMessageText($game->chat_id, $messageId, $textMessage, 'MarkdownV2', false, $keyboard);
-            } {
+            } else {
                 throw new Exception;
             }
         } catch(Exception $e) {
