@@ -13,19 +13,21 @@ class Leave implements Event {
 
     static function getEvent(BotApi $bot) : callable {
         return function (CallbackQuery $update) use ($bot) {
+            $message = $update->getMessage();
             $user = User::find($update->getFrom()->getId());
             if(!$user || !$user->game_id) {
                 $bot->answerCallbackQuery($update->getId());
                 return;
             }
 
-            $chat = Chat::find($update->getMessage()->getChat()->getId());
+            $chat = Chat::find($message->getChat()->getId());
             if($user->game_id != $chat->game->id) {
                 $bot->sendAlertOrMessage($update->getId(), $chat->id, 'error.already_playing');
                 return;
             }
 
             $user->leaveGame();
+            Menu::send($chat->game, $bot, Menu::EDIT, $message->getMessageId());
             $bot->answerCallbackQuery($update->getId(), AppString::get('game.you_left'));
         };
     }
