@@ -17,17 +17,21 @@ class SelectTeamAndRole implements Event {
         return function (CallbackQuery $update) use ($bot) {
             $message = $update->getMessage();
             $chatId = $message->getChat()->getId();
-            AppString::setLanguage($message);
 
             $user = User::find($update->getFrom()->getId());
             if(!$user || $user->status != 'actived') {
-                self::sendAlertOrMessage($update->getId(), $chatId, 'error.user_not_registered', $bot);
+                $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.user_not_registered');
                 return;
             }
 
             $game = Game::where('chat_id', $message->getChat()->getId())->first();
             if(!$game) {
-                self::sendAlertOrMessage($update->getId(), $chatId, 'game.no_game', $bot);
+                $bot->sendAlertOrMessage($update->getId(), $chatId, 'game.no_game');
+                return;
+            }
+
+            if($user->game_id && $user->game_id != $game->id) {
+                $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.already_playing');
                 return;
             }
 
@@ -39,7 +43,7 @@ class SelectTeamAndRole implements Event {
                     ->where('role', 'master')
                     ->count();
                 if($isThereAlreadyAMasterInSelectedTeam) {
-                    self::sendAlertOrMessage($update->getId(), $chatId, 'game.master_occupied', $bot);
+                    $bot->sendAlertOrMessage($update->getId(), $chatId, 'game.master_occupied');
                     return;
                 }
             }
@@ -54,15 +58,6 @@ class SelectTeamAndRole implements Event {
                 $bot->answerCallbackQuery($update->getId(), AppString::get('game.updated'));
             } catch(Exception $e) {}
         };
-    }
-
-    private static function sendAlertOrMessage(int $callbackQueryId, int $chatId, string $stringPath, BotApi $bot) {
-        $string = AppString::get($stringPath);
-        try {
-            $bot->answerCallbackQuery($callbackQueryId, $string, true);
-        } catch(Exception $e) {
-            $bot->sendMessage($chatId, $string);
-        }
     }
 
 }
