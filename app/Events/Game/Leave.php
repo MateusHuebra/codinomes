@@ -26,7 +26,7 @@ class Leave implements Event {
             }
 
             $user->leaveGame();
-            $bot->answerCallbackQuery($update->getId(), AppString::get('you_left'));
+            $bot->answerCallbackQuery($update->getId(), AppString::get('game.you_left'));
         };
     }
 
