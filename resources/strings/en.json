@@ -51,6 +51,12 @@
         ],
         "agents": [
             "agents"
+        ],
+        "leave": [
+            "Leave"
+        ],
+        "you_left": [
+            "You left"
         ]
     },
     "settings": {
@@ -61,6 +67,9 @@
     "error": {
         "user_not_registered": [
             "You need to DM me to have access to that"
+        ],
+        "already_playing": [
+            "You're already playing in another group"
         ],
         "admin_only": [
             "Only group admins can do that"

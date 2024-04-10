@@ -22,10 +22,7 @@ class Game extends Model
 
     public function stop() {
         foreach($this->users as $user) {
-            $user->game_id = null;
-            $user->team = null;
-            $user->role = null;
-            $user->save();
+            $user->leaveGame();
         }
         $this->delete();
     }

@@ -21,6 +21,13 @@ class User extends Model
         'status'
     ];
 
+    public function leaveGame() {
+        $this->game_id = null;
+        $this->team = null;
+        $this->role = null;
+        $this->save();
+    }
+
     static function createFromTGModel(TGUser $tgUser) : User {
         return self::create([
             'id' => $tgUser->getId(),

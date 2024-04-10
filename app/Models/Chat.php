@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Chat as TGChat;
 use TelegramBot\Api\Types\User;
@@ -21,6 +22,11 @@ class Chat extends Model
         'title',
         'language'
     ];
+
+    public function game(): HasOne
+    {
+        return $this->hasOne(Game::class);
+    }
 
     public function isTgUserAdmin(User $tgUser, BotApi $bot) : bool {
         $admins = $bot->getChatAdministrators($this->id);

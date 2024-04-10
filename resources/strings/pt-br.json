@@ -51,6 +51,12 @@
         ],
         "agents": [
             "agentes"
+        ],
+        "leave": [
+            "Sair"
+        ],
+        "you_left": [
+            "Você saiu"
         ]
     },
     "settings": {
@@ -61,6 +67,9 @@
     "error": {
         "user_not_registered": [
             "Você precisa me chamar no privado para ter acesso a isso"
+        ],
+        "already_playing": [
+            "Você já está jogando em outro grupo"
         ],
         "admin_only": [
             "Apenas administradores do grupo podem fazer isso"

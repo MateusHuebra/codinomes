@@ -10,6 +10,7 @@ class CallbackDataManager {
     //EVENTS
     const SET_LANGUAGE = 'sl';
     const SELECT_TEAM_AND_ROLE = 'tr';
+    const LEAVE_GAME = 'lg';
 
     //ATTRIBUTES
     const EVENT = 'e';

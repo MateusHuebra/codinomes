@@ -80,6 +80,14 @@ class Menu implements Event {
                         CDM::ROLE => CDM::AGENT
                     ])
                 ]
+            ],
+            [
+                [
+                    'text' => AppString::get('game.leave'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::LEAVE_GAME
+                    ])
+                ]
             ]
         ]);
 

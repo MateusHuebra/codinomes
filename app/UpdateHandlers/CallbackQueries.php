@@ -2,6 +2,7 @@
 
 namespace App\UpdateHandlers;
 
+use App\Events\Game\Leave;
 use App\Events\Language\Set as SetLanguage;
 use App\Events\Start;
 use App\Events\Ping;
@@ -28,6 +29,9 @@ class CallbackQueries implements UpdateHandler {
 
             } else if($data[CDM::EVENT] === CDM::SELECT_TEAM_AND_ROLE) {
                 call_user_func(SelectTeamAndRole::getEvent($bot), $update);
+            
+            } else if($data[CDM::EVENT] === CDM::LEAVE_GAME) {
+                call_user_func(Leave::getEvent($bot), $update);
             
             } else if($data[CDM::EVENT] === CDM::SET_LANGUAGE) {
                 call_user_func(SetLanguage::getEvent($bot), $update);
