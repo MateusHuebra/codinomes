@@ -17,6 +17,7 @@ class CodinomesController extends Controller
 {
 
     public function listen(Request $request) {
+        define('CONTROLLER_START', microtime(true));
         ServerLog::log('start -----> CodinomesController > listen');
         $bot = new BotApi(env('TG_TOKEN'));
         $client = new Client(env('TG_TOKEN'));
