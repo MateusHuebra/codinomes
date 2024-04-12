@@ -11,6 +11,7 @@ class CallbackDataManager {
     const SET_LANGUAGE = 'sl';
     const SELECT_TEAM_AND_ROLE = 'tr';
     const LEAVE_GAME = 'lg';
+    const START_GAME = 'sg';
 
     //ATTRIBUTES
     const EVENT = 'e';

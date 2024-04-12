@@ -52,6 +52,9 @@
         "agents": [
             "agentes"
         ],
+        "start": [
+            "Começar Partida"
+        ],
         "leave": [
             "Sair"
         ],

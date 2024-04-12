@@ -27,66 +27,27 @@ class Menu implements Action {
         $masterB = $users->where('team', 'b')->where('role', 'master')->first();
         $agentsB = $users->where('team', 'b')->where('role', 'agent');
         $empty = AppString::get('game.empty');
-        $stringMasterA = $masterA->name??$empty;
-        $stringMasterB = $masterB->name??$empty;
-        $stringAgentsA = self::getAgentsStringList($agentsA, $empty);
-        $stringAgentsB = self::getAgentsStringList($agentsB, $empty);
+        $stringMasterA = $masterA->name??null;
+        $stringMasterB = $masterB->name??null;
+        $stringAgentsA = self::getAgentsStringList($agentsA);
+        $stringAgentsB = self::getAgentsStringList($agentsB);
 
         $textMessage = AppString::get('game.teams_lists', [
-            'master_a' => $stringMasterA,
-            'agents_a' => $stringAgentsA,
-            'master_b' => $stringMasterB,
-            'agents_b' => $stringAgentsB,
+            'master_a' => $stringMasterA??$empty,
+            'agents_a' => $stringAgentsA??$empty,
+            'master_b' => $stringMasterB??$empty,
+            'agents_b' => $stringAgentsB??$empty,
             'a' => Game::A_EMOJI,
             'b' => Game::B_EMOJI
         ], null, true);
 
-        $keyboard = new InlineKeyboardMarkup([
-            [
-                [
-                    'text' => Game::A_EMOJI.' '.AppString::get('game.master'),
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                        CDM::TEAM => 'a',
-                        CDM::ROLE => CDM::MASTER
-                    ])
-                ],
-                [
-                    'text' => AppString::get('game.agents').' '.Game::A_EMOJI,
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                        CDM::TEAM => 'a',
-                        CDM::ROLE => CDM::AGENT
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => Game::B_EMOJI.' '.AppString::get('game.master'),
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                        CDM::TEAM => 'b',
-                        CDM::ROLE => CDM::MASTER
-                    ])
-                ],
-                [
-                    'text' => AppString::get('game.agents').' '.Game::B_EMOJI,
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                        CDM::TEAM => 'b',
-                        CDM::ROLE => CDM::AGENT
-                    ])
-                ]
-            ],
-            [
-                [
-                    'text' => AppString::get('game.leave'),
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::LEAVE_GAME
-                    ])
-                ]
-            ]
-        ]);
+        if(!is_null($stringMasterA) && !is_null($stringMasterB) && !is_null($stringAgentsA) && !is_null($stringAgentsB)) {
+            $hasRequiredPlayers = true;
+        } else {
+            $hasRequiredPlayers = false;
+        }
+
+        $keyboard = self::getKeyboard($hasRequiredPlayers);
 
         try {
             if($action == self::RESEND) {
@@ -105,15 +66,76 @@ class Menu implements Action {
         }
     }
 
-    private static function getAgentsStringList($agents, string $empty) : String {
+    private static function getAgentsStringList($agents) {
         if($agents->count()==0) {
-            return $empty;
+            return null;
         }
         $namesArray = [];
         foreach($agents as $agent) {
             $namesArray[] = $agent->name;
         }
         return implode(', ', $namesArray);
+    }
+
+    private static function getKeyboard(bool $hasRequiredPlayers) {
+        $buttonsArray = [];
+        $buttonsArray[] = [
+            [
+                'text' => Game::A_EMOJI.' '.AppString::get('game.master'),
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                    CDM::TEAM => 'a',
+                    CDM::ROLE => CDM::MASTER
+                ])
+            ],
+            [
+                'text' => AppString::get('game.agents').' '.Game::A_EMOJI,
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                    CDM::TEAM => 'a',
+                    CDM::ROLE => CDM::AGENT
+                ])
+            ]
+        ];
+        $buttonsArray[] = [
+            [
+                'text' => Game::B_EMOJI.' '.AppString::get('game.master'),
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                    CDM::TEAM => 'b',
+                    CDM::ROLE => CDM::MASTER
+                ])
+            ],
+            [
+                'text' => AppString::get('game.agents').' '.Game::B_EMOJI,
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                    CDM::TEAM => 'b',
+                    CDM::ROLE => CDM::AGENT
+                ])
+            ]
+        ];
+        $buttonsArray[] = [
+            [
+                'text' => AppString::get('game.leave'),
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::LEAVE_GAME
+                ])
+            ]
+        ];
+
+        if($hasRequiredPlayers) {
+            $buttonsArray[] = [
+                [
+                    'text' => AppString::get('game.start'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::START_GAME
+                    ])
+                ]
+            ];
+        }
+
+        return new InlineKeyboardMarkup($buttonsArray);
     }
 
 }
