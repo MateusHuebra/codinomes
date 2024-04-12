@@ -1,28 +1,25 @@
 <?php
 
-namespace App\Events\Game;
+namespace App\Actions\Game;
 
-use App\Events\Event;
+use App\Actions\Action;
 use App\Models\Game;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
-use TelegramBot\Api\Types\Message;
 use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
-class Menu implements Event {
+class Menu implements Action {
 
     const RESEND = 'resend';
     const EDIT = 'edit';
 
-    static function getEvent(BotApi $bot) : callable {
-        return function (Message $message) use ($bot) {
-            null;
-        };
+    public function run($update, BotApi $bot) : Void {
+
     }
     
-    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) {
+    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) : Void {
         $game->refresh();
         $users = $game->users;
         $masterA = $users->where('team', 'a')->where('role', 'master')->first();

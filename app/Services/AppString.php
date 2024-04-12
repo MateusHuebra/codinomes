@@ -51,12 +51,12 @@ class AppString {
         return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
-    static function setLanguage(Message $message) {
-        $chat = $message->getChat();
+    static function setLanguage($update) {
+        $chat = $update->getMessage()->getChat();
         if($chat->getType()==='private') {
             self::$language = User::find($chat->getId())->language??self::$language;
         } else if($chat->getType()==='supergroup') {
-            self::$language = Chat::find($message->getChat()->getId())->language??User::find($chat->getId())->language??self::$language;
+            self::$language = Chat::find($chat->getId())->language??User::find($chat->getId())->language??self::$language;
         }
         
     }
