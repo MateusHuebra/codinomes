@@ -7,7 +7,6 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
-use TelegramBot\Api\Types\CallbackQuery;
 
 class Leave implements Action {
 

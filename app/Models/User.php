@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use TelegramBot\Api\Types\User as TGUser;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Model
 {
@@ -26,6 +27,16 @@ class User extends Model
         $this->team = null;
         $this->role = null;
         $this->save();
+    }
+
+    public function scopeFromTeamRole(Builder $query, string $team, string $role): void
+    {
+        $query->where('team', $team)->where('role', $role);
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new \App\Collections\User($models);
     }
 
     static function createFromTGModel(TGUser $tgUser) : User {

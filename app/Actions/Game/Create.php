@@ -16,6 +16,10 @@ class Create implements Action {
             $bot->sendMessage($chatId, AppString::get('game.already_exists'), null, false, $messageId, null, false, null, null, true);
             return;
         }
+        if(!in_array($chatId, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
+            $bot->sendMessage($chatId, AppString::get('error.only_oficial_groups'), null, false, $messageId, null, false, null, null, true);
+            return;
+        }
         $game = new Game();
         $game->status = 'creating';
         $game->chat_id = $chatId;

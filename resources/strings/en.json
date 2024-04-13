@@ -60,6 +60,18 @@
         ],
         "you_left": [
             "You left"
+        ],
+        "choose_card": [
+            "Choose card"
+        ],
+        "give_hint": [
+            "Give hint"
+        ],
+        "turn": [
+            "It's turn of {role} {team} {players}"
+        ],
+        "mention": [
+            "[{name}](tg://user?id={id})"
         ]
     },
     "settings": {
@@ -76,6 +88,12 @@
         ],
         "admin_only": [
             "Only group admins can do that"
+        ],
+        "no_required_players": [
+            "The game needs at least a player for each role to get started"
+        ],
+        "only_oficial_groups": [
+            "For now, the bot only works for official groups, get in @CodinomesGrupo to play"
         ]
     }
 }

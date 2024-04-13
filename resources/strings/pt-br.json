@@ -60,6 +60,18 @@
         ],
         "you_left": [
             "Você saiu"
+        ],
+        "choose_card": [
+            "Escolha carta"
+        ],
+        "give_hint": [
+            "Dar dica"
+        ],
+        "turn": [
+            "É a vez de {role} {team} {players}"
+        ],
+        "mention": [
+            "[{name}](tg://user?id={id})"
         ]
     },
     "settings": {
@@ -76,6 +88,12 @@
         ],
         "admin_only": [
             "Apenas administradores do grupo podem fazer isso"
+        ],
+        "no_required_players": [
+            "A partida precisa de pelo menos um jogador em cada papel para começar"
+        ],
+        "only_oficial_groups": [
+            "No momento, o bot funciona apenas em grupos oficiais, entre em @CodinomesGrupo para jogar"
         ]
     }
 }

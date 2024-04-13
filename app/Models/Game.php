@@ -12,6 +12,8 @@ class Game extends Model
     
     const A_EMOJI = '🟣';
     const B_EMOJI = '🟠';
+    const A_COLOR = 'purple';
+    const B_COLOR = 'orange';
 
     public $timestamps = false;
 
@@ -20,10 +22,25 @@ class Game extends Model
         return $this->hasMany(User::class);
     }
 
+    public function cards(): HasMany
+    {
+        return $this->hasMany(GameCard::class);
+    }
+
     public function stop() {
         foreach($this->users as $user) {
             $user->leaveGame();
         }
+        foreach($this->cards as $card) {
+            $card->delete();
+        }
         $this->delete();
     }
+
+    public function updateStatus(string $status) {
+        $this->status = $status;
+        $this->status_updated_at = date('Y-m-d H-i-s');
+        $this->save();
+    }
+
 }

@@ -21,31 +21,27 @@ class Menu implements Action {
     
     static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) : Void {
         $game->refresh();
-        $users = $game->users;
-        $masterA = $users->where('team', 'a')->where('role', 'master')->first();
-        $agentsA = $users->where('team', 'a')->where('role', 'agent');
-        $masterB = $users->where('team', 'b')->where('role', 'master')->first();
-        $agentsB = $users->where('team', 'b')->where('role', 'agent');
-        $empty = AppString::get('game.empty');
-        $stringMasterA = $masterA->name??null;
-        $stringMasterB = $masterB->name??null;
-        $stringAgentsA = self::getAgentsStringList($agentsA);
-        $stringAgentsB = self::getAgentsStringList($agentsB);
 
+        $masterA = $game->users()->fromTeamRole('a', 'master');
+        $agentsA = $game->users()->fromTeamRole('a', 'agent');
+        $masterB = $game->users()->fromTeamRole('b', 'master');
+        $agentsB = $game->users()->fromTeamRole('b', 'agent');
+
+        if($masterA->count()==0 || $agentsA->count()==0 || $masterB->count()==0 || $agentsB->count()==0) {
+            $hasRequiredPlayers = false;
+        } else {
+            $hasRequiredPlayers = true;
+        }
+
+        $empty = '_'.AppString::get('game.empty').'_';
         $textMessage = AppString::get('game.teams_lists', [
-            'master_a' => $stringMasterA??$empty,
-            'agents_a' => $stringAgentsA??$empty,
-            'master_b' => $stringMasterB??$empty,
-            'agents_b' => $stringAgentsB??$empty,
+            'master_a' => $masterA->get()->toMentionList()??$empty,
+            'agents_a' => $agentsA->get()->toMentionList()??$empty,
+            'master_b' => $masterB->get()->toMentionList()??$empty,
+            'agents_b' => $agentsB->get()->toMentionList()??$empty,
             'a' => Game::A_EMOJI,
             'b' => Game::B_EMOJI
-        ], null, true);
-
-        if(!is_null($stringMasterA) && !is_null($stringMasterB) && !is_null($stringAgentsA) && !is_null($stringAgentsB)) {
-            $hasRequiredPlayers = true;
-        } else {
-            $hasRequiredPlayers = false;
-        }
+        ]);
 
         $keyboard = self::getKeyboard($hasRequiredPlayers);
 
@@ -64,17 +60,6 @@ class Menu implements Action {
             }
             $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
         }
-    }
-
-    private static function getAgentsStringList($agents) {
-        if($agents->count()==0) {
-            return null;
-        }
-        $namesArray = [];
-        foreach($agents as $agent) {
-            $namesArray[] = $agent->name;
-        }
-        return implode(', ', $namesArray);
     }
 
     private static function getKeyboard(bool $hasRequiredPlayers) {
