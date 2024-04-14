@@ -17,7 +17,7 @@ class ChosenHint implements Action {
         $game->attempts_left = $data[CDM::NUMBER];
         $game->save();
 
-        $hint = CDM::TEXT.' '.CDM::NUMBER;
+        $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
         Table::send($game, $bot, $hint, false);
     }
 
