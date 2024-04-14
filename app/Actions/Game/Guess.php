@@ -20,7 +20,7 @@ class Guess implements Action {
             return;
         }
 
-        $query = strtoupper($update->getQuery());
+        $query = mb_strtoupper($update->getQuery(), 'UTF-8');
         $cards = $game->cards;
 
         $results = [];
