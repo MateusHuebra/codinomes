@@ -3,9 +3,9 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Actions\Game\Menu;
 use App\Models\Game;
 use App\Models\User;
+use App\Services\Game\Menu;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use App\Services\CallbackDataManager as CDM;

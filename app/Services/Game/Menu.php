@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Actions\Game;
+namespace App\Services\Game;
 
-use App\Actions\Action;
 use App\Models\Game;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
@@ -10,14 +9,10 @@ use Exception;
 use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
-class Menu implements Action {
+class Menu {
 
     const RESEND = 'resend';
     const EDIT = 'edit';
-
-    public function run($update, BotApi $bot) : Void {
-
-    }
     
     static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) : Void {
         $game->refresh();

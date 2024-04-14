@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\Pack;
 use App\Services\AppString;
+use App\Services\Game\Table;
 use App\Services\Telegram\BotApi;
 use Exception;
 

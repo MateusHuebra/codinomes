@@ -1,44 +1,41 @@
 <?php
 
-namespace App\Actions\Game;
-use App\Actions\Action;
+namespace App\Services\Game;
+
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
 use CURLFile;
 use Exception;
-use GdImage;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
-class Table implements Action {
+class Table {
     
     static $border = 15;
     static $fontSize = 23;
 
-    public function run($update, BotApi $bot) : Void {
-
-    }
-
-    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) {
+    static function send(Game $game, BotApi $bot, string $hint = null, bool $sendToMasters = true) {
         $backgroundColor = ($game->status=='master_a' || $game->status=='agents_a' ? 'purple' : 'orange');
-        $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
+        if($sendToMasters) {
+            $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
+        }
         $agentsImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
 
         $cards = $game->cards;
         foreach($cards as $card) {
-            self::addCard($masterImage, $agentsImage, $card, true);
+            self::addCard($masterImage??null, $agentsImage, $card, true);
         }
 
-        $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
+        if($sendToMasters) {
+            $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
+            imagepng($masterImage, $tempMasterImageFileName);
+            imagedestroy($masterImage);
+            $masterPhoto = new CURLFile($tempMasterImageFileName,'image/png','master');
+        }
         $tempAgentsImageFileName = tempnam(sys_get_temp_dir(), 'a_image_');
-        imagepng($masterImage, $tempMasterImageFileName);
         imagepng($agentsImage, $tempAgentsImageFileName);
-        
-        imagedestroy($masterImage);
         imagedestroy($agentsImage);
-
-        $masterPhoto = new CURLFile($tempMasterImageFileName,'image/png','master');
         $agentsPhoto = new CURLFile($tempAgentsImageFileName,'image/png','agents');
 
         $keyboard = self::getKeyboard($game->status);
@@ -64,23 +61,41 @@ class Table implements Action {
                 $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();
                 break;
         }
+
+        $totalCardsA = $cards->where('team', 'a');
+        $totalCardsB = $cards->where('team', 'b');
+        $revealedCardsA = $totalCardsA->where('revealed', true);
+        $revealedCardsB = $totalCardsB->where('revealed', true);
+        $leftA = $totalCardsA->count() - $revealedCardsA->count();
+        $leftB = $totalCardsB->count() - $revealedCardsB->count();
         
         $text = AppString::get('game.turn', [
             'role' => $role,
             'team' =>  $team,
-            'players' => $playersList
+            'players' => $playersList,
+            'team_a' => Game::A_EMOJI,
+            'team_b' => Game::B_EMOJI,
+            'left_a' => $leftA,
+            'left_b' => $leftB
         ]);
-
-        $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
-        try{
-            $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard():null, false, 'MarkdownV2');
-            $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard():null, false, 'MarkdownV2');
-        } catch(Exception $e) {
-            $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered'));
+        if($hint) {
+            $text.= "\n\n".AppString::get('game.hint', [
+                'hint' => $hint
+            ]);
         }
 
-        unlink($tempMasterImageFileName);
+        $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
         unlink($tempAgentsImageFileName);
+        if($sendToMasters) {
+            try{
+                $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard():null, false, 'MarkdownV2');
+                $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard():null, false, 'MarkdownV2');
+                unlink($tempMasterImageFileName);
+            } catch(Exception $e) {
+                $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered'));
+            }
+        } 
+
     }
 
     static function getKeyboard(string $status) {
@@ -169,7 +184,9 @@ class Table implements Action {
             imagefttext($agentsCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
         }
         
-        imagecopy($masterImage, $masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+        if(!is_null($masterImage)) {
+            imagecopy($masterImage, $masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+        }
         imagecopy($agentsImage, $agentsCardImage??$masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
     }
 
