@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\Models\Chat;
 use App\Models\User;
-use Exception;
+use Throwable;
 use Illuminate\Support\Facades\File;
-use TelegramBot\Api\Types\Message;
 
 class AppString {
     
@@ -60,11 +59,11 @@ class AppString {
             } else if($chat->getType()==='supergroup') {
                 self::$language = Chat::find($chat->getId())->language??User::find($chat->getId())->language??self::$language;
             }
-        } catch(Exception $e) {
+        } catch(Throwable $e) {
             try {
                 $userId = $update->getFrom()->getId();
                 self::$language = User::find($userId)->language??self::$language;
-            } catch(Exception $e) {}
+            } catch(Throwable $e) {}
         }
         
     }
