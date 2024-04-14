@@ -18,6 +18,10 @@ class Factory {
             self::$update = $update->getCallbackQuery();
             return new CallbackQuery;
 
+        } else if($update->getInlineQuery()) {
+            self::$update = $update->getInlineQuery();
+            return new InlineQuery;
+
         }
 
     }
