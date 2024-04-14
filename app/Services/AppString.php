@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Chat;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\File;
 use TelegramBot\Api\Types\Message;
 
@@ -52,16 +53,18 @@ class AppString {
     }
 
     static function setLanguage($update) {
-        if($update->getMessage()) {
+        try {
             $chat = $update->getMessage()->getChat();
             if($chat->getType()==='private') {
                 self::$language = User::find($chat->getId())->language??self::$language;
             } else if($chat->getType()==='supergroup') {
                 self::$language = Chat::find($chat->getId())->language??User::find($chat->getId())->language??self::$language;
             }
-        } else if($update->getFrom()) {
-            $userId = $update->getFrom()->getId();
-            self::$language = User::find($userId)->language??self::$language;
+        } catch(Exception $e) {
+            try {
+                $userId = $update->getFrom()->getId();
+                self::$language = User::find($userId)->language??self::$language;
+            } catch(Exception $e) {}
         }
         
     }
