@@ -3,12 +3,42 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
+use App\Models\Game;
+use App\Models\User;
 use TelegramBot\Api\BotApi;
+use App\Services\CallbackDataManager as CDM;
+use TelegramBot\Api\Types\Inline\QueryResult\Article;
+use TelegramBot\Api\Types\Inline\InputMessageContent\Text;
 
 class Guess implements Action {
 
     public function run($update, BotApi $bot) : Void {
+        $user = User::find($update->getFrom()->getId());
+        $game = Game::find($user->game_id);
 
+        if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
+            return;
+        }
+
+        $query = $update->getQuery();
+        $cards = $game->cards;
+
+        $results = [];
+        if(preg_match('/^([a-záàâãéèêíïóôõöúçñ]{1,12})$/i', $query, $matches)) {
+            $filtredCards = $cards->where('text', 'LIKE', $query.'%')->where('revealed', false);
+            foreach($filtredCards as $card) {
+                $title = $card->text;
+                $messageContent = new Text($title);
+                $data = CDM::toString([
+                    CDM::EVENT => CDM::GUESS,
+                    CDM::NUMBER => $card->id
+                ]);
+                $results[] = new Article($data, $title, null, null, null, null, $messageContent);
+            }
+            
+            $bot->answerInlineQuery($update->getId(), $results, 10);
+        }
+        
     }
 
 }

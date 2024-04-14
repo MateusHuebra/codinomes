@@ -15,6 +15,7 @@ class CallbackDataManager {
     const IGNORE = 'ig';
     const HINT = 'hi';
     const GUESS = 'gu';
+    const SKIP = 'sk';
 
     //ATTRIBUTES
     const EVENT = 'e';

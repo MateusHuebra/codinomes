@@ -2,6 +2,7 @@
 
 namespace App\UpdateHandlers;
 
+use App\Actions\Game\Skip;
 use App\Actions\Language\Set as SetLanguage;
 use App\Actions\Start;
 use App\Actions\Ping;
@@ -29,6 +30,9 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::START_GAME) {
             return new StartGame;
+        
+        } else if($data[CDM::EVENT] === CDM::SKIP) {
+            return new Skip;
         
         } else if($data[CDM::EVENT] === CDM::SET_LANGUAGE) {
             return new SetLanguage;

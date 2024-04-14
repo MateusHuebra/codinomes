@@ -3,7 +3,7 @@
 namespace App\Services\Game;
 
 use App\Models\Game;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use Exception;
 use App\Services\CallbackDataManager as CDM;
@@ -34,8 +34,8 @@ class Menu {
             'agents_a' => $agentsA->get()->toMentionList()??$empty,
             'master_b' => $masterB->get()->toMentionList()??$empty,
             'agents_b' => $agentsB->get()->toMentionList()??$empty,
-            'a' => Game::A_EMOJI,
-            'b' => Game::B_EMOJI
+            'a' => Game::TEAM['a']['emoji'],
+            'b' => Game::TEAM['b']['emoji']
         ]);
 
         $keyboard = self::getKeyboard($hasRequiredPlayers);
@@ -61,7 +61,7 @@ class Menu {
         $buttonsArray = [];
         $buttonsArray[] = [
             [
-                'text' => Game::A_EMOJI.' '.AppString::get('game.master'),
+                'text' => Game::TEAM['a']['emoji'].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -69,7 +69,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::A_EMOJI,
+                'text' => AppString::get('game.agents').' '.Game::TEAM['a']['emoji'],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -79,7 +79,7 @@ class Menu {
         ];
         $buttonsArray[] = [
             [
-                'text' => Game::B_EMOJI.' '.AppString::get('game.master'),
+                'text' => Game::TEAM['b']['emoji'].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',
@@ -87,7 +87,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::B_EMOJI,
+                'text' => AppString::get('game.agents').' '.Game::TEAM['b']['emoji'],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',

@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Actions\Game;
+
+use App\Actions\Action;
+use App\Models\Game;
+use App\Models\User;
+use TelegramBot\Api\BotApi;
+
+class Skip implements Action {
+
+    public function run($update, BotApi $bot) : Void {
+        $user = User::find($update->getFrom()->getId());
+        $game = Game::find($user->game_id);
+
+        if($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') {
+            $game->updateStatus('master_b');
+            $game->attempts_left = null;
+
+        } else if($game->status=='agent_b' && $user->team=='b' && $user->role=='agent') {
+            $game->updateStatus('master_a');
+            $game->attempts_left = null;
+        }
+    }
+
+}

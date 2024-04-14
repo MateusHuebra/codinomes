@@ -9,11 +9,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Game extends Model
 {
     use HasFactory;
-    
-    const A_EMOJI = '🟣';
-    const B_EMOJI = '🟠';
-    const A_COLOR = 'purple';
-    const B_COLOR = 'orange';
+
+    const TEAM = [
+        'a' => [
+            'emoji' => '🟣',
+            'color' => 'purple'
+        ],
+        'b' => [
+            'emoji' => '🟠',
+            'color' => 'orange'
+        ]
+    ];
 
     public $timestamps = false;
 

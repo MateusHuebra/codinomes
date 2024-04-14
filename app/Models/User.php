@@ -39,6 +39,13 @@ class User extends Model
         return new \App\Collections\User($models);
     }
 
+    public function getEnemyTeam() {
+        if($this->team == 'a') {
+            return 'b';
+        }
+        return 'a';
+    }
+
     static function createFromTGModel(TGUser $tgUser) : User {
         return self::create([
             'id' => $tgUser->getId(),

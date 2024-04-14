@@ -17,16 +17,14 @@ class Hint implements Action {
         $user = User::find($update->getFrom()->getId());
 
         $results = [];
-        if(preg_match('/^([A-z]{1,16}) ([0-9])$/', $query, $matches)) {
+        if(preg_match('/^([a-záàâãéèêíïóôõöúçñ]{1,16}) ([0-9])$/i', $query, $matches)) {
             $title = AppString::get('game.confirm_hint');
             $desc = $query;
             $messageContent = new Text(AppString::get('game.hint_sended'));
             $data = CDM::toString([
                 CDM::EVENT => CDM::HINT,
                 CDM::TEXT => $matches[1],
-                CDM::NUMBER => $matches[2],
-                CDM::TEAM => $user->team,
-                CDM::GAME_ID => $user->game_id
+                CDM::NUMBER => $matches[2]
             ]);
         } else {
             $title = AppString::get('error.wrong_hint_format_title');
@@ -36,7 +34,6 @@ class Hint implements Action {
                 CDM::EVENT => CDM::IGNORE
             ]);
         }
-
         
         $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
         $bot->answerInlineQuery($update->getId(), $results, 10);
