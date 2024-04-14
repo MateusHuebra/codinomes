@@ -68,10 +68,19 @@
             "Dar dica"
         ],
         "turn": [
-            "É a vez de {role} {team} {players}"
+            "É a vez de {role} {team} {players}\n\n{team_a} {left_a}\n{team_b} {left_b}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
+        ],
+        "confirm_hint": [
+            "Confirmar dica"
+        ],
+        "hint_sended": [
+            "Dica enviada"
+        ],
+        "hint": [
+            "Dica: {hint}"
         ]
     },
     "settings": {
@@ -82,6 +91,9 @@
     "error": {
         "user_not_registered": [
             "Você precisa me chamar no privado para ter acesso a isso"
+        ],
+        "master_not_registered": [
+            "Não tenho acesso ao pv dos mestres para enviar a imagem para eles"
         ],
         "already_playing": [
             "Você já está jogando em outro grupo"
@@ -94,6 +106,12 @@
         ],
         "only_oficial_groups": [
             "No momento, o bot funciona apenas em grupos oficiais, entre em @CodinomesGrupo para jogar"
+        ],
+        "wrong_hint_format_title": [
+            "Digite uma dica"
+        ],
+        "wrong_hint_format_desc": [
+            "A dica deve ser uma palavra única de 1 a 16 caracteres seguido pelo número de cartas a qual essa dica se refere. Exemplo: Medo 2"
         ]
     }
 }

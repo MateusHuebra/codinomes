@@ -68,10 +68,19 @@
             "Give hint"
         ],
         "turn": [
-            "It's turn of {role} {team} {players}"
+            "It's turn of {role} {team} {players}\n\n{team_a} {left_a}\n{team_b} {left_b}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
+        ],
+        "confirm_hint": [
+            "Confirm hint"
+        ],
+        "hint_sended": [
+            "Hint sended"
+        ],
+        "hint": [
+            "Hint: {hint}"
         ]
     },
     "settings": {
@@ -82,6 +91,9 @@
     "error": {
         "user_not_registered": [
             "You need to DM me to have access to that"
+        ],
+        "master_not_registered": [
+            "I don't have access to masters dm to send them the image"
         ],
         "already_playing": [
             "You're already playing in another group"
@@ -94,6 +106,12 @@
         ],
         "only_oficial_groups": [
             "For now, the bot only works for official groups, get in @CodinomesGrupo to play"
+        ],
+        "wrong_hint_format_title": [
+            "Enter a hint"
+        ],
+        "wrong_hint_format_desc": [
+            "Your hint must be a single word from 1 to 16 characters followed by the number of cards which this hint refers to. Example: Fear 2"
         ]
     }
 }
