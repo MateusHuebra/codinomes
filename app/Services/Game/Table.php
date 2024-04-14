@@ -16,7 +16,7 @@ class Table {
     static $fontSize = 23;
 
     static function send(Game $game, BotApi $bot, string $hint = null, bool $sendToMasters = true) {
-        $backgroundColor = ($game->status=='master_a' || $game->status=='agents_a' ? 'purple' : 'orange');
+        $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a' ? 'purple' : 'orange');
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
         }
@@ -45,7 +45,7 @@ class Table {
                 $team = Game::A_EMOJI;
                 $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList();
                 break;
-            case 'agents_a':
+            case 'agent_a':
                 $role = AppString::get('game.agents');
                 $team = Game::A_EMOJI;
                 $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList();
@@ -55,7 +55,7 @@ class Table {
                 $team = Game::B_EMOJI;
                 $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList();
                 break;
-            case 'agents_b':
+            case 'agent_b':
                 $role = AppString::get('game.agents');
                 $team = Game::B_EMOJI;
                 $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();

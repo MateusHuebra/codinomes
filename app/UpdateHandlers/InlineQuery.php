@@ -30,9 +30,9 @@ class InlineQuery implements UpdateHandler {
                 return 'hint';
             } else if($game->status=='master_b' && $user->team=='b' && $user->role=='master') {
                 return 'hint';
-            } else if($game->status=='agents_a' && $user->team=='a' && $user->role=='agent') {
+            } else if($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') {
                 return 'guess';
-            } else if($game->status=='agents_b' && $user->team=='b' && $user->role=='agent') {
+            } else if($game->status=='agent_b' && $user->team=='b' && $user->role=='agent') {
                 return 'guess';
             } else {
                 return null;

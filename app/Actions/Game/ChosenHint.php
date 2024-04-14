@@ -13,7 +13,7 @@ class ChosenHint implements Action {
     public function run($update, BotApi $bot) : Void {
         $data = CDM::toArray($update->getResultId());
         $game = Game::find($data[CDM::GAME_ID]);
-        $game->updateStatus('agents_'.$data[CDM::TEAM]);
+        $game->updateStatus('agent_'.$data[CDM::TEAM]);
         $game->attempts_left = $data[CDM::NUMBER];
         $game->save();
 
