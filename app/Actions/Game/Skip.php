@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Models\Game;
 use App\Models\User;
 use App\Services\AppString;
+use App\Services\Game\Table;
 use Exception;
 use TelegramBot\Api\BotApi;
 
@@ -19,13 +20,11 @@ class Skip implements Action {
             $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
         } catch(Exception $e) {}
 
-        if($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') {
-            $game->updateStatus('master_b');
+        if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {
+            $game->updateStatus('master_'.$user->getEnemyTeam());
             $game->attempts_left = null;
+            Table::send($game, $bot);
 
-        } else if($game->status=='agent_b' && $user->team=='b' && $user->role=='agent') {
-            $game->updateStatus('master_a');
-            $game->attempts_left = null;
         }
     }
 
