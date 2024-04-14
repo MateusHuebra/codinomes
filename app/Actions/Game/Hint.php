@@ -13,7 +13,7 @@ use App\Services\CallbackDataManager as CDM;
 class Hint implements Action {
 
     public function run($update, BotApi $bot) : Void {
-        $query = $update->getQuery();
+        $query = strtoupper($update->getQuery());
         $user = User::find($update->getFrom()->getId());
 
         $results = [];
