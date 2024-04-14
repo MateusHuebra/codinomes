@@ -86,7 +86,7 @@
             "Pular sua vez"
         ],
         "win": [
-            "A equipe {team} venceu o jogo!"
+            "A equipe {team} venceu o jogo\\!"
         ]
     },
     "settings": {

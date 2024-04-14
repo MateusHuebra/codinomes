@@ -86,7 +86,7 @@
             "Skip your turn"
         ],
         "win": [
-            "Team {team} won the game!"
+            "Team {team} won the game\\!"
         ]
     },
     "settings": {
