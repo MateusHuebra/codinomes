@@ -27,7 +27,7 @@ class Guess implements Action {
         if(preg_match('/^([a-záàâãéèêíïóôõöúçñ]{1,12})$/i', $query, $matches)) {
             $filteredCards = $cards->where('revealed', false);
             $filteredCards = $filteredCards->filter(function ($card) use ($query) {
-                return strpos($card->text, $query) === 0;
+                return mb_strpos($card->text, $query, 0, 'UTF-8') === 0;
             });
             foreach($filteredCards as $card) {
                 $title = $card->text;
