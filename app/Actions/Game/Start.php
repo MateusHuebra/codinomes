@@ -6,13 +6,22 @@ use App\Actions\Action;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\Pack;
+use App\Services\AppString;
 use App\Services\Telegram\BotApi;
+use Exception;
 
 class Start implements Action {
 
     public function run($update, BotApi $bot) : Void {
+        $updateId = $update->getId();
+        $messageId = $update->getMessage()->getMessageId();
         $chatId = $update->getMessage()->getChat()->getId();
         $game = Game::where('chat_id', $chatId)->first();
+
+        if(!$game || $game->status != 'creating') {
+            $bot->deleteMessage($chatId, $messageId);
+            return;
+        }
 
         $masterA = $game->users()->fromTeamRole('a', 'master');
         $agentsA = $game->users()->fromTeamRole('a', 'agent');
@@ -72,6 +81,10 @@ class Start implements Action {
             $gameCard->save();
         }
 
+        try {
+            $bot->deleteMessage($chatId, $messageId);
+            $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
+        } catch(Exception $e) {}
         Table::send($game, $bot);
     }
 
