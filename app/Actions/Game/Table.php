@@ -100,7 +100,7 @@ class Table implements Action {
         }
     }
 
-    static function addCard(GdImage $image, GameCard $card, bool $master) {
+    static function addCard($image, GameCard $card, bool $master) {
         $y = floor($card->id / 5);
         $x = $card->id - (5*$y);
 
