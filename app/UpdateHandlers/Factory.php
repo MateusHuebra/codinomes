@@ -22,6 +22,10 @@ class Factory {
             self::$update = $update->getInlineQuery();
             return new InlineQuery;
 
+        } else if($update->getChosenInlineResult()) {
+            self::$update = $update->getChosenInlineResult();
+            return new ChosenInlineResult;
+
         }
 
     }
