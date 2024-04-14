@@ -81,6 +81,12 @@
         ],
         "hint": [
             "Dica: {hint}"
+        ],
+        "skip": [
+            "Pular sua vez"
+        ],
+        "win": [
+            "A equipe {team} venceu o jogo!"
         ]
     },
     "settings": {

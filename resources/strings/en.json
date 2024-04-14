@@ -81,6 +81,12 @@
         ],
         "hint": [
             "Hint: {hint}"
+        ],
+        "skip": [
+            "Skip your turn"
+        ],
+        "win": [
+            "Team {team} won the game!"
         ]
     },
     "settings": {
