@@ -20,13 +20,16 @@ class Guess implements Action {
             return;
         }
 
-        $query = $update->getQuery();
+        $query = strtoupper($update->getQuery());
         $cards = $game->cards;
 
         $results = [];
         if(preg_match('/^([a-záàâãéèêíïóôõöúçñ]{1,12})$/i', $query, $matches)) {
-            $filtredCards = $cards->where('text', 'LIKE', $query.'%')->where('revealed', false);
-            foreach($filtredCards as $card) {
+            $filteredCards = $cards->where('revealed', false);
+            $filteredCards = $filteredCards->filter(function ($card) use ($query) {
+                return strpos($card->text, $query) === 0;
+            });
+            foreach($filteredCards as $card) {
                 $title = $card->text;
                 $messageContent = new Text($title);
                 $data = CDM::toString([
