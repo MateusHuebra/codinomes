@@ -12,11 +12,17 @@ class CallbackDataManager {
     const SELECT_TEAM_AND_ROLE = 'tr';
     const LEAVE_GAME = 'lg';
     const START_GAME = 'sg';
+    const IGNORE = 'ig';
+    const HINT = 'hi';
+    const GUESS = 'gu';
 
     //ATTRIBUTES
     const EVENT = 'e';
     const LANGUAGE = 'l';
+    const TEXT = 'txt';
+    const NUMBER = 'num';
     const FIRST_TIME = 'ft';
+    const GAME_ID = 'gi';
 
     //TYPES
     const ROLE = 'r';

@@ -7,7 +7,7 @@ use TelegramBot\Api\BotApi;
 
 class Guess implements Action {
 
-    public function run($update, BotApi $bot) {
+    public function run($update, BotApi $bot) : Void {
 
     }
 
