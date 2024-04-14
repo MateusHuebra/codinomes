@@ -7,13 +7,14 @@ use App\Models\GameCard;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
 use CURLFile;
+use Exception;
 use GdImage;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Table implements Action {
     
     static $border = 15;
-    static $fontSize = 22;
+    static $fontSize = 23;
 
     public function run($update, BotApi $bot) : Void {
 
@@ -26,8 +27,7 @@ class Table implements Action {
 
         $cards = $game->cards;
         foreach($cards as $card) {
-            self::addCard($masterImage, $card, true);
-            self::addCard($agentsImage, $card, false);
+            self::addCard($masterImage, $agentsImage, $card, true);
         }
 
         $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
@@ -71,8 +71,13 @@ class Table implements Action {
             'players' => $playersList
         ]);
 
-        $bot->sendPhoto(env('TG_MY_ID'), $masterPhoto, null, null, $keyboard, false, 'MarkdownV2');
         $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
+        try{
+            $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard():null, false, 'MarkdownV2');
+            $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard():null, false, 'MarkdownV2');
+        } catch(Exception $e) {
+            $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered'));
+        }
 
         unlink($tempMasterImageFileName);
         unlink($tempAgentsImageFileName);
@@ -99,56 +104,73 @@ class Table implements Action {
             ]);
         }
     }
+    
+    static function getMasterKeyboard() {
+        return new InlineKeyboardMarkup([
+            [
+                [
+                    'text' => AppString::get('game.give_hint'),
+                    'switch_inline_query_current_chat' => ''
+                ]
+            ]
+        ]);
+    }
 
-    static function addCard($image, GameCard $card, bool $master) {
+    static function addCard($masterImage, $agentsImage, GameCard $card, bool $master) {
+        $fontPath = public_path('open-sans.bold.ttf');
+        #region calculations
         $y = floor($card->id / 5);
         $x = $card->id - (5*$y);
 
-        if($master || $card->revealed) {
-            switch ($card->team) {
-                case 'a':
-                    $color = Game::A_COLOR;
-                    break;
-                case 'b':
-                    $color = Game::B_COLOR;
-                    break;
-                case 'x':
-                    $color = 'black';
-                    break;
-                
-                default:
-                    $color = 'white';
-                    break;
-            }
-        } else {
-            $color = 'white';
-        }
-
-        $cardImage = imagecreatefrompng(public_path("images/{$color}_card.png"));
-        $textColor = imagecolorallocate($cardImage, 0, 0, 0);
-        $fontPath = public_path('open-sans.bold.ttf');
-        
         $textLen = strlen($card->text);
-        if($textLen<10) {
-            self::$fontSize = 22;
+        if($textLen<9) {
+            $fontSize = self::$fontSize;
             $bottomSpace = 0;
+        } else if($textLen<11) {
+            $fontSize = self::$fontSize-4;
+            $bottomSpace = 2;
         } else {
-            self::$fontSize = 16;
-            $bottomSpace = 3;
+            $fontSize = self::$fontSize-8;
+            $bottomSpace = 4;
         }
-        $textBox = imagettfbbox(self::$fontSize, 0, $fontPath, $card->text);
+        $textBox = imagettfbbox($fontSize, 0, $fontPath, $card->text);
         $textWidth = $textBox[2] - $textBox[0];
-        $textHeight = $textBox[1] - $textBox[7];
+        //$textHeight = $textBox[1] - $textBox[7]; usuless for now
         $textX = (210 - $textWidth) / 2;
         $textY = 120 - $bottomSpace;
-        imagefttext($cardImage, self::$fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
+        #endregion
+
+        switch ($card->team) {
+            case 'a':
+                $colorMaster = Game::A_COLOR;
+                break;
+            case 'b':
+                $colorMaster = Game::B_COLOR;
+                break;
+            case 'x':
+                $colorMaster = 'black';
+                break;
+            
+            default:
+                $colorMaster = 'white';
+                break;
+        }
+
+        $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
+        $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
+        imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
 
         if($card->revealed) {
             $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-            imagecopy($cardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+            imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+        } else {
+            $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
+            $textColor = imagecolorallocate($agentsCardImage, 0, 0, 0);
+            imagefttext($agentsCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
         }
         
-        imagecopy($image, $cardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+        imagecopy($masterImage, $masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+        imagecopy($agentsImage, $agentsCardImage??$masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
     }
 
 }

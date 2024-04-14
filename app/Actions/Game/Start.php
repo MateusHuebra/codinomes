@@ -77,7 +77,7 @@ class Start implements Action {
             $gameCard->id = $key;
             $gameCard->text = $card['text'];
             $gameCard->team = $card['team']??'w';
-            $gameCard->revealed = false;
+            $gameCard->revealed = false; //can change to rand(0,1)?true:false for testing
             $gameCard->save();
         }
 
