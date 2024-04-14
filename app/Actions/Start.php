@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Actions\Language\Get as GetLanguage;
 use App\Models\Chat;
 use App\Models\User;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 
 class Start implements Action {

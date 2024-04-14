@@ -4,7 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Models\Game;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Message;
 use TelegramBot\Api\Types\Update;

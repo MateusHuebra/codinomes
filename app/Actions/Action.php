@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;
 
 interface Action {

@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 
 class Ping implements Action {
 

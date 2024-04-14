@@ -4,7 +4,7 @@ namespace App\Actions\Language;
 
 use App\Actions\Action;
 use App\Services\CallbackDataManager as CDM;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 

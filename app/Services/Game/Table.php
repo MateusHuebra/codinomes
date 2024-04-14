@@ -2,6 +2,7 @@
 
 namespace App\Services\Game;
 
+use App\Models\Chat;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Services\AppString;
@@ -18,6 +19,7 @@ class Table {
 
     static function send(Game $game, BotApi $bot, string $hint = null, bool $sendToMasters = true, string $winner = null) {
         $chatId = $game->chat_id;
+        $chatLanguage = Chat::find($chatId)->language;
         $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a' ? 'purple' : 'orange');
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
@@ -45,25 +47,25 @@ class Table {
         }
 
         if(!$winner) {
-            $keyboard = self::getKeyboard($game->status);
+            $keyboard = self::getKeyboard($game->status, $chatLanguage);
             switch ($game->status) {
                 case 'master_a':
-                    $role = AppString::get('game.master');
+                    $role = AppString::get('game.master', null, $chatLanguage);
                     $team = Game::TEAM['a']['emoji'];
                     $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList();
                     break;
                 case 'agent_a':
-                    $role = AppString::get('game.agents');
+                    $role = AppString::get('game.agents', null, $chatLanguage);
                     $team = Game::TEAM['a']['emoji'];
                     $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList();
                     break;
                 case 'master_b':
-                    $role = AppString::get('game.master');
+                    $role = AppString::get('game.master', null, $chatLanguage);
                     $team = Game::TEAM['b']['emoji'];
                     $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList();
                     break;
                 case 'agent_b':
-                    $role = AppString::get('game.agents');
+                    $role = AppString::get('game.agents', null, $chatLanguage);
                     $team = Game::TEAM['b']['emoji'];
                     $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();
                     break;
@@ -80,29 +82,29 @@ class Table {
                 'team_b' => Game::TEAM['b']['emoji'],
                 'left_a' => $leftA,
                 'left_b' => $leftB
-            ]);
+            ], $chatLanguage);
             if($hint) {
                 $text.= "\n\n".AppString::get('game.hint', [
                     'hint' => $hint
-                ]);
+                ], $chatLanguage);
             }
 
             $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
             unlink($tempAgentsImageFileName);
             if($sendToMasters) {
                 try{
-                    $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard():null, false, 'MarkdownV2');
-                    $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard():null, false, 'MarkdownV2');
+                    $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2');
+                    $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2');
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
-                    $bot->sendMessage($chatId, AppString::get('error.master_not_registered'));
+                    $bot->sendMessage($chatId, AppString::get('error.master_not_registered', null, $chatLanguage));
                 }
             } 
             
         } else {
             $text = AppString::get('game.win', [
                 'team' => $game::TEAM[$winner]['emoji']
-            ]);
+            ], $chatLanguage);
 
             $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
@@ -112,12 +114,12 @@ class Table {
 
     }
 
-    static function getKeyboard(string $status) {
+    static function getKeyboard(string $status, string $chatLanguage) {
         if($status=='master_a' || $status=='master_b') {
             return new InlineKeyboardMarkup([
                 [
                     [
-                        'text' => AppString::get('game.give_hint'),
+                        'text' => AppString::get('game.give_hint', null, $chatLanguage),
                         'url' => 't.me/CodinomesBot'
                     ]
                 ]
@@ -126,13 +128,13 @@ class Table {
             return new InlineKeyboardMarkup([
                 [
                     [
-                        'text' => AppString::get('game.choose_card'),
+                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
                         'switch_inline_query_current_chat' => ''
                     ]
                 ],
                 [
                     [
-                        'text' => AppString::get('game.skip'),
+                        'text' => AppString::get('game.skip', null, $chatLanguage),
                         'callback_data' => CDM::toString([
                             CDM::EVENT => CDM::SKIP
                         ])
@@ -142,11 +144,11 @@ class Table {
         }
     }
     
-    static function getMasterKeyboard() {
+    static function getMasterKeyboard(string $chatLanguage) {
         return new InlineKeyboardMarkup([
             [
                 [
-                    'text' => AppString::get('game.give_hint'),
+                    'text' => AppString::get('game.give_hint', null, $chatLanguage),
                     'switch_inline_query_current_chat' => ''
                 ]
             ]

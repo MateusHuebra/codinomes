@@ -4,7 +4,7 @@ namespace App\Actions\Chat;
 
 use App\Actions\Action;
 use App\Models\Chat;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Message;
 
 class Delete implements Action {

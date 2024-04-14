@@ -6,10 +6,9 @@ use App\Services\AppString;
 use App\UpdateHandlers\Factory;
 use Illuminate\Http\Request;
 use App\Models\TelegramUpdate;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\ServerLog;
 use TelegramBot\Api\Types\Update;
-use TelegramBot\Api\Client;
 use Throwable;
 
 class CodinomesController extends Controller

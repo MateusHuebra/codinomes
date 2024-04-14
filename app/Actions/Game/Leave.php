@@ -6,7 +6,7 @@ use App\Actions\Action;
 use App\Models\Chat;
 use App\Models\User;
 use App\Services\Game\Menu;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 
 class Leave implements Action {

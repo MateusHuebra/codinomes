@@ -6,7 +6,7 @@ use App\Actions\Action;
 use App\Models\Chat;
 use App\Models\User;
 use App\Services\CallbackDataManager as CDM;
-use App\Services\Telegram\BotApi;
+use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use Illuminate\Database\Eloquent\Model;
 use TelegramBot\Api\Types\Message;
