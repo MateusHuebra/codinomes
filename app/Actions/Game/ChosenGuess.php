@@ -47,7 +47,7 @@ class ChosenGuess implements Action {
         $game->updateStatus($game->status);
         $cardsLeft = $game->cards->where('team', $user->team)->where('revealed', false)->count();
         if($cardsLeft > 0) {
-            Table::send($game, $bot);
+            Table::send($game, $bot, null, false);
         
         } else {
             Table::send($game, $bot, null, true, $user->team);
