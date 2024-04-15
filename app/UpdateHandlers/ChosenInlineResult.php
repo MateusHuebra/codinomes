@@ -2,6 +2,7 @@
 
 namespace App\UpdateHandlers;
 
+use App\Actions\Game\ChosenColor;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Services\CallbackDataManager as CDM;
@@ -19,6 +20,9 @@ class ChosenInlineResult implements UpdateHandler {
 
         } else if($data[CDM::EVENT] === CDM::GUESS) {
             return new ChosenGuess;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_COLOR) {
+            return new ChosenColor;
 
         }
 
