@@ -16,6 +16,7 @@ class CallbackDataManager {
     const HINT = 'hi';
     const GUESS = 'gu';
     const SKIP = 'sk';
+    const CHANGE_COLOR = 'cc';
 
     //ATTRIBUTES
     const EVENT = 'e';

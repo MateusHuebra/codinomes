@@ -34,11 +34,11 @@ class Menu {
             'agents_a' => $agentsA->get()->toMentionList()??$empty,
             'master_b' => $masterB->get()->toMentionList()??$empty,
             'agents_b' => $agentsB->get()->toMentionList()??$empty,
-            'a' => Game::TEAM['a']['emoji'],
-            'b' => Game::TEAM['b']['emoji']
+            'a' => Game::COLORS[$game->color_a],
+            'b' => Game::COLORS[$game->color_b]
         ]);
 
-        $keyboard = self::getKeyboard($hasRequiredPlayers);
+        $keyboard = self::getKeyboard($hasRequiredPlayers, $game);
 
         try {
             if($action == self::RESEND) {
@@ -57,11 +57,11 @@ class Menu {
         }
     }
 
-    private static function getKeyboard(bool $hasRequiredPlayers) {
+    private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
         $buttonsArray = [];
         $buttonsArray[] = [
             [
-                'text' => Game::TEAM['a']['emoji'].' '.AppString::get('game.master'),
+                'text' => Game::COLORS[$game->color_a].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -69,7 +69,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::TEAM['a']['emoji'],
+                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->color_a],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -79,7 +79,7 @@ class Menu {
         ];
         $buttonsArray[] = [
             [
-                'text' => Game::TEAM['b']['emoji'].' '.AppString::get('game.master'),
+                'text' => Game::COLORS[$game->color_b].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',
@@ -87,7 +87,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::TEAM['b']['emoji'],
+                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->color_b],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',
@@ -96,6 +96,10 @@ class Menu {
             ]
         ];
         $buttonsArray[] = [
+            [
+                'text' => AppString::get('game.change_color'),
+                'switch_inline_query_current_chat' => ''
+            ],
             [
                 'text' => AppString::get('game.leave'),
                 'callback_data' => CDM::toString([

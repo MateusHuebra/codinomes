@@ -10,15 +10,13 @@ class Game extends Model
 {
     use HasFactory;
 
-    const TEAM = [
-        'a' => [
-            'emoji' => '🟣',
-            'color' => 'purple'
-        ],
-        'b' => [
-            'emoji' => '🟠',
-            'color' => 'orange'
-        ]
+    const COLORS = [
+        'purple' => '🟣',
+        'orange' => '🟠',
+        'red' => '🔴',
+        'blue' => '🔵',
+        'green' => '🟢',
+        'yellow' => '🟡'
     ];
 
     public $timestamps = false;

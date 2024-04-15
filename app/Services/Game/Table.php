@@ -30,7 +30,7 @@ class Table {
 
         $cards = $game->cards;
         foreach($cards as $card) {
-            self::addCard($masterImage??null, $agentsImage??null, $card, true);
+            self::addCard($masterImage??null, $agentsImage??null, $card, $game);
         }
 
         if($sendToMasters) {
@@ -51,22 +51,22 @@ class Table {
             switch ($game->status) {
                 case 'master_a':
                     $role = AppString::get('game.master', null, $chatLanguage);
-                    $team = Game::TEAM['a']['emoji'];
+                    $team = Game::COLORS[$game->color_a];
                     $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList();
                     break;
                 case 'agent_a':
                     $role = AppString::get('game.agents', null, $chatLanguage);
-                    $team = Game::TEAM['a']['emoji'];
+                    $team = Game::COLORS[$game->color_a];
                     $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList();
                     break;
                 case 'master_b':
                     $role = AppString::get('game.master', null, $chatLanguage);
-                    $team = Game::TEAM['b']['emoji'];
+                    $team = Game::COLORS[$game->color_b];
                     $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList();
                     break;
                 case 'agent_b':
                     $role = AppString::get('game.agents', null, $chatLanguage);
-                    $team = Game::TEAM['b']['emoji'];
+                    $team = Game::COLORS[$game->color_b];
                     $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();
                     break;
             }
@@ -78,8 +78,8 @@ class Table {
                 'role' => $role,
                 'team' =>  $team,
                 'players' => $playersList,
-                'team_a' => Game::TEAM['a']['emoji'],
-                'team_b' => Game::TEAM['b']['emoji'],
+                'team_a' => Game::COLORS[$game->color_a],
+                'team_b' => Game::COLORS[$game->color_b],
                 'left_a' => $leftA,
                 'left_b' => $leftB
             ], $chatLanguage);
@@ -102,8 +102,9 @@ class Table {
             } 
             
         } else {
+            $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $text = AppString::get('game.win', [
-                'team' => $game::TEAM[$winner]['emoji']
+                'team' => Game::COLORS[$color]
             ], $chatLanguage);
 
             $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
@@ -155,7 +156,7 @@ class Table {
         ]);
     }
 
-    static function addCard($masterImage, $agentsImage, GameCard $card, bool $master) {
+    static function addCard($masterImage, $agentsImage, GameCard $card, Game $game) {
         $fontPath = public_path('open-sans.bold.ttf');
         #region calculations
         $y = floor($card->id / 5);
@@ -181,10 +182,10 @@ class Table {
 
         switch ($card->team) {
             case 'a':
-                $colorMaster = Game::TEAM['a']['color'];
+                $colorMaster = $game->color_a;
                 break;
             case 'b':
-                $colorMaster = Game::TEAM['b']['color'];
+                $colorMaster = $game->color_b;
                 break;
             case 'x':
                 $colorMaster = 'black';

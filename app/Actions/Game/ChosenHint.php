@@ -21,7 +21,8 @@ class ChosenHint implements Action {
 
         $data = CDM::toArray($update->getResultId());
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
-        $historyLine = Game::TEAM[$user->team]['emoji'].' '.$hint;
+        $color = ($user->team=='a') ? $game->color_a : $game->color_b;
+        $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory($historyLine);
         
         $game->updateStatus('agent_'.$user->team);

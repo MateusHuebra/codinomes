@@ -58,6 +58,9 @@
         "leave": [
             "Leave"
         ],
+        "change_color": [
+            "Change color"
+        ],
         "you_left": [
             "You left"
         ],
@@ -87,6 +90,29 @@
         ],
         "win": [
             "Team {team} won the game\\!"
+        ]
+    },
+    "color": {
+        "purple" : [
+            "Purple"
+        ],
+        "orange" : [
+            "Orange"
+        ],
+        "red" : [
+            "Red"
+        ],
+        "blue" : [
+            "Blue"
+        ],
+        "green" : [
+            "Green"
+        ],
+        "yellow" : [
+            "Yellow"
+        ],
+        "brown" : [
+            "Brown"
         ]
     },
     "settings": {
@@ -130,6 +156,12 @@
         ],
         "no_game": [
             "There's no game going on"
+        ],
+        "color_taken": [
+            "Color already taken by the other team"
+        ],
+        "master_only": [
+            "Only the master can do that"
         ]
     }
 }

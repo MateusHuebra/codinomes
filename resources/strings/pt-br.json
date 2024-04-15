@@ -58,6 +58,9 @@
         "leave": [
             "Sair"
         ],
+        "change_color": [
+            "Trocar cor"
+        ],
         "you_left": [
             "Você saiu"
         ],
@@ -87,6 +90,29 @@
         ],
         "win": [
             "A equipe {team} venceu o jogo\\!"
+        ]
+    },
+    "color": {
+        "purple" : [
+            "Roxo"
+        ],
+        "orange" : [
+            "Laranja"
+        ],
+        "red" : [
+            "Vermelho"
+        ],
+        "blue" : [
+            "Azul"
+        ],
+        "green" : [
+            "Verde"
+        ],
+        "yellow" : [
+            "Amarelo"
+        ],
+        "brown" : [
+            "Marrom"
         ]
     },
     "settings": {
@@ -130,6 +156,12 @@
         ],
         "no_game": [
             "Não há nenhuma partida rolando"
+        ],
+        "color_taken": [
+            "Cor já usada pelo outro time"
+        ],
+        "master_only": [
+            "Apenas o mestre pode fazer isso"
         ]
     }
 }
