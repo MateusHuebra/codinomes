@@ -14,12 +14,13 @@ class History implements Action {
         $message = $update->getMessage();
         $chatId = $message->getChat()->getId();
 
+        $game = null;
         if($message->getChat()->getType()==='private') {
             $user = User::find($chatId);
             if($user->game_id) {
                 $game = Game::find($user->game_id);
             }
-            
+
         } else {
             $game = Game::where('chat_id', $chatId)->first();
         }
