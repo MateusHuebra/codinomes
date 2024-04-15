@@ -117,7 +117,13 @@
             "Enter a hint"
         ],
         "wrong_hint_format_desc": [
-            "Your hint must be a single word from 1 to 16 characters followed by the number of cards which this hint refers to. Example: Fear 2"
+            "Your hint must be a single word from 1 to 16 characters followed by the number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
+        ],
+        "wrong_guess_format_title": [
+            "Enter your guess"
+        ],
+        "wrong_guess_format_desc": [
+            "Just enter the first letters of the word and it will appear right here"
         ]
     }
 }

@@ -5,6 +5,7 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Models\Game;
 use App\Models\User;
+use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\Types\Inline\QueryResult\Article;
@@ -36,12 +37,20 @@ class Guess implements Action {
                     CDM::EVENT => CDM::GUESS,
                     CDM::NUMBER => $card->id
                 ]);
-                $results[] = new Article($data, $title, null, null, null, null, $messageContent);
+                $results[] = new Article($data, $title, null, 'https://imgur.com/3kQB4ed', null, null, $messageContent);
             }
             
-            $bot->answerInlineQuery($update->getId(), $results, 10);
+        } else {
+            $title = AppString::get('error.wrong_guess_format_title');
+            $desc = AppString::get('error.wrong_guess_format_desc');
+            $messageContent = new Text($title);
+            $data = CDM::toString([
+                CDM::EVENT => CDM::IGNORE
+            ]);
+            $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
         }
-        
+
+        $bot->answerInlineQuery($update->getId(), $results, 10);
     }
 
 }
