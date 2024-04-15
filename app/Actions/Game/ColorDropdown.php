@@ -23,6 +23,7 @@ class ColorDropdown implements Action {
         $data = CDM::toArray($update->getData());
         $game = Chat::find($chatId)->game;
         $game->menu = ($data[CDM::NUMBER] == 1 ? 'color' : null);
+        $game->save();
 
         Menu::send($game, $bot, Menu::EDIT, $messageId);
     }
