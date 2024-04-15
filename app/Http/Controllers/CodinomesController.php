@@ -6,7 +6,7 @@ use App\Services\AppString;
 use App\UpdateHandlers\Factory;
 use Illuminate\Http\Request;
 use App\Models\TelegramUpdate;
-use TelegramBot\Api\BotApi;
+use App\Services\Telegram\BotApi;
 use App\Services\ServerLog;
 use TelegramBot\Api\Types\Update;
 use Throwable;

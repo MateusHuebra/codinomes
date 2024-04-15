@@ -15,7 +15,7 @@ use App\Services\CallbackDataManager as CDM;
 class Table {
     
     static $border = 15;
-    static $fontSize = 23;
+    static $fontSize = 21;
 
     static function send(Game $game, BotApi $bot, string $hint = null, bool $sendToMasters = true, string $winner = null) {
         $chatId = $game->chat_id;
@@ -164,19 +164,19 @@ class Table {
         $textLen = strlen($card->text);
         if($textLen<9) {
             $fontSize = self::$fontSize;
-            $bottomSpace = 0;
+            $bottomSpace = 5;
         } else if($textLen<11) {
-            $fontSize = self::$fontSize-4;
-            $bottomSpace = 2;
+            $fontSize = self::$fontSize-2;
+            $bottomSpace = 5 + 1;
         } else {
-            $fontSize = self::$fontSize-8;
-            $bottomSpace = 4;
+            $fontSize = self::$fontSize-6;
+            $bottomSpace = 5 + 3;
         }
         $textBox = imagettfbbox($fontSize, 0, $fontPath, $card->text);
         $textWidth = $textBox[2] - $textBox[0];
         //$textHeight = $textBox[1] - $textBox[7]; usuless for now
         $textX = (210 - $textWidth) / 2;
-        $textY = 120 - $bottomSpace;
+        $textY = 115 - $bottomSpace;
         #endregion
 
         switch ($card->team) {
@@ -196,10 +196,15 @@ class Table {
         }
 
         $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
-        $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
-        imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
 
         if($card->revealed) {
+            if($colorMaster=='black') {
+                $textColor = imagecolorallocate($masterCardImage, 255, 255, 255);
+            } else {
+                $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
+            }
+            imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
+            
             $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
             imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
         } else {
