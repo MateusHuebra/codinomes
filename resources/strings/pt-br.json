@@ -71,7 +71,7 @@
             "Dar dica"
         ],
         "turn": [
-            "É a vez de {role} {team} {players}\n\n{team_a} {left_a}\n{team_b} {left_b}"
+            "É a vez de {role} {team} {players}\n\n{team_a} {left_a}   restantes   {left_b} {team_b}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"

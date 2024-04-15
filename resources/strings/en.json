@@ -71,7 +71,7 @@
             "Give hint"
         ],
         "turn": [
-            "It's turn of {role} {team} {players}\n\n{team_a} {left_a}\n{team_b} {left_b}"
+            "It's turn of {role} {team} {players}\n\n{team_a} {left_a}   left   {left_b} {team_b}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
