@@ -31,7 +31,7 @@ class Start implements Action {
 
         if($masterA->count()==0 || $agentsA->count()==0 || $masterB->count()==0 || $agentsB->count()==0) {
             $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_required_players');
-            //return;
+            return;
         }
 
         $teams = ['a', 'b'];
@@ -78,7 +78,7 @@ class Start implements Action {
             $gameCard->id = $key;
             $gameCard->text = $card['text'];
             $gameCard->team = $card['team']??'w';
-            $gameCard->revealed = rand(0,1)?true:false; //can change to rand(0,1)?true:false for testing
+            $gameCard->revealed = false; //can change to rand(0,1)?true:false for testing
             $gameCard->save();
         }
 
