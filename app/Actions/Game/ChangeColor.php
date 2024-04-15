@@ -19,6 +19,11 @@ class ChangeColor implements Action {
         $messageId = $update->getMessage()->getMessageId();
 
         $user = User::find($update->getFrom()->getId());
+
+        if(!$user->game_id) {
+            return;
+        }
+
         $game = Game::find($user->game_id);
         
         if(!($game->status=='creating' && $user->role=='master')) {
