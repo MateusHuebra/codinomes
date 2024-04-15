@@ -17,10 +17,6 @@ class Guess implements Action {
         $user = User::find($update->getFrom()->getId());
         $game = Game::find($user->game_id);
 
-        if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
-            return;
-        }
-
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
         $cards = $game->cards;
 

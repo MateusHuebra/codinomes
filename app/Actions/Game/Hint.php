@@ -17,7 +17,6 @@ class Hint implements Action {
 
     public function run($update, BotApi $bot) : Void {
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
-        $user = User::find($update->getFrom()->getId());
 
         $results = [];
         if(preg_match(self::REGEX_HINT_NUMBER, $query, $matches) || preg_match(self::REGEX_NUMBER_HINT, $query, $matches)) {
