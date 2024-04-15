@@ -5,6 +5,7 @@ namespace App\UpdateHandlers;
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Game\Create;
+use App\Actions\Game\History;
 use App\Actions\Game\Stop;
 use App\Actions\Language\Get;
 use App\Actions\Ping;
@@ -53,6 +54,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'stop') {
             return new Stop;
+
+        } else if($command == 'history') {
+            return new History;
 
         } else if($command == 'language') {
             return new Get;
