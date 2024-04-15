@@ -124,6 +124,9 @@
         ],
         "wrong_guess_format_desc": [
             "Just enter the first letters of the word and it will appear right here"
+        ],
+        "no_history": [
+            "History is empty"
         ]
     }
 }

@@ -124,6 +124,9 @@
         ],
         "wrong_guess_format_desc": [
             "Basta escrever o começo da palavra que ela aparecerá aqui"
+        ],
+        "no_history": [
+            "O histórico está vazio"
         ]
     }
 }

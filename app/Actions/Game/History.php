@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Models\Game;
+use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 
 class History implements Action {
@@ -16,7 +17,7 @@ class History implements Action {
             return;
         }
 
-        $bot->sendMessage($chatId, $game->history, null, false, $message->getMessageId(), null, false, null, null, true);
+        $bot->sendMessage($chatId, $game->history??AppString::get('error.no_history'), null, false, $message->getMessageId(), null, false, null, null, true);
     }
 
 }
