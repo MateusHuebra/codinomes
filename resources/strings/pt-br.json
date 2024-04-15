@@ -127,6 +127,9 @@
         ],
         "no_history": [
             "O histórico está vazio"
+        ],
+        "no_game": [
+            "Não há nenhuma partida rolando"
         ]
     }
 }

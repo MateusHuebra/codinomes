@@ -127,6 +127,9 @@
         ],
         "no_history": [
             "History is empty"
+        ],
+        "no_game": [
+            "There's no game going on"
         ]
     }
 }
