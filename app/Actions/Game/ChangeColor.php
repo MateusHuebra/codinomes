@@ -31,7 +31,7 @@ class ChangeColor implements Action {
             return;
         }
 
-        $data = CDM::toArray($update->getResultId());
+        $data = CDM::toArray($update->getData());
         $newColor = $data[CDM::TEXT];
         if($user->team=='a') {
             $yourColor = 'color_a';
