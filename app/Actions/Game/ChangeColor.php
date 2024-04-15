@@ -47,6 +47,7 @@ class ChangeColor implements Action {
         }
         
         $game->$yourColor = $newColor;
+        $game->menu = null;
         $game->save();
         
         Menu::send($game, $bot, MENU::EDIT, $messageId);

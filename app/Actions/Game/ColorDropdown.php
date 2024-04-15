@@ -20,11 +20,11 @@ class ColorDropdown implements Action {
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
         
-        $chat = Chat::find($chatId);
         $data = CDM::toArray($update->getData());
-        $changeColor = ($data[CDM::NUMBER]);
+        $game = Chat::find($chatId)->game;
+        $game->menu = ($data[CDM::NUMBER] ? 'color' : null);
 
-        Menu::send($chat->game, $bot, Menu::EDIT, $messageId, $changeColor);
+        Menu::send($game, $bot, Menu::EDIT, $messageId);
     }
 
 }

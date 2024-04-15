@@ -14,7 +14,7 @@ class Menu {
     const RESEND = 'resend';
     const EDIT = 'edit';
     
-    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null, $changeColor = false) : Void {
+    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) : Void {
         $game->refresh();
 
         $masterA = $game->users()->fromTeamRole('a', 'master');
@@ -40,6 +40,7 @@ class Menu {
             'b' => $teamB
         ]);
 
+        $changeColor = ($game->menu == 'color');
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $changeColor);
 
         try {
@@ -114,7 +115,7 @@ class Menu {
 
         $buttonsArray[] = [
             [
-                'text' => AppString::get('game.change_color').'  '.($changeColor ? '⮾' : '⯅'),
+                'text' => AppString::get('game.change_color').'  '.($changeColor ? 'X' : '/\\'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::DROPDOWN,
                     CDM::TEXT => CDM::CHANGE_COLOR,
