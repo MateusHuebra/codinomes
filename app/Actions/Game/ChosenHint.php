@@ -20,11 +20,15 @@ class ChosenHint implements Action {
         }
 
         $data = CDM::toArray($update->getResultId());
+        $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
+        $historyLine = Game::TEAM[$user->team]['emoji'].' '.$hint;
+        $game->addToHistory($historyLine);
+        
         $game->updateStatus('agent_'.$user->team);
         $game->attempts_left = $data[CDM::NUMBER];
         $game->save();
 
-        $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
+        
         Table::send($game, $bot, $hint, false);
     }
 

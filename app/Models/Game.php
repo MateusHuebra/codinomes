@@ -49,4 +49,9 @@ class Game extends Model
         $this->save();
     }
 
+    public function addToHistory(string $line) {
+        $this->history = $this->history.PHP_EOL.$line;
+        $this->save();
+    }
+
 }
