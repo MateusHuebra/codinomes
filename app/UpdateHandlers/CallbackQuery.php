@@ -42,7 +42,7 @@ class CallbackQuery implements UpdateHandler {
         } else if($data[CDM::EVENT] === CDM::SET_LANGUAGE) {
             return new SetLanguage;
             
-        } else if($data[CDM::EVENT] === CDM::DROPDOWN && $data[CDM::TEXT === CDM::CHANGE_COLOR]) {
+        } else if($data[CDM::EVENT] === CDM::DROPDOWN && $data[CDM::TEXT] === CDM::CHANGE_COLOR) {
             return new ColorDropdown;
         }
 
