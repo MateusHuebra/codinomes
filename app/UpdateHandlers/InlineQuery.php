@@ -17,7 +17,7 @@ class InlineQuery implements UpdateHandler {
             return new Color;
 
         } else if($event === 'hint') {
-            return new Guess;
+            return new Hint;
 
         } else if($event === 'guess') {
             return new Guess;
