@@ -21,9 +21,6 @@ class ChosenInlineResult implements UpdateHandler {
         } else if($data[CDM::EVENT] === CDM::GUESS) {
             return new ChosenGuess;
 
-        } else if($data[CDM::EVENT] === CDM::CHANGE_COLOR) {
-            return new ChosenColor;
-
         }
 
     }

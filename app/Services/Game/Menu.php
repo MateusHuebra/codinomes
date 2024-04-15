@@ -14,7 +14,7 @@ class Menu {
     const RESEND = 'resend';
     const EDIT = 'edit';
     
-    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null) : Void {
+    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null, $changeColor = false) : Void {
         $game->refresh();
 
         $masterA = $game->users()->fromTeamRole('a', 'master');
@@ -40,7 +40,7 @@ class Menu {
             'b' => $teamB
         ]);
 
-        $keyboard = self::getKeyboard($hasRequiredPlayers, $game);
+        $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $changeColor);
 
         try {
             if($action == self::RESEND) {
@@ -59,7 +59,7 @@ class Menu {
         }
     }
 
-    private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
+    private static function getKeyboard(bool $hasRequiredPlayers, Game $game, $changeColor) {
         $buttonsArray = [];
         $buttonsArray[] = [
             [
@@ -97,10 +97,29 @@ class Menu {
                 ])
             ]
         ];
+
+        if($changeColor) {
+            $array = [];
+            foreach(Game::COLORS as $color => $emoji) {
+                $array[] = [
+                    'text' => $emoji,
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_COLOR,
+                        CDM::TEXT => $color
+                    ])
+                ];
+            }
+            $buttonsArray[] = $array;
+        }
+
         $buttonsArray[] = [
             [
-                'text' => AppString::get('game.change_color'),
-                'switch_inline_query_current_chat' => ''
+                'text' => AppString::get('game.change_color').'  '.($changeColor ? '⮾' : '⯅'),
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::DROPDOWN,
+                    CDM::TEXT => CDM::CHANGE_COLOR,
+                    CDM::NUMBER => ($changeColor ? 0 : 1)
+                ])
             ],
             [
                 'text' => AppString::get('game.leave'),

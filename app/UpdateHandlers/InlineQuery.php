@@ -31,7 +31,7 @@ class InlineQuery implements UpdateHandler {
         if($user && $user->game_id) {
             $game = Game::find($user->game_id);
             if($game->status=='creating' && $user->role=='master') {
-                return 'color';
+                return null;//'color';
             } else if($game->status=='master_a' && $user->team=='a' && $user->role=='master') {
                 return 'hint';
             } else if($game->status=='master_b' && $user->team=='b' && $user->role=='master') {
