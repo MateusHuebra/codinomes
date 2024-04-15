@@ -17,7 +17,7 @@ class StopAbandonedLobbies {
         $games = Game::all();
         foreach ($games as $game) {
             $time = strtotime($game->status_updated_at);
-            if($now - $time >= 600) {
+            if($now - $time >= 6000) {
                 try {
                     $bot->sendMessage($game->chat_id, AppString::get('game.stopped_by_time'));
                 } catch(Exception $e) {}
