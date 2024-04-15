@@ -16,7 +16,7 @@ class Color implements Action {
     public function run($update, BotApi $bot) : Void {
         $results = [];
         foreach(Game::COLORS as $color => $emoji) {
-            $title = $emoji.' '.AppString::get('color.',$color);
+            $title = $emoji.' '.AppString::get('color.'.$color);
             $data = CDM::toString([
                 CDM::EVENT => CDM::CHANGE_COLOR,
                 CDM::TEXT => $color
