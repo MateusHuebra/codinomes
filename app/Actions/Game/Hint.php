@@ -12,19 +12,22 @@ use App\Services\CallbackDataManager as CDM;
 
 class Hint implements Action {
 
+    const REGEX_HINT_NUMBER = '/^(?<hint>[a-záàâãéèêíïóôõöúçñ]{1,16}) (?<number>[0-9])$/i';
+    const REGEX_NUMBER_HINT = '/^(?<number>[0-9]) (?<hint>[a-záàâãéèêíïóôõöúçñ]{1,16})$/i';
+
     public function run($update, BotApi $bot) : Void {
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
         $user = User::find($update->getFrom()->getId());
 
         $results = [];
-        if(preg_match('/^([a-záàâãéèêíïóôõöúçñ]{1,16}) ([0-9])$/i', $query, $matches)) {
+        if(preg_match(self::REGEX_HINT_NUMBER, $query, $matches) || preg_match(self::REGEX_NUMBER_HINT, $query, $matches)) {
             $title = AppString::get('game.confirm_hint');
             $desc = $query;
             $messageContent = new Text(AppString::get('game.hint_sended'));
             $data = CDM::toString([
                 CDM::EVENT => CDM::HINT,
-                CDM::TEXT => $matches[1],
-                CDM::NUMBER => $matches[2]
+                CDM::TEXT => $matches['hint'],
+                CDM::NUMBER => $matches['number']
             ]);
         } else {
             $title = AppString::get('error.wrong_hint_format_title');
