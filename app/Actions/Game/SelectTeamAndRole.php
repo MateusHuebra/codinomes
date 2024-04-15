@@ -49,6 +49,8 @@ class SelectTeamAndRole implements Action {
             }
         }
 
+        $user->name = substr($update->getFrom()->getFirstName(), 0, 32);
+        $user->username = $update->getFrom()->getUsername();
         $user->game_id = $game->id;
         $user->team = $data[CDM::TEAM];
         $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
