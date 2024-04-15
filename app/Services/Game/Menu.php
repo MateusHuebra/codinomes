@@ -28,14 +28,16 @@ class Menu {
             $hasRequiredPlayers = true;
         }
 
+        $teamA = mb_strtoupper(AppString::get('color.'.$game->color_a), 'UTF-8').' '.Game::COLORS[$game->color_a];
+        $teamB = mb_strtoupper(AppString::get('color.'.$game->color_b), 'UTF-8').' '.Game::COLORS[$game->color_b];
         $empty = '_'.AppString::get('game.empty').'_';
         $textMessage = AppString::get('game.teams_lists', [
             'master_a' => $masterA->get()->toMentionList()??$empty,
             'agents_a' => $agentsA->get()->toMentionList()??$empty,
             'master_b' => $masterB->get()->toMentionList()??$empty,
             'agents_b' => $agentsB->get()->toMentionList()??$empty,
-            'a' => Game::COLORS[$game->color_a],
-            'b' => Game::COLORS[$game->color_b]
+            'a' => $teamA,
+            'b' => $teamB
         ]);
 
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game);

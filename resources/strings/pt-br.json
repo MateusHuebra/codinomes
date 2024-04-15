@@ -94,13 +94,13 @@
     },
     "color": {
         "purple" : [
-            "Roxo"
+            "Lilás"
         ],
         "orange" : [
             "Laranja"
         ],
         "red" : [
-            "Vermelho"
+            "Vermelha"
         ],
         "blue" : [
             "Azul"
@@ -109,10 +109,7 @@
             "Verde"
         ],
         "yellow" : [
-            "Amarelo"
-        ],
-        "brown" : [
-            "Marrom"
+            "Amarela"
         ]
     },
     "settings": {

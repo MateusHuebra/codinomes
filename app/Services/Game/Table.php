@@ -103,6 +103,7 @@ class Table {
             
         } else {
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
+            $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
             $text = AppString::get('game.win', [
                 'team' => Game::COLORS[$color]
             ], $chatLanguage);
