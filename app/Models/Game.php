@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 class Game extends Model
@@ -33,9 +33,9 @@ class Game extends Model
         return $this->hasMany(GameCard::class);
     }
 
-    public function chat(): HasOne
+    public function chat(): BelongsTo
     {
-        return $this->hasOne(Chat::class);
+        return $this->belongsTo(Chat::class);
     }
 
     public function stop() {
