@@ -83,7 +83,7 @@
             "Hint sended"
         ],
         "hint": [
-            "Hint: {hint}"
+            "{hints} < current hint"
         ],
         "skip": [
             "Skip your turn"
