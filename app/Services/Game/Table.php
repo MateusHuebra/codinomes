@@ -163,11 +163,11 @@ class Table {
         
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
-            imagefttext($masterImage, $fontSize, 0, $axis['x'], 1070, $textColor, self::$fontPath, $hint);
+            imagefttext($masterImage, $fontSize, 0, $axis['x'], 1065, $textColor, self::$fontPath, $hint);
         }
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
-            imagefttext($agentsImage, $fontSize, 0, $axis['x'], 1070, $textColor, self::$fontPath, $hint);
+            imagefttext($agentsImage, $fontSize, 0, $axis['x'], 1065, $textColor, self::$fontPath, $hint);
         }
     }
 
