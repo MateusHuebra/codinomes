@@ -30,7 +30,7 @@ class ChosenHint implements Action {
         $game->save();
 
         
-        Table::send($game, $bot, $hint, false);
+        Table::send($game, $bot, null, $hint, false);
     }
 
 }
