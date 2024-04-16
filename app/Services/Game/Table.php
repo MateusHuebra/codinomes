@@ -183,8 +183,8 @@ class Table {
         $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
         $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
         $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
-        imagefttext($squareA, $fontSize, 0, $axisA['x']-2, $axisA['y'], $textColor, self::$fontPath, $leftA);
-        imagefttext($squareB, $fontSize, 0, $axisB['x']-2, $axisB['y'], $textColor, self::$fontPath, $leftB);
+        imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
+        imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
         $y = self::BORDER;
         if($masterImage) {
             $x = self::BORDER;
