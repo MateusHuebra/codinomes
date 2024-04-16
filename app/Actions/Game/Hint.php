@@ -12,8 +12,8 @@ use App\Services\CallbackDataManager as CDM;
 
 class Hint implements Action {
 
-    const REGEX_HINT_NUMBER = '/^(?<hint>[a-záàâãéèêíïóôõöúçñ]{1,16}) (?<number>[0-9])$/i';
-    const REGEX_NUMBER_HINT = '/^(?<number>[0-9]) (?<hint>[a-záàâãéèêíïóôõöúçñ]{1,16})$/i';
+    const REGEX_HINT_NUMBER = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16}) (?<number>[0-9])$/';
+    const REGEX_NUMBER_HINT = '/^(?<number>[0-9]) (?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16})$/';
 
     public function run($update, BotApi $bot) : Void {
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
