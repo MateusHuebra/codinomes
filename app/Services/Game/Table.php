@@ -206,8 +206,10 @@ class Table {
             }
             imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
 
-            $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-            imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+            if($card->revealed) {
+                $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
+                imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+            }
         }
 
         if(!$card->revealed) {
