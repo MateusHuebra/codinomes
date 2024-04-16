@@ -19,7 +19,7 @@ class ChosenGuess implements Action {
         if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
             return;
         }
-        if(!$game->attempts_left || $game->attempts_left < 0) {
+        if(is_null($game->attempts_left) || $game->attempts_left < 0) {
             return;
         }
 
