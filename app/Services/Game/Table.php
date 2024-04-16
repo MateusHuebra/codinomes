@@ -266,7 +266,6 @@ class Table {
             } else {
                 $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
             }
-            imagefttext($masterCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
 
             if($card->revealed) {
                 $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
@@ -274,8 +273,12 @@ class Table {
                 if($card->id === $highlightCard) {
                     $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
                     imagecopy($masterCardImage, $highlightedImage, 0, 0, 0, 0, 210, 140);
+                } else {
+                    $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
                 }
             }
+
+            imagefttext($masterCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
         }
 
         if(!$card->revealed) {
