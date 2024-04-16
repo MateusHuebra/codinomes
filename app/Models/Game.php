@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Game extends Model
 {
@@ -29,6 +31,11 @@ class Game extends Model
     public function cards(): HasMany
     {
         return $this->hasMany(GameCard::class);
+    }
+
+    public function chat(): HasOne
+    {
+        return $this->hasOne(Chat::class);
     }
 
     public function stop() {

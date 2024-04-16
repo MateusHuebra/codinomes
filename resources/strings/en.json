@@ -122,7 +122,7 @@
     },
     "error": {
         "user_not_registered": [
-            "You need to DM me to have access to that"
+            "DM the bot to gain access to that"
         ],
         "master_not_registered": [
             "I don't have access to masters dm to send them the image"

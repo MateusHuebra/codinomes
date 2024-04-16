@@ -17,6 +17,11 @@ class Stop implements Action {
         if(!$game) {
             return;
         }
+        if(!$game->chat->isTgUserAdmin($update->getMessage()->getFrom(), $bot)) {
+            $bot->sendMessage($chatId, AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
+            return;
+        }
+
         $game->stop();
 
         $bot->sendMessage($chatId, AppString::get('game.stopped'));

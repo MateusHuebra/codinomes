@@ -65,7 +65,7 @@
             "Você saiu"
         ],
         "choose_card": [
-            "Escolha carta"
+            "Escolher carta"
         ],
         "give_hint": [
             "Dar dica"
@@ -122,7 +122,7 @@
     },
     "error": {
         "user_not_registered": [
-            "Você precisa me chamar no privado para ter acesso a isso"
+            "Chame o bot no privado para liberar o acesso a isso"
         ],
         "master_not_registered": [
             "Não tenho acesso ao pv dos mestres para enviar a imagem para eles"
