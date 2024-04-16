@@ -84,7 +84,7 @@ class Table {
                 'left_b' => $leftB
             ], $chatLanguage);
             if($hint) {
-                $text.= "\n\n".AppString::get('game.hint', [
+                $text.= "\n".AppString::get('game.hint', [
                     'hints' => $game->history
                 ], $chatLanguage);
             }
