@@ -14,7 +14,7 @@ use App\Services\CallbackDataManager as CDM;
 
 class Table {
     
-    const BORDER = 15;
+    const BORDER = 10;
     const FONT_SIZE = 21;
     static $fontPath;
 
