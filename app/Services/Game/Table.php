@@ -22,7 +22,11 @@ class Table {
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
-        $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a' ? $game->color_a : $game->color_b);
+        if($winner) {
+            $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
+        } else {
+            $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a') ? $game->color_a : $game->color_b;
+        }
         $cards = $game->cards;
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
