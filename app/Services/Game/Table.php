@@ -197,19 +197,20 @@ class Table {
                 break;
         }
 
-        $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
-
-        if($card->revealed) {
+        if(!is_null($masterImage) || $card->revealed) {       
+            $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
             if($colorMaster=='black') {
                 $textColor = imagecolorallocate($masterCardImage, 255, 255, 255);
             } else {
                 $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
             }
             imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
-            
+
             $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
             imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
-        } else {
+        }
+
+        if(!$card->revealed) {
             $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
             $textColor = imagecolorallocate($agentsCardImage, 0, 0, 0);
             imagefttext($agentsCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
