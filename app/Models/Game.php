@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use TelegramBot\Api\BotApi;
 
 
 class Game extends Model
@@ -36,6 +37,18 @@ class Game extends Model
     public function chat(): BelongsTo
     {
         return $this->belongsTo(Chat::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function hasPermission(User $user, BotApi $bot) {
+        if($user->id === $this->creator->id) {
+            return true;
+        }
+        return $this->chat->isAdmin($user, $bot);
     }
 
     public function stop() {

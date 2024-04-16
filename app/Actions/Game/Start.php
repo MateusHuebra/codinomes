@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\Pack;
+use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Table;
 use TelegramBot\Api\BotApi;
@@ -21,6 +22,12 @@ class Start implements Action {
 
         if(!$game || $game->status != 'creating') {
             $bot->deleteMessage($chatId, $messageId);
+            return;
+        }
+
+        $user = User::find($update->getMessage()->getFrom()->getId());
+        if(!$user || !$game->hasPermission($user, $bot)) {
+            $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.admin_only');
             return;
         }
 
@@ -91,6 +98,7 @@ class Start implements Action {
             $bot->deleteMessage($chatId, $messageId);
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
+
         Table::send($game, $bot);
     }
 

@@ -25,7 +25,7 @@ class SelectTeamAndRole implements Action {
         }
 
         $game = Game::where('chat_id', $chatId)->first();
-        if(!$game) {
+        if(!$game || $game->status != 'creating') {
             $bot->deleteMessage($chatId, $message->getMessageId());
             $bot->sendAlertOrMessage($updateId, $chatId, 'game.no_game');
             return;

@@ -23,18 +23,18 @@ class Set implements Action {
             //
         }
         $data = CDM::toArray($update->getData());
+        $user = User::find($update->getFrom()->getId());
         if($message->getChat()->getType()==='private') {
-            $user = User::find($update->getFrom()->getId());
             $chatId = $user->id;
             $this->setUserOrChatLanguage($user, $data, $bot, $message);
             
         } else if($message->getChat()->getType()==='supergroup') {
             $chat = Chat::find($message->getChat()->getId());
             $chatId = $chat->id;
-            if($data[CDM::FIRST_TIME] || $chat->isTgUserAdmin($update->getFrom(), $bot)) {
+            if($chat->isAdmin($user, $bot) || $data[CDM::FIRST_TIME]) {
                 $this->setUserOrChatLanguage($chat, $data, $bot, $message);
             } else {
-                $bot->sendMessage($chat->id, AppString::get('error.admin_only'));
+                $bot->sendMessage($chatId, AppString::get('error.admin_only'));
             }
 
         }

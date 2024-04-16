@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Models\Game;
+use App\Models\User;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Message;
@@ -13,11 +14,13 @@ class Stop implements Action {
 
     public function run($update, BotApi $bot) : Void {
         $chatId = $update->getMessage()->getChat()->getId();
+        $userId = $update->getMessage()->getFrom()->getId();
         $game = Game::where('chat_id', $chatId)->first();
-        if(!$game) {
+        $user = User::find($userId);
+        if(!$game || !$user) {
             return;
         }
-        if(!$game->chat->isTgUserAdmin($update->getMessage()->getFrom(), $bot)) {
+        if(!$game->hasPermission($user, $bot)) {
             $bot->sendMessage($chatId, AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
             return;
         }
