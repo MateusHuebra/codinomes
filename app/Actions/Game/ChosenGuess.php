@@ -39,7 +39,7 @@ class ChosenGuess implements Action {
             $this->endgame($user, $game, $bot, $card->id);
 
         } else {
-            $this->skip($user, $game, $bot);
+            $this->skip($user, $game, $bot, $card->id);
         }
     }
 
