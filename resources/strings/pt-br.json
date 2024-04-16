@@ -83,7 +83,7 @@
             "Dica enviada"
         ],
         "hint": [
-            "{hints} < dica atual"
+            "{hints} \\< dica atual"
         ],
         "skip": [
             "Pular sua vez"
