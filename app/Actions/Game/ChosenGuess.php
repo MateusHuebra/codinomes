@@ -30,41 +30,41 @@ class ChosenGuess implements Action {
         if($card->team == $user->team) {
             $game->attempts_left--;
             if($game->attempts_left >= 0) {
-                $this->next($user, $game, $bot);
+                $this->next($user, $game, $bot, $card->id);
             } else {
-                $this->skip($user, $game, $bot);
+                $this->skip($user, $game, $bot, $card->id);
             }
 
         } else if($card->team == 'x') {
-            $this->endgame($user, $game, $bot);
+            $this->endgame($user, $game, $bot, $card->id);
 
         } else {
             $this->skip($user, $game, $bot);
         }
     }
 
-    private function next(User $user, Game $game, $bot) {
+    private function next(User $user, Game $game, $bot, int $cardId) {
         $game->updateStatus($game->status);
         $cardsLeft = $game->cards->where('team', $user->team)->where('revealed', false)->count();
         if($cardsLeft > 0) {
-            Table::send($game, $bot, null, false);
+            Table::send($game, $bot, $cardId, null, false, null);
         
         } else {
-            Table::send($game, $bot, null, true, $user->team);
+            Table::send($game, $bot, $cardId, null, true, $user->team);
         }
     }
 
-    private function skip(User $user, Game $game, $bot) {
+    private function skip(User $user, Game $game, $bot, int $cardId = null) {
         $nextStatus = 'master_'.$user->getEnemyTeam();
         $game->updateStatus($nextStatus);
         $game->attempts_left = null;
         $game->save();
 
-        Table::send($game, $bot);
+        Table::send($game, $bot, $cardId);
     }
 
-    private function endgame(User $user, Game $game, $bot) {
-        Table::send($game, $bot, null, true, $user->getEnemyTeam());
+    private function endgame(User $user, Game $game, $bot, int $cardId) {
+        Table::send($game, $bot, $cardId, null, true, $user->getEnemyTeam());
     }
 
 }

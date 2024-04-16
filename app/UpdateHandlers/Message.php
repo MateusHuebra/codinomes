@@ -49,16 +49,16 @@ class Message implements UpdateHandler {
         if($command == 'start') {
             return new Start;
 
-        } else if($command == 'new') {
+        } else if(in_array($command, ['new', 'novo'])) {
             return new Create;
 
-        } else if($command == 'stop') {
+        } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;
 
-        } else if($command == 'history') {
+        } else if(in_array($command, ['hints', 'dicas'])) {
             return new History;
 
-        } else if($command == 'language') {
+        } else if(in_array($command, ['language', 'idioma'])) {
             return new Get;
 
         } else if($command == 'ping') {

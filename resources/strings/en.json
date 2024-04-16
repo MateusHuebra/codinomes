@@ -71,7 +71,7 @@
             "Give hint"
         ],
         "turn": [
-            "It's turn of {role} {team} {players}\n\n{team_a} {left_a}   left   {left_b} {team_b}"
+            "It's turn of {role} {team} {players}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
@@ -90,6 +90,9 @@
         ],
         "win": [
             "Team {team} won the game\\!"
+        ],
+        "history": [
+            "Send /hints to see the hints history"
         ]
     },
     "color": {

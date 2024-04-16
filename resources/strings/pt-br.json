@@ -71,7 +71,7 @@
             "Dar dica"
         ],
         "turn": [
-            "É a vez de {role} {team} {players}\n\n{team_a} {left_a}   restantes   {left_b} {team_b}"
+            "É a vez de {role} {team} {players}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
@@ -90,6 +90,9 @@
         ],
         "win": [
             "A equipe {team} venceu o jogo\\!"
+        ],
+        "history": [
+            "Envie /dicas para ver o histórico de dicas"
         ]
     },
     "color": {

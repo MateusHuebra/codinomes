@@ -14,13 +14,19 @@ use App\Services\CallbackDataManager as CDM;
 
 class Table {
     
-    static $border = 15;
-    static $fontSize = 21;
+    const BORDER = 15;
+    const FONT_SIZE = 21;
+    static $fontPath;
 
-    static function send(Game $game, BotApi $bot, string $hint = null, bool $sendToMasters = true, string $winner = null) {
+    static function send(Game $game, BotApi $bot, int $highlightCard = null, string $hint = null, bool $sendToMasters = true, string $winner = null) {
+        self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
-        $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a' ? 'purple' : 'orange');
+        $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a' ? $game->color_a : $game->color_b);
+        $cards = $game->cards;
+        $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
+        $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
+
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
         }
@@ -28,9 +34,16 @@ class Table {
             $agentsImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
         }
 
-        $cards = $game->cards;
+        self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB);
+
         foreach($cards as $card) {
-            self::addCard($masterImage??null, $agentsImage??null, $card, $game);
+            self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
+        }
+
+        if($hint) {
+            self::addHint($masterImage??null, $agentsImage??null, $hint, 50);
+        } else {
+            self::addHint($masterImage??null, $agentsImage??null, AppString::get('game.history'), 25);
         }
 
         if($sendToMasters) {
@@ -70,24 +83,12 @@ class Table {
                     $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();
                     break;
             }
-    
-            $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
-            $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
             
             $text = AppString::get('game.turn', [
                 'role' => $role,
                 'team' =>  $team,
-                'players' => $playersList,
-                'team_a' => Game::COLORS[$game->color_a],
-                'team_b' => Game::COLORS[$game->color_b],
-                'left_a' => $leftA,
-                'left_b' => $leftB
+                'players' => $playersList
             ], $chatLanguage);
-            if($hint) {
-                $text.= "\n".AppString::get('game.hint', [
-                    'hints' => $game->history
-                ], $chatLanguage);
-            }
 
             $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
             unlink($tempAgentsImageFileName);
@@ -157,28 +158,89 @@ class Table {
         ]);
     }
 
-    static function addCard($masterImage, $agentsImage, GameCard $card, Game $game) {
-        $fontPath = public_path('open-sans.bold.ttf');
-        #region calculations
-        $y = floor($card->id / 5);
-        $x = $card->id - (5*$y);
+    static function addHint($masterImage, $agentsImage, string $hint, int $fontSize) {
+        $axis = self::getAxisToCenterText($fontSize, $hint, 860, 1100);
+        
+        if($masterImage) {
+            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+            imagefttext($masterImage, $fontSize, 0, $axis['x'], 1070, $textColor, self::$fontPath, $hint);
+        }
+        if($agentsImage) {
+            $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
+            imagefttext($agentsImage, $fontSize, 0, $axis['x'], 1070, $textColor, self::$fontPath, $hint);
+        }
+    }
 
+    static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
+        if($masterImage) {
+            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+        }
+        if($agentsImage) {
+            $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
+        }
+        $fontSize = 65; 
+        $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
+        $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+        $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
+        $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
+        imagefttext($squareA, $fontSize, 0, $axisA['x']-2, $axisA['y'], $textColor, self::$fontPath, $leftA);
+        imagefttext($squareB, $fontSize, 0, $axisB['x']-2, $axisB['y'], $textColor, self::$fontPath, $leftB);
+        $y = self::BORDER;
+        if($masterImage) {
+            $x = self::BORDER;
+            imagecopy($masterImage, $squareA, $x, $y, 0, 0, 210, 140);
+            $x = self::BORDER+(3*210);
+            imagecopy($masterImage, $squareB, $x, $y, 0, 0, 210, 140);
+        }
+        if($agentsImage) {
+            $x = self::BORDER;
+            imagecopy($agentsImage, $squareA, $x, $y, 0, 0, 210, 140);
+            $x = self::BORDER+(3*210);
+            imagecopy($agentsImage, $squareB, $x, $y, 0, 0, 210, 140);
+        }
+    }
+
+    static function getAxisToCenterText($fontSize, $text, $width, $height) {
+        $textBox = imagettfbbox($fontSize, 0, self::$fontPath, $text);
+        $textWidth = $textBox[2] - $textBox[0];
+        $textHeight = $textBox[1] - $textBox[7];
+        $result['x'] = ($width - $textWidth) / 2;
+        $result['y'] = ($height + $textHeight) / 2;
+        return $result;
+    }
+
+    static function addCard($masterImage, $agentsImage, GameCard $card, Game $game, int $highlightCard = null) {
+        #region calculations
+        //card position
+        $cardByLine = 4;
+        if($card->id<2) {
+            $y = 0;
+            $x = $card->id + 1;
+        } else {
+            $y = floor(($card->id+2) / $cardByLine);
+            $x = $card->id+2 - ($cardByLine*$y);
+        }
+        
+        $cardX = self::BORDER+($x*210);
+        $cardY = self::BORDER+($y*140);
+        if($card->id > 21) {
+            $cardX+= 105;
+        }
+
+        //text position
         $textLen = strlen($card->text);
         if($textLen<9) {
-            $fontSize = self::$fontSize;
+            $fontSize = self::FONT_SIZE;
             $bottomSpace = 5;
         } else if($textLen<11) {
-            $fontSize = self::$fontSize-2;
+            $fontSize = self::FONT_SIZE-2;
             $bottomSpace = 5 + 1;
         } else {
-            $fontSize = self::$fontSize-6;
+            $fontSize = self::FONT_SIZE-6;
             $bottomSpace = 5 + 3;
         }
-        $textBox = imagettfbbox($fontSize, 0, $fontPath, $card->text);
-        $textWidth = $textBox[2] - $textBox[0];
-        //$textHeight = $textBox[1] - $textBox[7]; usuless for now
-        $textX = (210 - $textWidth) / 2;
-        $textY = 115 - $bottomSpace;
+        $textAxis = self::getAxisToCenterText($fontSize, $card->text, 210, 140);
+        $textAxis['y'] = 115 - $bottomSpace;
         #endregion
 
         switch ($card->team) {
@@ -204,25 +266,29 @@ class Table {
             } else {
                 $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
             }
-            imagefttext($masterCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
+            imagefttext($masterCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
 
             if($card->revealed) {
                 $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
                 imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+                if($card->id === $highlightCard) {
+                    $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
+                    imagecopy($masterCardImage, $highlightedImage, 0, 0, 0, 0, 210, 140);
+                }
             }
         }
 
         if(!$card->revealed) {
             $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
             $textColor = imagecolorallocate($agentsCardImage, 0, 0, 0);
-            imagefttext($agentsCardImage, $fontSize, 0, $textX, $textY, $textColor, $fontPath, $card->text);
+            imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
         }
         
         if(!is_null($masterImage)) {
-            imagecopy($masterImage, $masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+            imagecopy($masterImage, $masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
         }
         if(!is_null($agentsImage)) {
-            imagecopy($agentsImage, $agentsCardImage??$masterCardImage, self::$border+($x*210), self::$border+($y*140), 0, 0, 210, 140);
+            imagecopy($agentsImage, $agentsCardImage??$masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
         }
         
     }
