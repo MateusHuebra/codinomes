@@ -153,7 +153,7 @@ class Menu {
         }
 
         $line = [];
-        if(!$game->menu) {
+        if(!$game->menu || $game->menu == 'color') {
             $line[] = [
                 'text' => 'Cor'.'  '.($game->menu == 'color' ? 'X' : '/\\'),
                 'callback_data' => CDM::toString([
