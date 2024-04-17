@@ -62,7 +62,6 @@ class Menu {
     }
 
     private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
-        $game->menu = 'packs';
         $buttonsArray = [];
         $buttonsArray = self::getFirstButtons($game, $buttonsArray);
 
