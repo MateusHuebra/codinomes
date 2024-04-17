@@ -7,8 +7,6 @@ use App\Models\Game;
 use App\Models\User;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
-use TelegramBot\Api\Types\Message;
-use TelegramBot\Api\Types\Update;
 
 class Stop implements Action {
 

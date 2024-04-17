@@ -89,10 +89,28 @@
             "Pular sua vez"
         ],
         "win": [
-            "A equipe {team} venceu o jogo\\!"
+            "A equipe {team} venceu o jogo!"
+        ],
+        "win_black": [
+            "Tentou uma carta preta"
+        ],
+        "win_color": [
+            "Todas as cartas foram encontradas"
+        ],
+        "correct": [
+            "Tentativa correta!"
+        ],
+        "incorrect": [
+            "Tentativa incorreta!"
         ],
         "history": [
             "Envie /dicas para ver o histórico de dicas"
+        ],
+        "skipped": [
+            "Passou a vez!"
+        ],
+        "started": [
+            "Partida iniciada!"
         ]
     },
     "color": {

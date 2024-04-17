@@ -6,6 +6,7 @@ use App\Models\Chat;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Services\AppString;
+use App\Services\Game\Aux\Caption;
 use TelegramBot\Api\BotApi;
 use CURLFile;
 use Exception;
@@ -18,7 +19,7 @@ class Table {
     const FONT_SIZE = 21;
     static $fontPath;
 
-    static function send(Game $game, BotApi $bot, int $highlightCard = null, string $hint = null, bool $sendToMasters = true, string $winner = null) {
+    static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, bool $sendToMasters = true, string $winner = null) {
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
@@ -44,11 +45,7 @@ class Table {
             self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
         }
 
-        if($hint) {
-            self::addHint($masterImage??null, $agentsImage??null, $hint, 50);
-        } else {
-            self::addHint($masterImage??null, $agentsImage??null, AppString::get('game.history'), 25);
-        }
+        self::addCaption($masterImage??null, $agentsImage??null, $caption);
 
         if($sendToMasters) {
             $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
@@ -109,7 +106,7 @@ class Table {
         } else {
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
-            $text = AppString::get('game.win', [
+            $text = AppString::getParsed('game.win', [
                 'team' => Game::COLORS[$color]
             ], $chatLanguage);
 
@@ -162,16 +159,34 @@ class Table {
         ]);
     }
 
-    static function addHint($masterImage, $agentsImage, string $hint, int $fontSize) {
-        $axis = self::getAxisToCenterText($fontSize, $hint, 860, 1100);
+    static function addCaption($masterImage, $agentsImage, Caption $caption) {
+        $title = $caption->title;
+        $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 86);
+        $axis['y']+= + 1000;
+
+        if(!is_null($caption->text)) {
+            $text = $caption->text;
+            $textSize = $caption->titleSize/2;
+            $axisText = self::getAxisToCenterText($textSize, $text, 860, 90);
+            $axisText['y'] = $axis['y'] + ($textSize/2) + 5;
+            $axis['y'] = $axis['y'] - ($textSize/2) - 5;
+            if($masterImage) {
+                $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+                imagefttext($masterImage, $textSize, 0, $axisText['x'], $axisText['y'], $textColor, self::$fontPath, $text);
+            }
+            if($agentsImage) {
+                $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
+                imagefttext($agentsImage, $textSize, 0, $axisText['x'], $axisText['y'], $textColor, self::$fontPath, $text);
+            }
+        }
         
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
-            imagefttext($masterImage, $fontSize, 0, $axis['x'], 1065, $textColor, self::$fontPath, $hint);
+            imagefttext($masterImage, $caption->titleSize, 0, $axis['x'], $axis['y'], $textColor, self::$fontPath, $title);
         }
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
-            imagefttext($agentsImage, $fontSize, 0, $axis['x'], 1065, $textColor, self::$fontPath, $hint);
+            imagefttext($agentsImage, $caption->titleSize, 0, $axis['x'], $axis['y'], $textColor, self::$fontPath, $title);
         }
     }
 

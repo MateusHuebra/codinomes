@@ -47,6 +47,11 @@ class AppString {
 
     }
 
+    static function getParsed(string $path, array $variables = null, $language = null, $parseVariables = false) : String {
+        $string = self::get($path, $variables, $language, $parseVariables);
+        return self::parseMarkdownV2($string);
+    }
+
     static function parseMarkdownV2($string) {
         return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }

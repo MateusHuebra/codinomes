@@ -5,6 +5,7 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Models\Game;
 use App\Models\User;
+use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
@@ -29,8 +30,9 @@ class ChosenHint implements Action {
         $game->attempts_left = $data[CDM::NUMBER];
         $game->save();
 
+        $caption = new Caption($hint, null, 50);
         
-        Table::send($game, $bot, null, $hint, false);
+        Table::send($game, $bot, $caption, null, false);
     }
 
 }

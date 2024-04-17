@@ -8,6 +8,7 @@ use App\Models\GameCard;
 use App\Models\Pack;
 use App\Models\User;
 use App\Services\AppString;
+use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
 use TelegramBot\Api\BotApi;
 use Exception;
@@ -94,12 +95,16 @@ class Start implements Action {
             $gameCard->save();
         }
 
+        $text = $update->getMessage()->getText();
+        preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $text, $matches);
+        $text.= AppString::getParsed('game.started');
         try {
-            $bot->deleteMessage($chatId, $messageId);
+            $bot->editMessageText($chatId, $messageId, $text, 'MakedownV2');
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
 
-        Table::send($game, $bot);
+        $caption = new Caption(AppString::get('game.started'), null, 50);
+        Table::send($game, $bot, $caption);
     }
 
 }

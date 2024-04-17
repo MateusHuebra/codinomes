@@ -89,10 +89,28 @@
             "Skip your turn"
         ],
         "win": [
-            "Team {team} won the game\\!"
+            "Team {team} won the game!"
+        ],
+        "win_black": [
+            "Guessed a black card"
+        ],
+        "win_color": [
+            "Guessed all cards"
+        ],
+        "correct": [
+            "Correct guess!"
+        ],
+        "incorrect": [
+            "Incorrect guess!"
         ],
         "history": [
-            "Send /hints to see the hints history"
+            "Send /hints to see hints history"
+        ],
+        "skipped": [
+            "Skipped!"
+        ],
+        "started": [
+            "Game started!"
         ]
     },
     "color": {

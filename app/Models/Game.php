@@ -67,6 +67,13 @@ class Game extends Model
         $this->save();
     }
 
+    public function nextStatus(User $user) {
+        $nextStatus = 'master_'.$user->getEnemyTeam();
+        $this->updateStatus($nextStatus);
+        $this->attempts_left = null;
+        $this->save();
+    }
+
     public function addToHistory(string $line) {
         $this->history = $this->history.PHP_EOL.$line;
         $this->save();
