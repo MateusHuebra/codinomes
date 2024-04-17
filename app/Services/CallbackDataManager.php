@@ -17,7 +17,8 @@ class CallbackDataManager {
     const GUESS = 'gu';
     const SKIP = 'sk';
     const CHANGE_COLOR = 'cc';
-    const DROPDOWN = 'dd';
+    const CHANGE_PACK = 'cp';
+    const MENU = 'mn';
 
     //ATTRIBUTES
     const EVENT = 'e';
@@ -25,7 +26,6 @@ class CallbackDataManager {
     const TEXT = 'txt';
     const NUMBER = 'num';
     const FIRST_TIME = 'ft';
-    const GAME_ID = 'gi';
 
     //TYPES
     const ROLE = 'r';

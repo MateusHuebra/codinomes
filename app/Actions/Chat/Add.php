@@ -6,7 +6,6 @@ use App\Actions\Action;
 use App\Models\Chat;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
-use TelegramBot\Api\Types\Message;
 use App\Actions\Language\Get as GetLanguage;
 
 class Add implements Action {

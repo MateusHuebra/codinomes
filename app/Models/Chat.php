@@ -26,6 +26,11 @@ class Chat extends Model
     {
         return $this->hasOne(Game::class);
     }
+
+    public function packs()
+    {
+        return $this->belongsToMany(Pack::class);
+    }
     
     public function isAdmin(User $user, BotApi $bot) : bool {
         $admins = $bot->getChatAdministrators($this->id);

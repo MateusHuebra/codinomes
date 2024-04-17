@@ -15,4 +15,9 @@ class Pack extends Model
     {
         return $this->hasMany(Card::class);
     }
+
+    public function newCollection(array $models = [])
+    {
+        return new \App\Collections\Pack($models);
+    }
 }

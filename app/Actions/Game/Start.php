@@ -46,8 +46,10 @@ class Start implements Action {
         $firstTeam = rand(0, 1) ? 'a' : 'b';
         $game->updateStatus('master_'.$firstTeam);
 
-        $pack = Pack::find(1);
-        $cards = $pack->cards;
+        if($game->chat->packs()->count() == 0) {
+            $game->chat->packs()->attach(1);
+        }
+        $cards = $game->chat->packs->getCards();
         $randomizedCards = $cards->random(25);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);
