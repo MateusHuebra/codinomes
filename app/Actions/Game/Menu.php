@@ -17,7 +17,7 @@ class Menu implements Action {
         $updateId = $update->getId();
         $messageId = $update->getMessage()->getMessageId();
         $chatId = $update->getMessage()->getChat()->getId();
-        $userId = $update->getMessage()->getFrom()->getId();
+        $userId = $update->getFrom()->getId();
         try {
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
