@@ -19,7 +19,7 @@ class Pack implements Action {
         $userId = $update->getFrom()->getId();
 
         $user = User::find($userId);
-        $game = Game::find($user->game_id);
+        $game = Game::where('chat_id', $chatId)->first();
         if(!$game || !$user) {
             return;
         }
@@ -29,13 +29,13 @@ class Pack implements Action {
         }
 
         $data = CDM::toArray($update->getData());
-        $pack = PackModel::find($data['text']);
+        $pack = PackModel::find($data[CDM::TEXT]);
         $chat = $game->chat;
         if(!$pack || !$chat) {
             return;
         }
 
-        if($data['number']) {
+        if($data[CDM::NUMBER]) {
             $chat->packs()->attach($pack->id);
         } else {
             $chat->packs()->detach($pack->id);
