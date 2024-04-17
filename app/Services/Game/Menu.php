@@ -155,7 +155,7 @@ class Menu {
         $line = [];
         if(!$game->menu || $game->menu == 'color') {
             $line[] = [
-                'text' => 'Cor'.'  '.($game->menu == 'color' ? 'X' : '/\\'),
+                'text' => AppString::get('game.color').'  '.($game->menu == 'color' ? 'X' : '/\\'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::MENU,
                     CDM::TEXT => ($game->menu == 'color' ? null : 'color')
@@ -164,13 +164,13 @@ class Menu {
         }
         switch ($game->menu) {
             case 'packs_actived':
-                $text = 'Packs Ativos';
+                $text = AppString::get('game.packs_actived');
                 break;
-            case 'packs_official':
+            case AppString::get('game.packs_official'):
                 $text = 'Packs Oficiais';
                 break;
             default:
-            $text = 'Packs';
+            $text = AppString::get('game.packs');
                 break;
         }
         $line[] = [
@@ -233,7 +233,7 @@ class Menu {
         }
         
         $buttonsArray[] = [[
-            'text' => 'Voltar',
+            'text' => AppString::get('game.back'),
             'callback_data' => CDM::toString([
                 CDM::EVENT => CDM::MENU,
                 CDM::TEXT => 'packs',

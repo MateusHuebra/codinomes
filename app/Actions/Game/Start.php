@@ -50,6 +50,10 @@ class Start implements Action {
             $game->chat->packs()->attach(1);
         }
         $cards = $game->chat->packs->getCards();
+        if($cards->count() < 25) {
+            $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_enough_cards');
+            return;
+        }
         $randomizedCards = $cards->random(25);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);

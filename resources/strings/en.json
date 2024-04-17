@@ -58,8 +58,20 @@
         "leave": [
             "Leave"
         ],
-        "change_color": [
-            "Change color"
+        "color": [
+            "Color"
+        ],
+        "packs": [
+            "Packs"
+        ],
+        "packs_actived": [
+            "Actived Packs"
+        ],
+        "packs_official": [
+            "Official Packs"
+        ],
+        "back": [
+            "Back"
         ],
         "you_left": [
             "You left"
@@ -180,6 +192,9 @@
         ],
         "master_only": [
             "Only the master can do that"
+        ],
+        "no_enough_cards": [
+            "There's no enough cards in the actived packs to start the game"
         ]
     }
 }

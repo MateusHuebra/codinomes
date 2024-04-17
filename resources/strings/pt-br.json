@@ -58,8 +58,20 @@
         "leave": [
             "Sair"
         ],
-        "change_color": [
-            "Trocar cor"
+        "color": [
+            "Cor"
+        ],
+        "packs": [
+            "Packs"
+        ],
+        "packs_actived": [
+            "Packs Ativos"
+        ],
+        "packs_official": [
+            "Packs Oficiais"
+        ],
+        "back": [
+            "Voltar"
         ],
         "you_left": [
             "Você saiu"
@@ -180,6 +192,9 @@
         ],
         "master_only": [
             "Apenas o mestre pode fazer isso"
+        ],
+        "no_enough_cards": [
+            "Não há cartas o suficiete nos packs ativos para se iniciar a partida"
         ]
     }
 }
