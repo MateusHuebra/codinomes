@@ -4,6 +4,7 @@ namespace App\UpdateHandlers;
 
 use App\Actions\Game\Color;
 use App\Actions\Game\Menu;
+use App\Actions\Game\Pack;
 use App\Actions\Game\Skip;
 use App\Actions\Language\Set as SetLanguage;
 use App\Actions\Start;
@@ -38,6 +39,9 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_COLOR) {
             return new Color;
+        
+        } else if($data[CDM::EVENT] === CDM::CHANGE_PACK) {
+            return new Pack;
 
         } else if($data[CDM::EVENT] === CDM::SET_LANGUAGE) {
             return new SetLanguage;
