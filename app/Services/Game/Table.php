@@ -32,7 +32,7 @@ class Table {
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
         
-        $sendToMasters = ($sendToBothMasters || $game->status == 'master_a' || $game->status == 'master_b');
+        $sendToMasters = ($sendToBothMasters || $game->status == 'master_a' || $game->status == 'master_b' || $winner);
 
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
@@ -114,7 +114,7 @@ class Table {
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
             $text = AppString::getParsed('game.win', [
-                'team' => Game::COLORS[$color]
+                'team' => $team
             ], $chatLanguage);
 
             $message = $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
