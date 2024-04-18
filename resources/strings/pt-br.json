@@ -26,7 +26,7 @@
             "Já há um jogo rolando no grupo"
         ],
         "teams_lists": [
-            "*EQUIPE {a}:\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}:\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\nEscolha seu time e papel:"
+            "*EQUIPE {a}\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\nEscolha seu time e papel:"
         ],
         "empty": [
             "vazio"
