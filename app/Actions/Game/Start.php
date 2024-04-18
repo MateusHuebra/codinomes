@@ -43,9 +43,6 @@ class Start implements Action {
             }
         }
 
-        $firstTeam = rand(0, 1) ? 'a' : 'b';
-        $game->updateStatus('master_'.$firstTeam);
-
         if($game->chat->packs()->count() == 0) {
             $game->chat->packs()->attach(1);
         }
@@ -54,6 +51,10 @@ class Start implements Action {
             $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_enough_cards');
             return;
         }
+
+        $firstTeam = rand(0, 1) ? 'a' : 'b';
+        $game->updateStatus('master_'.$firstTeam);
+        
         $randomizedCards = $cards->random(25);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);
