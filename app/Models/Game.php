@@ -23,6 +23,9 @@ class Game extends Model
     ];
 
     public $timestamps = false;
+    public $auxMenu = null;
+    public $auxSubMenu = null;
+    public $auxMenuPage = 0;
 
     public function users(): HasMany
     {
@@ -49,6 +52,35 @@ class Game extends Model
             return true;
         }
         return $this->chat->isAdmin($user, $bot);
+    }
+
+    public function isMenu(String $menu, String $subMenu = null) {
+        return ($menu == $this->getMenu() && $subMenu == $this->auxSubMenu);
+    }
+
+    public function getMenu(bool $withSubMenu = false) {
+        if(!$this->menu) {
+            return null;
+        }
+        if(!$this->auxMenu) {
+            preg_match('/^(?<menu>[a-z]+)_?(?<sub>[a-z]*):?(?<page>[0-9]*)$/', $this->menu, $matches);
+            $this->auxMenu = $matches['menu'];
+            $this->auxSubMenu = $matches['sub'];
+            $this->auxMenuPage = $matches['page'];
+            if(strlen($this->auxMenuPage)==0) {
+                $this->auxMenuPage = 0;
+            }
+        }
+        $menu = $this->auxMenu;
+        if($withSubMenu) {
+            $menu.='_'.$this->auxSubMenu;
+        }
+        return $menu;
+    }
+    
+    public function getMenuPage() {
+        $this->getMenu();
+        return $this->auxMenuPage;
     }
 
     public function stop() {

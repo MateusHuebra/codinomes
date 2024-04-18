@@ -70,6 +70,12 @@
         "packs_official": [
             "Packs Oficiais"
         ],
+        "packs_users": [
+            "Packs dos Usuários"
+        ],
+        "packs_mine": [
+            "Meus Packs"
+        ],
         "back": [
             "Voltar"
         ],

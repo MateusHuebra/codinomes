@@ -70,6 +70,12 @@
         "packs_official": [
             "Official Packs"
         ],
+        "packs_users": [
+            "Users Packs"
+        ],
+        "packs_mine": [
+            "My Packs"
+        ],
         "back": [
             "Back"
         ],
