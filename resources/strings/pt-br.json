@@ -173,7 +173,7 @@
             "Digite uma dica"
         ],
         "wrong_hint_format_desc": [
-            "A dica deve ser uma palavra única de 1 a 16 caracteres seguido pelo número de cartas a qual essa dica se refere. Exemplos: Medo 2, 3 Brilhoso..."
+            "A dica deve ser uma palavra única de até 16 letras + número de cartas a qual essa dica se refere. Exemplos: Medo 2, 3 Brilhoso..."
         ],
         "wrong_guess_format_title": [
             "Digite seu chute"

@@ -21,32 +21,42 @@ class Guess implements Action {
         $cards = $game->cards;
 
         $results = [];
-        if(preg_match('/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,12})$/', $query, $matches)) {
+        if(preg_match('/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,12})?$/', $query, $matches)) {
             $filteredCards = $cards->where('revealed', false);
-            $filteredCards = $filteredCards->filter(function ($card) use ($query) {
-                return mb_strpos($card->text, $query, 0, 'UTF-8') === 0;
-            });
-            foreach($filteredCards as $card) {
-                $title = $card->text;
-                $messageContent = new Text($title);
-                $data = CDM::toString([
-                    CDM::EVENT => CDM::GUESS,
-                    CDM::NUMBER => $card->id
-                ]);
-                $results[] = new Article($data, $title, null, 'https://imgur.com/3kQB4ed', null, null, $messageContent);
+            if(strlen($query)) {
+                $filteredCards = $filteredCards->filter(function ($card) use ($query) {
+                    return mb_strpos($card->text, $query, 0, 'UTF-8') === 0;
+                });
+            }
+            if($filteredCards->count() == 0) {
+                $results[] = $this->getErrorResult();
+            } else {
+                foreach($filteredCards as $card) {
+                    $title = $card->text;
+                    $messageContent = new Text($title);
+                    $data = CDM::toString([
+                        CDM::EVENT => CDM::GUESS,
+                        CDM::NUMBER => $card->id
+                    ]);
+                    $results[] = new Article($data, $title, null, 'https://imgur.com/3kQB4ed', null, null, $messageContent);
+                }
             }
             
         } else {
-            $title = AppString::get('error.wrong_guess_format_title');
-            $desc = AppString::get('error.wrong_guess_format_desc');
-            $messageContent = new Text($title);
-            $data = CDM::toString([
-                CDM::EVENT => CDM::IGNORE
-            ]);
-            $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
+            $results[] = $this->getErrorResult();
         }
 
         $bot->answerInlineQuery($update->getId(), $results, 10);
+    }
+
+    private function getErrorResult() {
+        $title = AppString::get('error.wrong_guess_format_title');
+        $desc = AppString::get('error.wrong_guess_format_desc');
+        $messageContent = new Text($title);
+        $data = CDM::toString([
+            CDM::EVENT => CDM::IGNORE
+        ]);
+        return new Article($data, $title, $desc, null, null, null, $messageContent);
     }
 
 }
