@@ -51,7 +51,7 @@ class ChosenGuess implements Action {
             } else if($game->attempts_left >= 0) {
                 $game->updateStatus($game->status);
 
-                $title = AppString::get('game.correct', null, $chatLanguage);
+                $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
                 $text = AppString::get('game.history', null, $chatLanguage);
                 $caption = new Caption($title, $text);
                 
@@ -61,7 +61,7 @@ class ChosenGuess implements Action {
             } else {
                 $game->nextStatus($user);
 
-                $title = AppString::get('game.correct', null, $chatLanguage);
+                $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
                 $text = AppString::get('game.history', null, $chatLanguage);
                 $caption = new Caption($title, $text);
 
@@ -83,7 +83,7 @@ class ChosenGuess implements Action {
         } else {
             $game->nextStatus($user);
 
-            $title = AppString::get('game.incorrect', null, $chatLanguage);
+            $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
             $text = AppString::get('game.history', null, $chatLanguage);
             $caption = new Caption($title, $text);
 

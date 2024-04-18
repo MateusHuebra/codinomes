@@ -29,7 +29,7 @@ class Skip implements Action {
             $game->updateStatus('master_'.$user->getEnemyTeam());
             $game->attempts_left = null;
 
-            $title = AppString::get('game.skipped');
+            $title = AppString::get('game.skipped').' '.$game->getLastHint();
             $text = AppString::get('game.history');
             $caption = new Caption($title, $text);
             Table::send($game, $bot, $caption);

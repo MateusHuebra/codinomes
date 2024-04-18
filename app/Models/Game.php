@@ -26,6 +26,7 @@ class Game extends Model
     public $auxMenu = null;
     public $auxSubMenu = null;
     public $auxMenuPage = 0;
+    public $lastHint = null;
 
     public function users(): HasMany
     {
@@ -52,6 +53,14 @@ class Game extends Model
             return true;
         }
         return $this->chat->isAdmin($user, $bot);
+    }
+
+    public function getLastHint() {
+        if(!$this->lastHint) {
+            preg_match('/[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9]$/', $this->history, $matches);
+            $this->lastHint = $matches[0];
+        }
+        return $this->lastHint;
     }
 
     public function isMenu(String $menu, String $subMenu = null) {
