@@ -72,18 +72,18 @@ class Start implements Action {
             $gameCard->save();
         }
 
-        $text = $update->getMessage()->getText();
-        preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $text, $matches);
-        $text = $matches[0] = AppString::getParsed('game.started');
-        try {
-            $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
-            $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
-            $game->message_id = null;
-            $game->save();
-        } catch(Exception $e) {}
+        $game->message_id = null;
+        $game->save();
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
         Table::send($game, $bot, $caption, null, null, true);
+
+        preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $update->getMessage()->getText(), $matches);
+        $text = $matches[0] = AppString::getParsed('game.started');
+        try {
+            $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
+            $bot->unpinChatMessage($chatId, $messageId);
+        } catch(Exception $e) {}
     }
 
     private function getColoredCards(array $shuffledCards, string $firstTeam) {
