@@ -39,7 +39,7 @@ class ChosenGuess implements Action {
             //won
             if($cardsLeft <= 0) {
                 $color = ($user->team == 'a') ? $game->color_a : $game->color_b;
-                $title = AppString::getParsed('game.win', [
+                $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
@@ -71,7 +71,7 @@ class ChosenGuess implements Action {
         //black card
         } else if($card->team == 'x') {
             $color = ($user->getEnemyTeam == 'a') ? $game->color_a : $game->color_b;
-            $title = AppString::getParsed('game.win', [
+            $title = AppString::get('game.win', [
                 'team' => AppString::get('color.'.$color)
             ], $chatLanguage);
             $text = AppString::get('game.win_black', null, $chatLanguage);
