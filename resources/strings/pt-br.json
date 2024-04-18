@@ -194,7 +194,7 @@
             "Apenas o mestre pode fazer isso"
         ],
         "no_enough_cards": [
-            "Não há cartas o suficiete nos packs ativos para se iniciar a partida"
+            "Não há cartas o suficiente nos packs ativos para se iniciar a partida"
         ]
     }
 }

@@ -161,7 +161,7 @@ class Table {
 
     static function addCaption($masterImage, $agentsImage, Caption $caption) {
         $title = $caption->title;
-        $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 86);
+        $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 82);
         $axis['y']+= + 1000;
 
         if(!is_null($caption->text)) {
