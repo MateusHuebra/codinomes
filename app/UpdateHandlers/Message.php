@@ -55,7 +55,7 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;
 
-        } else if(in_array($command, ['hints', 'dicas'])) {
+        } else if(in_array($command, ['history', 'historico'])) {
             return new History;
 
         } else if(in_array($command, ['language', 'idioma'])) {

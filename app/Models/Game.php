@@ -19,7 +19,7 @@ class Game extends Model
         'red' => '🔴',
         'blue' => '🔵',
         'green' => '🟢',
-        'yellow' => '🟡'
+        'white' => '⚪️'
     ];
 
     public $timestamps = false;
@@ -57,8 +57,8 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            preg_match('/[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9]$/', $this->history, $matches);
-            $this->lastHint = $matches[0];
+            preg_match('/(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9])(\R  > .+)*$/', $this->history, $matches);
+            $this->lastHint = $matches['hint'];
         }
         return $this->lastHint;
     }

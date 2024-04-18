@@ -30,6 +30,21 @@ class ChosenGuess implements Action {
         $card = GameCard::find($data[CDM::NUMBER]);
         $card->revealed = true;
         $card->save();
+        
+        switch ($card->team) {
+            case 'a':
+                $emoji = Game::COLORS[$game->color_a];
+                break;
+            
+            case 'b':
+                $emoji = Game::COLORS[$game->color_b];
+                break;
+            
+            default:
+            $emoji = Game::COLORS['white'];
+                break;
+        }
+        $game->addToHistory('  > '.$card->text.' '.$emoji);
 
         //correct guess
         if($card->team == $user->team) {

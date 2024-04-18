@@ -122,7 +122,7 @@
             "Incorrect guess!"
         ],
         "history": [
-            "Send /hints to see hints history"
+            "Send /history to see whole history"
         ],
         "skipped": [
             "Skipped!"
