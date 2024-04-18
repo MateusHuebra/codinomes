@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class User extends Collection {
 
-    public function toMentionList() {
+    public function toMentionList($separator = ', ') {
         if($this->count()==0) {
             return null;
         }
@@ -18,7 +18,7 @@ class User extends Collection {
                 'id' => $player->id
             ]);
         }
-        return implode(', ', $namesArray);
+        return implode($separator, $namesArray);
     }
     
 }

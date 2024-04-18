@@ -66,22 +66,22 @@ class Table {
                 case 'master_a':
                     $role = AppString::get('game.master', null, $chatLanguage);
                     $team = Game::COLORS[$game->color_a];
-                    $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList();
+                    $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'agent_a':
                     $role = AppString::get('game.agents', null, $chatLanguage);
                     $team = Game::COLORS[$game->color_a];
-                    $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList();
+                    $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'master_b':
                     $role = AppString::get('game.master', null, $chatLanguage);
                     $team = Game::COLORS[$game->color_b];
-                    $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList();
+                    $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'agent_b':
                     $role = AppString::get('game.agents', null, $chatLanguage);
                     $team = Game::COLORS[$game->color_b];
-                    $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList();
+                    $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList(PHP_EOL);
                     break;
             }
             

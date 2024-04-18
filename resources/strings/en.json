@@ -83,7 +83,7 @@
             "Give hint"
         ],
         "turn": [
-            "It's turn of {role} {team} {players}"
+            "It's turn of {role} {team}\n{players}"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
