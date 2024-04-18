@@ -15,7 +15,7 @@ class Create implements Action {
         $chatId = $update->getMessage()->getChat()->getId();
         $userId = $update->getMessage()->getFrom()->getId();
         $messageId = $update->getMessage()->getMessageId();
-        if(!User::find($userId)->exists()) {
+        if(!User::find($userId)) {
             $bot->sendMessage($chatId, AppString::get('error.user_not_registered'), null, false, $messageId, null, false, null, null, true);
             return;
         }
