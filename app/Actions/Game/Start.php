@@ -83,7 +83,7 @@ class Start implements Action {
         } catch(Exception $e) {}
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
-        Table::send($game, $bot, $caption);
+        Table::send($game, $bot, $caption, null, null, true);
     }
 
     private function getColoredCards(array $shuffledCards, string $firstTeam) {

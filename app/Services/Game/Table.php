@@ -19,7 +19,7 @@ class Table {
     const FONT_SIZE = 21;
     static $fontPath;
 
-    static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, bool $sendToMasters = true, string $winner = null) {
+    static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
@@ -31,6 +31,8 @@ class Table {
         $cards = $game->cards;
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
+        
+        $sendToMasters = ($sendToBothMasters || $game->status == 'master_a' || $game->status == 'master_b');
 
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
@@ -65,29 +67,29 @@ class Table {
             switch ($game->status) {
                 case 'master_a':
                     $role = AppString::get('game.master', null, $chatLanguage);
-                    $team = Game::COLORS[$game->color_a];
+                    $teamColor = 'color_a';
                     $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'agent_a':
                     $role = AppString::get('game.agents', null, $chatLanguage);
-                    $team = Game::COLORS[$game->color_a];
+                    $teamColor = 'color_a';
                     $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'master_b':
                     $role = AppString::get('game.master', null, $chatLanguage);
-                    $team = Game::COLORS[$game->color_b];
+                    $teamColor = 'color_b';
                     $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList(PHP_EOL);
                     break;
                 case 'agent_b':
                     $role = AppString::get('game.agents', null, $chatLanguage);
-                    $team = Game::COLORS[$game->color_b];
+                    $teamColor = 'color_b';
                     $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList(PHP_EOL);
                     break;
             }
             
             $text = AppString::get('game.turn', [
                 'role' => $role,
-                'team' =>  $team,
+                'team' =>  Game::COLORS[$game->$teamColor],
                 'players' => $playersList
             ], $chatLanguage);
 
@@ -96,8 +98,12 @@ class Table {
 
             if($sendToMasters) {
                 try{
-                    $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
-                    $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                    if($sendToBothMasters || $game->status == 'master_a') {
+                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                    }
+                    if($sendToBothMasters || $game->status == 'master_b') {
+                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                    }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
                     $bot->sendMessage($chatId, AppString::get('error.master_not_registered', null, $chatLanguage));

@@ -32,7 +32,7 @@ class ChosenHint implements Action {
 
         $caption = new Caption($hint, null, 50);
         
-        Table::send($game, $bot, $caption, null, false);
+        Table::send($game, $bot, $caption);
     }
 
 }
