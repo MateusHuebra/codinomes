@@ -91,8 +91,12 @@ class Table {
                 'players' => $playersList
             ], $chatLanguage);
 
-            $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
+            try {
+                $bot->pinChatMessage($chatId, $message->getMessageId());
+            } catch(Exception $e) {}
             unlink($tempAgentsImageFileName);
+
             if($sendToMasters) {
                 try{
                     $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2');
@@ -110,7 +114,10 @@ class Table {
                 'team' => Game::COLORS[$color]
             ], $chatLanguage);
 
-            $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
+            try {
+                $bot->pinChatMessage($chatId, $message->getMessageId());
+            } catch(Exception $e) {}
             unlink($tempMasterImageFileName);
 
             $game->stop();
