@@ -26,7 +26,7 @@ class Start implements Action {
             return;
         }
 
-        $user = User::find($update->getMessage()->getFrom()->getId());
+        $user = User::find($update->getFrom()->getId());
         if(!$user || !$game->hasPermission($user, $bot)) {
             $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.admin_only');
             return;
