@@ -39,7 +39,7 @@ class User extends Model
         return new \App\Collections\User($models);
     }
 
-    public function getEnemyTeam() {
+    public function getEnemyTeam() : String {
         if($this->team == 'a') {
             return 'b';
         }

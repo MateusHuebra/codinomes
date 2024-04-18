@@ -5,7 +5,6 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Models\Game;
 use App\Models\GameCard;
-use App\Models\Pack;
 use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
@@ -77,6 +76,7 @@ class Start implements Action {
         preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $text, $matches);
         $text.= AppString::getParsed('game.started');
         try {
+            $bot->sendMessage($chatId, $text, 'MakedownV2');
             $bot->editMessageText($chatId, $messageId, $text, 'MakedownV2');
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
