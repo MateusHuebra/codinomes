@@ -92,9 +92,6 @@ class Table {
             ], $chatLanguage);
 
             $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
-            try {
-                $bot->pinChatMessage($chatId, $message->getMessageId());
-            } catch(Exception $e) {}
             unlink($tempAgentsImageFileName);
 
             if($sendToMasters) {
@@ -115,14 +112,19 @@ class Table {
             ], $chatLanguage);
 
             $message = $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
-            try {
-                $bot->pinChatMessage($chatId, $message->getMessageId());
-            } catch(Exception $e) {}
             unlink($tempMasterImageFileName);
 
             $game->stop();
         }
 
+        try {
+            $bot->pinChatMessage($chatId, $message->getMessageId(), true);
+            if(!is_null($game->message_id)) {
+                $bot->deleteMessage($chatId, $game->message_id);
+            }
+        } catch(Exception $e) {}
+        $game->message_id = $message->getMessageId();
+        $game->save();
     }
 
     static function getKeyboard(string $status, string $chatLanguage) {

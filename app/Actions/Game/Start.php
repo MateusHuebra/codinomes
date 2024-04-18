@@ -78,6 +78,8 @@ class Start implements Action {
         try {
             $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
+            $game->message_id = null;
+            $game->save();
         } catch(Exception $e) {}
 
         $caption = new Caption(AppString::get('game.started'), null, 50);

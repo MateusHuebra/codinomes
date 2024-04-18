@@ -61,6 +61,8 @@ class Menu {
             try {
                 $bot->pinChatMessage($game->chat_id, $message->getMessageId());
             } catch(Exception $e) {}
+            $game->message_id = $message->getMessageId();
+            $game->save();
         }
     }
 
