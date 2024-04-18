@@ -23,6 +23,7 @@ class Table {
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
+        $oldMessage = $game->message_id;
         if($winner) {
             $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
         } else {
@@ -108,7 +109,10 @@ class Table {
                 } catch(Exception $e) {
                     $bot->sendMessage($chatId, AppString::get('error.master_not_registered', null, $chatLanguage));
                 }
-            } 
+            }
+
+            $game->message_id = $message->getMessageId();
+            $game->save();
             
         } else {
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
@@ -125,12 +129,10 @@ class Table {
 
         try {
             $bot->pinChatMessage($chatId, $message->getMessageId(), true);
-            if(!is_null($game->message_id)) {
-                $bot->deleteMessage($chatId, $game->message_id);
+            if(!is_null($oldMessage)) {
+                $bot->deleteMessage($chatId, $oldMessage);
             }
         } catch(Exception $e) {}
-        $game->message_id = $message->getMessageId();
-        $game->save();
     }
 
     static function getKeyboard(string $status, string $chatLanguage) {
