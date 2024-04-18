@@ -96,8 +96,8 @@ class Table {
 
             if($sendToMasters) {
                 try{
-                    $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2');
-                    $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2');
+                    $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                    $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
                     $bot->sendMessage($chatId, AppString::get('error.master_not_registered', null, $chatLanguage));
