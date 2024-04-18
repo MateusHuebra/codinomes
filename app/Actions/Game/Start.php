@@ -74,7 +74,7 @@ class Start implements Action {
 
         $text = $update->getMessage()->getText();
         preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $text, $matches);
-        $text.= AppString::getParsed('game.started');
+        $text = $matches[0] = AppString::getParsed('game.started');
         try {
             $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
