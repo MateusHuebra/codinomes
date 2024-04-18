@@ -76,13 +76,12 @@ class Start implements Action {
         preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $text, $matches);
         $text.= AppString::getParsed('game.started');
         try {
-            $bot->editMessageText($chatId, $messageId, $text, 'MakedownV2');
+            $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
             $bot->answerCallbackQuery($updateId, AppString::get('settings.loading'));
         } catch(Exception $e) {}
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
         Table::send($game, $bot, $caption);
-        $bot->sendMessage($chatId, $text, 'MakedownV2');
     }
 
     private function getColoredCards(array $shuffledCards, string $firstTeam) {
