@@ -69,22 +69,22 @@ class Table {
                 case 'master_a':
                     $role = AppString::get('game.master', null, $chatLanguage);
                     $teamColor = 'color_a';
-                    $playersList = $game->users()->fromTeamRole('a', 'master')->get()->toMentionList(PHP_EOL);
+                    $playersList = $game->users()->fromTeamRole('a', 'master')->get()->getStringList(true, PHP_EOL);
                     break;
                 case 'agent_a':
                     $role = AppString::get('game.agents', null, $chatLanguage);
                     $teamColor = 'color_a';
-                    $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->toMentionList(PHP_EOL);
+                    $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->getStringList(true, PHP_EOL);
                     break;
                 case 'master_b':
                     $role = AppString::get('game.master', null, $chatLanguage);
                     $teamColor = 'color_b';
-                    $playersList = $game->users()->fromTeamRole('b', 'master')->get()->toMentionList(PHP_EOL);
+                    $playersList = $game->users()->fromTeamRole('b', 'master')->get()->getStringList(true, PHP_EOL);
                     break;
                 case 'agent_b':
                     $role = AppString::get('game.agents', null, $chatLanguage);
                     $teamColor = 'color_b';
-                    $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->toMentionList(PHP_EOL);
+                    $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->getStringList(true, PHP_EOL);
                     break;
             }
             
@@ -117,7 +117,9 @@ class Table {
         } else {
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
-            $text = AppString::getParsed('game.win', [
+
+            $text = $game->getTeamAndPlayersList()."\n\n";
+            $text.= AppString::getParsed('game.win', [
                 'team' => $team
             ], $chatLanguage);
 

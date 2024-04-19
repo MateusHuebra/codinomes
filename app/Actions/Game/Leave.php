@@ -27,7 +27,7 @@ class Leave implements Action {
         }
 
         $user->leaveGame();
-        Menu::send($chat->game, $bot, Menu::EDIT, $message->getMessageId());
+        Menu::send($chat->game, $bot, $message->getMessageId());
         $bot->answerCallbackQuery($updateId, AppString::get('game.you_left'));
     }
 

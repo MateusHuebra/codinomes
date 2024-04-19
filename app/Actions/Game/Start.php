@@ -15,7 +15,6 @@ use Exception;
 class Start implements Action {
 
     public function run($update, BotApi $bot) : Void {
-        $updateId = $update->getId();
         $messageId = $update->getMessage()->getMessageId();
         $chatId = $update->getMessage()->getChat()->getId();
         $game = Game::where('chat_id', $chatId)->first();
@@ -78,8 +77,7 @@ class Start implements Action {
         $caption = new Caption(AppString::get('game.started'), null, 50);
         Table::send($game, $bot, $caption, null, null, true);
 
-        preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $update->getMessage()->getText(), $matches);
-        $text = $matches[0] . AppString::getParsed('game.started');
+        $text = $game->getTeamAndPlayersList().AppString::getParsed('game.started');
         try {
             $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
             $bot->unpinChatMessage($chatId, $messageId);

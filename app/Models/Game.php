@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AppString;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,6 +30,13 @@ class Game extends Model
     public $auxSubMenu = null;
     public $auxMenuPage = 0;
     public $lastHint = null;
+
+    private $isTeamAndRolesSet = false;
+    private $masterA;
+    private $agentsA;
+    private $masterB;
+    private $agentsB;
+    private $hasRequiredPlayers = null; 
 
     public function users(): HasMany
     {
@@ -120,6 +128,46 @@ class Game extends Model
     public function addToHistory(string $line) {
         $this->history = $this->history.PHP_EOL.$line;
         $this->save();
+    }
+
+    public function hasRequiredPlayers() : Bool {
+        if($this->isTeamAndRolesSet === false) {
+            $this->setPlayerTeamAndRoles();
+        }
+        if($this->hasRequiredPlayers === null) {
+            if($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0) {
+                $this->hasRequiredPlayers = false;
+            }
+            $this->hasRequiredPlayers = true;
+        }
+        return $this->hasRequiredPlayers;
+    }
+
+    public function getTeamAndPlayersList(bool $mention = true) {
+        if($this->isTeamAndRolesSet===false) {
+            $this->setPlayerTeamAndRoles();
+        }
+
+        $teamA = mb_strtoupper(AppString::get('color.'.$this->color_a), 'UTF-8').' '.self::COLORS[$this->color_a];
+        $teamB = mb_strtoupper(AppString::get('color.'.$this->color_b), 'UTF-8').' '.self::COLORS[$this->color_b];
+        $empty = '_'.AppString::get('game.empty').'_';
+        $textMessage = AppString::get('game.teams_lists', [
+            'master_a' => $this->masterA->get()->getStringList($mention)??$empty,
+            'agents_a' => $this->agentsA->get()->getStringList($mention)??$empty,
+            'master_b' => $this->masterB->get()->getStringList($mention)??$empty,
+            'agents_b' => $this->agentsB->get()->getStringList($mention)??$empty,
+            'a' => $teamA,
+            'b' => $teamB
+        ]);
+        return $textMessage;
+    }
+
+    private function setPlayerTeamAndRoles() {
+        $this->masterA = $this->users()->fromTeamRole('a', 'master');
+        $this->agentsA = $this->users()->fromTeamRole('a', 'agent');
+        $this->masterB = $this->users()->fromTeamRole('b', 'master');
+        $this->agentsB = $this->users()->fromTeamRole('b', 'agent');
+        $this->isTeamAndRolesSet = true;
     }
 
 }

@@ -26,7 +26,10 @@
             "There's already a game going on in this group"
         ],
         "teams_lists": [
-            "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\nChoose your team and role:"
+            "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n"
+        ],
+        "choose_role": [
+            "Choose your team and role:"
         ],
         "empty": [
             "empty"

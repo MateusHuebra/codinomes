@@ -13,58 +13,30 @@ use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Menu {
-
-    const RESEND = 'resend';
-    const EDIT = 'edit';
     
-    static function send(Game $game, BotApi $bot, string $action = null, int $messageId = null, User $user = null) : Void {
+    static function send(Game $game, BotApi $bot, int $messageId = null, User $user = null) : Void {
         $game->refresh();
-
-        $masterA = $game->users()->fromTeamRole('a', 'master');
-        $agentsA = $game->users()->fromTeamRole('a', 'agent');
-        $masterB = $game->users()->fromTeamRole('b', 'master');
-        $agentsB = $game->users()->fromTeamRole('b', 'agent');
-
-        if($masterA->count()==0 || $agentsA->count()==0 || $masterB->count()==0 || $agentsB->count()==0) {
-            $hasRequiredPlayers = false;
-        } else {
-            $hasRequiredPlayers = true;
-        }
-
-        $teamA = mb_strtoupper(AppString::get('color.'.$game->color_a), 'UTF-8').' '.Game::COLORS[$game->color_a];
-        $teamB = mb_strtoupper(AppString::get('color.'.$game->color_b), 'UTF-8').' '.Game::COLORS[$game->color_b];
-        $empty = '_'.AppString::get('game.empty').'_';
-        $textMessage = AppString::get('game.teams_lists', [
-            'master_a' => $masterA->get()->toMentionList()??$empty,
-            'agents_a' => $agentsA->get()->toMentionList()??$empty,
-            'master_b' => $masterB->get()->toMentionList()??$empty,
-            'agents_b' => $agentsB->get()->toMentionList()??$empty,
-            'a' => $teamA,
-            'b' => $teamB
-        ]);
-
+        $hasRequiredPlayers = $game->hasRequiredPlayers();
+        $textMessage = $game->getTeamAndPlayersList().AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $user);
 
-        try {
-            if($action == self::RESEND) {
-                $bot->deleteMessage($game->chat_id, $messageId);
-            }
-            if ($action == self::EDIT) {
-                $bot->editMessageText($game->chat_id, $messageId, $textMessage, 'MarkdownV2', false, $keyboard);
-            } else {
-                throw new Exception;
-            }
-        } catch(Exception $e) {
-            if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message') {
-                return;
-            }
-            $message = $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
+        if($messageId !== null) {
             try {
-                $bot->pinChatMessage($game->chat_id, $message->getMessageId());
-            } catch(Exception $e) {}
-            $game->message_id = $message->getMessageId();
-            $game->save();
+                $bot->editMessageText($game->chat_id, $messageId, $textMessage, 'MarkdownV2', false, $keyboard);
+                return;
+            } catch(Exception $e) {
+                if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message') {
+                    return;
+                }
+            }
         }
+
+        $message = $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
+        try {
+            $bot->pinChatMessage($game->chat_id, $message->getMessageId());
+        } catch(Exception $e) {}
+        $game->message_id = $message->getMessageId();
+        $game->save();
     }
 
     private static function getKeyboard(bool $hasRequiredPlayers, Game $game, User $user = null) {

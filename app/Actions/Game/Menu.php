@@ -37,21 +37,18 @@ class Menu implements Action {
             $game->menu = null;
             $game->save();
         }
-        if($newMenu == 'color') {
-            $game->menu = $newMenu;
-            $game->save();
-        }
-        if(strpos($newMenu, 'packs') !== false) {
+
+        if($game->getMenu() == 'packs') {
             if(!$user || !$game->hasPermission($user, $bot)) {
                 $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.admin_only');
                 return;
             }
-            
-            $game->menu = $newMenu;
-            $game->save();
         }
 
-        MenuService::send($game, $bot, MenuService::EDIT, $messageId, $user);
+        $game->menu = $newMenu;
+        $game->save();
+
+        MenuService::send($game, $bot, $messageId, $user);
     }
 
 }

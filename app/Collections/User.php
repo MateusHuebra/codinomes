@@ -7,16 +7,20 @@ use Illuminate\Database\Eloquent\Collection;
 
 class User extends Collection {
 
-    public function toMentionList($separator = ', ') {
+    public function getStringList(bool $mention, $separator = ', ') {
         if($this->count()==0) {
             return null;
         }
         $namesArray = [];
         foreach($this->items as $player) {
-            $namesArray[] = AppString::get('game.mention', [
-                'name' => AppString::parseMarkdownV2($player->name),
-                'id' => $player->id
-            ]);
+            if($mention) {
+                $namesArray[] = AppString::get('game.mention', [
+                    'name' => AppString::parseMarkdownV2($player->name),
+                    'id' => $player->id
+                ]);
+            } else {
+                $namesArray[] = AppString::parseMarkdownV2($player->name);
+            }
         }
         return implode($separator, $namesArray);
     }
