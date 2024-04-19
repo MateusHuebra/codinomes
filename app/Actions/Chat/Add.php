@@ -12,7 +12,7 @@ class Add implements Action {
 
     public function run($update, BotApi $bot) : Void {
         $tgChat = $update->getMessage()->getChat();
-        $chat = Chat::createFromTGChat($tgChat);
+        $chat = Chat::createFromTGModel($tgChat);
         $keyboard = GetLanguage::getKeyboard(true);
         $bot->sendMessage($chat->id, AppString::get('language.choose_chat'), null, false, null, $keyboard);
     }
