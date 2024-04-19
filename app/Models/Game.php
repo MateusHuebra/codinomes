@@ -57,7 +57,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            preg_match('/(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9])(\R    > .+)*$/', $this->history, $matches);
+            preg_match('/[*](?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9])[*](\R>.+)*$/', $this->history, $matches);
             $this->lastHint = $matches['hint'];
         }
         return $this->lastHint;

@@ -31,7 +31,7 @@ class History implements Action {
             $text = AppString::get('error.no_game');
         }
         
-        $bot->sendMessage($chatId, $text, null, false, $message->getMessageId(), null, false, null, null, true);
+        $bot->sendMessage($chatId, $text, 'MarkdownV2', false, $message->getMessageId(), null, false, null, null, true);
     }
 
 }
