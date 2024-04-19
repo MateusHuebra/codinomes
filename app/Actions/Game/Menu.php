@@ -35,7 +35,8 @@ class Menu implements Action {
 
         if(!$newMenu) {
             $game->menu = null;
-            $game->save();
+        } else {
+            $game->menu = $newMenu;
         }
 
         if($game->getMenu() == 'packs') {
@@ -45,7 +46,6 @@ class Menu implements Action {
             }
         }
 
-        $game->menu = $newMenu;
         $game->save();
 
         MenuService::send($game, $bot, $messageId, $user);
