@@ -44,7 +44,7 @@ class ChosenGuess implements Action {
             $emoji = Game::COLORS['white'];
                 break;
         }
-        $game->addToHistory('    > '.$card->text.' '.$emoji);
+        $game->addToHistory('    > '.mb_strtolower($card->text, 'UTF-8').' '.$emoji);
 
         //correct guess
         if($card->team == $user->team) {
