@@ -79,7 +79,7 @@ class Start implements Action {
         Table::send($game, $bot, $caption, null, null, true);
 
         preg_match('/^.*\R.*\R.*\R\R.*\R.*\R.*\R\R/', $update->getMessage()->getText(), $matches);
-        $text = $matches[0] = AppString::getParsed('game.started');
+        $text = $matches[0] . AppString::getParsed('game.started');
         try {
             $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
             $bot->unpinChatMessage($chatId, $messageId);
