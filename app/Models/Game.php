@@ -19,6 +19,7 @@ class Game extends Model
         'red' => '🔴',
         'blue' => '🔵',
         'green' => '🟢',
+        'yellow' => '🟡',
         'white' => '⚪️',
         'black' => '⚫️'
     ];
