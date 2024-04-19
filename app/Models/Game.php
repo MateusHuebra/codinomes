@@ -137,8 +137,9 @@ class Game extends Model
         if($this->hasRequiredPlayers === null) {
             if($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0) {
                 $this->hasRequiredPlayers = false;
+            } else {
+                $this->hasRequiredPlayers = true;
             }
-            $this->hasRequiredPlayers = true;
         }
         return $this->hasRequiredPlayers;
     }
