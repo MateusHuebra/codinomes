@@ -19,7 +19,8 @@ class Game extends Model
         'red' => '🔴',
         'blue' => '🔵',
         'green' => '🟢',
-        'white' => '⚪️'
+        'white' => '⚪️',
+        'black' => '⚫️'
     ];
 
     public $timestamps = false;

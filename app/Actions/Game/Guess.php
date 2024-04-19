@@ -16,6 +16,12 @@ class Guess implements Action {
     public function run($update, BotApi $bot) : Void {
         $user = User::find($update->getFrom()->getId());
         $game = Game::find($user->game_id);
+        $emojis = [
+            'w' => Game::COLORS['white'],
+            'x' => Game::COLORS['black'],
+            'a' => Game::COLORS[$game->color_a],
+            'b' => Game::COLORS[$game->color_b]
+        ];
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
         $cards = $game->cards;
@@ -33,7 +39,7 @@ class Guess implements Action {
             } else {
                 foreach($filteredCards as $card) {
                     $title = $card->text;
-                    $messageContent = new Text($title);
+                    $messageContent = new Text($emojis[$card->team].' '.$title);
                     $data = CDM::toString([
                         CDM::EVENT => CDM::GUESS,
                         CDM::NUMBER => $card->id

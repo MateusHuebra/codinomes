@@ -172,6 +172,9 @@ class Menu {
         if($game->isMenu('color')) {
             $array = [];
             foreach(Game::COLORS as $color => $emoji) {
+                if(in_array($color, ['white', 'black'])) {
+                    continue;
+                }
                 $array[] = [
                     'text' => $emoji,
                     'callback_data' => CDM::toString([
