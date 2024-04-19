@@ -30,11 +30,7 @@ class Start implements Action {
             return;
         }
 
-        $masterA = $game->users()->fromTeamRole('a', 'master');
-        $agentsA = $game->users()->fromTeamRole('a', 'agent');
-        $masterB = $game->users()->fromTeamRole('b', 'master');
-        $agentsB = $game->users()->fromTeamRole('b', 'agent');
-        if($masterA->count()==0 || $agentsA->count()==0 || $masterB->count()==0 || $agentsB->count()==0) {
+        if(!$game->hasRequiredPlayers()) {
             $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_required_players');
             if(!env('APP_ENV')=='local') {
                 return;
