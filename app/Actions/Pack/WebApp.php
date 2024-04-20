@@ -14,7 +14,7 @@ class WebApp implements Action {
             [
                 [
                     'text' => 'Abrir app',
-                    'web_app' => ['url' => 'https://www.mateuskian.shop/codinomes/test']
+                    'web_app' => ['url' => 'https://mateuskian.shop/codinomes/test']
                 ]
             ]
         ]);
