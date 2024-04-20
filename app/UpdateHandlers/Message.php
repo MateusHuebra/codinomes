@@ -9,6 +9,7 @@ use App\Actions\Game\History;
 use App\Actions\Game\Stop;
 use App\Actions\Language\Get;
 use App\Actions\Notify;
+use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
 use App\Actions\Start;
 use TelegramBot\Api\Client;
@@ -66,6 +67,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'ping') {
             return new Ping;
+
+        } else if($command == 'packtest') {
+            return new WebApp;
         }
     }
 
