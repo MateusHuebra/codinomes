@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\User;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
+use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 
@@ -33,11 +34,8 @@ class ChosenHint implements Action {
         $caption = new Caption($hint, null, 50);
         
         try {
-            $bot->editMessageText($game->chat_id, $game->message_id, $historyLine);
-        } catch(\Exception $e) {
-            $bot->sendMessage(env('TG_MY_ID'), $e->getMessage());
             $bot->sendMessage($game->chat_id, $historyLine);
-        }
+        } catch(Exception $e) {}
         Table::send($game, $bot, $caption);
     }
 
