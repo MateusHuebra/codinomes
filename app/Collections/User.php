@@ -31,7 +31,7 @@ class User extends Collection {
     public function notify(Chat $chat, BotApi $bot) {
         $chat->refresh();
         $text = AppString::get('game.notification', [
-            'title' => $chat->title,
+            'title' => AppString::getParsed($chat->title),
             'url' => $chat->getUrl().'/'.$chat->game->message_id
         ]);
         $attachmentsToUpdate = [];
