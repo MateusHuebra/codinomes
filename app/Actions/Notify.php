@@ -19,7 +19,7 @@ class Notify implements Action {
             return;
         }
 
-        $chat->notifiableUsers()->attach($user->id);
+        $chat->notifiableUsers()->syncWithoutDetaching([$user->id]);
         $bot->setMessageReaction($chat->id, $update->getMessageId(), '👍');
     }
 
