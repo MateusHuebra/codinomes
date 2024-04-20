@@ -13,8 +13,11 @@ class Create implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $chat = $update->findChat();
+        $chat->username = $update->getChatUsername();
+        $chat->title = substr($update->getChatTitle(), 0, 32);
+        $chat->save();
+
         $user = $update->findUser();
-        
         if(!$user || !$chat) {
             $bot->sendMessage($chat->id, AppString::get('error.user_not_registered'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
