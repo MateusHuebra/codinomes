@@ -139,7 +139,7 @@ class Table {
     static function getKeyboard(string $status, string $chatLanguage) {
         if($status=='master_a' || $status=='master_b') {
             return new InlineKeyboardMarkup([
-                [,
+                [
                     [
                         'text' => AppString::get('game.give_hint', null, $chatLanguage),
                         'switch_inline_query_current_chat' => ''
