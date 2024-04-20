@@ -3,9 +3,9 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
-use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -14,9 +14,9 @@ use App\Services\CallbackDataManager as CDM;
 
 class ChosenGuess implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $user = User::find($update->getFrom()->getId());
-        $game = Game::find($user->game_id);
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        $game = $user->game;
         $chatLanguage = $game->chat->language;
         
         if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {

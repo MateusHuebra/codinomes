@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Adapters\UpdateTypes\Update;
 use App\Actions\Language\Get as GetLanguage;
 use App\Models\Chat;
 use App\Models\User;
@@ -10,13 +11,12 @@ use App\Services\AppString;
 
 class Start implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $message = $update->getMessage();
-        if($message->getChat()->getType()==='private') {
-            $this->checkIfUserOrChatExists($message->getFrom(), User::class, $bot, 'start.welcome', $message->getMessageId());
+    public function run(Update $update, BotApi $bot) : Void {
+        if($update->isChatType('private')) {
+            $this->checkIfUserOrChatExists($update->getFrom(), User::class, $bot, 'start.welcome', $update->getMessageId());
             
-        } else if($message->getChat()->getType()==='supergroup') {
-            $this->checkIfUserOrChatExists($message->getChat(), Chat::class, $bot, 'language.choose_chat', $message->getMessageId());
+        } else if($update->isChatType('supergroup')) {
+            $this->checkIfUserOrChatExists($update->getChat(), Chat::class, $bot, 'language.choose_chat', $update->getMessageId());
         }
     }
 

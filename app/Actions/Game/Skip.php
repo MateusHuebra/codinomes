@@ -3,8 +3,7 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Game;
-use App\Models\User;
+use App\Adapters\UpdateTypes\Update;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -13,9 +12,9 @@ use TelegramBot\Api\BotApi;
 
 class Skip implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $user = User::find($update->getFrom()->getId());
-        $game = Game::find($user->game_id);
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        $game = $user->game;
 
         try {
             $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));

@@ -3,29 +3,23 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Chat;
-use App\Models\Game;
-use App\Models\User;
-use App\Services\AppString;
+use App\Adapters\UpdateTypes\Update;
 use App\Services\Game\Menu;
-use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 
 class Color implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $updateId = $update->getId();
-        $messageId = $update->getMessage()->getMessageId();
-
-        $user = User::find($update->getFrom()->getId());
-        if(!$user->game_id) {
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        if(!$user->game) {
+            $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }
 
-        $game = Game::find($user->game_id);
+        $game = $user->game;
         if(!($game->status=='creating' && $user->role=='master')) {
-            $bot->sendAlertOrMessage($updateId, $game->chat_id, 'error.master_only');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.master_only');
             return;
         }
 
@@ -40,7 +34,7 @@ class Color implements Action {
         }
 
         if($newColor == $game->$enemyColor) {
-            $bot->sendAlertOrMessage($updateId, $game->chat_id, 'error.color_taken');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.color_taken');
             return;
         }
         
@@ -48,7 +42,7 @@ class Color implements Action {
         $game->menu = null;
         $game->save();
         
-        Menu::send($game, $bot, $messageId);
+        Menu::send($game, $bot, $update->getMessageId());
     }
 
 }

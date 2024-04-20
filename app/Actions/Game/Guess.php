@@ -3,8 +3,8 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
-use App\Models\User;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
@@ -13,9 +13,10 @@ use TelegramBot\Api\Types\Inline\InputMessageContent\Text;
 
 class Guess implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $user = User::find($update->getFrom()->getId());
-        $game = Game::find($user->game_id);
+    const REGEX = '/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,12})?$/';
+
+    public function run(Update $update, BotApi $bot) : Void {
+        $game = $update->findUser()->game;
         $emojis = [
             'w' => Game::COLORS['white'],
             'x' => Game::COLORS['black'],
@@ -27,7 +28,7 @@ class Guess implements Action {
         $cards = $game->cards;
 
         $results = [];
-        if(preg_match('/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,12})?$/', $query, $matches)) {
+        if(preg_match(self::REGEX, $query, $matches)) {
             $filteredCards = $cards->where('revealed', false);
             if(strlen($query)) {
                 $filteredCards = $filteredCards->filter(function ($card) use ($query) {
@@ -44,7 +45,7 @@ class Guess implements Action {
                         CDM::EVENT => CDM::GUESS,
                         CDM::NUMBER => $card->id
                     ]);
-                    $results[] = new Article($data, $title, null, 'https://imgur.com/3kQB4ed', null, null, $messageContent);
+                    $results[] = new Article($data, $title, null, null, null, null, $messageContent);
                 }
             }
             
@@ -52,7 +53,7 @@ class Guess implements Action {
             $results[] = $this->getErrorResult();
         }
 
-        $bot->answerInlineQuery($update->getId(), $results, 10);
+        $bot->answerInlineQuery($update->getCallbackQueryId(), $results, 10);
     }
 
     private function getErrorResult() {

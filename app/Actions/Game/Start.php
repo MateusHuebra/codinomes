@@ -3,9 +3,8 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Game;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\GameCard;
-use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -14,24 +13,23 @@ use Exception;
 
 class Start implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $messageId = $update->getMessage()->getMessageId();
-        $chatId = $update->getMessage()->getChat()->getId();
-        $game = Game::where('chat_id', $chatId)->first();
+    public function run(Update $update, BotApi $bot) : Void {
+        $chat = $update->findChat();
+        $game = $chat->game;
 
         if(!$game || $game->status != 'creating') {
-            $bot->deleteMessage($chatId, $messageId);
+            $bot->deleteMessage($chat->id, $update->getMessageId());
             return;
         }
 
-        $user = User::find($update->getFrom()->getId());
+        $user = $update->findUser();
         if(!$user || !$game->hasPermission($user, $bot)) {
-            $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.admin_only');
+            $bot->sendAlertOrMessage($update->getId(), $chat->id, 'error.admin_only');
             return;
         }
 
         if(!$game->hasRequiredPlayers()) {
-            $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_required_players');
+            $bot->sendAlertOrMessage($update->getId(), $chat->id, 'error.no_required_players');
             if(!env('APP_ENV')=='local') {
                 return;
             }
@@ -42,7 +40,7 @@ class Start implements Action {
         }
         $cards = $game->chat->packs->getCards();
         if($cards->count() < 25) {
-            $bot->sendAlertOrMessage($update->getId(), $chatId, 'error.no_enough_cards');
+            $bot->sendAlertOrMessage($update->getId(), $chat->id, 'error.no_enough_cards');
             return;
         }
 
@@ -75,8 +73,8 @@ class Start implements Action {
 
         $text = $game->getTeamAndPlayersList().AppString::getParsed('game.started');
         try {
-            $bot->editMessageText($chatId, $messageId, $text, 'MarkdownV2');
-            $bot->unpinChatMessage($chatId, $messageId);
+            $bot->editMessageText($chat->id, $update->getMessageId(), $text, 'MarkdownV2');
+            $bot->unpinChatMessage($chat->id, $update->getMessageId());
         } catch(Exception $e) {}
     }
 

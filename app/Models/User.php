@@ -21,6 +21,11 @@ class User extends Model
         'language',
         'status'
     ];
+    
+    public function game()
+    {
+        return $this->belongsTo(Game::class);
+    }
 
     public function leaveGame() {
         $this->game_id = null;

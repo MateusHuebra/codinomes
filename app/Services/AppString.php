@@ -58,16 +58,14 @@ class AppString {
 
     static function setLanguage($update) {
         try {
-            $chat = $update->getMessage()->getChat();
-            if($chat->getType()==='private') {
-                self::$language = User::find($chat->getId())->language??self::$language;
-            } else if($chat->getType()==='supergroup') {
-                self::$language = Chat::find($chat->getId())->language??User::find($chat->getId())->language??self::$language;
+            if($update->isChatType('private')) {
+                self::$language = $update->findUser()->language??self::$language;
+            } else if($update->isChatType('supergroup')) {
+                self::$language = $update->findChat()->language??$update->findUser()->language??self::$language;
             }
         } catch(Throwable $e) {
             try {
-                $userId = $update->getFrom()->getId();
-                self::$language = User::find($userId)->language??self::$language;
+                self::$language = $update->findUser()->language??self::$language;
             } catch(Throwable $e) {}
         }
         

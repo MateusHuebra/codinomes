@@ -3,10 +3,10 @@
 namespace App\Actions;
 
 use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Types\Update;
+use App\Adapters\UpdateTypes\Update;
 
 interface Action {
 
-    public function run($update, BotApi $bot) : Void;
+    public function run(Update $update, BotApi $bot) : Void;
 
-  }
+}

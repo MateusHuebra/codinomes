@@ -3,7 +3,7 @@
 namespace App\Actions\Language;
 
 use App\Actions\Action;
-use App\Models\Chat;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\User;
 use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\BotApi;
@@ -11,12 +11,10 @@ use App\Services\AppString;
 use Illuminate\Database\Eloquent\Model;
 use TelegramBot\Api\Types\Message;
 use Exception;
-use TelegramBot\Api\Types\Update;
 
 class Set implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $message = $update->getMessage();
+    public function run(Update $update, BotApi $bot) : Void {
         try {
             $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
         } catch(Exception $e) {
@@ -24,15 +22,15 @@ class Set implements Action {
         }
         $data = CDM::toArray($update->getData());
         $user = User::find($update->getFrom()->getId());
-        if($message->getChat()->getType()==='private') {
+        if($update->isChatType('private')) {
             $chatId = $user->id;
-            $this->setUserOrChatLanguage($user, $data, $bot, $message);
+            $this->setUserOrChatLanguage($user, $data, $bot, $update->getMessage());
             
-        } else if($message->getChat()->getType()==='supergroup') {
-            $chat = Chat::find($message->getChat()->getId());
+        } else if($update->isChatType('supergroup')) {
+            $chat = $update->findChat();
             $chatId = $chat->id;
             if($chat->isAdmin($user, $bot) || $data[CDM::FIRST_TIME]) {
-                $this->setUserOrChatLanguage($chat, $data, $bot, $message);
+                $this->setUserOrChatLanguage($chat, $data, $bot, $update->getMessage());
             } else {
                 $bot->sendMessage($chatId, AppString::get('error.admin_only'));
             }

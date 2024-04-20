@@ -3,8 +3,8 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
-use App\Models\User;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
 use Exception;
@@ -13,9 +13,9 @@ use App\Services\CallbackDataManager as CDM;
 
 class ChosenHint implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $user = User::find($update->getFrom()->getId());
-        $game = Game::find($user->game_id);
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        $game = $user->game;
         
         if(!(($game->status=='master_a' && $user->team=='a' && $user->role=='master') || ($game->status=='master_b' && $user->team=='b' && $user->role=='master'))) {
             return;

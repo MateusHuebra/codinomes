@@ -3,14 +3,13 @@
 namespace App\Actions\Chat;
 
 use App\Actions\Action;
-use App\Models\Chat;
+use App\Adapters\UpdateTypes\Update;
 use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Types\Message;
 
 class Delete implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $chat = Chat::find($update->getMessage()->getChat()->getId());
+    public function run(Update $update, BotApi $bot) : Void {
+        $chat = $update->findChat();
         $chat->delete();
     }
 

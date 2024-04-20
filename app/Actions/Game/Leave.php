@@ -3,32 +3,29 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Chat;
-use App\Models\User;
+use App\Adapters\UpdateTypes\Update;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 
 class Leave implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $updateId = $update->getId();
-        $message = $update->getMessage();
-        $user = User::find($update->getFrom()->getId());
-        if(!$user || !$user->game_id) {
-            $bot->answerCallbackQuery($updateId);
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        if(!$user || !$user->game) {
+            $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }
 
-        $chat = Chat::find($message->getChat()->getId());
+        $chat = $update->findChat();
         if($user->game_id != $chat->game->id) {
-            $bot->sendAlertOrMessage($updateId, $chat->id, 'error.already_playing');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.already_playing');
             return;
         }
 
         $user->leaveGame();
-        Menu::send($chat->game, $bot, $message->getMessageId());
-        $bot->answerCallbackQuery($updateId, AppString::get('game.you_left'));
+        Menu::send($chat->game, $bot, $update->getMessageId());
+        $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.you_left'));
     }
 
 }

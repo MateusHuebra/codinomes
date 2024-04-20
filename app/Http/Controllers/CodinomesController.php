@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\AppString;
-use App\UpdateHandlers\Factory;
+use App\UpdateHandlers\Factory as HandlerFactory;
+use App\Adapters\UpdateTypes\Factory as UpdateFactory;
 use Illuminate\Http\Request;
 use App\Models\TelegramUpdate;
 use App\Services\Telegram\BotApi;
@@ -20,12 +21,12 @@ class CodinomesController extends Controller
         $bot = new BotApi(env('TG_TOKEN'));
         $updateRawData = file_get_contents('php://input');
         $update = Update::fromResponse(BotApi::jsonValidate($updateRawData, true));
+        $update = UpdateFactory::build($update);
         ServerLog::log('update raw data: '.$updateRawData);
 
         TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
 
-        $updateHandler = Factory::build($update);
-        $update = Factory::getSpecificUpdateType();
+        $updateHandler = HandlerFactory::build($update);
         AppString::setLanguage($update);
         $action = $updateHandler->getAction($update);
 

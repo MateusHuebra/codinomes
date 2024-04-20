@@ -3,8 +3,7 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Game;
-use App\Models\User;
+use App\Adapters\UpdateTypes\Update;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -13,26 +12,23 @@ use Exception;
 
 class SelectTeamAndRole implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $updateId = $update->getId();
-        $message = $update->getMessage();
-        $chatId = $message->getChat()->getId();
-
-        $user = User::find($update->getFrom()->getId());
+    public function run(Update $update, BotApi $bot) : Void {
+        $chat = $update->findChat();
+        $user = $update->findUser();
         if(!$user || $user->status != 'actived') {
-            $bot->sendAlertOrMessage($updateId, $chatId, 'error.user_not_registered');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.user_not_registered');
             return;
         }
 
-        $game = Game::where('chat_id', $chatId)->first();
+        $game = $chat->game;
         if(!$game || $game->status != 'creating') {
-            $bot->deleteMessage($chatId, $message->getMessageId());
-            $bot->sendAlertOrMessage($updateId, $chatId, 'game.no_game');
+            $bot->deleteMessage($chat->id, $update->getMessageId());
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'game.no_game');
             return;
         }
 
         if($user->game_id && $user->game_id != $game->id) {
-            $bot->sendAlertOrMessage($updateId, $chatId, 'error.already_playing');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.already_playing');
             return;
         }
 
@@ -44,7 +40,7 @@ class SelectTeamAndRole implements Action {
                 ->where('role', 'master')
                 ->count();
             if($isThereAlreadyAMasterInSelectedTeam) {
-                $bot->sendAlertOrMessage($updateId, $chatId, 'game.master_occupied');
+                $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'game.master_occupied');
                 return;
             }
         }
@@ -56,9 +52,9 @@ class SelectTeamAndRole implements Action {
         $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
         $user->save();
 
-        Menu::send($game, $bot, $message->getMessageId());
+        Menu::send($game, $bot, $update->getMessageId());
         try {
-            $bot->answerCallbackQuery($updateId, AppString::get('game.updated'));
+            $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.updated'));
         } catch(Exception $e) {}
     }
 

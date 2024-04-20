@@ -16,8 +16,7 @@ use TelegramBot\Api\Types\Message as MessageType;
 class Message implements UpdateHandler {
 
     public function getAction($update) {
-        $message = $update->getMessage();
-        $commandMatches = $this->getCommand($message);
+        $commandMatches = $this->getCommand($update->getMessage());
 
         if($commandMatches) {
             $command = $commandMatches[1];
@@ -27,15 +26,15 @@ class Message implements UpdateHandler {
             }
 
         } else {
-            if($message->getNewChatMembers()) {
-                foreach($message->getNewChatMembers() as $newMember) {
+            if($update->getNewChatMembers()) {
+                foreach($update->getNewChatMembers() as $newMember) {
                     if($newMember->getId() == env('TG_BOT_ID')) {
                         return new AddChat;
                     }
                 }
     
-            } else if($message->getLeftChatMember()) {
-                if($message->getLeftChatMember()->getId() == env('TG_BOT_ID')) {
+            } else if($update->getLeftChatMember()) {
+                if($update->getLeftChatMember()->getId() == env('TG_BOT_ID')) {
                     return new DeleteChat;
                 }
     

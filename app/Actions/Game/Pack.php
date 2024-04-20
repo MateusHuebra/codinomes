@@ -3,8 +3,7 @@
 namespace App\Actions\Game;
 
 use App\Actions\Action;
-use App\Models\Game;
-use App\Models\User;
+use App\Adapters\UpdateTypes\Update;
 use App\Models\Pack as PackModel;
 use App\Services\AppString;
 use App\Services\Game\Menu;
@@ -13,18 +12,14 @@ use App\Services\CallbackDataManager as CDM;
 
 class Pack implements Action {
 
-    public function run($update, BotApi $bot) : Void {
-        $messageId = $update->getMessage()->getMessageId();
-        $chatId = $update->getMessage()->getChat()->getId();
-        $userId = $update->getFrom()->getId();
-
-        $user = User::find($userId);
-        $game = Game::where('chat_id', $chatId)->first();
+    public function run(Update $update, BotApi $bot) : Void {
+        $user = $update->findUser();
+        $game = $update->findChat()->game;
         if(!$game || !$user) {
             return;
         }
         if(!$game->hasPermission($user, $bot)) {
-            $bot->sendMessage($chatId, AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
+            $bot->sendMessage($update->getChatId(), AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
             return;
         }
 
@@ -41,7 +36,7 @@ class Pack implements Action {
             $chat->packs()->detach($pack->id);
         }
         
-        Menu::send($game, $bot, $messageId);
+        Menu::send($game, $bot, $update->getMessageId());
     }
 
 }

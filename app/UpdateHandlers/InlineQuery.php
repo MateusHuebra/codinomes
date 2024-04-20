@@ -27,9 +27,9 @@ class InlineQuery implements UpdateHandler {
     }
 
     private function getEvent($update) {
-        $user = User::find($update->getFrom()->getId());
-        if($user && $user->game_id) {
-            $game = Game::find($user->game_id);
+        $user = $update->findUser();
+        $game = $user->game;
+        if($user && $game) {
             if($game->status=='creating' && $user->role=='master') {
                 return null;//'color';
             } else if($game->status=='master_a' && $user->team=='a' && $user->role=='master') {

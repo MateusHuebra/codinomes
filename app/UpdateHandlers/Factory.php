@@ -2,36 +2,26 @@
 
 namespace App\UpdateHandlers;
 
-use TelegramBot\Api\Types\Update;
+use App\Adapters\UpdateTypes\Update;
 
 class Factory {
 
-    static private $update = null;
-
     static function build(Update $update) {
 
-        if($update->getMessage()) {
-            self::$update = $update;
+        if($update->isType(Update::MESSAGE)) {
             return new Message;
 
-        } else if($update->getCallbackQuery()) {
-            self::$update = $update->getCallbackQuery();
+        } else if($update->isType(Update::CALLBACK_QUERY)) {
             return new CallbackQuery;
 
-        } else if($update->getInlineQuery()) {
-            self::$update = $update->getInlineQuery();
+        } else if($update->isType(Update::INLINE_QUERY)) {
             return new InlineQuery;
 
-        } else if($update->getChosenInlineResult()) {
-            self::$update = $update->getChosenInlineResult();
+        } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             return new ChosenInlineResult;
 
         }
 
-    }
-
-    static function getSpecificUpdateType() {
-        return self::$update;
     }
 
 }
