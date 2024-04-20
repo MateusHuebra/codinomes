@@ -91,6 +91,9 @@
         "give_hint": [
             "Dar dica"
         ],
+        "open_dm": [
+            "Abrir PV"
+        ],
         "turn": [
             "É a vez de {role} {team}\n{players}"
         ],
@@ -107,7 +110,7 @@
             "{hints} \\< dica atual"
         ],
         "skip": [
-            "Pular sua vez"
+            "Pular vez"
         ],
         "win": [
             "A equipe {team} venceu o jogo!"

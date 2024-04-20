@@ -91,6 +91,9 @@
         "give_hint": [
             "Give hint"
         ],
+        "open_dm": [
+            "Open DM"
+        ],
         "turn": [
             "It's turn of {role} {team}\n{players}"
         ],
@@ -107,7 +110,7 @@
             "{hints} \\< current hint"
         ],
         "skip": [
-            "Skip your turn"
+            "Skip turn"
         ],
         "win": [
             "Team {team} won the game!"

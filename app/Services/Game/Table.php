@@ -130,7 +130,6 @@ class Table {
         }
 
         try {
-            $bot->pinChatMessage($chatId, $message->getMessageId(), true);
             if(!is_null($oldMessage)) {
                 $bot->deleteMessage($chatId, $oldMessage);
             }
@@ -140,9 +139,13 @@ class Table {
     static function getKeyboard(string $status, string $chatLanguage) {
         if($status=='master_a' || $status=='master_b') {
             return new InlineKeyboardMarkup([
-                [
+                [,
                     [
                         'text' => AppString::get('game.give_hint', null, $chatLanguage),
+                        'switch_inline_query_current_chat' => ''
+                    ],
+                    [
+                        'text' => AppString::get('game.open_dm', null, $chatLanguage),
                         'url' => 't.me/CodinomesBot'
                     ]
                 ]
@@ -151,16 +154,14 @@ class Table {
             return new InlineKeyboardMarkup([
                 [
                     [
-                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
-                        'switch_inline_query_current_chat' => ''
-                    ]
-                ],
-                [
-                    [
                         'text' => AppString::get('game.skip', null, $chatLanguage),
                         'callback_data' => CDM::toString([
                             CDM::EVENT => CDM::SKIP
                         ])
+                    ],
+                    [
+                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
+                        'switch_inline_query_current_chat' => ''
                     ]
                 ]
             ]);
