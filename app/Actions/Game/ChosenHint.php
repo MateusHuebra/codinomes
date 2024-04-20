@@ -32,6 +32,11 @@ class ChosenHint implements Action {
 
         $caption = new Caption($hint, null, 50);
         
+        try {
+            $bot->editMessageText($game->chat_id, $game->message_id, $historyLine);
+        } catch(\Exception $e) {
+            $bot->sendMessage($game->chat_id, $historyLine);
+        }
         Table::send($game, $bot, $caption);
     }
 
