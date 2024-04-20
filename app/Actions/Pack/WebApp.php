@@ -14,7 +14,7 @@ class WebApp implements Action {
             [
                 [
                     'text' => 'Abrir app',
-                    'web_app' => json_encode(['url' => 'https://.www.mateuskian.shop/test'])
+                    'web_app' => ['url' => 'https://www.mateuskian.shop/test']
                 ]
             ]
         ]);
