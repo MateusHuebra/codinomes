@@ -31,6 +31,11 @@ class Chat extends Model
     {
         return $this->belongsToMany(Pack::class);
     }
+
+    public function notifiableUsers()
+    {
+        return $this->belongsToMany(User::class, 'notifiable_chat_users')->withPivot('message_id');
+    }
     
     public function isAdmin(User $user, BotApi $bot) : bool {
         $admins = $bot->getChatAdministrators($this->id);
@@ -40,6 +45,10 @@ class Chat extends Model
             }
         }
         return false;
+    }
+
+    public function getUrl() {
+        return str_replace('-100', 'https://t.me/c/', $this->id);
     }
 
     static function createFromTGModel(TGChat $tgChat) : Chat {

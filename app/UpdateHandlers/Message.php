@@ -8,6 +8,7 @@ use App\Actions\Game\Create;
 use App\Actions\Game\History;
 use App\Actions\Game\Stop;
 use App\Actions\Language\Get;
+use App\Actions\Notify;
 use App\Actions\Ping;
 use App\Actions\Start;
 use TelegramBot\Api\Client;
@@ -59,6 +60,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['language', 'idioma'])) {
             return new Get;
+
+        } else if(in_array($command, ['notify', 'notificar'])) {
+            return new Notify;
 
         } else if($command == 'ping') {
             return new Ping;

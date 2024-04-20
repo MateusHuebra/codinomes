@@ -135,6 +135,9 @@
         ],
         "started": [
             "Game started!"
+        ],
+        "notification": [
+            "New game at [{title}]({url})"
         ]
     },
     "color": {
