@@ -66,7 +66,6 @@ class Start implements Action {
         }
 
         $game->message_id = null;
-        $game->save();
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
         Table::send($game, $bot, $caption, null, null, true);
