@@ -28,6 +28,9 @@ class ChosenGuess implements Action {
 
         $data = CDM::toArray($update->getResultId());
         $card = GameCard::find($data[CDM::NUMBER]);
+        if($card->revealed) {
+            return;
+        }
         $card->revealed = true;
         $card->save();
         
