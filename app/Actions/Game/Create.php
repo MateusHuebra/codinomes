@@ -38,7 +38,7 @@ class Create implements Action {
         $game->save();
 
         Menu::send($game, $bot);
-        $chat->notifiableUsers->notify($chat, $bot);
+        $chat->notifiableUsers->notify($game, $bot);
     }
 
 }
