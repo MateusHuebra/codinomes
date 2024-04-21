@@ -112,6 +112,15 @@
         "skip": [
             "Skip turn"
         ],
+        "sure_skip": [
+            "Do you really want to skip?"
+        ],
+        "cancel": [
+            "Cancel"
+        ],
+        "confirm": [
+            "Confirm"
+        ],
         "win": [
             "Team {team} won the game!"
         ],

@@ -112,6 +112,15 @@
         "skip": [
             "Pular vez"
         ],
+        "sure_skip": [
+            "Quer mesmo pular a vez?"
+        ],
+        "cancel": [
+            "Cancelar"
+        ],
+        "confirm": [
+            "Confirmar"
+        ],
         "win": [
             "A equipe {team} venceu o jogo!"
         ],

@@ -16,6 +16,8 @@ class CallbackDataManager {
     const HINT = 'hi';
     const GUESS = 'gu';
     const SKIP = 'sk';
+    const CONFIRM_SKIP = 'yessk';
+    const CANCEL_SKIP = 'nosk';
     const CHANGE_COLOR = 'cc';
     const CHANGE_PACK = 'cp';
     const MENU = 'mn';

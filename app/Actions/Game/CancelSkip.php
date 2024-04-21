@@ -10,7 +10,7 @@ use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use App\Services\CallbackDataManager as CDM;
 
-class Skip implements Action {
+class CancelSkip implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
@@ -25,26 +25,21 @@ class Skip implements Action {
         }
 
         if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {
-            $text = AppString::get('game.sure_skip');
             $keyboard = new InlineKeyboardMarkup([
                 [
                     [
-                        'text' => AppString::get('game.cancel', null, $game->chat->language),
+                        'text' => AppString::get('game.skip', null, $game->chat->language),
                         'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::CONFIRM_SKIP
+                            CDM::EVENT => CDM::SKIP
                         ])
-                    ]
-                ],
-                [
+                    ],
                     [
-                        'text' => AppString::get('game.confirm', null, $game->chat->language),
-                        'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::CANCEL_SKIP
-                        ])
+                        'text' => AppString::get('game.choose_card', null, $game->chat->language),
+                        'switch_inline_query_current_chat' => ''
                     ]
                 ]
             ]);
-            $bot->editMessageCaption($game->chat_id, $update->getMessageId(), $text, $keyboard);
+            $bot->editMessageCaption($game->chat_id, $update->getMessageId(), null, $keyboard);
         }
         
     }
