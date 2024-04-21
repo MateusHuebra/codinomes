@@ -96,13 +96,29 @@ class ChosenGuess implements Action {
         
         //incorrect guess
         } else {
-            $game->nextStatus($user);
+            $cardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
+            
+            //won
+            if($cardsLeft <= 0) {
+                $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
+                $title = AppString::get('game.win', [
+                    'team' => AppString::get('color.'.$color)
+                ], $chatLanguage);
+                $text = AppString::get('game.win_color', null, $chatLanguage);
+                $caption = new Caption($title, $text);
 
-            $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
-            $text = AppString::get('game.history', null, $chatLanguage);
-            $caption = new Caption($title, $text);
+                Table::send($game, $bot, $caption,$card->id, $user->getEnemyTeam());
+            
+            //skip
+            } else {
+                $game->nextStatus($user);
 
-            Table::send($game, $bot, $caption, $card->id);
+                $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
+                $text = AppString::get('game.history', null, $chatLanguage);
+                $caption = new Caption($title, $text);
+    
+                Table::send($game, $bot, $caption, $card->id);
+            }
         }
 
     }
