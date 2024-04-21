@@ -188,7 +188,7 @@
             "Enter a hint"
         ],
         "wrong_hint_format_desc": [
-            "Your hint must be a single word up to 16 characters + number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
+            "A single word up to 16 characters + number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
         ],
         "wrong_guess_format_title": [
             "Enter your guess"
