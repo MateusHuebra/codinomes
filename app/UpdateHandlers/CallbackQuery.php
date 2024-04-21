@@ -6,6 +6,8 @@ use App\Actions\Game\Color;
 use App\Actions\Game\Menu;
 use App\Actions\Game\Pack;
 use App\Actions\Game\Skip;
+use App\Actions\Game\ConfirmSkip;
+use App\Actions\Game\CancelSkip;
 use App\Actions\Language\Set as SetLanguage;
 use App\Actions\Start;
 use App\Actions\Ping;
@@ -36,6 +38,12 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::SKIP) {
             return new Skip;
+        
+        } else if($data[CDM::EVENT] === CDM::CONFIRM_SKIP) {
+            return new ConfirmSkip;
+        
+        } else if($data[CDM::EVENT] === CDM::CANCEL_SKIP) {
+            return new CancelSkip;
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_COLOR) {
             return new Color;
