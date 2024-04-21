@@ -17,7 +17,7 @@ class History implements Action {
         }
         
         if($game) {
-            $text = $game->history??AppString::get('error.no_history');
+            $text = AppString::parseMarkdownV2($game->history)??AppString::get('error.no_history');
         } else {
             $text = AppString::get('error.no_game');
         }
