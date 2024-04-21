@@ -31,7 +31,7 @@ class Skip implements Action {
                     [
                         'text' => AppString::get('game.cancel', null, $game->chat->language),
                         'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::CONFIRM_SKIP
+                            CDM::EVENT => CDM::CANCEL_SKIP
                         ])
                     ]
                 ],
@@ -39,7 +39,7 @@ class Skip implements Action {
                     [
                         'text' => AppString::get('game.confirm', null, $game->chat->language),
                         'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::CANCEL_SKIP
+                            CDM::EVENT => CDM::CONFIRM_SKIP
                         ])
                     ]
                 ]
