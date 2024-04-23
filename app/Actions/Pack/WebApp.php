@@ -13,12 +13,12 @@ class WebApp implements Action {
         $keyboard = new InlineKeyboardMarkup([
             [
                 [
-                    'text' => 'Abrir app',
+                    'text' => 'Abrir gerenciador',
                     'web_app' => ['url' => 'https://codinomesbot.surge.sh/#/packs/yours']
                 ]
             ]
         ]);
-        $bot->sendMessage($update->getChatId(), 'test', null, false, null, $keyboard);
+        $bot->sendMessage($update->getChatId(), 'Packs', null, false, null, $keyboard);
     }
 
 }

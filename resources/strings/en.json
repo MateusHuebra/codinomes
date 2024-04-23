@@ -219,6 +219,23 @@
         ],
         "no_enough_cards": [
             "There's no enough cards in the actived packs to start the game"
+        ],
+        "no_hint": [
+            "NO HINT"
+        ]
+    },
+    "time": {
+        "left": [
+            "Time left: {time} {format}"
+        ],
+        "minute": [
+            "minute"
+        ],
+        "minutes": [
+            "minutes"
+        ],
+        "out": [
+            "Out of time!"
         ]
     }
 }

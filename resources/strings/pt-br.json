@@ -219,6 +219,23 @@
         ],
         "no_enough_cards": [
             "Não há cartas o suficiente nos packs ativos para se iniciar a partida"
+        ],
+        "no_hint": [
+            "SEM DICA"
+        ]
+    },
+    "time": {
+        "left": [
+            "Tempo restante: {time} {format}"
+        ],
+        "minute": [
+            "minuto"
+        ],
+        "minutes": [
+            "minutos"
+        ],
+        "out": [
+            "Tempo esgotado!"
         ]
     }
 }

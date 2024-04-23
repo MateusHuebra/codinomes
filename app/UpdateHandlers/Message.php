@@ -68,7 +68,7 @@ class Message implements UpdateHandler {
         } else if($command == 'ping') {
             return new Ping;
 
-        } else if($command == 'packtest') {
+        } else if($command == 'packs') {
             return new WebApp;
         }
     }
