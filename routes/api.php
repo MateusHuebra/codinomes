@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/bot/listen', [CodinomesController::class, 'listen']);
 
 Route::get('/packs/get', [PacksController::class, 'get']);
+Route::get('/packs/getall', [PacksController::class, 'getAll']);
+Route::delete('/packs/delete/{id}', [PacksController::class, 'delete']);
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
