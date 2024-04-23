@@ -86,7 +86,7 @@ class CheckTurnLeftTime {
         try {
             $bot->sendMessage($chatId, AppString::get('time.left', [
                 'time' => $time,
-                'minute' => $minute
+                'format' => $minute
             ]));
         } catch(Exception $e) {}
     }
