@@ -52,7 +52,8 @@ class CheckTurnLeftTime {
         $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $game->updateStatus('agent_'.substr($game->status, 7, 1));
+        $team = substr($game->status, 7, 1)=='a' ? 'b' : 'a';
+        $game->updateStatus('agent_'.$team);
         $game->attempts_left = 0;
         $game->save();
 
@@ -67,7 +68,8 @@ class CheckTurnLeftTime {
     }
 
     private function skipAgent(Game $game, BotApi $bot) {
-        $game->updateStatus('master_'.substr($game->status, 6, 1));
+        $team = substr($game->status, 6, 1)=='a' ? 'b' : 'a';
+        $game->updateStatus('master_'.$team);
         $game->attempts_left = null;
         $game->save();
 
