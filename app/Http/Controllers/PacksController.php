@@ -16,7 +16,7 @@ class PacksController extends Controller
         foreach($pack->cards()->get() as $card) {
             $cards[] = $card->text;
         }
-        $pack->cards = implode('\n', $cards);
+        $pack->cards = implode(PHP_EOL, $cards);
         return $pack;
     }
 
