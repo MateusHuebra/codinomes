@@ -47,7 +47,7 @@ class CheckTurnLeftTime {
     }
 
     private function skipMaster(Game $game, BotApi $bot) {
-        $hint = AppString::get('error.no_hint');
+        $hint = AppString::get('error.no_hint').' 0';
         $color = ($game->status=='master_a') ? $game->color_a : $game->color_b;
         $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
