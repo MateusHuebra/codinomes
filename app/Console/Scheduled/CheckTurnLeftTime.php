@@ -33,14 +33,14 @@ class CheckTurnLeftTime {
                     $this->skipAgent($game, $bot);
                 }
                 
-            } else if ($now - $time >= (60*3)) {
-                $this->warn($game->chat_id, 3, $bot);
+            } else if ($now - $time >= (60*4)) {
+                $this->warn($game->chat_id, 1, $bot);
 
-            } else if ($now - $time >= (60*2)) {
+            } else if ($now - $time >= (60*3)) {
                 $this->warn($game->chat_id, 2, $bot);
                 
-            } else if ($now - $time >= (60*1)) {
-                $this->warn($game->chat_id, 1, $bot);
+            } else if ($now - $time >= (60*2)) {
+                $this->warn($game->chat_id, 3, $bot);
                 
             }
         }
