@@ -19,8 +19,12 @@ class Notify implements Action {
             return;
         }
 
-        $chat->notifiableUsers()->syncWithoutDetaching([$user->id]);
-        $bot->setMessageReaction($chat->id, $update->getMessageId(), '👍');
+        $toggled = $chat->notifiableUsers()->toggle([$user->id]);
+        if(count($toggled['attached']) == 1) {
+            $bot->setMessageReaction($chat->id, $update->getMessageId(), '✍️');
+        } else {
+            $bot->setMessageReaction($chat->id, $update->getMessageId(), '🙊');
+        }
     }
 
 }
