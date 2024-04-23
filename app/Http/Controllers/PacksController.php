@@ -21,8 +21,8 @@ class PacksController extends Controller
         return Pack::all();
     }
 
-    public function delete(Request $request) {
-        $pack = Pack::find($request->input('id'));
+    public function delete(int $id) {
+        $pack = Pack::find($id);
         return $pack->delete();
     }
 }
