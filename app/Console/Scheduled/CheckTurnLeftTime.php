@@ -52,7 +52,7 @@ class CheckTurnLeftTime {
         $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $team = substr($game->status, 7, 1)=='a' ? 'b' : 'a';
+        $team = substr($game->status, 7, 1);
         $game->updateStatus('agent_'.$team);
         $game->attempts_left = 0;
         $game->save();
