@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Actions\Game\Guess;
 use App\Models\Card;
 use App\Models\Pack;
+use Exception;
 use Illuminate\Http\Request;
+use TelegramBot\Api\BotApi;
 use Validator;
 
 class PacksController extends Controller
@@ -68,6 +70,11 @@ class PacksController extends Controller
         }
         $pack->cards()->delete();
         $pack->cards()->saveMany($cards);
+
+        $bot = new BotApi(env('TG_TOKEN'));
+        try {
+            $bot->sendMessage(env('TG_MY_ID'), 'New pack!');
+        } catch(Exception $e) {}
 
         return $pack->push();
     }
