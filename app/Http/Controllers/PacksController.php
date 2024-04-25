@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Game\Guess;
 use App\Models\Card;
 use App\Models\Pack;
 use Illuminate\Http\Request;
@@ -42,11 +43,11 @@ class PacksController extends Controller
             'status' => 'required',
             'language' => 'required|max:5',
             'cards' => 'required|array',
-            'cards.*' => 'max:12'
+            'cards.*' => 'max:12|regex:'.Guess::REGEX
         ]);
 
         if($validator->fails()){
-            return response(['data' => $validator->errors()], 400);
+            return response($validator->errors(), 400);
         }
 
         $pack = Pack::findOrNew($request->input('id')??null);
