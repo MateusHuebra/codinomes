@@ -25,7 +25,11 @@ class PacksController extends Controller
 
     public function getAll(Request $request) {
         if($request->input('id')) {
-            return Pack::where('user_id', $request->input('id'))->get();
+            if($request->input('id') == env('TG_MY_ID')) {
+                return Pack::where('user_id', null)->get();
+            } else {
+                return Pack::where('user_id', $request->input('id'))->get();
+            }
         }
         return Pack::all();
     }
@@ -40,6 +44,9 @@ class PacksController extends Controller
     public function save(Request $request) {
         $data = $request->all();
         $data['cards'] = explode(PHP_EOL, $data['cards']);
+        if($data['user_id'] == env('TG_MY_ID')) {
+            $data['user_id'] = null;
+        }
         $validator = Validator::make($data, [
             'name' => 'required|min:3|max:32',
             'status' => 'required',
