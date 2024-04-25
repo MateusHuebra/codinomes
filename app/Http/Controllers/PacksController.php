@@ -47,7 +47,7 @@ class PacksController extends Controller
         ]);
 
         if($validator->fails()){
-            return $validator->errors();
+            return response($validator->errors(), 400);
         }
 
         $pack = Pack::findOrNew($request->input('id')??null);
