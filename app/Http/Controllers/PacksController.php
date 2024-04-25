@@ -37,7 +37,7 @@ class PacksController extends Controller
 
     public function save(Request $request) {
         $data = $request->all();
-        $data['cards'] = explode('\n', $data['cards']);
+        $data['cards'] = explode(PHP_EOL, $data['cards']);
         $validator = Validator::make($data, [
             'name' => 'required|min:3|max:32',
             'status' => 'required',
