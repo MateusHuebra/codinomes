@@ -24,14 +24,10 @@ class PacksController extends Controller
     }
 
     public function getAll(Request $request) {
-        if($request->input('id')) {
-            if($request->input('id') == env('TG_MY_ID')) {
-                return Pack::where('user_id', null)->get();
-            } else {
-                return Pack::where('user_id', $request->input('id'))->get();
-            }
+        if(!$request->input('id') || $request->input('id') == env('TG_MY_ID')) {
+            return Pack::all();
         }
-        return Pack::all();
+        return Pack::where('user_id', $request->input('id'))->get();
     }
 
     public function delete(int $id) {
