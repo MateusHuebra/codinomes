@@ -38,7 +38,6 @@ class PacksController extends Controller
         $data = $request->all();
         $data['cards'] = explode('\n', $data['cards']);
         $validator = Validator::make($data, [
-            'id' => 'int',
             'name' => 'required|min:3|max:32',
             'status' => 'required',
             'language' => 'required|max:5',
