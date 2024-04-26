@@ -57,7 +57,7 @@ class SelectTeamAndRole implements Action {
             $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.updated'));
         } catch(Exception $e) {}
 
-        $notifiedMessageId = $chat->notifiableUsers()->where('user_id', $user->id)->first()->pivot->message_id;
+        $notifiedMessageId = $chat->notifiableUsers()->where('user_id', $user->id)->first()->pivot->message_id??null;
         if($notifiedMessageId) {
             try {
                 $bot->deleteMessage($user->id, $notifiedMessageId);
