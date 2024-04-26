@@ -118,7 +118,7 @@ class Game extends Model
 
         if(!$this->hasRequiredPlayers()) {
             $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_required_players') : null;
-            if(!env('APP_ENV')=='local') {
+            if(env('APP_ENV')!='local') {
                 return false;
             }
         }
