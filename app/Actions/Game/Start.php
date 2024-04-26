@@ -4,13 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
-use App\Models\Game;
-use App\Models\GameCard;
-use App\Services\AppString;
-use App\Services\Game\Aux\Caption;
-use App\Services\Game\Table;
 use TelegramBot\Api\BotApi;
-use Exception;
 
 class Start implements Action {
 
@@ -24,7 +18,7 @@ class Start implements Action {
         }
 
         $user = $update->findUser();
-        $game->start($bot, $user, $update->getMessageId());
+        $game->start($bot, $user, $update->getId());
     }
 
 }
