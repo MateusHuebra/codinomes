@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Services\AppString;
+use App\Services\Game\Aux\Caption;
+use App\Services\Game\Table;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -100,6 +103,47 @@ class Game extends Model
     public function getMenuPage() {
         $this->getMenu();
         return $this->auxMenuPage;
+    }
+
+    public function start(BotApi $bot, User $user = null, $callbackId = null) : Bool {
+        if($this->status != 'creating') {
+            $bot->deleteMessage($this->chat_id, $this->message_id);
+            return false;
+        }
+
+        if($callbackId && (!$user || !$this->hasPermission($user, $bot))) {
+            $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.admin_only');
+            return false;
+        }
+
+        if(!$this->hasRequiredPlayers()) {
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_required_players') : null;
+            if(!env('APP_ENV')=='local') {
+                return false;
+            }
+        }
+
+        $firstTeam = rand(0, 1) ? 'a' : 'b';
+        $isCardsSetted = GameCard::set($this, $firstTeam);
+        if(!$isCardsSetted) {
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
+            return false;
+        }
+        $this->updateStatus('master_'.$firstTeam);  
+
+        $messageId = $this->message_id;
+        $this->message_id = null;
+
+        $text = $this->getTeamAndPlayersList().AppString::getParsed('game.started');
+        try {
+            $bot->editMessageText($this->chat_id, $messageId, $text, 'MarkdownV2');
+            $bot->unpinChatMessage($this->chat_id, $messageId);
+        } catch(Exception $e) {}
+
+        $caption = new Caption(AppString::get('game.started'), null, 50);
+        Table::send($this, $bot, $caption, null, null, true);
+
+        return true;
     }
 
     public function stop() {

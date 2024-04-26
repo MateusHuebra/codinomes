@@ -14,13 +14,13 @@ class StopAbandonedLobbies {
         $bot = new BotApi(env('TG_TOKEN'));
         $now = strtotime('now');
         
-        $games = Game::all();
+        $games = Game::where('status', 'creating');
         foreach ($games as $game) {
-            if($game->status != 'creating') {
-                continue;
-            }
             $time = strtotime($game->status_updated_at);
-            if($now - $time >= 1200) {
+            if($now - $time >= 600*1.5) {
+                if($game->start($bot)) {
+                    return;
+                }
                 try {
                     $bot->deleteMessage($game->chat_id, $game->message_id);
                     $bot->sendMessage($game->chat_id, AppString::get('game.stopped_by_time'));
