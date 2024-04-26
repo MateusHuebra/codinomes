@@ -56,6 +56,15 @@ class SelectTeamAndRole implements Action {
         try {
             $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.updated'));
         } catch(Exception $e) {}
+
+        $notifiedMessageId = $chat->notifiableUsers()->where('user_id', $user->id)->first()->pivot->message_id;
+        if($notifiedMessageId) {
+            try {
+                $bot->deleteMessage($user->id, $notifiedMessageId);
+            } catch(Exception $e) {}
+            $attachmentsToUpdate[$user->id] = ['message_id' => null];
+            $chat->notifiableUsers()->syncWithoutDetaching($attachmentsToUpdate);
+        }
     }
 
 }
