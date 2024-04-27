@@ -24,7 +24,13 @@ class Table {
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
-        $oldMessage = $game->message_id;
+
+        try {
+            if(!is_null($game->message_id)) {
+                $bot->deleteMessage($chatId, $game->message_id);
+            }
+        } catch(Exception $e) {}
+
         if($winner) {
             $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
         } else {
@@ -129,12 +135,6 @@ class Table {
 
             $game->stop();
         }
-
-        try {
-            if(!is_null($oldMessage)) {
-                $bot->deleteMessage($chatId, $oldMessage);
-            }
-        } catch(Exception $e) {}
     }
 
     static function getKeyboard(string $status, string $chatLanguage) {
