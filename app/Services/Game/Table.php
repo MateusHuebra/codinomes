@@ -17,6 +17,7 @@ class Table {
     
     const BORDER = 10;
     const FONT_SIZE = 21;
+    const EASTER_EGGS = ['MANOEL GOMES','THE WEEKND']; // might add later: 'LADY GAGA','AMOR','MEDO','SANGUE','MORTE','ENERGIA','CONHECIMENTO','KIAN'
     static $fontPath;
 
     static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
@@ -309,6 +310,12 @@ class Table {
             if($card->revealed) {
                 $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
                 imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+
+                if(in_array($card->text, self::EASTER_EGGS)) {
+                    $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
+                    imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, 210, 140);
+                }
+
                 if($card->id === $highlightCard) {
                     $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
                     imagecopy($masterCardImage, $highlightedImage, 0, 0, 0, 0, 210, 140);
