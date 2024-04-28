@@ -251,7 +251,7 @@ class Table {
         $noAccentText = str_replace(['É', 'È', 'Ê'], 'E', $noAccentText);
         $noAccentText = str_replace(['Í', 'Ï'], 'I', $noAccentText);
         $noAccentText = str_replace(['Ó', 'Ô', 'Õ', 'Ö'], 'O', $noAccentText);
-        $noAccentText = str_replace(['Ú', 'Ç', 'Ñ'], ['U', 'C', 'N'], $noAccentText);
+        $noAccentText = str_replace(['Ú', 'Ç', 'Ñ', 'J'], ['U', 'C', 'N', 'E'], $noAccentText);
 
         $textBox = imagettfbbox($fontSize, 0, self::$fontPath, $noAccentText);
         $textWidth = $textBox[2] - $textBox[0];
