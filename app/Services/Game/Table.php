@@ -95,14 +95,14 @@ class Table {
                 'players' => $playersList
             ], $chatLanguage);
 
-            $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
-            unlink($tempAgentsImageFileName);
-
             try {
                 if(!is_null($game->message_id)) {
                     $bot->deleteMessage($chatId, $game->message_id);
                 }
             } catch(Exception $e) {}
+
+            $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
+            unlink($tempAgentsImageFileName);
 
             if($sendToMasters) {
                 try{
@@ -247,11 +247,20 @@ class Table {
     }
 
     static function getAxisToCenterText($fontSize, $text, $width, $height) {
-        $textBox = imagettfbbox($fontSize, 0, self::$fontPath, $text);
+        $noAccentText = str_replace(['Á', 'À', 'Â', 'Ã'], 'A', $text);
+        $noAccentText = str_replace(['É', 'È', 'Ê'], 'E', $noAccentText);
+        $noAccentText = str_replace(['Í', 'Ï'], 'I', $noAccentText);
+        $noAccentText = str_replace(['Ó', 'Ô', 'Õ', 'Ö'], 'O', $noAccentText);
+        $noAccentText = str_replace(['Ú', 'Ç', 'Ñ'], ['U', 'C', 'N'], $noAccentText);
+
+        $textBox = imagettfbbox($fontSize, 0, self::$fontPath, $noAccentText);
         $textWidth = $textBox[2] - $textBox[0];
         $textHeight = $textBox[1] - $textBox[7];
+        $result['width'] = $textWidth;
+        $result['height'] = $textHeight;
         $result['x'] = ($width - $textWidth) / 2;
         $result['y'] = ($height + $textHeight) / 2;
+
         return $result;
     }
 
@@ -273,20 +282,17 @@ class Table {
             $cardX+= 105;
         }
 
-        //text position
-        $textLen = strlen($card->text);
-        if($textLen<9) {
-            $fontSize = self::FONT_SIZE;
-            $bottomSpace = 5;
-        } else if($textLen<11) {
-            $fontSize = self::FONT_SIZE-2;
-            $bottomSpace = 5 + 1;
-        } else {
-            $fontSize = self::FONT_SIZE-6;
-            $bottomSpace = 5 + 3;
+        //text position and size
+        $fontSize = self::FONT_SIZE + 1;
+        $inputWidth = 192;
+        $inputHeight = 34;
+        $textAxis = [];
+        while(empty($textAxis) || $textAxis['width'] >= $inputWidth - 30) {
+            $fontSize-=1;
+            $textAxis = self::getAxisToCenterText($fontSize, $card->text, 210, $inputHeight);
         }
-        $textAxis = self::getAxisToCenterText($fontSize, $card->text, 210, 140);
-        $textAxis['y'] = 115 - $bottomSpace;
+        $bottomSpace = 23;
+        $textAxis['y'] = 140-$bottomSpace-$inputHeight+$textAxis['y'];
         #endregion
 
         switch ($card->team) {
@@ -314,12 +320,12 @@ class Table {
             }
 
             if($card->revealed) {
-                $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-                imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
-
                 if(in_array($card->text, self::EASTER_EGGS)) {
                     $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
                     imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, 210, 140);
+                } else {
+                    $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
+                    imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
                 }
 
                 if($card->id === $highlightCard) {
