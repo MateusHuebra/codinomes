@@ -249,9 +249,9 @@ class Table {
     static function getAxisToCenterText($fontSize, $text, $width, $height) {
         $noAccentText = str_replace(['Á', 'À', 'Â', 'Ã'], 'A', $text);
         $noAccentText = str_replace(['É', 'È', 'Ê'], 'E', $noAccentText);
-        $noAccentText = str_replace(['Í', 'Ï'], 'I', $noAccentText);
+        $noAccentText = str_replace(['Í', 'Ï', 'J'], 'I', $noAccentText);
         $noAccentText = str_replace(['Ó', 'Ô', 'Õ', 'Ö'], 'O', $noAccentText);
-        $noAccentText = str_replace(['Ú', 'Ç', 'Ñ', 'J'], ['U', 'C', 'N', 'E'], $noAccentText);
+        $noAccentText = str_replace(['Ú', 'Ç', 'Ñ'], ['U', 'C', 'N'], $noAccentText);
 
         $textBox = imagettfbbox($fontSize, 0, self::$fontPath, $noAccentText);
         $textWidth = $textBox[2] - $textBox[0];
