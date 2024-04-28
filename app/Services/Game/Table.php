@@ -25,12 +25,6 @@ class Table {
         $chatId = $game->chat_id;
         $chatLanguage = Chat::find($chatId)->language;
 
-        try {
-            if(!is_null($game->message_id)) {
-                $bot->deleteMessage($chatId, $game->message_id);
-            }
-        } catch(Exception $e) {}
-
         if($winner) {
             $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
         } else {
@@ -104,6 +98,12 @@ class Table {
             $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
             unlink($tempAgentsImageFileName);
 
+            try {
+                if(!is_null($game->message_id)) {
+                    $bot->deleteMessage($chatId, $game->message_id);
+                }
+            } catch(Exception $e) {}
+
             if($sendToMasters) {
                 try{
                     if($sendToBothMasters || $game->status == 'master_a') {
@@ -122,6 +122,12 @@ class Table {
             $game->save();
             
         } else {
+            try {
+                if(!is_null($game->message_id)) {
+                    $bot->deleteMessage($chatId, $game->message_id);
+                }
+            } catch(Exception $e) {}
+
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
 
