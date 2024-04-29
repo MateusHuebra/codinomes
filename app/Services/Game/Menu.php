@@ -203,7 +203,7 @@ class Menu {
     private static function getActivedPacks(Chat $chat, Array $buttonsArray) {
         foreach ($chat->packs as $pack) {
             $buttonsArray[] = [[
-                'text' => '{ '.$pack->name.' ('.$pack->count().') }',
+                'text' => '{ '.$pack->name.' ('.$pack->cards()->count().') }',
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::CHANGE_PACK,
                     CDM::TEXT => $pack->id,
@@ -231,10 +231,10 @@ class Menu {
 
         foreach ($packs->get() as $pack) {
             if($chatPacks->find($pack->id)) {
-                $text = '{ '.$pack->name.' ('.$pack->count().') }';
+                $text = '{ '.$pack->name.' ('.$pack->cards()->count().') }';
                 $bool = 0;
             } else {
-                $text = $pack->name.' ('.$pack->count().')';
+                $text = $pack->name.' ('.$pack->cards()->count().')';
                 $bool = 1;
             }
             $buttonsArray[] = [[
