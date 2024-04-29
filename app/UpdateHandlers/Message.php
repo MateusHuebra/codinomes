@@ -7,6 +7,7 @@ use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Game\Create;
 use App\Actions\Game\History;
 use App\Actions\Game\Stop;
+use App\Actions\Help;
 use App\Actions\Language\Get;
 use App\Actions\Notify;
 use App\Actions\Pack\WebApp;
@@ -64,6 +65,18 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['notify', 'notificar'])) {
             return new Notify;
+
+        } else if(in_array($command, ['help', 'ajuda'])) {
+            return new Help;
+
+        } else if(in_array($command, ['help_roles', 'ajuda_papeis'])) {
+            return new Help('roles');
+
+        } else if(in_array($command, ['help_hints', 'ajuda_dicas'])) {
+            return new Help('hints');
+
+        } else if(in_array($command, ['help_colors', 'ajuda_cores'])) {
+            return new Help('colors');
 
         } else if($command == 'ping') {
             return new Ping;

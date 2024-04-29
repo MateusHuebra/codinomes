@@ -237,5 +237,19 @@
         "out": [
             "Tempo esgotado!"
         ]
+    },
+    "help": {
+        "base" : [
+            "*Codinomes* é um jogo de adivinhação de palavras, baseado em dicas, dividido em duas Equipes de cores diferentes compostas por um Mestre e vários Agentes\\.\n\nGanha a equipe que encontrar todas as cartas da própria cor primeiro\\.\n\n• Papéis: /ajuda\\_papeis\n\n• Dicas: /ajuda\\_dicas\n\n• Cores: /ajuda\\_cores\n\nObs\\.: No momento o bot está disponível apenas no grupo @CodinomesGrupo"
+        ],
+        "roles": [
+            "*Mestre:*\n• Vê a cor de todas as cartas;\n• Seu objetivo é dar dicas que relacionem o máximo possível de palavras da cor do seu time para que seus agentes as encontrem\\.\n\n*Agentes*: \n• Não vê a cor das cartas;\n• Seu objetivo é encontrar as palavras da cor do seu time seguindo as dicas do seu respectivo mestre\\."
+        ],
+        "hints": [
+            "As dicas devem ser uma palavra única seguidas do número de cartas que estão relacionadas a essa dica\\.\n\nExemplo: Everest 3\nPalavras: Neve, Frio e Montanha"
+        ],
+        "colors": [
+            "O que acontece dependendo da cor da carta escolhida:\n\n🟣 *Sua cor:* continua chutando até esgotar o número máximo de tentativas \\(Número da dica atual \\+ 1\\);\n\n⚪️ *Branca:* passa a vez imediatamente;\n\n🟠 *Cor do oponente:* passa a vez imediatamente, e deixa o time oponente uma carta mais próximo da vitória;\n\n⚫️ *Preta:* perde o jogo imediatamente, dando a vitória ao time oponente\\."
+        ]
     }
 }
