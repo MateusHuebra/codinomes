@@ -32,9 +32,7 @@ class Menu {
         }
 
         $message = $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
-        try {
-            $bot->pinChatMessage($game->chat_id, $message->getMessageId());
-        } catch(Exception $e) {}
+        $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
         $game->message_id = $message->getMessageId();
         $game->save();
     }

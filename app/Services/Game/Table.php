@@ -22,8 +22,7 @@ class Table {
 
     static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
         self::$fontPath = public_path('open-sans.bold.ttf');
-        $chatId = $game->chat_id;
-        $chatLanguage = Chat::find($chatId)->language;
+        $chatLanguage = $game->chat->language;
 
         if($winner) {
             $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
@@ -44,64 +43,28 @@ class Table {
         }
 
         self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB);
-
         foreach($cards as $card) {
             self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
         }
-
         self::addCaption($masterImage??null, $agentsImage??null, $caption);
 
         if($sendToMasters) {
             $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
-            imagepng($masterImage, $tempMasterImageFileName);
-            imagedestroy($masterImage);
-            $masterPhoto = new CURLFile($tempMasterImageFileName,'image/png','master');
+            $masterPhoto = self::getCURLFileFromImage($masterImage, $tempMasterImageFileName, 'master');
         }
+
+        if(!is_null($game->message_id)) {
+            $bot->tryToDeleteMessage($game->chat_id, $game->message_id);
+        }
+
         if(!$winner) {
             $tempAgentsImageFileName = tempnam(sys_get_temp_dir(), 'a_image_');
-            imagepng($agentsImage, $tempAgentsImageFileName);
-            imagedestroy($agentsImage);
-            $agentsPhoto = new CURLFile($tempAgentsImageFileName,'image/png','agents');
-        }
+            $agentsPhoto = self::getCURLFileFromImage($agentsImage, $tempAgentsImageFileName, 'agents');
 
-        if(!$winner) {
             $keyboard = self::getKeyboard($game->status, $chatLanguage);
-            switch ($game->status) {
-                case 'master_a':
-                    $role = AppString::get('game.master', null, $chatLanguage);
-                    $teamColor = 'color_a';
-                    $playersList = $game->users()->fromTeamRole('a', 'master')->get()->getStringList(true, PHP_EOL);
-                    break;
-                case 'agent_a':
-                    $role = AppString::get('game.agents', null, $chatLanguage);
-                    $teamColor = 'color_a';
-                    $playersList = $game->users()->fromTeamRole('a', 'agent')->get()->getStringList(true, PHP_EOL);
-                    break;
-                case 'master_b':
-                    $role = AppString::get('game.master', null, $chatLanguage);
-                    $teamColor = 'color_b';
-                    $playersList = $game->users()->fromTeamRole('b', 'master')->get()->getStringList(true, PHP_EOL);
-                    break;
-                case 'agent_b':
-                    $role = AppString::get('game.agents', null, $chatLanguage);
-                    $teamColor = 'color_b';
-                    $playersList = $game->users()->fromTeamRole('b', 'agent')->get()->getStringList(true, PHP_EOL);
-                    break;
-            }
+            $text = $game->getPhotoCaption();
             
-            $text = AppString::get('game.turn', [
-                'role' => $role,
-                'team' =>  Game::COLORS[$game->$teamColor],
-                'players' => $playersList
-            ], $chatLanguage);
-
-            try {
-                if(!is_null($game->message_id)) {
-                    $bot->deleteMessage($chatId, $game->message_id);
-                }
-            } catch(Exception $e) {}
-
-            $message = $bot->sendPhoto($chatId, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
             unlink($tempAgentsImageFileName);
 
             if($sendToMasters) {
@@ -114,7 +77,7 @@ class Table {
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
-                    $bot->sendMessage($chatId, AppString::get('error.master_not_registered', null, $chatLanguage));
+                    $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered', null, $chatLanguage));
                 }
             }
 
@@ -122,12 +85,6 @@ class Table {
             $game->save();
             
         } else {
-            try {
-                if(!is_null($game->message_id)) {
-                    $bot->deleteMessage($chatId, $game->message_id);
-                }
-            } catch(Exception $e) {}
-
             $color = ($winner == 'a') ? $game->color_a : $game->color_b;
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
 
@@ -136,14 +93,20 @@ class Table {
                 'team' => $team
             ], $chatLanguage);
 
-            $message = $bot->sendPhoto($chatId, $masterPhoto, $text, null, null, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
             $game->stop();
         }
     }
 
-    static function getKeyboard(string $status, string $chatLanguage) {
+    private static function getCURLFileFromImage($image, $tempFileName, string $fileName) : CURLFile {
+        imagepng($image, $tempFileName);
+        imagedestroy($image);
+        return new CURLFile($tempFileName,'image/png',$fileName);
+    }
+
+    private static function getKeyboard(string $status, string $chatLanguage) {
         if($status=='master_a' || $status=='master_b') {
             return new InlineKeyboardMarkup([
                 [
@@ -175,7 +138,7 @@ class Table {
         }
     }
     
-    static function getMasterKeyboard(string $chatLanguage) {
+    private static function getMasterKeyboard(string $chatLanguage) {
         return new InlineKeyboardMarkup([
             [
                 [
@@ -186,7 +149,7 @@ class Table {
         ]);
     }
 
-    static function addCaption($masterImage, $agentsImage, Caption $caption) {
+    private static function addCaption($masterImage, $agentsImage, Caption $caption) {
         $title = $caption->title;
         $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 82);
         $axis['y']+= + 1000;
@@ -217,7 +180,7 @@ class Table {
         }
     }
 
-    static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
+    private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
         }
@@ -246,7 +209,7 @@ class Table {
         }
     }
 
-    static function getAxisToCenterText($fontSize, $text, $width, $height) {
+    private static function getAxisToCenterText($fontSize, $text, $width, $height) {
         $noAccentText = str_replace(['Á', 'À', 'Â', 'Ã'], 'A', $text);
         $noAccentText = str_replace(['É', 'È', 'Ê'], 'E', $noAccentText);
         $noAccentText = str_replace(['Í', 'Ï', 'J'], 'I', $noAccentText);
@@ -264,7 +227,7 @@ class Table {
         return $result;
     }
 
-    static function addCard($masterImage, $agentsImage, GameCard $card, Game $game, int $highlightCard = null) {
+    private static function addCard($masterImage, $agentsImage, GameCard $card, Game $game, int $highlightCard = null) {
         #region calculations
         //card position
         $cardByLine = 4;

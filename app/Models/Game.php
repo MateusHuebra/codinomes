@@ -76,6 +76,37 @@ class Game extends Model
         return $this->lastHint;
     }
 
+    public function getPhotoCaption() {
+        switch ($this->status) {
+            case 'master_a':
+                $role = 'game.master';
+                $teamColor = 'color_a';
+                $playersList = $this->users()->fromTeamRole('a', 'master')->get()->getStringList(true, PHP_EOL);
+                break;
+            case 'agent_a':
+                $role = 'game.agents';
+                $teamColor = 'color_a';
+                $playersList = $this->users()->fromTeamRole('a', 'agent')->get()->getStringList(true, PHP_EOL);
+                break;
+            case 'master_b':
+                $role = 'game.master';
+                $teamColor = 'color_b';
+                $playersList = $this->users()->fromTeamRole('b', 'master')->get()->getStringList(true, PHP_EOL);
+                break;
+            case 'agent_b':
+                $role = 'game.agents';
+                $teamColor = 'color_b';
+                $playersList = $this->users()->fromTeamRole('b', 'agent')->get()->getStringList(true, PHP_EOL);
+                break;
+        }
+
+        return AppString::get('game.turn', [
+            'role' => AppString::get($role, null, $this->chat->language),
+            'team' =>  Game::COLORS[$this->$teamColor],
+            'players' => $playersList
+        ], $this->chat->language);
+    }
+
     public function isMenu(String $menu, String $subMenu = null) {
         return ($menu == $this->getMenu() && $subMenu == $this->auxSubMenu);
     }

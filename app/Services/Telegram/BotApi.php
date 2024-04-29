@@ -28,4 +28,24 @@ class BotApi extends OriginalBotApi {
         }
     }
 
+    public function tryToDeleteMessage($chatId, $messageId) {
+        try {
+            return $this->deleteMessage($chatId, $messageId);
+        } catch(Exception $e) {}
+    }
+
+    public function tryToPinChatMessage($chatId, $messageId, $disableNotification = false) {
+        try {
+            return $this->pinChatMessage($chatId, $messageId, $disableNotification);
+        } catch(Exception $e) {}
+    }
+
+    public function sendPhoto($chatId, $photo, $caption = null, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false, $parseMode = null, $messageThreadId = null, $protectContent = null, $allowSendingWithoutReply = null) {
+        try {
+            return parent::sendPhoto($chatId, $photo, $caption, $replyToMessageId, $replyMarkup, $disableNotification, $parseMode, $messageThreadId, $protectContent, $allowSendingWithoutReply);
+        } catch(Exception $e) {
+            return parent::sendPhoto($chatId, $photo, $caption, $replyToMessageId, $replyMarkup, $disableNotification, $parseMode, $messageThreadId, $protectContent, $allowSendingWithoutReply);
+        }
+    }
+
 }
