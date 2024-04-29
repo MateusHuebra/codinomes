@@ -13,7 +13,7 @@ use TelegramBot\Api\Types\Inline\InputMessageContent\Text;
 
 class Guess implements Action {
 
-    const REGEX = '/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\-.]{1,12})?$/';
+    const REGEX = '/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\-.]{1,16})?$/';
 
     public function run(Update $update, BotApi $bot) : Void {
         $game = $update->findUser()->game;
