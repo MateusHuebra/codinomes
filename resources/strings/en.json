@@ -237,5 +237,19 @@
         "out": [
             "Out of time!"
         ]
+    },
+    "help": {
+        "base" : [
+            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins.\\.\n\n• Roles: /ajuda\\_papeis\n\n• Hints: /ajuda\\_dicas\n\n• Colors: /ajuda\\_cores\n\nNote: At the moment the bot is only available in the group @CodinomesGrupo"
+        ],
+        "roles": [
+            "*Master:*\n• See the color of all the cards;\n• \\.\n\n*Agentes*: Your goal is to give hints that guide to as many words as possible in your team's color so that your agents can find them.\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."
+        ],
+        "hints": [
+            "Hints must be a single word followed by the number of cards that are related to that clue\\.\n\nExample: Everest 3\nWords: Snow, Cold e Mountain"
+        ],
+        "colors": [
+            "What happens depending on the color of the card chosen:\n\n🟣 *Your color:* keep guessing until the maximum number of attempts has been reached. \\(Current hint number \\+ 1\\);\n\n⚪️ *White:* skip the turn immediately;\n\n🟠 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n\n⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\."
+        ]
     }
 }

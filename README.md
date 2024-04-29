@@ -12,4 +12,4 @@ Outra coisa bacana sobre este projeto foi o uso dos métodos do PHP para geraç�
 
 ### Créditos
 
-A primeira versão das imagens das cartas atuais foram totalmente feitas especialmente para o projeto por [GabrielFQK](https://github.com/GabrielFQK).
+A primeira versão das imagens das cartas atuais foram totalmente feitas especialmente para o projeto por [GabrielFQK](https://twitter.com/_kkgab).
