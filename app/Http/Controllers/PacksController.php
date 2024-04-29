@@ -48,7 +48,7 @@ class PacksController extends Controller
             'status' => 'required',
             'language' => 'required|max:5',
             'cards' => 'required|array',
-            'cards.*' => 'max:12|regex:'.Guess::REGEX
+            'cards.*' => 'max:16|regex:'.Guess::REGEX
         ]);
 
         if($validator->fails()){
