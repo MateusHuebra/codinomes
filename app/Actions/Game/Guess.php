@@ -53,7 +53,7 @@ class Guess implements Action {
             $results[] = $this->getErrorResult();
         }
 
-        $bot->answerInlineQuery($update->getId(), $results, 10);
+        $bot->answerInlineQuery($update->getId(), $results, 5, true);
     }
 
     private function getErrorResult() {

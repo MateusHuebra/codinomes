@@ -38,7 +38,7 @@ class Hint implements Action {
         }
         
         $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
-        $bot->answerInlineQuery($update->getId(), $results, 10);
+        $bot->answerInlineQuery($update->getId(), $results, 5, true);
     }
 
 }
