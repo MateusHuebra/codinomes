@@ -66,7 +66,7 @@ class PacksController extends Controller
         if($request->input('cards')) {
             foreach ($data['cards'] as $newCard) {
                 $card = new Card;
-                $card->text = $newCard;
+                $card->text = trim($newCard);
                 $card->pack_id = $pack->id;
                 $cards[] = $card;
             }
