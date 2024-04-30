@@ -22,6 +22,9 @@ class BotApi extends OriginalBotApi {
     public function sendAlertOrMessage(int $callbackQueryId, int $chatId, string $stringPath) {
         $string = AppString::get($stringPath);
         try {
+            if($callbackQueryId === 0) {
+                throw new Exception;
+            }
             $this->answerCallbackQuery($callbackQueryId, $string, true);
         } catch(Exception $e) {
             $this->sendMessage($chatId, $string);
