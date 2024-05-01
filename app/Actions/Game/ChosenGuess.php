@@ -68,7 +68,7 @@ class ChosenGuess implements Action {
                 Table::send($game, $bot, $caption,$card->id, $user->team);
                 
             //next
-            } else if($game->attempts_left==null || $game->attempts_left >= 0) {
+            } else if($game->attempts_left===null || $game->attempts_left >= 0) {
                 $game->updateStatus($game->status);
 
                 $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
