@@ -6,8 +6,8 @@ use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
+use App\Services\Telegram\BotApi;
 use Exception;
-use TelegramBot\Api\BotApi;
 
 class CheckTurnLeftTime {
 
