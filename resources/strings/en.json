@@ -246,10 +246,10 @@
             "*Master:*\n• See the color of all the cards;\n• \\.\n\n*Agentes*: Your goal is to give hints that guide to as many words as possible in your team's color so that your agents can find them.\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."
         ],
         "hints": [
-            "Hints must be a single word followed by the number of cards that are related to that clue\\.\n\nExample: Everest 3\nWords: Snow, Cold e Mountain"
+            "Hints must be a single word followed by the number of cards that are related to that clue\\.\n\n*Example: EVEREST 3*\n*Words:* SNOW, COLD and MOUNTAIN\n\nYour agents can try to guess up to the number of the current hint + 1 extra card.\n\n*Infinity Hint ∞:* If you need your agents to try more cards than this, you can submit your hint without the number and it will become an Infinity Hint. They can try as many cards as they want until they make a wrong guess, but they won't know how many words relate to the current hint.\n\n*Zero Hint 0:* You can also submit a hint with the number 0. It also has infinite attempts, but it serves to give hint on which cards your agents should avoid."
         ],
         "colors": [
-            "What happens depending on the color of the card chosen:\n\n🟣 *Your color:* keep guessing until the maximum number of attempts has been reached. \\(Current hint number \\+ 1\\);\n\n⚪️ *White:* skip the turn immediately;\n\n🟠 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n\n⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\."
+            "What happens depending on the color of the card chosen:\n\n🟣 *Your color:* keep guessing;\n\n⚪️ *White:* skip the turn immediately;\n\n🟠 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n\n⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\."
         ]
     }
 }

@@ -246,10 +246,10 @@
             "*Mestre:*\n• Vê a cor de todas as cartas;\n• Seu objetivo é dar dicas que relacionem o máximo possível de palavras da cor do seu time para que seus agentes as encontrem\\.\n\n*Agentes*: \n• Não vê a cor das cartas;\n• Seu objetivo é encontrar as palavras da cor do seu time seguindo as dicas do seu respectivo mestre\\."
         ],
         "hints": [
-            "As dicas devem ser uma palavra única seguidas do número de cartas que estão relacionadas a essa dica\\.\n\nExemplo: Everest 3\nPalavras: Neve, Frio e Montanha"
+            "As dicas devem ser uma palavra única seguidas do número de cartas que estão relacionadas a essa dica.\n\n*Exemplo: EVEREST 3*\n*Palavras:* NEVE, FRIO e MONTANHA\n\nSeus agentes poderão tentar adivinhar no máximo até a quantidade da dica atual + 1 carta extra.\n\n*Dica Infinita ∞:* Se você precisar que seus agentes tentem mais cartas do que isso, você pode enviar a dica sem o número e ela se tornará uma Dica Infinita. Eles poderão tentar quantas cartas quiserem até errar, mas não saberão quantas palavras se relacionam com a dica atual.\n\n*Dica Zero 0:* Você também pode dar uma dica com o número 0. Ela também conta com tentativas infinitas, porém serve para dar dicas de quais cartas seus agentes devem evitar."
         ],
         "colors": [
-            "O que acontece dependendo da cor da carta escolhida:\n\n🟣 *Sua cor:* continua chutando até esgotar o número máximo de tentativas \\(Número da dica atual \\+ 1\\);\n\n⚪️ *Branca:* passa a vez imediatamente;\n\n🟠 *Cor do oponente:* passa a vez imediatamente, e deixa o time oponente uma carta mais próximo da vitória;\n\n⚫️ *Preta:* perde o jogo imediatamente, dando a vitória ao time oponente\\."
+            "O que acontece dependendo da cor da carta escolhida:\n\n🟣 *Sua cor:* continua chutando;\n\n⚪️ *Branca:* passa a vez imediatamente;\n\n🟠 *Cor do oponente:* passa a vez imediatamente, e deixa o time oponente uma carta mais próximo da vitória;\n\n⚫️ *Preta:* perde o jogo imediatamente, dando a vitória ao time oponente\\."
         ]
     }
 }
