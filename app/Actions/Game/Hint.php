@@ -22,13 +22,16 @@ class Hint implements Action {
 
         $results = [];
         if(preg_match(self::REGEX_HINT_NUMBER, $query, $matches) && (!isset($matches['number']) || $matches['number'] <= $cardsLeft)) {
+            if(!isset($matches['number'])) {
+                $matches['number'] = '∞';
+            }
             $title = AppString::get('game.confirm_hint');
-            $desc = $matches['hint'].' '.$matches['number']??'∞';
+            $desc = $matches['hint'].' '.$matches['number'];
             $messageContent = new Text(AppString::get('game.hint_sended'));
             $data = CDM::toString([
                 CDM::EVENT => CDM::HINT,
                 CDM::TEXT => $matches['hint'],
-                CDM::NUMBER => $matches['number']??'∞'
+                CDM::NUMBER => $matches['number']
             ]);
         } else {
             $title = AppString::get('error.wrong_hint_format_title');
