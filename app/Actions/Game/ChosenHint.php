@@ -28,7 +28,11 @@ class ChosenHint implements Action {
         $game->addToHistory('*'.$historyLine.'*');
         
         $game->updateStatus('agent_'.$user->team);
-        $game->attempts_left = $data[CDM::NUMBER];
+        if(in_array($data[CDM::NUMBER], ['∞', 0])) {
+            $game->attempts_left = null;
+        } else {
+            $game->attempts_left = $data[CDM::NUMBER];
+        }
         $game->save();
 
         $caption = new Caption($hint, null, 50);

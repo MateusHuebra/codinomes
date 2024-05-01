@@ -22,7 +22,7 @@ class ChosenGuess implements Action {
         if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
             return;
         }
-        if(is_null($game->attempts_left) || $game->attempts_left < 0) {
+        if($game->attempts_left < 0) {
             return;
         }
 
@@ -51,7 +51,9 @@ class ChosenGuess implements Action {
 
         //correct guess
         if($card->team == $user->team) {
-            $game->attempts_left--;
+            if($game->attempts_left) {
+                $game->attempts_left--;
+            }
             $cardsLeft = $game->cards->where('team', $user->team)->where('revealed', false)->count();
 
             //won
@@ -66,7 +68,7 @@ class ChosenGuess implements Action {
                 Table::send($game, $bot, $caption,$card->id, $user->team);
                 
             //next
-            } else if($game->attempts_left >= 0) {
+            } else if($game->attempts_left==null || $game->attempts_left >= 0) {
                 $game->updateStatus($game->status);
 
                 $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
