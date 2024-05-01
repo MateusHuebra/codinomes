@@ -167,6 +167,15 @@
         ],
         "yellow" : [
             "Yellow"
+        ],
+        "cyan" : [
+            "Cyan"
+        ],
+        "pink" : [
+            "Pink"
+        ],
+        "brown" : [
+            "Brown"
         ]
     },
     "settings": {

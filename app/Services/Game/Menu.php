@@ -140,20 +140,29 @@ class Menu {
         ];
 
         if($game->isMenu('color')) {
-            $array = [];
+            $line = [];
+            $i = 0;
             foreach(Game::COLORS as $color => $emoji) {
+                $i++;
                 if(in_array($color, ['white', 'black'])) {
                     continue;
                 }
-                $array[] = [
+                $line[] = [
                     'text' => $emoji,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::CHANGE_COLOR,
                         CDM::TEXT => $color
                     ])
                 ];
+                if($i>=5) {
+                    $buttonsArray[] = $line;
+                    $line = [];
+                    $i = 0;
+                }
             }
-            $buttonsArray[] = $array;
+            if(!empty($line)) {
+                $buttonsArray[] = $line;
+            }
         }
 
         $line = [];

@@ -167,6 +167,15 @@
         ],
         "yellow" : [
             "Amarela"
+        ],
+        "cyan" : [
+            "Ciano"
+        ],
+        "pink" : [
+            "Rosa"
+        ],
+        "brown" : [
+            "Marrom"
         ]
     },
     "settings": {
