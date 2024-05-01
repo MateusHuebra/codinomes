@@ -51,7 +51,7 @@ class ChosenGuess implements Action {
 
         //correct guess
         if($card->team == $user->team) {
-            if($game->attempts_left) {
+            if($game->attempts_left!=null) {
                 $game->attempts_left--;
             }
             $cardsLeft = $game->cards->where('team', $user->team)->where('revealed', false)->count();
