@@ -5,6 +5,7 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
+use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
 use Exception;
@@ -36,9 +37,14 @@ class ChosenHint implements Action {
         $game->save();
 
         $caption = new Caption($hint, null, 50);
+        $mention = AppString::get('game.mention', [
+            'name' => $user->name,
+            'id' => $user->id
+        ]);
+        $text = $mention.': '.AppString::parseMarkdownV2($historyLine);
         
         try {
-            $bot->sendMessage($game->chat_id, $historyLine);
+            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
         } catch(Exception $e) {}
         Table::send($game, $bot, $caption);
     }
