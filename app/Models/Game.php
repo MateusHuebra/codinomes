@@ -18,14 +18,14 @@ class Game extends Model
     use HasFactory;
 
     const COLORS = [
-        'red' => '🔴',
-        'purple' => '🟣',
-        'orange' => '🟠',
-        'green' => '🟢',
-        'blue' => '🔵',
-        'pink' => '🩷',
-        'yellow' => '🟡',
-        'brown' => '🟤',
+        'red' => '♦️',
+        'purple' => '👾',
+        'orange' => '🍂',
+        'green' => '🍀',
+        'blue' => '🌀',
+        'pink' => '💕',
+        'yellow' => '🔆',
+        'brown' => '🧸',
         'cyan' => '📗',
         'white' => '⚪️',
         'black' => '⚫️'
