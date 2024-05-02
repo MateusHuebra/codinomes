@@ -21,14 +21,14 @@ class Game extends Model
         'red' => '♦️',
         'purple' => '👾',
         'orange' => '🍂',
-        'green' => '🍀',
+        'green' => '♻️',
         'blue' => '🌀',
-        'pink' => '💕',
+        'pink' => '🩷',
         'yellow' => '🔆',
         'brown' => '🧸',
         'cyan' => '📗',
-        'white' => '⚪️',
-        'black' => '⚫️'
+        'white' => '◽️',
+        'black' => '◼️'
     ];
 
     public $timestamps = false;
