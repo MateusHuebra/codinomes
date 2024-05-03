@@ -20,10 +20,10 @@ class Game extends Model
     const COLORS = [
         'red' => '🔴',
         'blue' => '🔷',
-        'green' => '♻️',
+        'pink' => '🩷',
         'orange' => '🔶',
         'purple' => '🟣',
-        'pink' => '🩷',
+        'green' => '♻️',
         'yellow' => '⭐️',
         'brown' => '🍪',
         'cyan' => '🧩',
