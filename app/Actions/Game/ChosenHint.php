@@ -41,7 +41,7 @@ class ChosenHint implements Action {
             'name' => $user->name,
             'id' => $user->id
         ]);
-        $text = $mention.': '.AppString::parseMarkdownV2($historyLine);
+        $text = $mention.' '.AppString::parseMarkdownV2($historyLine);
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
