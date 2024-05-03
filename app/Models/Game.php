@@ -25,7 +25,7 @@ class Game extends Model
         'purple' => '🟣',
         'pink' => '🩷',
         'yellow' => '⭐️',
-        'brown' => '🟤',
+        'brown' => '🍪',
         'cyan' => '🧩',
         'white' => '◽️',
         'black' => '◼️'
