@@ -52,7 +52,7 @@ class SelectTeamAndRole implements Action {
         $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
         $user->save();
 
-        Menu::send($game, $bot, $update->getMessageId());
+        Menu::send($game, $bot);
         try {
             $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.updated'));
         } catch(Exception $e) {}

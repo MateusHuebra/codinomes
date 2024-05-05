@@ -36,7 +36,7 @@ class Pack implements Action {
             $chat->packs()->detach($pack->id);
         }
         
-        Menu::send($game, $bot, $update->getMessageId());
+        Menu::send($game, $bot);
     }
 
 }

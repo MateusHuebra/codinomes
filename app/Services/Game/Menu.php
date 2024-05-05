@@ -14,15 +14,15 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Menu {
     
-    static function send(Game $game, BotApi $bot, int $messageId = null, User $user = null) : Void {
+    static function send(Game $game, BotApi $bot, User $user = null) : Void {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $textMessage = $game->getTeamAndPlayersList().AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $user);
 
-        if($messageId !== null) {
+        if($game->message_id !== null) {
             try {
-                $bot->editMessageText($game->chat_id, $messageId, $textMessage, 'MarkdownV2', false, $keyboard);
+                $bot->editMessageText($game->chat_id, $game->message_id, $textMessage, 'MarkdownV2', false, $keyboard);
                 return;
             } catch(Exception $e) {
                 if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message') {

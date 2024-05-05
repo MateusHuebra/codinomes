@@ -31,14 +31,18 @@ class Create implements Action {
             return;
         }
 
+        $message = $bot->sendMessage($chat->id, AppString::get('game.creating'));
+
         $game = new Game();
         $game->status = 'creating';
         $game->chat_id = $chat->id;
         $game->creator_id = $user->id;
+        $game->message_id = $message->getMessageId();
         $game->save();
 
-        Menu::send($game, $bot);
         $chat->notifiableUsers->notify($game, $bot);
+        Menu::send($game, $bot);
+        $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
     }
 
 }

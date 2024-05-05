@@ -22,6 +22,9 @@
         ]
     },
     "game": {
+        "creating": [
+            "Criando partida..."
+        ],
         "already_exists": [
             "Já há um jogo rolando no grupo"
         ],

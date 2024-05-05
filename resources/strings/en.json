@@ -22,6 +22,9 @@
         ]
     },
     "game": {
+        "creating": [
+            "Creating lobby..."
+        ],
         "already_exists": [
             "There's already a game going on in this group"
         ],

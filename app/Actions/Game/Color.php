@@ -42,7 +42,7 @@ class Color implements Action {
         $game->menu = null;
         $game->save();
         
-        Menu::send($game, $bot, $update->getMessageId());
+        Menu::send($game, $bot);
     }
 
 }
