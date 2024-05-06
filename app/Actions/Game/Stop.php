@@ -26,7 +26,7 @@ class Stop implements Action {
         try {
             $bot->deleteMessage($chat->id, $game->message_id);
         } catch(Exception $e) {}
-        $game->stop();
+        $game->stop($bot);
 
         $bot->sendMessage($chat->id, AppString::get('game.stopped'));
     }

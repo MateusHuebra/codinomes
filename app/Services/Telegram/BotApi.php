@@ -43,6 +43,12 @@ class BotApi extends OriginalBotApi {
         } catch(Exception $e) {}
     }
 
+    public function tryToUnpinChatMessage($chatId, $messageId) {
+        try {
+            return $this->unpinChatMessage($chatId, $messageId);
+        } catch(Exception $e) {}
+    }
+
     public function sendPhoto($chatId, $photo, $caption = null, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false, $parseMode = null, $messageThreadId = null, $protectContent = null, $allowSendingWithoutReply = null) {
         try {
             return parent::sendPhoto($chatId, $photo, $caption, $replyToMessageId, $replyMarkup, $disableNotification, $parseMode, $messageThreadId, $protectContent, $allowSendingWithoutReply);

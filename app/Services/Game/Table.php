@@ -96,7 +96,7 @@ class Table {
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
-            $game->stop();
+            $game->stop($bot);
         }
     }
 

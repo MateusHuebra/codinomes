@@ -20,20 +20,21 @@ class Menu {
         $textMessage = $game->getTeamAndPlayersList().AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $user);
 
-        if($game->message_id !== null) {
+        if($game->lobby_message_id !== null) {
             try {
-                $bot->editMessageText($game->chat_id, $game->message_id, $textMessage, 'MarkdownV2', false, $keyboard);
+                $bot->editMessageText($game->chat_id, $game->lobby_message_id, $textMessage, 'MarkdownV2', false, $keyboard);
                 return;
             } catch(Exception $e) {
                 if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message') {
                     return;
                 }
+                $bot->tryToDeleteMessage($game->chat_id, $game->lobby_message_id);
             }
         }
 
         $message = $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
         $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
-        $game->message_id = $message->getMessageId();
+        $game->lobby_message_id = $message->getMessageId();
         $game->save();
     }
 

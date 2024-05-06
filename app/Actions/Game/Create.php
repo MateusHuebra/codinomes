@@ -37,7 +37,7 @@ class Create implements Action {
         $game->status = 'creating';
         $game->chat_id = $chat->id;
         $game->creator_id = $user->id;
-        $game->message_id = $message->getMessageId();
+        $game->lobby_message_id = $message->getMessageId();
         $game->save();
 
         $chat->notifiableUsers->notify($game, $bot);

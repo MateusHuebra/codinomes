@@ -163,15 +163,11 @@ class Game extends Model
             $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
             return false;
         }
-        $this->updateStatus('master_'.$firstTeam);  
-
-        $messageId = $this->message_id;
-        $this->message_id = null;
+        $this->updateStatus('master_'.$firstTeam);
 
         $text = $this->getTeamAndPlayersList().AppString::getParsed('game.started');
         try {
-            $bot->editMessageText($this->chat_id, $messageId, $text, 'MarkdownV2');
-            $bot->unpinChatMessage($this->chat_id, $messageId);
+            $bot->editMessageText($this->chat_id, $this->lobby_message_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
@@ -180,7 +176,9 @@ class Game extends Model
         return true;
     }
 
-    public function stop() {
+    public function stop(BotApi $bot) {
+        $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+        
         foreach($this->users as $user) {
             $user->leaveGame();
         }
