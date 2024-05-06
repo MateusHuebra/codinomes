@@ -4,6 +4,7 @@ namespace App\UpdateHandlers;
 
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
+use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\Create;
 use App\Actions\Game\History;
 use App\Actions\Game\Stop;
@@ -65,6 +66,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['notify', 'notificar'])) {
             return new Notify;
+
+        } else if(in_array($command, ['skip', 'pular'])) {
+            return new ConfirmSkip;
 
         } else if(in_array($command, ['help', 'ajuda'])) {
             return new Help;

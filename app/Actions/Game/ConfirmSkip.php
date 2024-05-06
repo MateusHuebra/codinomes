@@ -16,9 +16,11 @@ class ConfirmSkip implements Action {
         $user = $update->findUser();
         $game = $user->game;
 
-        try {
-            $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
-        } catch(Exception $e) {}
+        if($update->isType(Update::CALLBACK_QUERY)) {
+            try {
+                $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
+            } catch(Exception $e) {}
+        }
 
         if(!$user || !$game) {
             return;
