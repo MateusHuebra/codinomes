@@ -22,10 +22,9 @@ class StopAbandonedLobbies {
                     return;
                 }
                 try {
-                    $bot->deleteMessage($game->chat_id, $game->message_id);
                     $bot->sendMessage($game->chat_id, AppString::get('game.stopped_by_time'));
                 } catch(Exception $e) {}
-                $game->stop($bot);
+                $game->stop($bot, true);
             }
         }
     }

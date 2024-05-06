@@ -176,8 +176,17 @@ class Game extends Model
         return true;
     }
 
-    public function stop(BotApi $bot) {
-        $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+    public function stop(BotApi $bot, bool $delete = false) {
+        if($delete) {
+            if($this->status == 'creating') {
+                $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
+            } else {
+                $bot->tryToDeleteMessage($this->chat_id, $this->message_id);
+                $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+            }
+        } else {
+            $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+        }
         
         foreach($this->users as $user) {
             $user->leaveGame();

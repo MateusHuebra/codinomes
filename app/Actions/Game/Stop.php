@@ -4,7 +4,6 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
-use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 
@@ -23,10 +22,7 @@ class Stop implements Action {
             return;
         }
         
-        try {
-            $bot->deleteMessage($chat->id, $game->message_id);
-        } catch(Exception $e) {}
-        $game->stop($bot);
+        $game->stop($bot, true);
 
         $bot->sendMessage($chat->id, AppString::get('game.stopped'));
     }
