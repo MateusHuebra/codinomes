@@ -33,15 +33,13 @@ class User extends Collection {
         $chat = $game->chat;
         $text = AppString::get('game.notification', [
             'title' => AppString::parseMarkdownV2($chat->title),
-            'url' => $chat->getUrl().'/'.$chat->game->message_id
+            'url' => $chat->getUrl().'/'.$chat->game->lobby_message_id
         ]);
         $attachmentsToUpdate = [];
 
         foreach($this->items as $user) {
             if($user->pivot->message_id) {
-                try {
-                    $bot->deleteMessage($user->id, $user->pivot->message_id);
-                } catch(Exception $e) {}
+                $bot->tryToDeleteMessage($user->id, $user->pivot->message_id);
             }
 
             if($game->creator_id === $user->id) {
