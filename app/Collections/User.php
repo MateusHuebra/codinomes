@@ -7,6 +7,7 @@ use App\Services\AppString;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use TelegramBot\Api\BotApi;
+use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class User extends Collection {
 
@@ -31,9 +32,18 @@ class User extends Collection {
     public function notify(Game $game, BotApi $bot) {
         $game->refresh();
         $chat = $game->chat;
+        $url = $chat->getUrl().'/'.$chat->game->lobby_message_id;
         $text = AppString::get('game.notification', [
             'title' => AppString::parseMarkdownV2($chat->title),
-            'url' => $chat->getUrl().'/'.$chat->game->lobby_message_id
+            'url' => $url
+        ]);
+        $keyboard = new InlineKeyboardMarkup([
+            [
+                [
+                    'text' => AppString::get('game.open'),
+                    'url' => $url
+                ]
+            ]
         ]);
         $attachmentsToUpdate = [];
 
@@ -46,7 +56,7 @@ class User extends Collection {
                 $attachmentsToUpdate[$user->id] = ['message_id' => null];
             } else {
                 try {
-                    $message = $bot->sendMessage($user->id, $text, 'MarkdownV2');
+                    $message = $bot->sendMessage($user->id, $text, 'MarkdownV2', true, null, $keyboard);
                     $attachmentsToUpdate[$user->id] = ['message_id' => $message->getMessageId()];
                 } catch(Exception $e) {}
             }

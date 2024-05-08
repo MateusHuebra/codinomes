@@ -150,6 +150,9 @@
         ],
         "notification": [
             "Novo jogo em [{title}]({url})"
+        ],
+        "open": [
+            "Abrir jogo"
         ]
     },
     "color": {
