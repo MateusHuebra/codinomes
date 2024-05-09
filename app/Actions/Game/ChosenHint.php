@@ -40,7 +40,7 @@ class ChosenHint implements Action {
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
             'id' => $user->id
-        ]);
+        ], null, true);
         $text = $mention.' '.AppString::parseMarkdownV2($historyLine);
         
         try {
