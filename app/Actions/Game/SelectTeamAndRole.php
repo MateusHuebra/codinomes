@@ -4,6 +4,8 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
+use App\Models\User;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -52,6 +54,8 @@ class SelectTeamAndRole implements Action {
         $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
         $user->save();
 
+        $this->changeColorToUsersDefault($game, $user);
+
         Menu::send($game, $bot);
         try {
             $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.updated'));
@@ -65,6 +69,30 @@ class SelectTeamAndRole implements Action {
             $attachmentsToUpdate[$user->id] = ['message_id' => null];
             $chat->notifiableUsers()->syncWithoutDetaching($attachmentsToUpdate);
         }
+    }
+
+    private function changeColorToUsersDefault(Game $game, User $user) {
+        if($user->role!='master') {
+            return;
+        }
+        if(!$user->default_color) {
+            return;
+        }
+        if(
+            $user->default_color == $game->{'color_'.$user->team}
+            ||
+            ($user->default_color == $game->{'color_'.$user->getEnemyTeam()} && $game->hasMaster($user->getEnemyTeam()))
+        ) {
+            return;
+        }
+
+        if($user->default_color == $game->{'color_'.$user->getEnemyTeam()}) {
+            $colors = ['red', 'blue'];
+            $game->{'color_'.$user->getEnemyTeam()} = $colors[rand(0, 1)];
+        }
+
+        $game->{'color_'.$user->team} = $user->default_color;
+        $game->save();
     }
 
 }

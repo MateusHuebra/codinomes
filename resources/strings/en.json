@@ -70,6 +70,9 @@
         "packs": [
             "Packs"
         ],
+        "settings": [
+            "Settings"
+        ],
         "packs_actived": [
             "Actived Packs"
         ],
@@ -182,11 +185,35 @@
         ],
         "brown" : [
             "Brown"
+        ],
+        "default": [
+            "Choose your default color:\nCurrent: {color}"
+        ],
+        "defined": [
+            "Default color successfully defined to {mention}: {color}"
         ]
     },
     "settings": {
         "loading": [
             "Loading"
+        ],
+        "chat": [
+            "Group settings"
+        ],
+        "admin_only": [
+            "Admin only"
+        ],
+        "timer": [
+            "Timer"
+        ],
+        "on": [
+            "on"
+        ],
+        "off": [
+            "off"
+        ],
+        "turn_off": [
+            "Turn off"
         ]
     },
     "error": {

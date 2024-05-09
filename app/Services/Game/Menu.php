@@ -41,7 +41,7 @@ class Menu {
     private static function getKeyboard(bool $hasRequiredPlayers, Game $game, User $user = null) {
         $buttonsArray = [];
         $buttonsArray = self::getFirstButtons($game, $buttonsArray);
-
+        
         if($game->isMenu('packs')) {
             $buttonsArray[] = [[
                 'text' => AppString::get('game.packs_actived'),
@@ -140,42 +140,17 @@ class Menu {
             ]
         ];
 
-        if($game->isMenu('color')) {
-            $line = [];
-            $i = 0;
-            foreach(Game::COLORS as $color => $emoji) {
-                $i++;
-                if(in_array($color, ['white', 'black'])) {
-                    continue;
-                }
-                $line[] = [
-                    'text' => $emoji,
-                    'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::CHANGE_COLOR,
-                        CDM::TEXT => $color
-                    ])
-                ];
-                if($i>=5) {
-                    $buttonsArray[] = $line;
-                    $line = [];
-                    $i = 0;
-                }
-            }
-            if(!empty($line)) {
-                $buttonsArray[] = $line;
-            }
-        }
-
         $line = [];
         if(!$game->menu || $game->isMenu('color')) {
             $line[] = [
-                'text' => AppString::get('game.color').'  '.($game->menu == 'color' ? 'X' : '/\\'),
+                'text' => AppString::get('game.color').'  '.($game->menu == 'color' ? 'X' : '\\/'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::MENU,
                     CDM::TEXT => ($game->menu == 'color' ? null : 'color')
                 ])
             ];
         }
+        
         switch ($game->getMenu(true)) {
             case 'packs_actived':
                 $text = AppString::get('game.packs_actived');
@@ -193,6 +168,7 @@ class Menu {
                 $text = AppString::get('game.packs');
                 break;
         }
+        
         $line[] = [
             'text' => $text.' '.(strpos($game->menu, "packs")!==false ? 'X' : '\\/'),
             'callback_data' => CDM::toString([
@@ -200,6 +176,7 @@ class Menu {
                 CDM::TEXT => (strpos($game->menu, "packs")!==false ? null : 'packs')
             ])
         ];
+
         $line[] = [
             'text' => AppString::get('game.leave'),
             'callback_data' => CDM::toString([
@@ -207,6 +184,38 @@ class Menu {
             ])
         ];
         $buttonsArray[] = $line;
+
+        if($game->isMenu('color')) {
+            $buttonsArray = self::addColorsToKeyboard($buttonsArray);
+        }
+        
+        return $buttonsArray;
+    }
+
+    public static function addColorsToKeyboard(array $buttonsArray = [], string $event = CDM::CHANGE_COLOR) {
+        $line = [];
+        $i = 0;
+        foreach(Game::COLORS as $color => $emoji) {
+            $i++;
+            if(in_array($color, ['white', 'black'])) {
+                continue;
+            }
+            $line[] = [
+                'text' => $emoji,
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => $event,
+                    CDM::TEXT => $color
+                ])
+            ];
+            if($i>=5) {
+                $buttonsArray[] = $line;
+                $line = [];
+                $i = 0;
+            }
+        }
+        if(!empty($line)) {
+            $buttonsArray[] = $line;
+        }
         return $buttonsArray;
     }
 

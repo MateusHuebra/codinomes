@@ -248,6 +248,15 @@ class Game extends Model
         return $textMessage;
     }
 
+    public function hasMaster(string $team) {
+        if($this->isTeamAndRolesSet===false) {
+            $this->setPlayerTeamAndRoles();
+        }
+
+        $master = $team=='a' ? $this->masterA : $this->masterB;
+        return $master->exists();
+    }
+
     private function setPlayerTeamAndRoles() {
         $this->masterA = $this->users()->fromTeamRole('a', 'master');
         $this->agentsA = $this->users()->fromTeamRole('a', 'agent');

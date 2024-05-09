@@ -19,14 +19,18 @@ class CallbackDataManager {
     const CONFIRM_SKIP = 'yessk';
     const CANCEL_SKIP = 'nosk';
     const CHANGE_COLOR = 'cc';
+    const CHANGE_DEFAULT_COLOR = 'cdc';
     const CHANGE_PACK = 'cp';
     const MENU = 'mn';
+    const SETTINGS = 'st';
+    const INFO = 'i';
 
     //ATTRIBUTES
     const EVENT = 'e';
     const LANGUAGE = 'l';
     const TEXT = 'txt';
     const NUMBER = 'num';
+    const VALUE = 'vlu';
     const FIRST_TIME = 'ft';
 
     //TYPES

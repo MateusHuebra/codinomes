@@ -68,7 +68,10 @@
             "Cor"
         ],
         "packs": [
-            "Packs"
+            "Pacotes"
+        ],
+        "settings": [
+            "Config."
         ],
         "packs_actived": [
             "Packs Ativos"
@@ -182,11 +185,35 @@
         ],
         "brown" : [
             "Marrom"
+        ],
+        "default": [
+            "Defina sua cor padrão:\nAtual: {color}"
+        ],
+        "defined": [
+            "Cor padrão definida com sucesso para {mention}: {color}"
         ]
     },
     "settings": {
         "loading": [
             "Carregando"
+        ],
+        "chat": [
+            "Configurações do grupo"
+        ],
+        "admin_only": [
+            "Apenas admin"
+        ],
+        "timer": [
+            "Timer"
+        ],
+        "on": [
+            "ligado"
+        ],
+        "off": [
+            "desligado"
+        ],
+        "turn_off": [
+            "Desligar"
         ]
     },
     "error": {
