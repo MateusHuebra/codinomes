@@ -9,6 +9,7 @@ use App\Models\GameCard;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
+use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 
@@ -42,21 +43,19 @@ class ChosenGuess implements Action {
         }
         $card->revealed = true;
         $card->save();
-        
-        switch ($card->team) {
-            case 'a':
-                $emoji = Game::COLORS[$game->color_a];
-                break;
-            
-            case 'b':
-                $emoji = Game::COLORS[$game->color_b];
-                break;
-            
-            default:
-            $emoji = Game::COLORS['white'];
-                break;
-        }
+
+        $emojis = [
+            'w' => Game::COLORS['white'],
+            'x' => Game::COLORS['black'],
+            'a' => Game::COLORS[$game->color_a],
+            'b' => Game::COLORS[$game->color_b]
+        ];
+        $emoji = $emojis[$card->team];
         $game->addToHistory('>'.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
+
+        try {
+            $bot->sendMessage($game->chat_id, $emoji, null, false, $update->getMessageId());
+        } catch(Exception $e) {}
 
         //correct guess
         if($card->team == $user->team) {
