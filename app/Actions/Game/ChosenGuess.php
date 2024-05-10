@@ -62,6 +62,7 @@ class ChosenGuess implements Action {
             'user' => $mention,
             'card' => AppString::parseMarkdownV2($card->text).' '.$emoji
         ], $chatLanguage);
+        $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
         } catch(Exception $e) {}

@@ -34,6 +34,7 @@ class ConfirmSkip implements Action {
         ], $chatLanguage, true);
         $skipped = strtolower(AppString::get('game.skipped', null, $chatLanguage));
         $text = $mention.' '.$skipped;
+        $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
         } catch(Exception $e) {}
