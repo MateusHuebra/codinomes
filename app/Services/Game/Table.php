@@ -123,6 +123,7 @@ class Table {
             ]);
         } else {
             $cardsArray = [];
+            $cardsArray[] = ['/history'];
             foreach($game->cards as $card) {
                 if(!$card->revealed) {
                     $cardsArray[] = [$card->text];
