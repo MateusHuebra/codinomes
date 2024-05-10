@@ -12,6 +12,7 @@ use App\Services\Game\Table;
 use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
+use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 class ChosenGuess implements Action {
 
@@ -52,9 +53,14 @@ class ChosenGuess implements Action {
         ];
         $emoji = $emojis[$card->team];
         $game->addToHistory('>'.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
-
+        
+        $mention = AppString::get('game.mention', [
+            'name' => $user->name,
+            'id' => $user->id
+        ], $chatLanguage, true);
+        $text = $mention.' '.$emoji.' '.$card->text;
         try {
-            $bot->sendMessage($game->chat_id, $emoji, null, false, $update->getMessageId());
+            $bot->sendMessage($game->chat_id, $text, null, false, null, new ReplyKeyboardRemove);
         } catch(Exception $e) {}
 
         //correct guess
