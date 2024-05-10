@@ -36,7 +36,8 @@ class ChosenHint implements Action {
         
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
         $color = ($user->team=='a') ? $game->color_a : $game->color_b;
-        $historyLine = Game::COLORS[$color].' '.$hint;
+        $emoji = Game::COLORS[$color];
+        $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
         $game->updateStatus('agent_'.$user->team);
@@ -52,7 +53,10 @@ class ChosenHint implements Action {
             'name' => $user->name,
             'id' => $user->id
         ], null, true);
-        $text = $mention.' '.AppString::parseMarkdownV2($historyLine);
+        $text = $emoji.' '.AppString::get('game.hinted', [
+            'user' => $mention,
+            'hint' => AppString::parseMarkdownV2($hint)
+        ]);
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);

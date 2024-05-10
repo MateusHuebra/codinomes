@@ -162,6 +162,9 @@
         ],
         "attempted": [
             "{user} tentou {card}"
+        ],
+        "hinted": [
+            "{user} deu a dica {hint}"
         ]
     },
     "color": {
