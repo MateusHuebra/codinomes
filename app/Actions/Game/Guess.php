@@ -40,7 +40,7 @@ class Guess implements Action {
             } else {
                 foreach($filteredCards as $card) {
                     $title = $card->text;
-                    $messageContent = new Text($emojis[$card->team].' '.$title);
+                    $messageContent = new Text($card->text);
                     $data = CDM::toString([
                         CDM::EVENT => CDM::GUESS,
                         CDM::NUMBER => $card->id

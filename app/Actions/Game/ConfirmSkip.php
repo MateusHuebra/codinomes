@@ -35,7 +35,7 @@ class ConfirmSkip implements Action {
         $skipped = strtolower(AppString::get('game.skipped', null, $chatLanguage));
         $text = $mention.' '.$skipped;
         try {
-            $bot->sendMessage($game->chat_id, $text, null, false, null, new ReplyKeyboardRemove);
+            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
         } catch(Exception $e) {}
 
         if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {
