@@ -29,7 +29,6 @@ class ChosenHint implements Action {
                 $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
                 return;
             }
-            $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
         } else if ($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
         }
