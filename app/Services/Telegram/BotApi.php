@@ -19,6 +19,12 @@ class BotApi extends OriginalBotApi {
         ]);
     }
 
+    public function tryToSetMessageReaction($chatId, $messageId, $emoji = null) {
+        try {
+            return $this->setMessageReaction($chatId, $messageId, $emoji);
+        } catch(Exception $e) {}
+    }
+
     public function sendAlertOrMessage($callbackQueryId, int $chatId, string $stringPath) {
         $string = AppString::get($stringPath);
         try {

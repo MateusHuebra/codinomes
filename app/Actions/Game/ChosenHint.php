@@ -26,10 +26,10 @@ class ChosenHint implements Action {
             $hint = new Hint;
             $data = CDM::toArray($hint->run($update, $bot, $update->getMessageText()));
             if($data[CDM::EVENT] == CDM::IGNORE) {
-                $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
+                $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
                 return;
             }
-            $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
+            $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
         } else if ($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
         }
