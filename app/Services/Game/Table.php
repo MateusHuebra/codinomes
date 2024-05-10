@@ -11,8 +11,7 @@ use TelegramBot\Api\BotApi;
 use CURLFile;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
-use TelegramBot\Api\Types\ReplyKeyboardMarkup;
-use TelegramBot\Api\Types\ReplyKeyboardRemove;
+use App\Services\CallbackDataManager as CDM;
 
 class Table {
     
@@ -94,7 +93,7 @@ class Table {
                 'team' => $team
             ], $chatLanguage);
 
-            $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, new ReplyKeyboardRemove, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
             $game->stop($bot);
@@ -122,15 +121,20 @@ class Table {
                 ]
             ]);
         } else {
-            $cardsArray = [];
-            $cardsArray[] = ['/history'];
-            foreach($game->cards as $card) {
-                if(!$card->revealed) {
-                    $cardsArray[] = [$card->text];
-                }
-            }
-            $cardsArray[] = ['/skip'];
-            return new ReplyKeyboardMarkup($cardsArray, true, true, true, false, AppString::get('game.choose_card'));
+            return new InlineKeyboardMarkup([
+                [
+                    [
+                        'text' => AppString::get('game.skip', null, $chatLanguage),
+                        'callback_data' => CDM::toString([
+                            CDM::EVENT => CDM::SKIP
+                        ])
+                    ],
+                    [
+                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
+                        'switch_inline_query_current_chat' => ''
+                    ]
+                ]
+            ]);
         }
     }
     

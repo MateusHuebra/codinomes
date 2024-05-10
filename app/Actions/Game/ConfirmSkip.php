@@ -9,7 +9,6 @@ use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
 use Exception;
 use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 class ConfirmSkip implements Action {
 
@@ -22,6 +21,8 @@ class ConfirmSkip implements Action {
             try {
                 $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
             } catch(Exception $e) {}
+        } else if($update->isType(Update::MESSAGE)) {
+            $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
         }
 
         if(!$user || !$game) {
@@ -34,9 +35,9 @@ class ConfirmSkip implements Action {
         ], $chatLanguage, true);
         $skipped = strtolower(AppString::getParsed('game.skipped', null, $chatLanguage));
         $text = $mention.' '.$skipped;
-        $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
+        
         try {
-            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
+            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
         if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {

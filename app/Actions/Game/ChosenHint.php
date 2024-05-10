@@ -53,10 +53,13 @@ class ChosenHint implements Action {
             'name' => $user->name,
             'id' => $user->id
         ], null, true);
+        $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($hint);
+        /*
         $text = $emoji.' '.AppString::get('game.hinted', [
             'user' => $mention,
             'hint' => AppString::parseMarkdownV2($hint)
         ]);
+        */
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);

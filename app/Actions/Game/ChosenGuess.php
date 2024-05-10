@@ -12,7 +12,6 @@ use App\Services\Game\Table;
 use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
-use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 class ChosenGuess implements Action {
 
@@ -29,7 +28,7 @@ class ChosenGuess implements Action {
         }
 
         if($update->isType(Update::MESSAGE)) {
-            $text = mb_strtoupper($update->getMessageText(), 'UTF-8');
+            $text = $update->getMessageText();
             $card = GameCard::where('text', $text)->first();
             if(!$card) {
                 return;
@@ -54,18 +53,20 @@ class ChosenGuess implements Action {
         $emoji = $emojis[$card->team];
         $game->addToHistory('>'.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
         
-        $mention = AppString::get('game.mention', [
-            'name' => $user->name,
-            'id' => $user->id
-        ], $chatLanguage, true);
-        $text = AppString::get('game.attempted', [
-            'user' => $mention,
-            'card' => AppString::parseMarkdownV2($card->text).' '.$emoji
-        ], $chatLanguage);
-        $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
-        try {
-            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
-        } catch(Exception $e) {}
+        if($update->isType(Update::MESSAGE)) {
+            $mention = AppString::get('game.mention', [
+                'name' => $user->name,
+                'id' => $user->id
+            ], $chatLanguage, true);
+            $text = AppString::get('game.attempted', [
+                'user' => $mention,
+                'card' => AppString::parseMarkdownV2($card->text).' '.$emoji
+            ], $chatLanguage);
+            $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
+            try {
+                $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
+            } catch(Exception $e) {}
+        }
 
         //correct guess
         if($card->team == $user->team) {
