@@ -18,7 +18,7 @@ class ChosenGuess implements Action {
         $user = $update->findUser();
         $game = $user->game;
         $chatLanguage = $game->chat->language;
-        
+
         if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
             return;
         }
@@ -26,8 +26,17 @@ class ChosenGuess implements Action {
             return;
         }
 
-        $data = CDM::toArray($update->getResultId());
-        $card = GameCard::find($data[CDM::NUMBER]);
+        if($update->isType(Update::MESSAGE)) {
+            $text = mb_strtoupper($update->getMessageText(), 'UTF-8');
+            $card = GameCard::where('text', $text)->first();
+            if(!$card) {
+                return;
+            }
+        } else if($update->isType(Update::CALLBACK_QUERY)) {
+            $data = CDM::toArray($update->getResultId());
+            $card = GameCard::find($data[CDM::NUMBER]);
+        }
+
         if($card->revealed) {
             return;
         }

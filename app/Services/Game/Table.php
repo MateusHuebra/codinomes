@@ -11,7 +11,8 @@ use TelegramBot\Api\BotApi;
 use CURLFile;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
-use App\Services\CallbackDataManager as CDM;
+use TelegramBot\Api\Types\ReplyKeyboardMarkup;
+use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 class Table {
     
@@ -61,7 +62,7 @@ class Table {
             $tempAgentsImageFileName = tempnam(sys_get_temp_dir(), 'a_image_');
             $agentsPhoto = self::getCURLFileFromImage($agentsImage, $tempAgentsImageFileName, 'agents');
 
-            $keyboard = self::getKeyboard($game->status, $chatLanguage);
+            $keyboard = self::getKeyboard($game, $chatLanguage);
             $text = $game->getPhotoCaption();
             
             $message = $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
@@ -93,7 +94,7 @@ class Table {
                 'team' => $team
             ], $chatLanguage);
 
-            $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
+            $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, new ReplyKeyboardRemove, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
             $game->stop($bot);
@@ -106,8 +107,8 @@ class Table {
         return new CURLFile($tempFileName,'image/png',$fileName);
     }
 
-    private static function getKeyboard(string $status, string $chatLanguage) {
-        if($status=='master_a' || $status=='master_b') {
+    private static function getKeyboard(Game $game, string $chatLanguage) {
+        if($game->status=='master_a' || $game->status=='master_b') {
             return new InlineKeyboardMarkup([
                 [
                     [
@@ -121,20 +122,14 @@ class Table {
                 ]
             ]);
         } else {
-            return new InlineKeyboardMarkup([
-                [
-                    [
-                        'text' => AppString::get('game.skip', null, $chatLanguage),
-                        'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::SKIP
-                        ])
-                    ],
-                    [
-                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
-                        'switch_inline_query_current_chat' => ''
-                    ]
-                ]
-            ]);
+            $cardsArray = [];
+            foreach($game->cards as $card) {
+                if(!$card->revealed) {
+                    $cardsArray[] = [$card->text];
+                }
+            }
+            $cardsArray[] = ['/skip'];
+            return new ReplyKeyboardMarkup($cardsArray, true, true, true, false, AppString::get('game.choose_card'));
         }
     }
     

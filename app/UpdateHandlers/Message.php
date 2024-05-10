@@ -4,6 +4,7 @@ namespace App\UpdateHandlers;
 
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
+use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Actions\GetColors;
 use App\Actions\Game\ConfirmSkip;
@@ -52,13 +53,28 @@ class Message implements UpdateHandler {
 
     private function getActionForOrdinaryMessage($update) {
         $user = $update->findUser();
-        if($update->isChatType('private') && $user && $game = $user->game) {
+        if($user && $game = $user->game) {
             if(
-                ($game->status=='master_a' && $user->team=='a' && $user->role=='master')
-                ||
-                ($game->status=='master_b' && $user->team=='b' && $user->role=='master')
+                $update->isChatType('private')
+                &&
+                (
+                    ($game->status=='master_a' && $user->team=='a' && $user->role=='master')
+                    ||
+                    ($game->status=='master_b' && $user->team=='b' && $user->role=='master')
+                )
             ) {
                 return new ChosenHint;
+
+            } else if (
+                $update->isChatType('supergroup')
+                &&
+                (
+                    ($game->status=='agent_a' && $user->team=='a' && $user->role=='agent')
+                    ||
+                    ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')
+                )
+            ) {
+                return new ChosenGuess;
             }
         }
     }
