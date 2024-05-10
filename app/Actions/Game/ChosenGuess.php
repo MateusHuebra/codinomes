@@ -60,6 +60,7 @@ class ChosenGuess implements Action {
 
         //correct guess
         if($card->team == $user->team) {
+            $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
             if($game->attempts_left!==null) {
                 $game->attempts_left--;
             }
@@ -97,6 +98,7 @@ class ChosenGuess implements Action {
 
         //black card
         } else if($card->team == 'x') {
+            $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '😨');
             $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
             $title = AppString::get('game.win', [
                 'team' => AppString::get('color.'.$color)
@@ -108,6 +110,11 @@ class ChosenGuess implements Action {
         
         //incorrect guess
         } else {
+            if($card->team == 'w') {
+                $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👀');
+            } else {
+                $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
+            }
             $cardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
             
             //won
