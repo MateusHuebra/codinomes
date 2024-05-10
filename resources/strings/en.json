@@ -97,6 +97,9 @@
         "give_hint": [
             "Give hint"
         ],
+        "send_hint": [
+            "Send your hint\n\n/help_hints"
+        ],
         "open_dm": [
             "Open DM"
         ],

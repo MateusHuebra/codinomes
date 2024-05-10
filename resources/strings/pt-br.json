@@ -97,6 +97,9 @@
         "give_hint": [
             "Dar dica"
         ],
+        "send_hint": [
+            "Envie sua dica\n\n/ajuda_dicas"
+        ],
         "open_dm": [
             "Abrir PV"
         ],

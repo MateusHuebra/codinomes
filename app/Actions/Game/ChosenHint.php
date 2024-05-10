@@ -22,7 +22,18 @@ class ChosenHint implements Action {
             return;
         }
 
-        $data = CDM::toArray($update->getResultId());
+        if($update->isType(Update::MESSAGE)) {
+            $hint = new Hint;
+            $data = CDM::toArray($hint->run($update, $bot, $update->getMessageText()));
+            if($data[CDM::EVENT] == CDM::IGNORE) {
+                $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
+                return;
+            }
+            $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
+        } else if ($update->isType(Update::CHOSEN_INLINE_RESULT)) {
+            $data = CDM::toArray($update->getResultId());
+        }
+        
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
         $color = ($user->team=='a') ? $game->color_a : $game->color_b;
         $historyLine = Game::COLORS[$color].' '.$hint;

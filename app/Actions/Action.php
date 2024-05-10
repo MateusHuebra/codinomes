@@ -7,6 +7,6 @@ use App\Adapters\UpdateTypes\Update;
 
 interface Action {
 
-    public function run(Update $update, BotApi $bot) : Void;
+    public function run(Update $update, BotApi $bot);
 
 }

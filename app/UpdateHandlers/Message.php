@@ -4,6 +4,7 @@ namespace App\UpdateHandlers;
 
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
+use App\Actions\Game\ChosenHint;
 use App\Actions\GetColors;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\Create;
@@ -43,8 +44,21 @@ class Message implements UpdateHandler {
                     return new DeleteChat;
                 }
     
-            } else if(is_null($commandMatches)) {
-                //ordinary message
+            } else {
+                return $this->getActionForOrdinaryMessage($update);
+            }
+        }
+    }
+
+    private function getActionForOrdinaryMessage($update) {
+        $user = $update->findUser();
+        if($update->isChatType('private') && $user && $game = $user->game) {
+            if(
+                ($game->status=='master_a' && $user->team=='a' && $user->role=='master')
+                ||
+                ($game->status=='master_b' && $user->team=='b' && $user->role=='master')
+            ) {
+                return new ChosenHint;
             }
         }
     }

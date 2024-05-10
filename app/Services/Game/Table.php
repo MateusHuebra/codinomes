@@ -70,10 +70,10 @@ class Table {
             if($sendToMasters) {
                 try{
                     if($sendToBothMasters || $game->status == 'master_a') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_a')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->status=='master_a')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
                     }
                     if($sendToBothMasters || $game->status == 'master_b') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, null, null, ($game->status=='master_b')?self::getMasterKeyboard($chatLanguage):null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->status=='master_b')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {

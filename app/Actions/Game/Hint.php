@@ -14,8 +14,8 @@ class Hint implements Action {
 
     const REGEX_HINT_NUMBER = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16})( (?<number>[0-9]))?$/';
 
-    public function run(Update $update, BotApi $bot) : Void {
-        $query = mb_strtoupper($update->getQuery(), 'UTF-8');
+    public function run(Update $update, BotApi $bot, string $forceText = null) {
+        $query = mb_strtoupper($forceText??$update->getQuery(), 'UTF-8');
         $game = $update->findUser()->game;
         $team = ($game->status=='master_a' || $game->status=='agent_a') ? 'a' : 'b';
         $cardsLeft = $game->cards->where('team', $team)->where('revealed', false)->count();
@@ -40,6 +40,10 @@ class Hint implements Action {
             $data = CDM::toString([
                 CDM::EVENT => CDM::IGNORE
             ]);
+        }
+
+        if($forceText) {
+            return $data;
         }
         
         $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
