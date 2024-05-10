@@ -32,7 +32,7 @@ class ConfirmSkip implements Action {
             'name' => $user->name,
             'id' => $user->id
         ], $chatLanguage, true);
-        $skipped = strtolower(AppString::get('game.skipped', null, $chatLanguage));
+        $skipped = strtolower(AppString::getParsed('game.skipped', null, $chatLanguage));
         $text = $mention.' '.$skipped;
         $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
         try {
