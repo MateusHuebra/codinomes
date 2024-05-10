@@ -58,7 +58,10 @@ class ChosenGuess implements Action {
             'name' => $user->name,
             'id' => $user->id
         ], $chatLanguage, true);
-        $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($card->text);
+        $text = AppString::get('game.attempted', [
+            'user' => $mention,
+            'card' => $emoji.' '.AppString::parseMarkdownV2($card->text)
+        ], $chatLanguage);
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, new ReplyKeyboardRemove);
         } catch(Exception $e) {}

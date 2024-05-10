@@ -159,6 +159,9 @@
         ],
         "open": [
             "Abrir jogo"
+        ],
+        "attempted": [
+            "{user} tentou {card}"
         ]
     },
     "color": {
