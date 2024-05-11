@@ -33,7 +33,7 @@ class ChosenGuess implements Action {
             if(!$card) {
                 return;
             }
-        } else if($update->isType(Update::CALLBACK_QUERY)) {
+        } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
             $card = GameCard::find($data[CDM::NUMBER]);
         }
