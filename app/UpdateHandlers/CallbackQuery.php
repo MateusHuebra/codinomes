@@ -2,6 +2,9 @@
 
 namespace App\UpdateHandlers;
 
+use App\Actions\Chat\AdminOnly;
+use App\Actions\Chat\Settings;
+use App\Actions\Chat\Timer;
 use App\Actions\Game\Color;
 use App\Actions\Game\Menu;
 use App\Actions\Game\Pack;
@@ -51,6 +54,15 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_DEFAULT_COLOR) {
             return new SetColor;
+
+        } else if($data[CDM::EVENT] === CDM::SETTINGS) {
+            return new Settings;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_ADMIN_ONLY) {
+            return new AdminOnly;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_TIMER) {
+            return new Timer;
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_PACK) {
             return new Pack;
@@ -60,6 +72,9 @@ class CallbackQuery implements UpdateHandler {
             
         } else if($data[CDM::EVENT] === CDM::MENU) {
             return new Menu;
+            
+        } else {
+            return null;
         }
 
     }

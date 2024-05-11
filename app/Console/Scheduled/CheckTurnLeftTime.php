@@ -21,8 +21,12 @@ class CheckTurnLeftTime {
             if($game->status == 'creating') {
                 continue;
             }
+            $timer = $game->chat->timer;
+            if($timer == null) {
+                continue;
+            }
             $time = strtotime($game->status_updated_at);
-            if($now - $time >= (60*5)) {
+            if($now - $time >= (60*$game->chat->timer)) {
                 try {
                     $bot->deleteMessage($game->chat_id, $game->message_id);
                 } catch(Exception $e) {}
@@ -33,13 +37,22 @@ class CheckTurnLeftTime {
                     $this->skipAgent($game, $bot);
                 }
                 
-            } else if ($now - $time >= (60*4)) {
+            } else if ($now - $time >= (60*($timer-1))) {
                 $this->warn($game->chat_id, 1, $bot);
 
-            } else if ($now - $time >= (60*3)) {
+            } else if ($now - $time >= (60*($timer-2))) {
                 $this->warn($game->chat_id, 2, $bot);
                 
-            } else if ($now - $time >= (60*2)) {
+            } else if ($timer > 3 && $now - $time >= (60*($timer-3))) {
+                $this->warn($game->chat_id, 3, $bot);
+                
+            } else if ($timer > 5 && $now - $time >= (60*($timer-5))) {
+                $this->warn($game->chat_id, 3, $bot);
+                
+            } else if ($timer > 7 && $now - $time >= (60*($timer-7))) {
+                $this->warn($game->chat_id, 3, $bot);
+                
+            } else if ($timer > 10 && $now - $time >= (60*($timer-10))) {
                 $this->warn($game->chat_id, 3, $bot);
                 
             }

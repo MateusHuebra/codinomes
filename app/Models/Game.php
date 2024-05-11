@@ -68,7 +68,7 @@ class Game extends Model
         if($user->id === $this->creator->id) {
             return true;
         }
-        return $this->chat->isAdmin($user, $bot);
+        return $this->chat->hasPermission($user, $bot);
     }
 
     public function getLastHint() {

@@ -212,8 +212,14 @@
         "admin_only": [
             "Apenas admin"
         ],
+        "admin_only_info": [
+            "Defina se apenas admins do grupo podem mudar as configurações, parar partidas, etc"
+        ],
         "timer": [
             "Timer"
+        ],
+        "timer_info": [
+            "Defina quanto tempo os jogadores têm para executar sua rodada no jogo"
         ],
         "on": [
             "ligado"

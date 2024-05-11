@@ -168,15 +168,12 @@ class Menu {
                 $text = AppString::get('game.packs');
                 break;
         }
-        
         $line[] = [
-            'text' => $text.' '.(strpos($game->menu, "packs")!==false ? 'X' : '\\/'),
+            'text' => AppString::get('game.settings'),
             'callback_data' => CDM::toString([
-                CDM::EVENT => CDM::MENU,
-                CDM::TEXT => (strpos($game->menu, "packs")!==false ? null : 'packs')
+                CDM::EVENT => CDM::SETTINGS
             ])
         ];
-
         $line[] = [
             'text' => AppString::get('game.leave'),
             'callback_data' => CDM::toString([

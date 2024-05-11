@@ -36,6 +36,13 @@ class Chat extends Model
     {
         return $this->belongsToMany(User::class, 'notifiable_chat_users')->withPivot('message_id');
     }
+
+    public function hasPermission(User $user, BotApi $bot) {
+        if($this->admin_only == false) {
+            return true;
+        }
+        return $this->isAdmin($user, $bot);
+    }
     
     public function isAdmin(User $user, BotApi $bot) : bool {
         $admins = $bot->getChatAdministrators($this->id);

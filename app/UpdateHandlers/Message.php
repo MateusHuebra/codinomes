@@ -4,6 +4,7 @@ namespace App\UpdateHandlers;
 
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
+use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Actions\GetColors;
@@ -91,6 +92,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['history', 'historico'])) {
             return new History;
+
+        } else if(in_array($command, ['settings', 'config'])) {
+            return new Settings;
 
         } else if(in_array($command, ['color', 'cor'])) {
             return new GetColors;

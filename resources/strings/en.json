@@ -212,8 +212,14 @@
         "admin_only": [
             "Admin only"
         ],
+        "admin_only_info": [
+            "Choose if only group admins can change settings, stop games, etc"
+        ],
         "timer": [
             "Timer"
+        ],
+        "timer_info": [
+            "Choose how long players can take to make their play"
         ],
         "on": [
             "on"
