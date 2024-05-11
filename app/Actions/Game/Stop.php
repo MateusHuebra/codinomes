@@ -6,7 +6,6 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
-use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 class Stop implements Action {
 
@@ -25,7 +24,7 @@ class Stop implements Action {
         
         $game->stop($bot, true);
 
-        $bot->sendMessage($chat->id, AppString::get('game.stopped'), null, false, null, new ReplyKeyboardRemove);
+        $bot->sendMessage($chat->id, AppString::get('game.stopped'));
     }
 
 }
