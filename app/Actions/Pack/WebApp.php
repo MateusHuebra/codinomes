@@ -10,6 +10,10 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 class WebApp implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
+        if(!$update->isChatType('private')) {
+            return;
+        }
+
         $keyboard = new InlineKeyboardMarkup([
             [
                 [
