@@ -195,6 +195,9 @@
         "brown" : [
             "Marrom"
         ],
+        "gray" : [
+            "Cinza"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

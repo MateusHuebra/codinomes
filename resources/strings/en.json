@@ -195,6 +195,9 @@
         "brown" : [
             "Brown"
         ],
+        "gray" : [
+            "Gray"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],
