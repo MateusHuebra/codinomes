@@ -29,7 +29,7 @@ class ChosenGuess implements Action {
 
         if($update->isType(Update::MESSAGE)) {
             $text = $update->getMessageText();
-            $card = GameCard::where('text', $text)->first();
+            $card = GameCard::whereRaw('BINARY text = ?', [$text])->first();
             if(!$card) {
                 return;
             }
