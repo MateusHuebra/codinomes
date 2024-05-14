@@ -14,18 +14,17 @@ class Pack implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        $game = $update->findChat()->game;
-        if(!$game || !$user) {
+        $chat = $update->findChat();
+        if(!$user) {
             return;
         }
-        if(!$game->hasPermission($user, $bot)) {
+        if(!$chat->hasPermission($user, $bot)) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
             return;
         }
 
         $data = CDM::toArray($update->getData());
         $pack = PackModel::find($data[CDM::TEXT]);
-        $chat = $game->chat;
         if(!$pack || !$chat) {
             return;
         }
