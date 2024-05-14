@@ -2,11 +2,9 @@
 
 namespace App\Services\Game;
 
-use App\Models\Chat;
 use App\Models\Game;
-use App\Models\Pack;
 use App\Models\User;
-use TelegramBot\Api\BotApi;
+use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
 use App\Services\CallbackDataManager as CDM;
@@ -18,7 +16,7 @@ class Menu {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $textMessage = $game->getTeamAndPlayersList().AppString::get('game.choose_role');
-        $keyboard = self::getKeyboard($hasRequiredPlayers, $game, $user);
+        $keyboard = self::getKeyboard($hasRequiredPlayers, $game);
 
         if($game->lobby_message_id !== null) {
             try {
@@ -38,55 +36,9 @@ class Menu {
         $game->save();
     }
 
-    private static function getKeyboard(bool $hasRequiredPlayers, Game $game, User $user = null) {
+    private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
         $buttonsArray = [];
         $buttonsArray = self::getFirstButtons($game, $buttonsArray);
-        
-        if($game->isMenu('packs')) {
-            $buttonsArray[] = [[
-                'text' => AppString::get('game.packs_actived'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => 'packs_actived',
-                ])
-            ]];
-            $buttonsArray[] = [[
-                'text' => AppString::get('game.packs_official'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => 'packs_official',
-                ])
-            ]];
-            $buttonsArray[] = [[
-                'text' => AppString::get('game.packs_users'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => 'packs_users',
-                ])
-            ]];
-            $buttonsArray[] = [[
-                'text' => AppString::get('game.packs_mine'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => 'packs_mine',
-                ])
-            ]];
-
-        } else if($game->isMenu('packs', 'actived')) {
-            $buttonsArray = self::getActivedPacks($game->chat, $buttonsArray);
-
-        } else if($game->isMenu('packs', 'official')) {
-            $packs = Pack::where('user_id', null);
-            $buttonsArray = self::getPacks($game, $buttonsArray, $packs);
-
-        } else if($game->isMenu('packs', 'users')) {
-            $packs = Pack::where('status', 'public')->whereNotNull('user_id');
-            $buttonsArray = self::getPacks($game, $buttonsArray, $packs);
-            
-        } else if($game->isMenu('packs', 'mine')) {
-            $packs = Pack::where('user_id', $user->id);
-            $buttonsArray = self::getPacks($game, $buttonsArray, $packs);
-        }
 
         if($hasRequiredPlayers && !$game->menu) {
             $buttonsArray[] = [
@@ -151,23 +103,6 @@ class Menu {
             ];
         }
         
-        switch ($game->getMenu(true)) {
-            case 'packs_actived':
-                $text = AppString::get('game.packs_actived');
-                break;
-            case 'packs_official':
-                $text = AppString::get('game.packs_official');
-                break;
-            case 'packs_users':
-                $text = AppString::get('game.packs_users');
-                break;
-            case 'packs_mine':
-                $text = AppString::get('game.packs_mine');
-                break;
-            default:
-                $text = AppString::get('game.packs');
-                break;
-        }
         $line[] = [
             'text' => AppString::get('game.settings'),
             'callback_data' => CDM::toString([
@@ -213,84 +148,6 @@ class Menu {
         if(!empty($line)) {
             $buttonsArray[] = $line;
         }
-        return $buttonsArray;
-    }
-
-    private static function getActivedPacks(Chat $chat, Array $buttonsArray) {
-        foreach ($chat->packs as $pack) {
-            $buttonsArray[] = [[
-                'text' => '> '.$pack->name.' ('.$pack->cards()->count().')',
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::CHANGE_PACK,
-                    CDM::TEXT => $pack->id,
-                    CDM::NUMBER => 0
-            ])
-        ]];
-        }
-        
-        $buttonsArray[] = [[
-            'text' => 'Voltar',
-            'callback_data' => CDM::toString([
-                CDM::EVENT => CDM::MENU,
-                CDM::TEXT => 'packs',
-            ])
-        ]];
-        return $buttonsArray;
-    }
-
-    private static function getPacks(Game $game, Array $buttonsArray, $packs) {
-        $chatPacks = $game->chat->packs;
-        $take = 5;
-        $skip = ($game->getMenuPage()) * $take;
-        $packs = $packs->skip($skip)->take($take);
-        $totalPages = $packs->count() / $take;
-
-        foreach ($packs->get() as $pack) {
-            if($chatPacks->find($pack->id)) {
-                $text = '> '.$pack->name.' ('.$pack->cards()->count().')';
-                $bool = 0;
-            } else {
-                $text = $pack->name.' ('.$pack->cards()->count().')';
-                $bool = 1;
-            }
-            $buttonsArray[] = [[
-                'text' => $text,
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::CHANGE_PACK,
-                    CDM::TEXT => $pack->id,
-                    CDM::NUMBER => $bool
-            ])
-        ]];
-        }
-
-        $line = [];
-        if($game->getMenuPage()>0) {
-            $line[] = [
-                'text' => '<',
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => $game->getMenu(true).':'.$game->getMenuPage()-1,
-                ])
-            ];
-        }
-        if($game->getMenuPage()<$totalPages-1) {
-            $line[] = [
-                'text' => '>',
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::MENU,
-                    CDM::TEXT => $game->getMenu(true).':'.$game->getMenuPage()+1,
-                ])
-            ];
-        }
-        $buttonsArray[] = $line;
-        
-        $buttonsArray[] = [[
-            'text' => AppString::get('game.back'),
-            'callback_data' => CDM::toString([
-                CDM::EVENT => CDM::MENU,
-                CDM::TEXT => 'packs',
-            ])
-        ]];
         return $buttonsArray;
     }
 

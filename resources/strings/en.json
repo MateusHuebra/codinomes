@@ -70,6 +70,9 @@
         "packs": [
             "Packs"
         ],
+        "packs_count_cards": [
+            "Packs (cards: {count})"
+        ],
         "settings": [
             "Settings"
         ],

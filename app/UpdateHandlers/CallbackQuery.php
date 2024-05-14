@@ -7,7 +7,7 @@ use App\Actions\Chat\Settings;
 use App\Actions\Chat\Timer;
 use App\Actions\Game\Color;
 use App\Actions\Game\Menu;
-use App\Actions\Game\Pack;
+use App\Actions\Chat\Pack;
 use App\Actions\Game\Skip;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\CancelSkip;

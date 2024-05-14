@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Game;
+namespace App\Actions\Chat;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
@@ -36,7 +36,8 @@ class Pack implements Action {
             $chat->packs()->detach($pack->id);
         }
         
-        Menu::send($game, $bot);
+        $settings = new Settings();
+        $settings->prepareAndSend($update, $bot, $chat, $user);
     }
 
 }

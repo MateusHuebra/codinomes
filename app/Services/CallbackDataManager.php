@@ -32,6 +32,7 @@ class CallbackDataManager {
     const LANGUAGE = 'l';
     const TEXT = 'txt';
     const NUMBER = 'num';
+    const PAGE = 'pg';
     const VALUE = 'vlu';
     const FIRST_TIME = 'ft';
 
@@ -40,6 +41,13 @@ class CallbackDataManager {
     const TEAM = 't';
     const MASTER = 'm';
     const AGENT = 'a';
+
+    //PACKS
+    const PACKS = 'pk';
+    const PACKS_ACTIVED = 'pka';
+    const PACKS_OFFICIAL = 'pko';
+    const PACKS_USERS = 'pku';
+    const PACKS_MINE = 'pkm';
 
     static function toString(array $dataArray) : String {
         $stringArray = [];

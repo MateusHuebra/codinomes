@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use TelegramBot\Api\BotApi;
+use App\Services\Telegram\BotApi;
 
 
 class Game extends Model
@@ -74,7 +74,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            preg_match('/[*].+ (?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16} [0-9∞]+)[*](\R>.+)*$/', $this->history, $matches);
+            preg_match('/[*].+ (?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ ]{1,16} [0-9∞]+)[*](\R>.+)*$/', $this->history, $matches);
             $this->lastHint = $matches['hint'];
         }
         return $this->lastHint;
