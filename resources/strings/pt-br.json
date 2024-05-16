@@ -303,7 +303,7 @@
     },
     "help": {
         "base" : [
-            "*Codinomes* é um jogo de adivinhação de palavras, baseado em dicas, dividido em duas Equipes de cores diferentes compostas por um Mestre e vários Agentes\\.\n\nGanha a equipe que encontrar todas as cartas da própria cor primeiro\\.\n\n• Papéis: /ajuda\\_papeis\n\n• Dicas: /ajuda\\_dicas\n\n• Cores: /ajuda\\_cores\n\nObs\\.: No momento o bot está disponível apenas no grupo @CodinomesGrupo"
+            "*Codinomes* é um jogo de adivinhação de palavras, baseado em dicas, dividido em duas Equipes de cores diferentes compostas por um Mestre e vários Agentes\\.\n\nGanha a equipe que encontrar todas as cartas da própria cor primeiro\\.\n\n• Papéis: /ajuda\\_papeis\n• Dicas: /ajuda\\_dicas\n• Cores: /ajuda\\_cores\n\n• Comandos: /ajuda\\_comandos\n\nObs\\.: No momento o bot está disponível apenas no grupo @CodinomesGrupo"
         ],
         "roles": [
             "*Mestre:*\n• Vê a cor de todas as cartas;\n• Seu objetivo é dar dicas que relacionem o máximo possível de palavras da cor do seu time para que seus agentes as encontrem\\.\n\n*Agentes*: \n• Não vê a cor das cartas;\n• Seu objetivo é encontrar as palavras da cor do seu time seguindo as dicas do seu respectivo mestre\\."
@@ -313,6 +313,9 @@
         ],
         "colors": [
             "O que acontece dependendo da cor da carta escolhida:\n\n🟣 *Sua cor:* continua chutando;\n\n⚪️ *Branca:* passa a vez imediatamente;\n\n🟠 *Cor do oponente:* passa a vez imediatamente, e deixa o time oponente uma carta mais próximo da vitória;\n\n⚫️ *Preta:* perde o jogo imediatamente, dando a vitória ao time oponente\\."
+        ],
+        "commands": [
+            "*Comandos do Codinomes:*\n\n• /novo cria uma nova sala de partida\n• /pular pula sua vez na partida\n• /parar interrompe e cancela a partida\n\n• /notificar envie no grupo para ser avisado sempre que rolar uma nova partida, envie novamente para cancelar\n\n• /historico visualize o histórico de dicas e tentativas da partida, funciona também no pv\n\n• /config configurações do grupo \\(como timer e pacotes de palavras\\)\n\n• /cor escolha sua cor padrão que será definida automaticamente quando entrar como mestre\n\n• /pacotes envie no pv para criar e gerenciar seus próprios pacotes de palavras"
         ]
     }
 }

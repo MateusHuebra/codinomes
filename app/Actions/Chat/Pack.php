@@ -6,7 +6,6 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Pack as PackModel;
 use App\Services\AppString;
-use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 

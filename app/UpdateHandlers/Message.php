@@ -120,6 +120,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['help_colors', 'ajuda_cores'])) {
             return new Help('colors');
 
+        } else if(in_array($command, ['help_commands', 'ajuda_comandos'])) {
+            return new Help('commands');
+
         } else if($command == 'ping') {
             return new Ping;
 
