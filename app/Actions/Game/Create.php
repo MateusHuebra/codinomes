@@ -12,7 +12,7 @@ use App\Services\AppString;
 class Create implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
-        if(!$update->isChatType('private')) {
+        if(!$update->isChatType('supergroup')) {
             return;
         }
         $chat = $update->findChat();
