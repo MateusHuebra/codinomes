@@ -74,10 +74,12 @@ class PacksController extends Controller
         $pack->cards()->delete();
         $pack->cards()->saveMany($cards);
 
-        $bot = new BotApi(env('TG_TOKEN'));
-        try {
-            $bot->sendMessage(env('TG_MY_ID'), 'New pack!');
-        } catch(Exception $e) {}
+        if($data['status'] != 'public') {
+            $bot = new BotApi(env('TG_TOKEN'));
+            try {
+                $bot->sendMessage(env('TG_MY_ID'), 'New pack!');
+            } catch(Exception $e) {}
+        }
 
         return $pack->push();
     }
