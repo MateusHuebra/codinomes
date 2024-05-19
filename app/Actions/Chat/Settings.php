@@ -187,7 +187,7 @@ class Settings implements Action {
 
         foreach ($packs->get() as $pack) {
             if($chatPacks->find($pack->id)) {
-                $text = '> '.$pack->name.' ('.$pack->cards()->count().')';
+                $text = '• '.$pack->name.' ('.$pack->cards()->count().')';
                 $bool = 0;
             } else {
                 $text = $pack->name.' ('.$pack->cards()->count().')';
