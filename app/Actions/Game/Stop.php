@@ -12,11 +12,15 @@ class Stop implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         $chat = $update->findChat();
         $user = $update->findUser();
-        $game = $chat->game;
-
-        if(!$game || !$user) {
+        if(!$chat || !$user) {
             return;
         }
+        
+        $game = $chat->game;
+        if(!$game) {
+            return;
+        }
+
         if(!$game->hasPermission($user, $bot)) {
             $bot->sendMessage($chat->id, AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
             return;

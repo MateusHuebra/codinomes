@@ -17,8 +17,12 @@ class Pack implements Action {
         if(!$user) {
             return;
         }
+        if(!$user || $user->status != 'actived') {
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.user_not_registered');
+            return;
+        }
         if(!$chat->hasPermission($user, $bot)) {
-            $bot->sendMessage($update->getChatId(), AppString::get('error.admin_only'), null, false, null, null, false, null, null, true);
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
             return;
         }
 

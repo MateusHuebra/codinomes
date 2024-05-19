@@ -16,6 +16,9 @@ class Start implements Action {
             $bot->deleteMessage($chat->id, $update->getMessageId());
             return;
         }
+        if($game->status != 'creating') {
+            return;
+        }
 
         $user = $update->findUser();
         $game->start($bot, $user, $update->getId());

@@ -28,6 +28,15 @@ class Settings implements Action {
         }
 
         $user = $update->findUser();
+        if(!$user) {
+            if($update->isType(Update::CALLBACK_QUERY)) {
+                $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.user_not_registered');
+            } else {
+                $bot->sendMessage($chat->id, AppString::get('error.user_not_registered'), null, false, $update->getMessageId(), null, false, null, null, true);
+            }
+            return;
+        }
+
         if(!$chat->hasPermission($user, $bot)) {
             if($update->isType(Update::CALLBACK_QUERY)) {
                 $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');

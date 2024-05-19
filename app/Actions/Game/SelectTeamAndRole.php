@@ -24,7 +24,9 @@ class SelectTeamAndRole implements Action {
 
         $game = $chat->game;
         if(!$game || $game->status != 'creating') {
-            $bot->deleteMessage($chat->id, $update->getMessageId());
+            if(!$game) {
+                $bot->deleteMessage($chat->id, $update->getMessageId());
+            }
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'game.no_game');
             return;
         }

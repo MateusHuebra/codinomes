@@ -22,8 +22,12 @@ class Menu implements Action {
         $chat = $update->findChat();
         $game = $chat->game;
 
-        if(!$game || $game->status != 'creating') {
+        if(!$game) {
             $bot->deleteMessage($chat->id, $update->getMessageId());
+            return;
+        }
+
+        if($game->status != 'creating') {
             return;
         }
 

@@ -12,6 +12,9 @@ use App\Services\AppString;
 class Create implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
+        if(!$update->isChatType('private')) {
+            return;
+        }
         $chat = $update->findChat();
         $chat->username = $update->getChatUsername();
         $chat->title = substr($update->getChatTitle(), 0, 32);
