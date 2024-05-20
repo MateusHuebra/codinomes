@@ -24,6 +24,9 @@ class CodinomesController extends Controller
         $update = UpdateFactory::build($update);
         ServerLog::log('update raw data: '.$updateRawData);
 
+        if(!$update) {
+            die;
+        }
         TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
 
         $updateHandler = HandlerFactory::build($update);
