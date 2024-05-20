@@ -19,7 +19,7 @@ class Ping implements Action {
             $text = "\n {$laravelTime}s for laravel\n+{$controllerTime}s for processes\n= {$totalTime}";
         }
         
-        $bot->sendMessage($update->getChatId(), 'pong'.$text);
+        $bot->sendMessage($update->getChatId(), 'pong'.$text, null, false, $update->getMessageId(), null, false, null, null, true);
     }
 
 }
