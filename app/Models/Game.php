@@ -192,10 +192,10 @@ class Game extends Model
         foreach($this->users as $user) {
             $user->leaveGame();
         }
-        foreach($this->cards as $card) {
-            $card->delete();
-        }
-        $this->delete();
+        
+        $this->cards()->delete();
+
+        parent::delete();
     }
 
     public function updateStatus(string $status) {
