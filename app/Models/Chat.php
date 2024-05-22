@@ -62,7 +62,7 @@ class Chat extends Model
         return self::create([
             'id' => $tgChat->getId(),
             'username' => $tgChat->getUsername(),
-            'title' => substr($tgChat->getTitle(), 0, 32),
+            'title' => mb_substr($tgChat->getTitle(), 0, 32, 'UTF-8'),
             'language' => 'pt-br'
         ]);
     }

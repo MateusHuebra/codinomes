@@ -55,7 +55,7 @@ class User extends Model
         return self::create([
             'id' => $tgUser->getId(),
             'username' => $tgUser->getUsername(),
-            'name' => substr($tgUser->getFirstName(), 0, 32),
+            'name' => mb_substr($tgUser->getFirstName(), 0, 32, 'UTF-8'),
             'language' => $tgUser->getLanguageCode(),
             'status' => 'actived'
         ]);
