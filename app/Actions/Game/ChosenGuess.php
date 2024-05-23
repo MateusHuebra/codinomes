@@ -29,13 +29,17 @@ class ChosenGuess implements Action {
 
         if($update->isType(Update::MESSAGE)) {
             $text = $update->getMessageText();
-            $card = GameCard::whereRaw('BINARY text = ?', [$text])->first();
+            $card = GameCard::where('game_id', $game->id)
+                ->whereRaw('BINARY text = ?', [$text])
+                ->first();
             if(!$card) {
                 return;
             }
         } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
-            $card = GameCard::find($data[CDM::NUMBER]);
+            $card = GameCard::where('game_id', $game->id)
+                ->where('id', $data[CDM::NUMBER])
+                ->first();
         }
 
         if($card->revealed) {
