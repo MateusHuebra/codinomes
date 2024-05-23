@@ -59,8 +59,15 @@ class BotApi extends OriginalBotApi {
         try {
             return parent::sendPhoto($chatId, $photo, $caption, $replyToMessageId, $replyMarkup, $disableNotification, $parseMode, $messageThreadId, $protectContent, $allowSendingWithoutReply);
         } catch(Exception $e) {
-            parent::sendMessage(env('TG_MY_ID'), "error trying to send photo to $chatId");
             return parent::sendPhoto($chatId, $photo, $caption, $replyToMessageId, $replyMarkup, $disableNotification, $parseMode, $messageThreadId, $protectContent, $allowSendingWithoutReply);
+        }
+    }
+
+    public function sendMessage($chatId, $text, $parseMode = null, $disablePreview = false, $replyToMessageId = null, $replyMarkup = null, $disableNotification = false, $messageThreadId = null, $protectContent = null, $allowSendingWithoutReply = null) {
+        try {
+            return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification, $messageThreadId, $protectContent, $allowSendingWithoutReply);
+        } catch(Exception $e) {
+            return parent::sendMessage($chatId, $text, $parseMode, $disablePreview, $replyToMessageId, $replyMarkup, $disableNotification, $messageThreadId, $protectContent, $allowSendingWithoutReply);
         }
     }
 
