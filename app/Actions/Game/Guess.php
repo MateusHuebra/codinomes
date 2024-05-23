@@ -43,7 +43,7 @@ class Guess implements Action {
                     $messageContent = new Text($emojis[$card->team].' '.$title);
                     $data = CDM::toString([
                         CDM::EVENT => CDM::GUESS,
-                        CDM::NUMBER => $card->id
+                        CDM::NUMBER => $card->position
                     ]);
                     $results[] = new Article($data, $title, null, null, null, null, $messageContent);
                 }

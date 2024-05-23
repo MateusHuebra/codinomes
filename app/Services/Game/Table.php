@@ -231,17 +231,17 @@ class Table {
         #region calculations
         //card position
         $cardByLine = 4;
-        if($card->id<2) {
+        if($card->position<2) {
             $y = 0;
-            $x = $card->id + 1;
+            $x = $card->position + 1;
         } else {
-            $y = floor(($card->id+2) / $cardByLine);
-            $x = $card->id+2 - ($cardByLine*$y);
+            $y = floor(($card->position+2) / $cardByLine);
+            $x = $card->position+2 - ($cardByLine*$y);
         }
         
         $cardX = self::BORDER+($x*210);
         $cardY = self::BORDER+($y*140);
-        if($card->id > 21) {
+        if($card->position > 21) {
             $cardX+= 105;
         }
 
@@ -291,7 +291,7 @@ class Table {
                     imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
                 }
 
-                if($card->id === $highlightCard) {
+                if($card->position === $highlightCard) {
                     $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
                     imagecopy($masterCardImage, $highlightedImage, 0, 0, 0, 0, 210, 140);
                 } else {

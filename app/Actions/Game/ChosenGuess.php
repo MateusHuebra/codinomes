@@ -38,7 +38,7 @@ class ChosenGuess implements Action {
         } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
             $card = GameCard::where('game_id', $game->id)
-                ->where('id', $data[CDM::NUMBER])
+                ->where('position', $data[CDM::NUMBER])
                 ->first();
         }
 
@@ -88,7 +88,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.win_color', null, $chatLanguage);
                 $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption,$card->id, $user->team);
+                Table::send($game, $bot, $caption,$card->position, $user->team);
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
@@ -96,7 +96,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.history', null, $chatLanguage);
                 $caption = new Caption($title, $text);
                 
-                Table::send($game, $bot, $caption,$card->id);
+                Table::send($game, $bot, $caption,$card->position);
 
             //skip
             } else {
@@ -106,7 +106,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.history', null, $chatLanguage);
                 $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption, $card->id);
+                Table::send($game, $bot, $caption, $card->position);
             }
 
         //black card
@@ -118,7 +118,7 @@ class ChosenGuess implements Action {
             $text = AppString::get('game.win_black', null, $chatLanguage);
             $caption = new Caption($title, $text);
 
-            Table::send($game, $bot, $caption,$card->id, $user->getEnemyTeam());
+            Table::send($game, $bot, $caption,$card->position, $user->getEnemyTeam());
         
         //incorrect guess
         } else {
@@ -133,7 +133,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.win_color', null, $chatLanguage);
                 $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption,$card->id, $user->getEnemyTeam());
+                Table::send($game, $bot, $caption,$card->position, $user->getEnemyTeam());
             
             //skip
             } else {
@@ -143,7 +143,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.history', null, $chatLanguage);
                 $caption = new Caption($title, $text);
     
-                Table::send($game, $bot, $caption, $card->id);
+                Table::send($game, $bot, $caption, $card->position);
             }
         }
 

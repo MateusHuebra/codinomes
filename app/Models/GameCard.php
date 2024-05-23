@@ -28,7 +28,7 @@ class GameCard extends Model
         foreach ($shuffledCards as $key => $card) {
             $gameCard = new GameCard;
             $gameCard->game_id = $game->id;
-            $gameCard->id = $key;
+            $gameCard->position = $key;
             $gameCard->text = $card['text'];
             $gameCard->team = $card['team']??'w';
             $gameCard->revealed = false;
