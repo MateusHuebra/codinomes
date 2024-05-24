@@ -74,10 +74,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            if(preg_match('/\*.+ (?<hint>SEM DICA ∞+)\*(\R>.+)*$/', $this->history, $matches)) {
-                $this->lastHint = $matches['hint'];
-            }
-            preg_match('/\*.+ (?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ ]{1,16} [0-9∞]+)\*(\R>.+)*$/', $this->history, $matches);
+            preg_match('/\*.. (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>.+)*$/', $this->history, $matches);
             $this->lastHint = $matches['hint'];
         }
         return $this->lastHint;
