@@ -38,22 +38,22 @@ class CheckTurnLeftTime {
                 }
                 
             } else if ($now - $time >= (60*($timer-1))) {
-                $this->warn($game->chat_id, 1, $bot);
+                $this->warn($game, 1, $bot);
 
             } else if ($now - $time >= (60*($timer-2))) {
-                $this->warn($game->chat_id, 2, $bot);
+                $this->warn($game, 2, $bot);
                 
             } else if ($timer > 3 && $now - $time >= (60*($timer-3))) {
-                $this->warn($game->chat_id, 3, $bot);
+                $this->warn($game, 3, $bot);
                 
             } else if ($timer > 5 && $now - $time >= (60*($timer-5))) {
-                $this->warn($game->chat_id, 3, $bot);
+                $this->warn($game, 5, $bot);
                 
             } else if ($timer > 7 && $now - $time >= (60*($timer-7))) {
-                $this->warn($game->chat_id, 3, $bot);
+                $this->warn($game, 7, $bot);
                 
             } else if ($timer > 10 && $now - $time >= (60*($timer-10))) {
-                $this->warn($game->chat_id, 3, $bot);
+                $this->warn($game, 10, $bot);
                 
             }
         }
@@ -93,7 +93,13 @@ class CheckTurnLeftTime {
         Table::send($game, $bot, $caption);
     }
 
-    private function warn($chatId, int $time, BotApi $bot) {
+    private function warn(Game $game, int $time, BotApi $bot) {
+        if($game->status == 'master_a' || $game->status == 'master_b') {
+            $team = substr($game->status, 7, 1);
+            $chatId = $game->users()->fromTeamRole($team, 'master')->first()->id;
+        } else {
+            $chatId = $game->chat_id;
+        }
         if($time==1){
             $minute = AppString::get('time.minute');
         } else {
