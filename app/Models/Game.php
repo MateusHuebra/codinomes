@@ -213,7 +213,11 @@ class Game extends Model
     }
 
     public function addToHistory(string $line) {
-        $this->history = $this->history.PHP_EOL.$line;
+        if($this->history === null) {
+            $this->history = $line;
+        } else {
+            $this->history = $this->history.PHP_EOL.$line;
+        }
         $this->save();
     }
 
