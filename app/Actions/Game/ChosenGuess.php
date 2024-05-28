@@ -55,7 +55,7 @@ class ChosenGuess implements Action {
             'b' => Game::COLORS[$game->color_b]
         ];
         $emoji = $emojis[$card->team];
-        $game->addToHistory('>'.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
+        $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
         
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [

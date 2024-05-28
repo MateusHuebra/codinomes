@@ -214,11 +214,18 @@ class Game extends Model
 
     public function addToHistory(string $line) {
         if($this->history === null) {
-            $this->history = $line;
+            $this->history = '**>'.$line;
         } else {
-            $this->history = $this->history.PHP_EOL.$line;
+            $this->history = $this->history.PHP_EOL.'>'.$line;
         }
         $this->save();
+    }
+    
+    public function getHistory() {
+        if(is_null($this->history)) {
+            return null;
+        }
+        return str_replace(['.', '-'], ['\.', '\-'], $this->history).'||';
     }
 
     public function hasRequiredPlayers() : Bool {

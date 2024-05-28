@@ -17,7 +17,7 @@ class History implements Action {
         }
         
         if($game) {
-            $text = str_replace(['.', '-'], ['\.', '\-'], $game->history)??AppString::get('error.no_history');
+            $text = $game->getHistory()??AppString::get('error.no_history');
         } else {
             $text = AppString::get('error.no_game');
         }
