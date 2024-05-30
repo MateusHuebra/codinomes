@@ -191,7 +191,7 @@ class Settings implements Action {
         $chatPacks = $chat->packs;
         $take = 5;
         $skip = ($data[CDM::PAGE]) * $take;
-        $packs = $packs->skip($skip)->take($take);
+        $packs = $packs->orderBy('id', 'asc')->skip($skip)->take($take);
         $totalPages = $packs->count() / $take;
 
         foreach ($packs->get() as $pack) {
