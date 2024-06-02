@@ -18,7 +18,7 @@
             "Welcome to Codinomes!!\nChoose your language"
         ],
         "questions": [
-            "Have questions? Check out /help"
+            "Have questions? Check out /help\n\nPlay or report bugs in our official group as well @CodinomesGrupo"
         ]
     },
     "game": {
@@ -42,6 +42,9 @@
         ],
         "stopped_by_time": [
             "Game canceled due to inactivity"
+        ],
+        "try_official_group": [
+            "Consider starting a game in our official group @CodinomesGrupo to find fellow players!"
         ],
         "no_game": [
             "No game going on now"
@@ -137,7 +140,7 @@
             "Team {team} won the game!"
         ],
         "win_black": [
-            "Guessed a black card"
+            "Opponent guessed a black card"
         ],
         "win_color": [
             "Guessed all cards"
@@ -283,8 +286,14 @@
         "no_enough_cards": [
             "There's no enough cards in the actived packs to start the game"
         ],
+        "no_packs": [
+            "There are no selected word packs, choose them in /settings and feel free to create your own packs by sending /packs as a dm to the bot"
+        ],
         "no_hint": [
             "NO HINT"
+        ],
+        "must_be_supergroup": [
+            "This bot only works in supergroups (changing an admin's role name is enough to transform a group into a supergroup, after that send /start)"
         ]
     },
     "time": {

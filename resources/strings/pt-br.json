@@ -18,7 +18,7 @@
             "Boas vindas ao Codinomes!!\nEscolha o seu idioma"
         ],
         "questions": [
-            "Se tiver alguma dúvida, dê uma olhada em /ajuda"
+            "Se tiver alguma dúvida, dê uma olhada em /ajuda\n\nJogue ou reporte erros também em nosso grupo oficial @CodinomesGrupo"
         ]
     },
     "game": {
@@ -42,6 +42,9 @@
         ],
         "stopped_by_time": [
             "Jogo cancelado por inatividade"
+        ],
+        "try_official_group": [
+            "Considere iniciar uma partida no nosso grupo oficial @CodinomesGrupo para encontrar colegas de jogo!"
         ],
         "no_game": [
             "Nenhum jogo em andamento"
@@ -137,7 +140,7 @@
             "A equipe {team} venceu o jogo!"
         ],
         "win_black": [
-            "Tentou uma carta preta"
+            "Oponente tentou uma carta preta"
         ],
         "win_color": [
             "Todas as cartas foram encontradas"
@@ -283,8 +286,14 @@
         "no_enough_cards": [
             "Não há cartas o suficiente nos packs ativos para se iniciar a partida"
         ],
+        "no_packs": [
+            "Não há packs de palavras selecionados, escolha-os em /config e fique à vontade para criar seus próprios packs enviando /pacotes no privado do bot"
+        ],
         "no_hint": [
             "SEM DICA"
+        ],
+        "must_be_supergroup": [
+            "O bot só funciona em super grupos (mudar o nome do cargo de um Admin já transforma o grupo em super gropo, após isso envie /start)"
         ]
     },
     "time": {

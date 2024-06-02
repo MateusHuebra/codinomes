@@ -25,6 +25,9 @@ class Start implements Action {
                     $bot->sendMessage($chat->id, AppString::get('start.questions'), null, false, $update->getMessageId(), null, false, null, null, true);
                 }
             }
+
+        } else {
+            $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'));
         }
     }
 

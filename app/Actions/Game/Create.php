@@ -29,10 +29,6 @@ class Create implements Action {
             $bot->sendMessage($chat->id, AppString::get('game.already_exists'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if(!in_array($chat->id, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
-            $bot->sendMessage($chat->id, AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
-            return;
-        }
 
         $message = $bot->sendMessage($chat->id, AppString::get('game.creating'));
 
@@ -46,6 +42,10 @@ class Create implements Action {
         $chat->notifiableUsers->notify($game, $bot);
         Menu::send($game, $bot);
         $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
+
+        if($game->chat->packs()->count() == 0) {
+            $bot->sendMessage($chat->id, AppString::get('error.no_packs'));
+        }
     }
 
 }
