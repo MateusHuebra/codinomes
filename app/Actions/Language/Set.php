@@ -17,9 +17,8 @@ class Set implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         try {
             $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
-        } catch(Exception $e) {
-            //
-        }
+        } catch(Exception $e) {}
+
         $data = CDM::toArray($update->getData());
         $user = User::find($update->getFrom()->getId());
         if($update->isChatType('private')) {
@@ -29,7 +28,7 @@ class Set implements Action {
         } else if($update->isChatType('supergroup')) {
             $chat = $update->findChat();
             $chatId = $chat->id;
-            if($chat->isAdmin($user, $bot) || $data[CDM::FIRST_TIME]) {
+            if($data[CDM::FIRST_TIME] || $chat->isAdmin($user, $bot)) {
                 $this->setUserOrChatLanguage($chat, $data, $bot, $update->getMessage());
             } else {
                 $bot->sendMessage($chatId, AppString::get('error.admin_only'));
