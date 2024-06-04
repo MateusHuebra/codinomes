@@ -26,7 +26,7 @@ class Stop implements Action {
             return;
         }
         
-        $game->stop($bot, true);
+        $game->stop($bot);
 
         $bot->sendMessage($chat->id, AppString::get('game.stopped'));
     }

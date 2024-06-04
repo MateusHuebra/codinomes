@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use TelegramBot\Api\Types\User as TGUser;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
@@ -21,6 +23,16 @@ class User extends Model
         'language',
         'status'
     ];
+
+    public function stats(): HasOne
+    {
+        return $this->hasOne(UserStats::class);
+    }
+
+    public function colorStats(): HasMany
+    {
+        return $this->hasMany(UserColorStats::class);
+    }
     
     public function game()
     {

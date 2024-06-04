@@ -29,7 +29,7 @@ class StopAbandonedLobbies {
                     }
                 } catch(Exception $e) {}
 
-                $game->stop($bot, true);
+                $game->stop($bot);
             }
         }
     }

@@ -178,8 +178,8 @@ class Game extends Model
         return true;
     }
 
-    public function stop(BotApi $bot, bool $delete = false) {
-        if($delete) {
+    public function stop(BotApi $bot, string $winner = null) {
+        if($winner == null) {
             if($this->status == 'creating') {
                 $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
             } else {
@@ -191,6 +191,37 @@ class Game extends Model
         }
         
         foreach($this->users as $user) {
+            if($winner != null) {
+                $stats = UserStats::firstOrNew([
+                    'user_id' => $user->id
+                ]);
+                $colorStats = UserColorStats::firstOrNew([
+                    'user_id' => $user->id,
+                    'color' => $this->{'color_'.$user->team}
+                ]);
+
+                if($user->role == 'master') {
+                    $stats->games_as_master+= 1;
+                    $colorStats->games_as_master+= 1;
+                } else {
+                    $stats->games_as_agent+= 1;
+                    $colorStats->games_as_agent+= 1;
+                }
+    
+                if($user->team == $winner) {
+                    if($user->role == 'master') {
+                        $stats->wins_as_master+= 1;
+                        $colorStats->wins_as_master+= 1;
+                    } else {
+                        $stats->wins_as_agent+= 1;
+                        $colorStats->wins_as_agent+= 1;
+                    }
+                }
+
+                $stats->save();
+                $colorStats->save();
+            }
+
             $user->leaveGame();
         }
         

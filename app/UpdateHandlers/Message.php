@@ -18,6 +18,7 @@ use App\Actions\Notify;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
 use App\Actions\Start;
+use App\Actions\Stats;
 use App\Actions\Test;
 use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Message as MessageType;
@@ -129,6 +130,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'test') {
             return new Test;
+
+        } else if($command == 'stats') {
+            return new Stats;
 
         } else if($command == 'ping') {
             return new Ping;

@@ -97,7 +97,7 @@ class Table {
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
-            $game->stop($bot);
+            $game->stop($bot, $winner);
         }
     }
 
@@ -111,10 +111,6 @@ class Table {
         if($game->status=='master_a' || $game->status=='master_b') {
             return new InlineKeyboardMarkup([
                 [
-                    [
-                        'text' => AppString::get('game.give_hint', null, $chatLanguage),
-                        'switch_inline_query_current_chat' => ''
-                    ],
                     [
                         'text' => AppString::get('game.open_dm', null, $chatLanguage),
                         'url' => 't.me/CodinomesBot'

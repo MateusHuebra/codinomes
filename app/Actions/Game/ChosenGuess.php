@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
+use App\Models\UserStats;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -74,6 +75,7 @@ class ChosenGuess implements Action {
 
         //correct guess
         if($card->team == $user->team) {
+            $attemptType = 'ally';
             if($game->attempts_left!==null) {
                 $game->attempts_left--;
             }
@@ -86,17 +88,15 @@ class ChosenGuess implements Action {
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-                $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption,$card->position, $user->team);
+                $winner = $user->team;
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
                 $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
                 $text = AppString::get('game.history', null, $chatLanguage);
-                $caption = new Caption($title, $text);
-                
-                Table::send($game, $bot, $caption,$card->position);
+
+                $winner = null;
 
             //skip
             } else {
@@ -104,24 +104,24 @@ class ChosenGuess implements Action {
 
                 $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
                 $text = AppString::get('game.history', null, $chatLanguage);
-                $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption, $card->position);
+                $winner = null;
             }
 
         //black card
         } else if($card->team == 'x') {
+            $attemptType = 'black';
             $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
             $title = AppString::get('game.win', [
                 'team' => AppString::get('color.'.$color)
             ], $chatLanguage);
             $text = AppString::get('game.win_black', null, $chatLanguage);
-            $caption = new Caption($title, $text);
 
-            Table::send($game, $bot, $caption,$card->position, $user->getEnemyTeam());
-        
+            $winner = $user->getEnemyTeam();
+            
         //incorrect guess
         } else {
+            $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             $cardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
             
             //won
@@ -131,9 +131,8 @@ class ChosenGuess implements Action {
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-                $caption = new Caption($title, $text);
 
-                Table::send($game, $bot, $caption,$card->position, $user->getEnemyTeam());
+                $winner = $user->getEnemyTeam();
             
             //skip
             } else {
@@ -141,11 +140,14 @@ class ChosenGuess implements Action {
 
                 $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
                 $text = AppString::get('game.history', null, $chatLanguage);
-                $caption = new Caption($title, $text);
-    
-                Table::send($game, $bot, $caption, $card->position);
+
+                $winner = null;
             }
         }
+
+        $caption = new Caption($title, $text);
+        UserStats::addAttempt($game, $user->team, $attemptType);
+        Table::send($game, $bot, $caption, $card->position, $winner);
 
     }
 
