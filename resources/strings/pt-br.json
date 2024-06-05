@@ -294,6 +294,9 @@
         ],
         "must_be_supergroup": [
             "O bot só funciona em super grupos (mudar o nome do cargo de um Admin já transforma o grupo em super gropo, após isso envie /start)"
+        ],
+        "no_enough_stats": [
+            "Sem dados suficientes para as estatísticas"
         ]
     },
     "time": {
@@ -308,6 +311,11 @@
         ],
         "out": [
             "Tempo esgotado!"
+        ]
+    },
+    "stats": {
+        "general": [
+            "*Estatísticas de {name}*\n**>Partidas jogadas:   {totalGames}\n>Vitórias:                   {totalWins}   {totalWinsPercent}%\n>  \\-  como Mestre:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  como Agente:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cartas escolhidas como Agente:*\n>  \\-  Aliada:          {attemptsOnAlly}\n>  \\-  Oponente:   {attemptsOnOpponent}\n>  \\-  Branca:         {attemptsOnWhite}\n>  \\-  Preta:            {attemptsOnBlack}\n>  \n>*Cartas guiadas como Mestre:*\n>  \\-  Aliada:          {hintedToAlly}\n>  \\-  Oponente:   {hintedToOpponent}\n>  \\-  Branca:         {hintedToWhite}\n>  \\-  Preta:            {hintedToBlack}||"
         ]
     },
     "help": {

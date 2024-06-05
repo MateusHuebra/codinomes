@@ -110,6 +110,29 @@ abstract class Update {
         return $this->getChatType() === $type;
     }
     #endregion
+    public function getReplyToMessage() {
+        if(!isset($this->replyToMessage)) {
+            $this->replyToMessage = $this->getMessage()->getReplyToMessage();
+        }
+        return $this->replyToMessage;
+    }
+
+    public function getReplyToMessageFrom() {
+        if(!isset($this->replyToMessageFrom)) {
+            $this->replyToMessageFrom = $this->getReplyToMessage()->getFrom();
+        }
+        return $this->replyToMessageFrom;
+    }
+
+    public function getReplyToMessageFromId() {
+        if(!isset($this->replyToMessageFromId)) {
+            $this->replyToMessageFromId = $this->getReplyToMessageFrom()->getId();
+        }
+        return $this->replyToMessageFromId;
+    }
+    #region reply to methods
+
+    #endregion
 
     #region methods which need child methods
     public function getMessageId() {

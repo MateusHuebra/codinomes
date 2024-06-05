@@ -294,6 +294,9 @@
         ],
         "must_be_supergroup": [
             "This bot only works in supergroups (changing an admin's role name is enough to transform a group into a supergroup, after that send /start)"
+        ],
+        "no_enough_stats": [
+            "Not enough data for statistics"
         ]
     },
     "time": {
@@ -308,6 +311,11 @@
         ],
         "out": [
             "Out of time!"
+        ]
+    },
+    "stats": {
+        "general": [
+            "*Statistics of {name}*\n**>Games played:   {totalGames}\n>Wins:                   {totalWins}   {totalWinsPercent}%\n>  \\-  as Master:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  as Agent:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cards chosen as Agent:*\n>  \\-  Ally:          {attemptsOnAlly}\n>  \\-  Opponent:   {attemptsOnOpponent}\n>  \\-  White:         {attemptsOnWhite}\n>  \\-  Black:            {attemptsOnBlack}\n>  \n>*Cards hinted to as Master:*\n>  \\-  Ally:          {hintedToAlly}\n>  \\-  Opponent:   {hintedToOpponent}\n>  \\-  White:         {hintedToWhite}\n>  \\-  Black:            {hintedToBlack}||"
         ]
     },
     "help": {
