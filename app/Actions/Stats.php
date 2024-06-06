@@ -28,7 +28,7 @@ class Stats implements Action {
         $winsAsAgentPercent = ($stats->games_as_agent == 0) ? 0 : ($stats->wins_as_agent / $stats->games_as_agent) * 100;
         
         $text = AppString::get('stats.general', [
-            "name" => AppString::parseMarkdownV2($user->name),
+            "name" => $user->name,
             "totalGames" => $totalGames,
             "totalWins" => $totalWins,
             "totalWinsPercent" => $totalWinsPercent,
