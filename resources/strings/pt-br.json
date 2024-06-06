@@ -224,6 +224,12 @@
         "admin_only_info": [
             "Defina se apenas admins do grupo podem mudar as configurações, parar partidas, etc"
         ],
+        "compound_words": [
+            "Palavras compostas"
+        ],
+        "compound_words_info": [
+            "Permite dicas de palavras compostas (com espaço ou hífen)"
+        ],
         "timer": [
             "Timer"
         ],

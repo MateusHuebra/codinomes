@@ -224,6 +224,12 @@
         "admin_only_info": [
             "Choose if only group admins can change settings, stop games, etc"
         ],
+        "compound_words": [
+            "Compound words"
+        ],
+        "compound_words_info": [
+            "Allows compound word (with space or hyphen) as hints"
+        ],
         "timer": [
             "Timer"
         ],

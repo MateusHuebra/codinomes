@@ -13,6 +13,7 @@ use App\Services\CallbackDataManager as CDM;
 class Hint implements Action {
 
     const REGEX_HINT_NUMBER = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,16})( (?<number>[0-9]))?$/';
+    const REGEX_HINT_NUMBER_COMPOUND = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ -]{1,16})( (?<number>[0-9]))?$/';
 
     public function run(Update $update, BotApi $bot, string $forceText = null) {
         $query = mb_strtoupper($forceText??$update->getQuery(), 'UTF-8');
@@ -20,7 +21,7 @@ class Hint implements Action {
         $cardsLeft = $game->cards->where('team', $game->team)->where('revealed', false)->count();
 
         $results = [];
-        if(preg_match(self::REGEX_HINT_NUMBER, $query, $matches) && (!isset($matches['number']) || $matches['number'] <= $cardsLeft)) {
+        if(preg_match($game->chat->compound_words ? self::REGEX_HINT_NUMBER_COMPOUND : self::REGEX_HINT_NUMBER, $query, $matches) && (!isset($matches['number']) || $matches['number'] <= $cardsLeft)) {
             if(!isset($matches['number'])) {
                 $matches['number'] = '∞';
             }

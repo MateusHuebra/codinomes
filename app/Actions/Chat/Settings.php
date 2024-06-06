@@ -118,6 +118,21 @@ class Settings implements Action {
             ],
             [
                 [
+                    'text' => AppString::get('settings.compound_words'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_COMPOUND_WORDS,
+                        CDM::VALUE => CDM::INFO
+                    ])
+                ],
+                [
+                    'text' => AppString::get('settings.'.($chat->compound_words?'on':'off')),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_COMPOUND_WORDS
+                    ])
+                ]
+            ],
+            [
+                [
                     'text' => AppString::get('settings.timer'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::CHANGE_TIMER,
