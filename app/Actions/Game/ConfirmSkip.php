@@ -42,7 +42,7 @@ class ConfirmSkip implements Action {
         } catch(Exception $e) {}
 
         if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
-            $game->updateStatus('master_'.$user->getEnemyTeam());
+            $game->updateStatus('playing', $user->getEnemyTeam(), 'master');
             $game->attempts_left = null;
 
             $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
