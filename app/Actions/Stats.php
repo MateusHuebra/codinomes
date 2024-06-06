@@ -23,9 +23,9 @@ class Stats implements Action {
 
         $totalGames = $stats->games_as_master + $stats->games_as_agent;
         $totalWins = $stats->wins_as_master + $stats->wins_as_agent;
-        $totalWinsPercent = ($totalGames == 0) ? 0 : ($totalWins / $totalGames) * 100;
-        $winsAsMasterPercent = ($stats->games_as_master == 0) ? 0 : ($stats->wins_as_master / $stats->games_as_master) * 100;
-        $winsAsAgentPercent = ($stats->games_as_agent == 0) ? 0 : ($stats->wins_as_agent / $stats->games_as_agent) * 100;
+        $totalWinsPercent = ($totalGames == 0) ? 0 : number_format(($totalWins / $totalGames) * 100, 1);
+        $winsAsMasterPercent = ($stats->games_as_master == 0) ? 0 : number_format(($stats->wins_as_master / $stats->games_as_master) * 100, 1);
+        $winsAsAgentPercent = ($stats->games_as_agent == 0) ? 0 : number_format(($stats->wins_as_agent / $stats->games_as_agent) * 100, 1);
         
         $text = AppString::get('stats.general', [
             "name" => $user->name,

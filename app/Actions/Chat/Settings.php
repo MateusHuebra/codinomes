@@ -225,6 +225,13 @@ class Settings implements Action {
                 ])
             ];
         }
+        $line[] = [
+            'text' => AppString::get('game.back'),
+            'callback_data' => CDM::toString([
+                CDM::EVENT => CDM::SETTINGS,
+                CDM::MENU => CDM::PACKS,
+            ])
+        ];
         if($data[CDM::PAGE]<$totalPages-1) {
             $line[] = [
                 'text' => '>',
@@ -237,13 +244,6 @@ class Settings implements Action {
         }
         $buttonsArray[] = $line;
         
-        $buttonsArray[] = [[
-            'text' => AppString::get('game.back'),
-            'callback_data' => CDM::toString([
-                CDM::EVENT => CDM::SETTINGS,
-                CDM::MENU => CDM::PACKS,
-            ])
-        ]];
         return new InlineKeyboardMarkup($buttonsArray);
     }
 

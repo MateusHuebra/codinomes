@@ -39,7 +39,8 @@ class SelectTeamAndRole implements Action {
         $data = CDM::toArray($update->getData());
         $role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
         if($role=='master') {
-            $isThereAlreadyAMasterInSelectedTeam = $game->users->where('id', '!=', $user->id)
+            $isThereAlreadyAMasterInSelectedTeam = $game->users()
+                ->where('id', '!=', $user->id)
                 ->where('team', $data[CDM::TEAM])
                 ->where('role', 'master')
                 ->count();
