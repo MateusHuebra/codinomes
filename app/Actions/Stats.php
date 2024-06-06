@@ -46,7 +46,7 @@ class Stats implements Action {
             "hintedToOpponent" => $stats->hinted_to_opponent,
             "hintedToWhite" => $stats->hinted_to_white,
             "hintedToBlack" => $stats->hinted_to_black
-        ]);
+        ], null, true);
 
         $bot->sendMessage($update->getChatId(), $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
     }
