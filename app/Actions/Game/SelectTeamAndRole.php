@@ -22,7 +22,7 @@ class SelectTeamAndRole implements Action {
             return;
         }
 
-        $game = $chat->game;
+        $game = $chat->currentGame();
         if(!$game || $game->status != 'creating') {
             if(!$game) {
                 $bot->deleteMessage($chat->id, $update->getMessageId());
@@ -31,7 +31,7 @@ class SelectTeamAndRole implements Action {
             return;
         }
 
-        if($user->game_id && $user->game_id != $game->id) {
+        if($user->currentGame() && $user->currentGame()->id != $game->id) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.already_playing');
             return;
         }
@@ -51,10 +51,14 @@ class SelectTeamAndRole implements Action {
 
         $user->name = substr($update->getFrom()->getFirstName(), 0, 32);
         $user->username = $update->getFrom()->getUsername();
-        $user->game_id = $game->id;
-        $user->team = $data[CDM::TEAM];
-        $user->role = ($data[CDM::ROLE]==CDM::MASTER)?'master':'agent';
         $user->save();
+        
+        $user->games()->syncWithoutDetaching([
+            $game->id => [
+                'team' => $data[CDM::TEAM],
+                'role' => $role
+                ]
+        ]);
 
         $this->changeColorToUsersDefault($game, $user);
 
@@ -74,14 +78,15 @@ class SelectTeamAndRole implements Action {
     }
 
     private function changeColorToUsersDefault(Game $game, User $user) {
-        if($user->role!='master') {
+        $player = $user->currentGame()->player;
+        if($player->role != 'master') {
             return;
         }
         if(!$user->default_color) {
             return;
         }
         if(
-            $user->default_color == $game->{'color_'.$user->team}
+            $user->default_color == $game->{'color_'.$player->team}
             ||
             ($user->default_color == $game->{'color_'.$user->getEnemyTeam()} && $game->hasMaster($user->getEnemyTeam()))
         ) {
@@ -93,7 +98,7 @@ class SelectTeamAndRole implements Action {
             $game->{'color_'.$user->getEnemyTeam()} = $colors[rand(0, 1)];
         }
 
-        $game->{'color_'.$user->team} = $user->default_color;
+        $game->{'color_'.$player->team} = $user->default_color;
         $game->save();
     }
 

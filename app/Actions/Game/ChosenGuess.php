@@ -19,10 +19,11 @@ class ChosenGuess implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        $game = $user->game;
+        $game = $user->currentGame();
+        $player = $game->player;
         $chatLanguage = $game->chat->language;
 
-        if(!(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent'))) {
+        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)) {
             return;
         }
         if($game->attempts_left < 0) {
@@ -62,22 +63,22 @@ class ChosenGuess implements Action {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
 
         //correct guess
-        if($card->team == $user->team) {
+        if($card->team == $player->team) {
             $attemptType = 'ally';
             if($game->attempts_left!==null) {
                 $game->attempts_left--;
             }
-            $cardsLeft = $game->cards->where('team', $user->team)->where('revealed', false)->count();
+            $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
 
             //won
             if($cardsLeft <= 0) {
-                $color = ($user->team == 'a') ? $game->color_a : $game->color_b;
+                $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
 
-                $winner = $user->team;
+                $winner = $player->team;
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
@@ -134,7 +135,7 @@ class ChosenGuess implements Action {
         }
 
         $caption = new Caption($title, $text);
-        UserStats::addAttempt($game, $user->team, $attemptType);
+        UserStats::addAttempt($game, $player->team, $attemptType);
         Table::send($game, $bot, $caption, $card->position, $winner);
 
     }

@@ -14,7 +14,7 @@ class ConfirmSkip implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        $game = $user->game;
+        $game = $user->currentGame();
         $chatLanguage = $game->chat->language;
 
         if($update->isType(Update::CALLBACK_QUERY)) {
@@ -28,6 +28,7 @@ class ConfirmSkip implements Action {
         if(!$user || !$game) {
             return;
         }
+        $player = $game->player;
 
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
@@ -40,7 +41,7 @@ class ConfirmSkip implements Action {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {
+        if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
             $game->updateStatus('master_'.$user->getEnemyTeam());
             $game->attempts_left = null;
 

@@ -10,7 +10,7 @@ class Start implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $chat = $update->findChat();
-        $game = $chat->game;
+        $game = $chat->currentGame();
 
         if(!$game) {
             $bot->deleteMessage($chat->id, $update->getMessageId());

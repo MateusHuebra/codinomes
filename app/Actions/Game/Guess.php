@@ -16,7 +16,7 @@ class Guess implements Action {
     const REGEX = '/^([ A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\-.]{1,16})?$/';
 
     public function run(Update $update, BotApi $bot) : Void {
-        $game = $update->findUser()->game;
+        $game = $update->findUser()->currentGame();
         $emojis = [
             'w' => Game::COLORS['white'],
             'x' => Game::COLORS['black'],

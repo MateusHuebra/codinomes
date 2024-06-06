@@ -25,15 +25,15 @@ class Table {
         $chatLanguage = $game->chat->language;
 
         if($winner) {
-            $backgroundColor = $winner == 'a' ? $game->color_a : $game->color_b;
+            $backgroundColor = $game->{'color_'.$winner};
         } else {
-            $backgroundColor = ($game->status=='master_a' || $game->status=='agent_a') ? $game->color_a : $game->color_b;
+            $backgroundColor = $game->{'color_'.$game->team};
         }
         $cards = $game->cards;
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
         
-        $sendToMasters = ($sendToBothMasters || $game->status == 'master_a' || $game->status == 'master_b' || $winner);
+        $sendToMasters = ($sendToBothMasters || $game->role == 'master' || $winner);
 
         if($sendToMasters) {
             $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
@@ -69,11 +69,11 @@ class Table {
 
             if($sendToMasters) {
                 try{
-                    if($sendToBothMasters || $game->status == 'master_a') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->status=='master_a')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
+                    if($sendToBothMasters || $game->team == 'a') {
+                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->team=='a')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
                     }
-                    if($sendToBothMasters || $game->status == 'master_b') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->status=='master_b')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
+                    if($sendToBothMasters || $game->team == 'b') {
+                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
@@ -108,7 +108,7 @@ class Table {
     }
 
     private static function getKeyboard(Game $game, string $chatLanguage) {
-        if($game->status=='master_a' || $game->status=='master_b') {
+        if($game->role=='master') {
             return new InlineKeyboardMarkup([
                 [
                     [

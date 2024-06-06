@@ -20,7 +20,7 @@ class Menu implements Action {
         $data = CDM::toArray($update->getData());
         $user = $update->findUser();
         $chat = $update->findChat();
-        $game = $chat->game;
+        $game = $chat->currentGame();
 
         if(!$game) {
             $bot->deleteMessage($chat->id, $update->getMessageId());

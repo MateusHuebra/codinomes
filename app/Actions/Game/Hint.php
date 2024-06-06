@@ -16,9 +16,8 @@ class Hint implements Action {
 
     public function run(Update $update, BotApi $bot, string $forceText = null) {
         $query = mb_strtoupper($forceText??$update->getQuery(), 'UTF-8');
-        $game = $update->findUser()->game;
-        $team = ($game->status=='master_a' || $game->status=='agent_a') ? 'a' : 'b';
-        $cardsLeft = $game->cards->where('team', $team)->where('revealed', false)->count();
+        $game = $update->findUser()->currentGame();
+        $cardsLeft = $game->cards->where('team', $game->team)->where('revealed', false)->count();
 
         $results = [];
         if(preg_match(self::REGEX_HINT_NUMBER, $query, $matches) && (!isset($matches['number']) || $matches['number'] <= $cardsLeft)) {

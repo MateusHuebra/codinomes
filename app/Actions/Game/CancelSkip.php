@@ -14,7 +14,7 @@ class CancelSkip implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        $game = $user->game;
+        $game = $user->currentGame();
 
         try {
             $bot->answerCallbackQuery($update->getId(), AppString::get('settings.loading'));
@@ -24,7 +24,8 @@ class CancelSkip implements Action {
             return;
         }
 
-        if(($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') || ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')) {
+        $player = $game->player;
+        if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
             $keyboard = new InlineKeyboardMarkup([
                 [
                     [

@@ -28,17 +28,14 @@ class InlineQuery implements UpdateHandler {
 
     private function getEvent($update) {
         $user = $update->findUser();
-        $game = $user->game;
+        $game = $user->currentGame();
         if($user && $game) {
-            if($game->status=='creating' && $user->role=='master') {
-                return null;//'color';
-            } else if($game->status=='master_a' && $user->team=='a' && $user->role=='master') {
+            $player = $game->player;
+            if($game->status == 'creating') {
+                return null;
+            } else if($game->role == 'master' && $player->role == 'master' && $player->team == $game->team) {
                 return 'hint';
-            } else if($game->status=='master_b' && $user->team=='b' && $user->role=='master') {
-                return 'hint';
-            } else if($game->status=='agent_a' && $user->team=='a' && $user->role=='agent') {
-                return 'guess';
-            } else if($game->status=='agent_b' && $user->team=='b' && $user->role=='agent') {
+            } else if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
                 return 'guess';
             } else {
                 return null;

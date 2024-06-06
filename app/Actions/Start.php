@@ -19,8 +19,8 @@ class Start implements Action {
             
         } else if($update->isChatType('supergroup')) {
             if($chat = $this->checkIfUserOrChatExists($update->getChat(), Chat::class, $bot, 'language.choose_chat')) {
-                if($chat->game && $user = $update->findUser()) {
-                    $chat->game->start($bot, $user, 1);
+                if($chat->currentGame() && $user = $update->findUser()) {
+                    $chat->currentGame()->start($bot, $user, 1);
                 } else {
                     $bot->sendMessage($chat->id, AppString::get('start.questions'), null, false, $update->getMessageId(), null, false, null, null, true);
                 }

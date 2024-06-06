@@ -34,16 +34,18 @@ class User extends Model
         return $this->hasMany(UserColorStats::class);
     }
     
-    public function game()
+    public function games()
     {
-        return $this->belongsTo(Game::class);
+        return $this->belongsToMany(Game::class)->withPivot('team', 'role')->as('player');
     }
 
-    public function leaveGame() {
-        $this->game_id = null;
-        $this->team = null;
-        $this->role = null;
-        $this->save();
+    public function currentGame()
+    {
+        return $this->belongsToMany(Game::class)
+            ->whereIn('games.status', ['playing', 'creating'])
+            ->withPivot('team', 'role')
+            ->as('player')
+            ->first();
     }
 
     public function scopeFromTeamRole(Builder $query, string $team, string $role): void
@@ -57,7 +59,7 @@ class User extends Model
     }
 
     public function getEnemyTeam() : String {
-        if($this->team == 'a') {
+        if($this->currentGame()->player->team == 'a') {
             return 'b';
         }
         return 'a';

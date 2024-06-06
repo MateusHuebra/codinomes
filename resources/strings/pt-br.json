@@ -257,7 +257,7 @@
             "A partida precisa de pelo menos um jogador em cada papel para começar"
         ],
         "only_oficial_groups": [
-            "No momento, o bot funciona apenas em grupos oficiais, entre em @CodinomesGrupo para jogar"
+            "No momento, o bot está passando por testes e, portanto, está funcionando apenas nos grupos oficiais\n\nEntre em @CodinomesGrupo para jogar"
         ],
         "wrong_hint_format_title": [
             "Digite uma dica"

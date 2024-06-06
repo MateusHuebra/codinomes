@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Chat as TGChat;
 
@@ -22,9 +22,14 @@ class Chat extends Model
         'language'
     ];
 
-    public function game(): HasOne
+    public function games(): HasMany
     {
-        return $this->hasOne(Game::class);
+        return $this->HasMany(Game::class);
+    }
+
+    public function currentGame()
+    {
+        return $this->hasMany(Game::class)->whereIn('status', ['creating', 'playing'])->first();
     }
 
     public function packs()

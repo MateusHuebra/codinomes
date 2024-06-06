@@ -257,7 +257,7 @@
             "The game needs at least a player for each role to get started"
         ],
         "only_oficial_groups": [
-            "For now, the bot only works for official groups, get in @CodinomesGrupo to play"
+            "For now, the bot is undergoing testing and therefore is only functioning in official groups\n\nJoin @CodinomesGrupo to play"
         ],
         "wrong_hint_format_title": [
             "Enter a hint"

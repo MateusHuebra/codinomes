@@ -16,11 +16,8 @@ class CheckTurnLeftTime {
         $bot = new BotApi(env('TG_TOKEN'));
         $now = strtotime('now');
         
-        $games = Game::all();
+        $games = Game::where('status', 'playing')->get();
         foreach ($games as $game) {
-            if($game->status == 'creating') {
-                continue;
-            }
             $timer = $game->chat->timer;
             if($timer == null) {
                 continue;
@@ -30,7 +27,7 @@ class CheckTurnLeftTime {
                 try {
                     $bot->deleteMessage($game->chat_id, $game->message_id);
                 } catch(Exception $e) {}
-                if($game->status == 'master_a' || $game->status == 'master_b') {
+                if($game->role == 'master') {
                     $this->skipMaster($game, $bot);
 
                 } else {
@@ -61,12 +58,11 @@ class CheckTurnLeftTime {
 
     private function skipMaster(Game $game, BotApi $bot) {
         $hint = AppString::get('error.no_hint').' ∞';
-        $color = ($game->status=='master_a') ? $game->color_a : $game->color_b;
+        $color = $game->{'color_'.$game->team};
         $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $team = substr($game->status, 7, 1);
-        $game->updateStatus('agent_'.$team);
+        $game->updateStatus('playing', $game->team, 'agent');
         $game->attempts_left = null;
         $game->save();
 
@@ -81,8 +77,8 @@ class CheckTurnLeftTime {
     }
 
     private function skipAgent(Game $game, BotApi $bot) {
-        $team = substr($game->status, 6, 1)=='a' ? 'b' : 'a';
-        $game->updateStatus('master_'.$team);
+        $team = $game->team == 'a' ? 'b' : 'a';
+        $game->updateStatus('playing', $team, 'master');
         $game->attempts_left = null;
         $game->save();
 
@@ -94,9 +90,8 @@ class CheckTurnLeftTime {
     }
 
     private function warn(Game $game, int $time, BotApi $bot) {
-        if($game->status == 'master_a' || $game->status == 'master_b') {
-            $team = substr($game->status, 7, 1);
-            $chatId = $game->users()->fromTeamRole($team, 'master')->first()->id;
+        if($game->role == 'master') {
+            $chatId = $game->users()->fromTeamRole($game->team, 'master')->first()->id;
         } else {
             $chatId = $game->chat_id;
         }

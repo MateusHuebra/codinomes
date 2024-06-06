@@ -45,9 +45,9 @@ class Game extends Model
     private $agentsB;
     private $hasRequiredPlayers = null; 
 
-    public function users(): HasMany
+    public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('team', 'role')->as('player');
     }
 
     public function cards(): HasMany
@@ -82,32 +82,13 @@ class Game extends Model
     }
 
     public function getPhotoCaption() {
-        switch ($this->status) {
-            case 'master_a':
-                $role = 'game.master';
-                $teamColor = 'color_a';
-                $playersList = $this->users()->fromTeamRole('a', 'master')->get()->getStringList(true, PHP_EOL);
-                break;
-            case 'agent_a':
-                $role = 'game.agents';
-                $teamColor = 'color_a';
-                $playersList = $this->users()->fromTeamRole('a', 'agent')->get()->getStringList(true, PHP_EOL);
-                break;
-            case 'master_b':
-                $role = 'game.master';
-                $teamColor = 'color_b';
-                $playersList = $this->users()->fromTeamRole('b', 'master')->get()->getStringList(true, PHP_EOL);
-                break;
-            case 'agent_b':
-                $role = 'game.agents';
-                $teamColor = 'color_b';
-                $playersList = $this->users()->fromTeamRole('b', 'agent')->get()->getStringList(true, PHP_EOL);
-                break;
-        }
+        $role = $this->role=='master' ? 'game.master' : 'game.agents';
+        $teamColor = $this->{'color_'.$this->team};
+        $playersList = $this->users()->fromTeamRole($this->team, $this->role)->get()->getStringList(true, PHP_EOL);
 
         return AppString::get('game.turn', [
             'role' => AppString::get($role, null, $this->chat->language),
-            'team' =>  Game::COLORS[$this->$teamColor],
+            'team' =>  Game::COLORS[$teamColor],
             'players' => $playersList
         ], $this->chat->language);
     }
@@ -165,7 +146,7 @@ class Game extends Model
             $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
             return false;
         }
-        $this->updateStatus('master_'.$firstTeam);
+        $this->updateStatus('playing', $firstTeam, 'master');
 
         $text = $this->getTeamAndPlayersList().AppString::getParsed('game.started');
         try {
@@ -180,6 +161,7 @@ class Game extends Model
 
     public function stop(BotApi $bot, string $winner = null) {
         if($winner == null) {
+            $this->status = 'canceled';
             if($this->status == 'creating') {
                 $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
             } else {
@@ -187,20 +169,22 @@ class Game extends Model
                 $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
             }
         } else {
+            $this->status = 'ended';
             $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
         }
         
         foreach($this->users as $user) {
+            $player = $user->player;
             if($winner != null) {
                 $stats = UserStats::firstOrNew([
                     'user_id' => $user->id
                 ]);
                 $colorStats = UserColorStats::firstOrNew([
                     'user_id' => $user->id,
-                    'color' => $this->{'color_'.$user->team}
+                    'color' => $this->{'color_'.$player->team}
                 ]);
 
-                if($user->role == 'master') {
+                if($player->role == 'master') {
                     $stats->games_as_master+= 1;
                     $colorStats->games_as_master+= 1;
                 } else {
@@ -208,8 +192,8 @@ class Game extends Model
                     $colorStats->games_as_agent+= 1;
                 }
     
-                if($user->team == $winner) {
-                    if($user->role == 'master') {
+                if($player->team == $winner) {
+                    if($player->role == 'master') {
                         $stats->wins_as_master+= 1;
                         $colorStats->wins_as_master+= 1;
                     } else {
@@ -221,24 +205,30 @@ class Game extends Model
                 $stats->save();
                 $colorStats->save();
             }
-
-            $user->leaveGame();
         }
         
         $this->cards()->delete();
 
-        parent::delete();
+        $this->team = $winner;
+        $this->role = null;
+        $this->save();
+
+        if($this->status == 'canceled') {
+            $this->users()->detach();
+            parent::delete();
+        }
     }
 
-    public function updateStatus(string $status) {
-        $this->status = $status;
+    public function updateStatus(string $status = null, string $team = null, string $role = null) {
+        $this->status = $status??$this->status;
+        $this->team = $team??$this->team;
+        $this->role = $role??$this->role;
         $this->status_updated_at = date('Y-m-d H-i-s');
         $this->save();
     }
 
     public function nextStatus(User $user) {
-        $nextStatus = 'master_'.$user->getEnemyTeam();
-        $this->updateStatus($nextStatus);
+        $this->updateStatus('playing', $user->getEnemyTeam(), 'master');
         $this->attempts_left = null;
         $this->save();
     }

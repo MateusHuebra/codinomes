@@ -25,8 +25,12 @@ class Create implements Action {
             $bot->sendMessage($chat->id, AppString::get('error.user_not_registered'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if($chat->game) {
+        if($chat->currentGame()) {
             $bot->sendMessage($chat->id, AppString::get('game.already_exists'), null, false, $update->getMessageId(), null, false, null, null, true);
+            return;
+        }
+        if(!in_array($chat->id, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
+            $bot->sendMessage($chat->id, AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
 

@@ -56,26 +56,26 @@ class Message implements UpdateHandler {
 
     private function getActionForOrdinaryMessage($update) {
         $user = $update->findUser();
-        if($user && $game = $user->game) {
+        if($user && $game = $user->currentGame()) {
             if(
                 $update->isChatType('private')
                 &&
-                (
-                    ($game->status=='master_a' && $user->team=='a' && $user->role=='master')
-                    ||
-                    ($game->status=='master_b' && $user->team=='b' && $user->role=='master')
-                )
+                $game->role == 'master'
+                &&
+                $user->currentGame()->player->role == 'master'
+                &&
+                $game->team == $user->currentGame()->player->team
             ) {
                 return new ChosenHint;
 
             } else if (
                 $update->isChatType('supergroup')
                 &&
-                (
-                    ($game->status=='agent_a' && $user->team=='a' && $user->role=='agent')
-                    ||
-                    ($game->status=='agent_b' && $user->team=='b' && $user->role=='agent')
-                )
+                $game->role == 'agent'
+                &&
+                $user->currentGame()->player->role == 'agent'
+                &&
+                $game->team == $user->currentGame()->player->team
             ) {
                 return new ChosenGuess;
             }

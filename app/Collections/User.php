@@ -32,7 +32,7 @@ class User extends Collection {
     public function notify(Game $game, BotApi $bot) {
         $game->refresh();
         $chat = $game->chat;
-        $url = $chat->getUrl().'/'.$chat->game->lobby_message_id;
+        $url = $chat->getUrl().'/'.$chat->currentGame()->lobby_message_id;
         $text = AppString::get('game.notification', [
             'title' => AppString::parseMarkdownV2($chat->title),
             'url' => $url

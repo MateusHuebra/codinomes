@@ -12,20 +12,21 @@ class Color implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        if(!$user->game) {
+        if(!$user->currentGame()) {
             $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }
 
-        $game = $user->game;
-        if(!($game->status=='creating' && $user->role=='master')) {
+        $game = $user->currentGame();
+        $player = $game->player;
+        if(!($game->status=='creating' && $player->role=='master')) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.master_only');
             return;
         }
 
         $data = CDM::toArray($update->getData());
         $newColor = $data[CDM::TEXT];
-        if($user->team=='a') {
+        if($player->team=='a') {
             $yourColor = 'color_a';
             $enemyColor = 'color_b';
         } else {

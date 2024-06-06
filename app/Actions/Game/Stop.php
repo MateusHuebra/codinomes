@@ -16,8 +16,7 @@ class Stop implements Action {
             return;
         }
         
-        $game = $chat->game;
-        if(!$game) {
+        if(!$game = $chat->currentGame()) {
             return;
         }
 

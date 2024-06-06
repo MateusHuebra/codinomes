@@ -11,9 +11,9 @@ class History implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         if($update->isChatType('private')) {
-            $game = $update->findUser()->game;
+            $game = $update->findUser()->currentGame();
         } else {
-            $game = $update->findChat()->game;
+            $game = $update->findChat()->currentGame();
         }
         
         if($game) {

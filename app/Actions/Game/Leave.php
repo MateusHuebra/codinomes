@@ -12,19 +12,19 @@ class Leave implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        if(!$user || !$user->game) {
+        if(!$user || !$user->currentGame()) {
             $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }
 
         $chat = $update->findChat();
-        if($user->game_id != $chat->game->id) {
+        if($user->currentGame()->id != $chat->currentGame()->id) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.already_playing');
             return;
         }
 
-        $user->leaveGame();
-        Menu::send($chat->game, $bot);
+        $user->games()->detach($user->currentGame()->id);
+        Menu::send($chat->currentGame(), $bot);
         $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.you_left'));
     }
 

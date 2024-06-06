@@ -16,9 +16,10 @@ class ChosenHint implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        $game = $user->game;
+        $game = $user->currentGame();
+        $player = $game->player;
         
-        if(!(($game->status=='master_a' && $user->team=='a' && $user->role=='master') || ($game->status=='master_b' && $user->team=='b' && $user->role=='master'))) {
+        if(!($game->role == 'master' && $player->role == 'master' && $player->team == $game->team)) {
             return;
         }
 
@@ -34,12 +35,12 @@ class ChosenHint implements Action {
         }
         
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
-        $color = ($user->team=='a') ? $game->color_a : $game->color_b;
+        $color = $game->{'color_'.$player->team};
         $emoji = Game::COLORS[$color];
         $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $game->updateStatus('agent_'.$user->team);
+        $game->updateStatus('playing', $player->team, 'agent');
         if(in_array($data[CDM::NUMBER], ['∞', 0])) {
             $game->attempts_left = null;
         } else {
