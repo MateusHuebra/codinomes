@@ -29,6 +29,9 @@ class ConfirmSkip implements Action {
             return;
         }
         $player = $game->player;
+        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)) {
+            return;
+        }
 
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
@@ -41,15 +44,13 @@ class ConfirmSkip implements Action {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
-            $game->updateStatus('playing', $user->getEnemyTeam(), 'master');
-            $game->attempts_left = null;
+        $game->updateStatus('playing', $user->getEnemyTeam(), 'master');
+        $game->attempts_left = null;
 
-            $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
-            $text = AppString::get('game.history', null, $chatLanguage);
-            $caption = new Caption($title, $text);
-            Table::send($game, $bot, $caption);
-        }
+        $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
+        $text = AppString::get('game.history', null, $chatLanguage);
+        $caption = new Caption($title, $text);
+        Table::send($game, $bot, $caption);
     }
 
 }
