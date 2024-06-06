@@ -161,13 +161,13 @@ class Game extends Model
 
     public function stop(BotApi $bot, string $winner = null) {
         if($winner == null) {
-            $this->status = 'canceled';
             if($this->status == 'creating') {
                 $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
             } else {
                 $bot->tryToDeleteMessage($this->chat_id, $this->message_id);
                 $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
             }
+            $this->status = 'canceled';
         } else {
             $this->status = 'ended';
             $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
