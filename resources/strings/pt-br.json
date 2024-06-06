@@ -209,6 +209,9 @@
         ],
         "defined": [
             "Cor padrão definida com sucesso para {mention}: {color}"
+        ],
+        "suggestion": [
+            "Lembre-se que você pode escolher uma /cor padrão para ser aplicada automaticamente quando entrar nas partidas"
         ]
     },
     "settings": {

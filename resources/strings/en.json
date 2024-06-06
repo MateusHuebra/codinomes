@@ -209,6 +209,9 @@
         ],
         "defined": [
             "Default color successfully defined to {mention}: {color}"
+        ],
+        "suggestion": [
+            "Remember that you can choose a default /color to be automatically applied when you enter a game"
         ]
     },
     "settings": {
