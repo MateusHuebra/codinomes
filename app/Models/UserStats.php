@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
 
 class UserStats extends Model
 {
@@ -19,14 +21,14 @@ class UserStats extends Model
     public static function addAttempt(Game $game, string $team, string $type) {
         $streak = $type == 'ally' ? $game->countLastStreak() : null;
 
-        $master = $game->users()->fromTeamRole($team, 'master')->first();
-        self::setStatsForUsers([$master], 'master', $type, $streak);
+        $master = $game->users()->fromTeamRole($team, 'master')->get();
+        self::setStatsForUsers($master, 'master', $type, $streak);
 
         $agents = $game->users()->fromTeamRole($team, 'agent')->get();
         self::setStatsForUsers($agents, 'agent', $type, $streak);
     }
 
-    private static function setStatsForUsers(array $users, string $role, string $type, int $streak = null) {
+    private static function setStatsForUsers(Collection $users, string $role, string $type, int $streak = null) {
         if($role == 'master') {
             $statsColumn = 'hinted_to_'.$type;
             $streakColumn = 'hinted_to_ally_streak';
