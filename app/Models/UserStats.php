@@ -17,19 +17,30 @@ class UserStats extends Model
     ];
 
     public static function addAttempt(Game $game, string $team, string $type) {
+        $streak = $type == 'ally' ? $game->countLastStreak() : null;
+
         $master = $game->users()->fromTeamRole($team, 'master')->first();
-        $stats = self::firstOrNew([
-            'user_id' => $master->id
-        ]);
-        $stats->{'hinted_to_'.$type}+= 1;
-        $stats->save();
+        self::setStatsForUsers([$master], 'master', $type, $streak);
 
         $agents = $game->users()->fromTeamRole($team, 'agent')->get();
-        foreach ($agents as $agent) {
+        self::setStatsForUsers($agents, 'agent', $type, $streak);
+    }
+
+    private static function setStatsForUser(array $users, string $role, string $type, int $streak = null) {
+        if($role == 'master') {
+            $statsColumn = 'hinted_to_'.$type;
+            $streakColumn = 'hinted_to_ally_streak';
+        } else {
+            $statsColumn = 'attempts_on_'.$type;
+            $streakColumn = 'attempts_on_ally_streak';
+        }
+        
+        foreach ($users as $user) {
             $stats = self::firstOrNew([
-                'user_id' => $agent->id
+                'user_id' => $user->id
             ]);
-            $stats->{'attempts_on_'.$type}+= 1;
+            $stats->{$streakColumn} = ($type != 'ally' || $stats->{$streakColumn} > $streak) ? $stats->{$streakColumn} : $streak;
+            $stats->{$statsColumn}+= 1;
             $stats->save();
         }
     }
