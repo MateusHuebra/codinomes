@@ -26,7 +26,7 @@ class UserStats extends Model
         self::setStatsForUsers($agents, 'agent', $type, $streak);
     }
 
-    private static function setStatsForUser(array $users, string $role, string $type, int $streak = null) {
+    private static function setStatsForUsers(array $users, string $role, string $type, int $streak = null) {
         if($role == 'master') {
             $statsColumn = 'hinted_to_'.$type;
             $streakColumn = 'hinted_to_ally_streak';
@@ -34,7 +34,7 @@ class UserStats extends Model
             $statsColumn = 'attempts_on_'.$type;
             $streakColumn = 'attempts_on_ally_streak';
         }
-        
+
         foreach ($users as $user) {
             $stats = self::firstOrNew([
                 'user_id' => $user->id
