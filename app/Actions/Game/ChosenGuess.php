@@ -135,8 +135,8 @@ class ChosenGuess implements Action {
         }
 
         $caption = new Caption($title, $text);
-        UserStats::addAttempt($game, $player->team, $attemptType);
         Table::send($game, $bot, $caption, $card->position, $winner);
+        UserStats::addAttempt($game, $player->team, $attemptType);
 
     }
 
