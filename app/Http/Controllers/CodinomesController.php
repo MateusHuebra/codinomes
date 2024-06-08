@@ -41,6 +41,7 @@ class CodinomesController extends Controller
             $errorMessage = '\#Exception at '.ServerLog::$updateId.':```java'.PHP_EOL;
             $errorMessage.= $e->getMessage().PHP_EOL.PHP_EOL;
             $errorMessage.= $e->getFile().' line '.$e->getLine().'```';
+            ServerLog::log($errorMessage);
             $bot->sendMessage(env('TG_MY_ID'), $errorMessage, 'MarkdownV2');
         }
         ServerLog::log('end -----> CodinomesController > listen');
