@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Adapters\UpdateTypes\Update;
+use App\Models\User;
 use TelegramBot\Api\BotApi;
 
 class Ping implements Action {

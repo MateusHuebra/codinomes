@@ -306,6 +306,9 @@
         ],
         "no_enough_stats": [
             "Not enough data for statistics"
+        ],
+        "no_achievements": [
+            "No achievements"
         ]
     },
     "time": {
@@ -324,7 +327,7 @@
     },
     "stats": {
         "general": [
-            "*Statistics of {name}*\n**>Games played:   {totalGames}\n>Wins:                   {totalWins}   {totalWinsPercent}%\n>  \\-  as Master:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  as Agent:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cards chosen as Agent:*\n>  \\-  Ally:          {attemptsOnAlly}   \\(🔥{attemptsOnAllyStreak}\\)\n>  \\-  Opponent:   {attemptsOnOpponent}\n>  \\-  White:         {attemptsOnWhite}\n>  \\-  Black:            {attemptsOnBlack}\n>  \n>*Cards hinted to as Master:*\n>  \\-  Ally:          {hintedToAlly}   \\(🔥{hintedToAllyStreak}\\)\n>  \\-  Opponent:   {hintedToOpponent}\n>  \\-  White:         {hintedToWhite}\n>  \\-  Black:            {hintedToBlack}||"
+            "*📊 Statistics of {name}*\n**>Games played:   {totalGames}\n>Wins:                   {totalWins}   {totalWinsPercent}%\n>  \\-  as Master:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  as Agent:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cards chosen as Agent:*\n>  \\-  Ally:          {attemptsOnAlly}   \\(🔥{attemptsOnAllyStreak}\\)\n>  \\-  Opponent:   {attemptsOnOpponent}\n>  \\-  White:         {attemptsOnWhite}\n>  \\-  Black:            {attemptsOnBlack}\n>  \n>*Cards hinted to as Master:*\n>  \\-  Ally:          {hintedToAlly}   \\(🔥{hintedToAllyStreak}\\)\n>  \\-  Opponent:   {hintedToOpponent}\n>  \\-  White:         {hintedToWhite}\n>  \\-  Black:            {hintedToBlack}||"
         ]
     },
     "help": {
@@ -343,5 +346,74 @@
         "commands": [
             "*Codinomes Commands:*\n\n• /new creates a new game lobby\n• /skip skip your turn in the game\n• /stop interrupts and cancels the match\n\n• /notify send it to a group to be notified whenever a new match takes place in it, send it again to cancel\n\n• /history view the history of hints and attempts from the match, it also works via DM\n\n• /settings group settings \\(as timer and word packs\\)\n\n• /color choose your default color that will be set automatically when you enter as a master\n\n• /packs send it to DM to create and manage your own word packages"
         ]
+    },
+    "achievements": {
+        "from": [
+            "*🏆 Achievements of {user}*"
+        ],
+        "new": [
+            "🏆 Achievement *{title}* reached\\!\n\nBy: {users}"
+        ],
+        "seven_one": [
+            "Every Day a 7\\-1"
+        ],
+        "seven_one_info": [
+            "Reach the 7\\-1 score in a match"
+        ],
+        "possessed": [
+            "Possessed"
+        ],
+        "possessed_info": [
+            "Hit 6 cards in a row"
+        ],
+        "good_start": [
+            "Good Start"
+        ],
+        "good_start_info": [
+            "Flip a black card on the first try"
+        ],
+        "day_is_night": [
+            "Some Days Are Nights"
+        ],
+        "day_is_night_info": [
+            "Flip the black card missing one card to win the game"
+        ],
+        "rainbow": [
+            "At the End of the Rainbow"
+        ],
+        "rainbow_info": [
+            "Play with all possible colors"
+        ],
+        "graduated": [
+            "Graduated in Codinomes"
+        ],
+        "graduated_info": [
+            "Win with all possible colors"
+        ],
+        "addicted": [
+            "Addicted"
+        ],
+        "addicted_info": [
+            "Play 100 matches"
+        ],
+        "proplayer": [
+            "Codinomes Pro Player"
+        ],
+        "proplayer_info": [
+            "Win 100 matches"
+        ],
+        "making_friends": [
+            "Making Friends"
+        ],
+        "making_friends_info": [
+            "Play a match in the official group"
+        ],
+        "kian_knows": [
+            "Kian Knows"
+        ],
+        "kian_knows_info": [
+            "Play a match with the developer"
+        ]
     }
+    
 }

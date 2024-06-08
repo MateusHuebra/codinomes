@@ -2,6 +2,7 @@
 
 namespace App\UpdateHandlers;
 
+use App\Actions\Achievements;
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
@@ -127,6 +128,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['packs', 'pacotes'])) {
             return new WebApp;
+
+        } else if(in_array($command, ['achievements', 'conquistas'])) {
+            return new Achievements;
 
         } else if($command == 'test') {
             return new Test;

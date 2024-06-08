@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Telegram\BotApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -18,7 +19,7 @@ class UserStats extends Model
         'user_id'
     ];
 
-    public static function addAttempt(Game $game, string $team, string $type) {
+    public static function addAttempt(Game $game, string $team, string $type, BotApi $bot) {
         $streak = $type == 'ally' ? $game->countLastStreak() : null;
 
         $master = $game->users()->fromTeamRole($team, 'master')->get();
@@ -26,6 +27,10 @@ class UserStats extends Model
 
         $agents = $game->users()->fromTeamRole($team, 'agent')->get();
         self::setStatsForUsers($agents, 'agent', $type, $streak);
+
+        if($streak == 6) {
+            UserAchievement::add($agents, 'possessed', $bot, $game->chat_id);
+        }
     }
 
     private static function setStatsForUsers(Collection $users, string $role, string $type, int $streak = null) {

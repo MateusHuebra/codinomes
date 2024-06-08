@@ -2,9 +2,9 @@
 
 namespace App\Services\Game;
 
-use App\Models\Chat;
 use App\Models\Game;
 use App\Models\GameCard;
+use App\Models\UserAchievement;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use TelegramBot\Api\BotApi;
@@ -32,6 +32,10 @@ class Table {
         $cards = $game->cards;
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
+
+        if(($leftA==1 && $leftB==7) || ($leftA==7 && $leftB==1)) {
+            UserAchievement::add($game->users, 'seven_one', $bot, $game->chat_id);
+        }
         
         $sendToMasters = ($sendToBothMasters || $game->role == 'master' || $winner);
 
@@ -98,6 +102,8 @@ class Table {
             unlink($tempMasterImageFileName);
 
             $game->stop($bot, $winner);
+
+            UserAchievement::testEndGame($game->users, $bot, $game->chat_id);
         }
     }
 

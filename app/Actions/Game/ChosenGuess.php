@@ -7,6 +7,7 @@ use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\User;
+use App\Models\UserAchievement;
 use App\Models\UserStats;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
@@ -62,13 +63,14 @@ class ChosenGuess implements Action {
         
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
 
+        $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
+
         //correct guess
         if($card->team == $player->team) {
             $attemptType = 'ally';
             if($game->attempts_left!==null) {
                 $game->attempts_left--;
             }
-            $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
 
             //won
             if($cardsLeft <= 0) {
@@ -108,6 +110,15 @@ class ChosenGuess implements Action {
 
             $winner = $user->getEnemyTeam();
             
+            if($cardsLeft == 1) {
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
+                
+            } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
+            }
+            
         //incorrect guess
         } else {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
@@ -136,7 +147,7 @@ class ChosenGuess implements Action {
 
         $caption = new Caption($title, $text);
         Table::send($game, $bot, $caption, $card->position, $winner);
-        UserStats::addAttempt($game, $player->team, $attemptType);
+        UserStats::addAttempt($game, $player->team, $attemptType, $bot);
 
     }
 

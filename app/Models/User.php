@@ -33,6 +33,11 @@ class User extends Model
     {
         return $this->hasMany(UserColorStats::class);
     }
+
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
     
     public function games()
     {
