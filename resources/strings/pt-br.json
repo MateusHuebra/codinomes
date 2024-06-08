@@ -349,10 +349,13 @@
     },
     "achievements": {
         "from": [
-            "*🏆 Conquistas de {user}*"
+            "*🏆 Conquistas de {user}* {from} \\/ {to}"
         ],
         "new": [
-            "🏆 Conquista *{title}* alcançada\\!\n\nPor: {users}"
+            "🏆 Conquista alcançada\\!\n*\\[ {title} \\]*\n\nPor {users}"
+        ],
+        "and": [
+            "e"
         ],
         "seven_one": [
             "Todo Dia um 7 a 1"

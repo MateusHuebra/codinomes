@@ -56,6 +56,18 @@ class AppString {
         return str_replace(self::RESERVED_CHARACTERS, self::ESCAPED_CHARACTERS, $string);
     }
 
+    static function replaceLastCommaByAnd(string $string) {
+        $lastCommaPosition = strrpos($string, ',');
+
+        $and = ' '.AppString::get('achievements.and');
+
+        if ($lastCommaPosition !== false) {
+            $string = substr_replace($string, $and, $lastCommaPosition, 1);
+        }
+
+        return $string;
+    }
+
     static function setLanguage($update) {
         try {
             if($update->isChatType('private')) {

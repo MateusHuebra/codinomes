@@ -23,18 +23,25 @@ class Achievements implements Action {
             return;
         }
 
-        $text = AppString::get('achievements.from', [
-            'user' => $user->name            
-        ], null, true);
-        $text.= "\n**";
-
+        $text = '';
+        $from = $to = 0;
         foreach(UserAchievement::AVAILABLE as $achievement) {
+            $to++;
             if($achievements->contains('achievement_id', $achievement)) {
-                $text.= '>*'.AppString::get('achievements.'.$achievement).'*';
+                $from++;
+                $text.= '>*\[ '.AppString::get('achievements.'.$achievement).' \]*';
                 $text.= "\n>  \-  ".AppString::get('achievements.'.$achievement.'_info')."\n>\n";
             }
         }
-        $text.= '>||';
+
+        $title = AppString::get('achievements.from', [
+            'user' => $user->name,
+            'from' => $from,
+            'to' => $to
+        ], null, true);
+        $title.= "\n**";
+
+        $text = $title.$text.'>||';
 
         $bot->sendMessage($update->getChatId(), $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
     }

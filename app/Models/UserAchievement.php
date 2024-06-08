@@ -48,7 +48,11 @@ class UserAchievement extends Model
                 'user_id' => $user->id,
                 'achievement_id' => $achievement
             ]);
-            $usersNames[] = $user->name;
+
+            $usersNames[] = AppString::get('game.mention', [
+                'name' => $user->name,
+                'id' => $user->id
+            ], null, true);
         }
 
         if(count($usersNames) == 0) {
@@ -56,9 +60,10 @@ class UserAchievement extends Model
         }
 
         $usersList = implode(', ', $usersNames);
+        $usersList = AppString::replaceLastCommaByAnd($usersList);
         $text = AppString::get('achievements.new', [
             'title' => AppString::get('achievements.'.$achievement),
-            'users' => AppString::parseMarkdownV2($usersList)
+            'users' => $usersList
         ]);
 
         $bot->sendMessage($chatId, $text, 'MarkdownV2');

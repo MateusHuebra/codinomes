@@ -349,10 +349,13 @@
     },
     "achievements": {
         "from": [
-            "*🏆 Achievements of {user}*"
+            "*🏆 Achievements of {user}* {from} \\/ {to}"
         ],
         "new": [
-            "🏆 Achievement *{title}* reached\\!\n\nBy: {users}"
+            "🏆 Achievement reached\\!\n*\\[ {title} \\]*\n\nBy {users}"
+        ],
+        "and": [
+            "and"
         ],
         "seven_one": [
             "Every Day a 7\\-1"
