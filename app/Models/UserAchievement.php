@@ -119,7 +119,7 @@ class UserAchievement extends Model
         if($users->contains('id', env('TG_MY_ID'))) {
             self::add($users, 'kian_knows', $bot, $chatId);
         }
-        if(in_array($chatId, env('TG_OFICIAL_GROUPS_IDS'))) {
+        if(in_array($chatId, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
             self::add($users, 'making_friends', $bot, $chatId);
         }
     }
