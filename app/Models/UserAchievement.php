@@ -77,8 +77,10 @@ class UserAchievement extends Model
 
         foreach($users as $user) {
             $winColorStats = $user->colorStats()
-                ->where('wins_as_master', '!=', 0)
-                ->orWhere('wins_as_agent', '!=', 0)
+                ->where(function ($query) {
+                    $query->where('wins_as_master', '!=', 0)
+                        ->orWhere('wins_as_agent', '!=', 0);
+                })
                 ->get();
             
             if(self::doesUserHaveAllColors($winColorStats)) {
@@ -136,7 +138,7 @@ class UserAchievement extends Model
                 continue;
             }
             
-            if(!$colorStats->contains($color)) {
+            if(!$colorStats->contains('color', $color)) {
                 $result = false;
                 break;
             }
