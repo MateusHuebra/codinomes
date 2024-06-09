@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
-use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -71,10 +70,10 @@ class UserAchievement extends Model
     }
 
     public static function testEndGame(Collection $users, BotApi $bot, int $chatId) {
-        $usersForRainbow = collect();
-        $usersForGratuated = collect();
-        $usersForAddicted = collect();
-        $usersForProPlayer = collect();
+        $usersForRainbow = new Collection();
+        $usersForGratuated = new Collection();
+        $usersForAddicted = new Collection();
+        $usersForProPlayer = new Collection();
 
         foreach($users as $user) {
             $winColorStats = $user->colorStats()
@@ -83,13 +82,13 @@ class UserAchievement extends Model
                 ->get();
             
             if(self::doesUserHaveAllColors($winColorStats)) {
-                $usersForRainbow->push($user);
-                $usersForGratuated->push($user);
+                $usersForRainbow->add($user);
+                $usersForGratuated->add($user);
                 continue;
             }
             
             if(self::doesUserHaveAllColors($user->colorStats)) {
-                $usersForRainbow->push($user);
+                $usersForRainbow->add($user);
             }
         }
 
@@ -99,13 +98,13 @@ class UserAchievement extends Model
             $totalGames = $stats->games_as_master + $stats->games_as_agent;
 
             if($totalWins == 100) {
-                $usersForAddicted->push($user);
-                $usersForProPlayer->push($user);
+                $usersForAddicted->add($user);
+                $usersForProPlayer->add($user);
                 continue;
             }
             
             if($totalGames == 100) {
-                $usersForAddicted->push($user);
+                $usersForAddicted->add($user);
             }
         }
 
