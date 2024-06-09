@@ -179,39 +179,7 @@ class Game extends Model
             $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
         }
         
-        foreach($this->users as $user) {
-            $player = $user->player;
-            if($winner != null) {
-                $stats = UserStats::firstOrNew([
-                    'user_id' => $user->id
-                ]);
-                $colorStats = UserColorStats::firstOrNew([
-                    'user_id' => $user->id,
-                    'color' => $this->{'color_'.$player->team}
-                ]);
-
-                if($player->role == 'master') {
-                    $stats->games_as_master+= 1;
-                    $colorStats->games_as_master+= 1;
-                } else {
-                    $stats->games_as_agent+= 1;
-                    $colorStats->games_as_agent+= 1;
-                }
-    
-                if($player->team == $winner) {
-                    if($player->role == 'master') {
-                        $stats->wins_as_master+= 1;
-                        $colorStats->wins_as_master+= 1;
-                    } else {
-                        $stats->wins_as_agent+= 1;
-                        $colorStats->wins_as_agent+= 1;
-                    }
-                }
-
-                $stats->save();
-                $colorStats->save();
-            }
-        }
+        UserStats::addGame($this, $winner);
         
         $this->cards()->delete();
 

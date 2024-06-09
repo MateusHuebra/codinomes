@@ -338,7 +338,7 @@
     },
     "help": {
         "base" : [
-            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n\nNote: At the moment the bot is only available in the group @CodinomesGrupo"
+            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n\nIf you have any questions, ask in @CodinomesGrupo"
         ],
         "roles": [
             "*Master:*\n• See the color of all the cards;\n• \\.\n\n*Agentes*: Your goal is to give hints that guide to as many words as possible in your team's color so that your agents can find them\\.\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."

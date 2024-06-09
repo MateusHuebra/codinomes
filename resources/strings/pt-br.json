@@ -338,7 +338,7 @@
     },
     "help": {
         "base" : [
-            "*Codinomes* é um jogo de adivinhação de palavras, baseado em dicas, dividido em duas Equipes de cores diferentes compostas por um Mestre e vários Agentes\\.\n\nGanha a equipe que encontrar todas as cartas da própria cor primeiro\\.\n\n• Papéis: /ajuda\\_papeis\n• Dicas: /ajuda\\_dicas\n• Cores: /ajuda\\_cores\n\n• Comandos: /ajuda\\_comandos\n\nObs\\.: No momento o bot está disponível apenas no grupo @CodinomesGrupo"
+            "*Codinomes* é um jogo de adivinhação de palavras, baseado em dicas, dividido em duas Equipes de cores diferentes compostas por um Mestre e vários Agentes\\.\n\nGanha a equipe que encontrar todas as cartas da própria cor primeiro\\.\n\n• Papéis: /ajuda\\_papeis\n• Dicas: /ajuda\\_dicas\n• Cores: /ajuda\\_cores\n\n• Comandos: /ajuda\\_comandos\n\nQualquer dúvida pergunte em @CodinomesGrupo"
         ],
         "roles": [
             "*Mestre:*\n• Vê a cor de todas as cartas;\n• Seu objetivo é dar dicas que relacionem o máximo possível de palavras da cor do seu time para que seus agentes as encontrem\\.\n\n*Agentes*: \n• Não vê a cor das cartas;\n• Seu objetivo é encontrar as palavras da cor do seu time seguindo as dicas do seu respectivo mestre\\."
