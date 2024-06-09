@@ -97,13 +97,13 @@ class UserAchievement extends Model
             $totalWins = $stats->wins_as_master + $stats->wins_as_agent;
             $totalGames = $stats->games_as_master + $stats->games_as_agent;
 
-            if($totalWins == 100) {
+            if($totalWins >= 100) {
                 $usersForAddicted->add($user);
                 $usersForProPlayer->add($user);
                 continue;
             }
             
-            if($totalGames == 100) {
+            if($totalGames >= 100) {
                 $usersForAddicted->add($user);
             }
         }
