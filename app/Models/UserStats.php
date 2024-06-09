@@ -20,7 +20,7 @@ class UserStats extends Model
     ];
 
     public static function addAttempt(Game $game, string $team, string $type, BotApi $bot) {
-        $streak = $type == 'ally' ? $game->countLastStreak() : null;
+        $streak = $type == 'ally' ? $game->countLastStreak() : 0;
 
         $master = $game->users()->fromTeamRole($team, 'master')->get();
         self::setStatsForUsers($master, 'master', $type, $streak);
@@ -33,7 +33,7 @@ class UserStats extends Model
         }
     }
 
-    private static function setStatsForUsers(Collection $users, string $role, string $type, int $streak = null) {
+    private static function setStatsForUsers(Collection $users, string $role, string $type, int $streak = 0) {
         if($role == 'master') {
             $statsColumn = 'hinted_to_'.$type;
             $streakColumn = 'hinted_to_ally_streak';
