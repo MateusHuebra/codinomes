@@ -11,6 +11,12 @@ use App\Services\AppString;
 
 class Create implements Action {
 
+    private $mode;
+
+    public function __construct(string $mode = 'default') {
+        $this->mode = $mode;
+    }
+
     public function run(Update $update, BotApi $bot) : Void {
         if(!$update->isChatType('supergroup')) {
             return;
@@ -39,6 +45,7 @@ class Create implements Action {
 
         $game = new Game();
         $game->status = 'creating';
+        $game->mode = $this->mode;
         $game->chat_id = $chat->id;
         $game->creator_id = $user->id;
         $game->lobby_message_id = $message->getMessageId();

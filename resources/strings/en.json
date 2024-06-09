@@ -31,6 +31,12 @@
         "teams_lists": [
             "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n"
         ],
+        "mode": [
+            "*{mode} MIDE*\n\n"
+        ],
+        "fast": [
+            "RÁPIDO"
+        ],
         "choose_role": [
             "Choose your team and role:"
         ],

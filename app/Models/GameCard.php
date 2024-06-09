@@ -23,7 +23,7 @@ class GameCard extends Model
         $randomizedCards = $cards->random(25);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);
-        $shuffledCards = self::getColoredCards($shuffledCards, $firstTeam);
+        $shuffledCards = self::getColoredCards($game->mode, $shuffledCards, $firstTeam);
 
         foreach ($shuffledCards as $key => $card) {
             $gameCard = new GameCard;
@@ -40,11 +40,23 @@ class GameCard extends Model
         return true;
     }
 
-    private static function getColoredCards(array $shuffledCards, string $firstTeam) {
+    private static function getColoredCards(string $gameMode, array $shuffledCards, string $firstTeam) {
+        switch ($gameMode) {
+            case 'fast':
+                $baseCardsCount = 4;
+                $blackCardsCount = 3;
+                break;
+            
+            default:
+                $baseCardsCount = 8;
+                $blackCardsCount = 1;
+                break;
+        }
+
         $teams = [
-            'a' => 8+($firstTeam=='a'?1:0),
-            'b' => 8+($firstTeam=='b'?1:0),
-            'x' => 1
+            'a' => $baseCardsCount + ($firstTeam=='a'?1:0),
+            'b' => $baseCardsCount + ($firstTeam=='b'?1:0),
+            'x' => $blackCardsCount
         ];
         
         while($teams['a']>0) {

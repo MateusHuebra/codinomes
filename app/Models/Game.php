@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
+use App\Services\Game\Menu;
 use App\Services\Game\Table;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -153,7 +154,7 @@ class Game extends Model
         }
         $this->updateStatus('playing', $firstTeam, 'master');
 
-        $text = $this->getTeamAndPlayersList().AppString::getParsed('game.started');
+        $text = Menu::getLobbyText($this) . AppString::getParsed('game.started');
         try {
             $bot->editMessageText($this->chat_id, $this->lobby_message_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
