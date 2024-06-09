@@ -32,10 +32,13 @@
             "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n"
         ],
         "mode": [
-            "*{mode} MIDE*\n\n"
+            "*{mode} MODE*\n\n"
         ],
         "fast": [
-            "RÁPIDO"
+            "FAST"
+        ],
+        "mineswp": [
+            "MINESWEEPER"
         ],
         "choose_role": [
             "Choose your team and role:"

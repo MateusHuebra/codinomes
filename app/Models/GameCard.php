@@ -25,6 +25,14 @@ class GameCard extends Model
                     'max' => 14
                 ];
                 break;
+
+            case 'mineswp':
+                self::$cardsCounts = [
+                    'base' => 8,
+                    'black' => 8,
+                    'max' => 25
+                ];
+                break;
             
             default:
                 self::$cardsCounts = [
