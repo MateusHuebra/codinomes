@@ -13,7 +13,7 @@ class Create implements Action {
 
     private $mode;
 
-    public function __construct(string $mode = 'default') {
+    public function __construct(string $mode = 'classic') {
         $this->mode = $mode;
     }
 
