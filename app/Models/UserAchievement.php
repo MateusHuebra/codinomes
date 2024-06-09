@@ -25,6 +25,7 @@ class UserAchievement extends Model
         'possessed',
         'good_start',
         'day_is_night',
+        'impostor',
         'rainbow',
         'graduated',
         'addicted',

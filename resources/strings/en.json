@@ -381,6 +381,12 @@
         "day_is_night_info": [
             "Flip the black card missing one card to win the game"
         ],
+        "impostor": [
+            "Impostor"
+        ],
+        "impostor_info": [
+            "Flip the opponent's last card, leading them to victory"
+        ],
         "rainbow": [
             "At the End of the Rainbow"
         ],

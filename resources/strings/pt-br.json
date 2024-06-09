@@ -381,6 +381,12 @@
         "day_is_night_info": [
             "Vire a carta preta faltando uma carta para ganhar o jogo"
         ],
+        "impostor": [
+            "Impostor"
+        ],
+        "impostor_info": [
+            "Vire a última carta do oponente o levando a vitória"
+        ],
         "rainbow": [
             "No Fim do Arco\\-Íris"
         ],

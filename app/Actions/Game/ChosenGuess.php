@@ -133,6 +133,9 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.win_color', null, $chatLanguage);
 
                 $winner = $user->getEnemyTeam();
+                
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                UserAchievement::add($agents, 'impostor', $bot, $game->chat_id);
             
             //skip
             } else {
