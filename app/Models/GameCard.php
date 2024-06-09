@@ -9,6 +9,7 @@ class GameCard extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    private static $cardsCounts = [];
 
     public static function set(Game $game, string $firstTeam) : Bool {
         if($game->chat->packs()->count() == 0) {
@@ -16,14 +17,32 @@ class GameCard extends Model
         }
         $cards = $game->chat->packs->getCards();
 
-        if($cards->count() < 25) {
+        switch ($game->mode) {
+            case 'fast':
+                self::$cardsCounts = [
+                    'base' => 4,
+                    'black' => 2,
+                    'max' => 14
+                ];
+                break;
+            
+            default:
+                self::$cardsCounts = [
+                    'base' => 8,
+                    'black' => 1,
+                    'max' => 25
+                ];
+                break;
+        }
+
+        if($cards->count() < self::$cardsCounts['max']) {
             return false;
         }
 
-        $randomizedCards = $cards->random(25);
+        $randomizedCards = $cards->random(self::$cardsCounts['max']);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);
-        $shuffledCards = self::getColoredCards($game->mode, $shuffledCards, $firstTeam);
+        $shuffledCards = self::getColoredCards($shuffledCards, $firstTeam);
 
         foreach ($shuffledCards as $key => $card) {
             $gameCard = new GameCard;
@@ -40,41 +59,29 @@ class GameCard extends Model
         return true;
     }
 
-    private static function getColoredCards(string $gameMode, array $shuffledCards, string $firstTeam) {
-        switch ($gameMode) {
-            case 'fast':
-                $baseCardsCount = 4;
-                $blackCardsCount = 3;
-                break;
-            
-            default:
-                $baseCardsCount = 8;
-                $blackCardsCount = 1;
-                break;
-        }
-
+    private static function getColoredCards(array $shuffledCards, string $firstTeam) {
         $teams = [
-            'a' => $baseCardsCount + ($firstTeam=='a'?1:0),
-            'b' => $baseCardsCount + ($firstTeam=='b'?1:0),
-            'x' => $blackCardsCount
+            'a' => self::$cardsCounts['base'] + ($firstTeam=='a'?1:0),
+            'b' => self::$cardsCounts['base'] + ($firstTeam=='b'?1:0),
+            'x' => self::$cardsCounts['black']
         ];
         
         while($teams['a']>0) {
-            $randomIndex = rand(0, 24);
+            $randomIndex = rand(0, self::$cardsCounts['max']-1);
             if(!isset($shuffledCards[$randomIndex]['team'])) {
                 $shuffledCards[$randomIndex]['team'] = 'a';
                 $teams['a']--;
             }
         }
         while($teams['b']>0) {
-            $randomIndex = rand(0, 24);
+            $randomIndex = rand(0, self::$cardsCounts['max']-1);
             if(!isset($shuffledCards[$randomIndex]['team'])) {
                 $shuffledCards[$randomIndex]['team'] = 'b';
                 $teams['b']--;
             }
         }
         while($teams['x']>0) {
-            $randomIndex = rand(0, 24);
+            $randomIndex = rand(0, self::$cardsCounts['max']-1);
             if(!isset($shuffledCards[$randomIndex]['team'])) {
                 $shuffledCards[$randomIndex]['team'] = 'x';
                 $teams['x']--;
