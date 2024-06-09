@@ -99,7 +99,7 @@ class Table {
             $text.= PHP_EOL.PHP_EOL.$game->getHistory();
 
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
-            $title = "\{$game->chat_id}: {$game->chat->name}\n\n";
+            $title = '\\'.$game->chat_id.': '.AppString::getParsed($game->chat->title)."\n\n";
             $message = $bot->sendPhoto(env('TG_MY_ID'), $masterPhoto, $title.$text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
