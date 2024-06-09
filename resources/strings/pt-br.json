@@ -34,6 +34,9 @@
         "mode": [
             "*MODO {mode}*\n\n"
         ],
+        "default": [
+            "CODINOMES"
+        ],
         "fast": [
             "RÁPIDO"
         ],
