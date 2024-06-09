@@ -15,7 +15,7 @@ class Menu {
     static function send(Game $game, BotApi $bot, User $user = null) : Void {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
-        $textMessage = self::getLobbyText($game) . AppString::get('game.choose_role');
+        $textMessage = self::getLobbyText($game, true) . AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($hasRequiredPlayers, $game);
 
         if($game->lobby_message_id !== null) {
@@ -36,9 +36,10 @@ class Menu {
         $game->save();
     }
 
-    public static function getLobbyText(Game $game) {
+    public static function getLobbyText(Game $game, bool $showInfo = false) {
         $textMessage = AppString::get('game.mode', [
-            'mode' => AppString::get('game.'.$game->mode)
+            'mode' => AppString::get('mode.'.$game->mode),
+            'info' => ($showInfo ? '   /info' : '')
         ]);
         $textMessage.= $game->getTeamAndPlayersList();
         return $textMessage;

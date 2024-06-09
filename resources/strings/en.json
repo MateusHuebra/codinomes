@@ -21,6 +21,26 @@
             "Have questions? Check out /help\n\nPlay or report bugs in our official group as well @CodinomesGrupo"
         ]
     },
+    "mode": {
+        "classic": [
+            "CLASSIC"
+        ],
+        "classic_info": [
+            "Classic game mode\n\n8 cards for each team (+1 for the starting team), 7 white and 1 black"
+        ],
+        "fast": [
+            "FAST"
+        ],
+        "fast_info": [
+            "Fast game mode, similar to classic mode but shorter\n\n4 cards for each team (+1 for the starting team), 3 white and 2 black"
+        ],
+        "mineswp": [
+            "MINESWEEPER"
+        ],
+        "mineswp_info": [
+            "Minesweeper mode, similar to classic mode but full of black cards and no white cards\n\n8 cards for each team (+1 for the starting team), 0 white and 8 black"
+        ]
+    },
     "game": {
         "creating": [
             "Creating lobby..."
@@ -32,16 +52,7 @@
             "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n"
         ],
         "mode": [
-            "*{mode} MODE*\n\n"
-        ],
-        "classic": [
-            "CLASSIC"
-        ],
-        "fast": [
-            "FAST"
-        ],
-        "mineswp": [
-            "MINESWEEPER"
+            "*{mode} MODE*{info}\n\n"
         ],
         "choose_role": [
             "Choose your team and role:"

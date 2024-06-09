@@ -8,6 +8,7 @@ use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
+use App\Actions\Game\Info;
 use App\Actions\GetColors;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\Create;
@@ -140,6 +141,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'test') {
             return new Test;
+
+        } else if($command == 'info') {
+            return new Info;
 
         } else if($command == 'stats') {
             return new Stats;

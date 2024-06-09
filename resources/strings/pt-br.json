@@ -21,6 +21,26 @@
             "Se tiver alguma dúvida, dê uma olhada em /ajuda\n\nJogue ou reporte erros também em nosso grupo oficial @CodinomesGrupo"
         ]
     },
+    "mode": {
+        "classic": [
+            "CLÁSSICO"
+        ],
+        "classic_info": [
+            "Modo clássico de jogo\n\n8 cartas pra cada time (+1 pro time que começa), 7 brancas e 1 preta"
+        ],
+        "fast": [
+            "RÁPIDO"
+        ],
+        "fast_info": [
+            "Modo rápido de jogo, é como o modo clássico só que reduzido\n\n4 cartas pra cada time (+1 pro time que começa), 3 brancas e 2 pretas"
+        ],
+        "mineswp": [
+            "CAMPO MINADO"
+        ],
+        "mineswp_info": [
+            "Modo campo minado, é como o modo clássico só que cheio de cartas pretas e nenhuma branca\n\n8 cartas pra cada time (+1 pro time que começa), 0 brancas e 8 preta"
+        ]
+    },
     "game": {
         "creating": [
             "Criando partida..."
@@ -32,16 +52,7 @@
             "*EQUIPE {a}\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\n"
         ],
         "mode": [
-            "*MODO {mode}*\n\n"
-        ],
-        "classic": [
-            "CLÁSSICO"
-        ],
-        "fast": [
-            "RÁPIDO"
-        ],
-        "mineswp": [
-            "CAMPO MINADO"
+            "*MODO {mode}*{info}\n\n"
         ],
         "choose_role": [
             "Escolha seu time e papel:"
