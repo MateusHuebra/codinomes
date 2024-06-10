@@ -110,13 +110,15 @@ class ChosenGuess implements Action {
 
             $winner = $user->getEnemyTeam();
             
-            if($cardsLeft == 1) {
-                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
-                
-            } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
-                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
+            if($game->mode == 'classic') {
+                if($cardsLeft == 1) {
+                    $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                    UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
+                    
+                } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
+                    $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                    UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
+                }
             }
             
         //incorrect guess
