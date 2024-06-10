@@ -223,8 +223,14 @@ class Table {
         $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
         $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
         $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
-        imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
-        imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
+        if($game->mode == 'ghost') {
+            $textA = $textB = '?';
+        } else {
+            $textA = $leftA;
+            $textB = $leftB;
+        }
+        imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $textA);
+        imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $textB);
         $y = self::BORDER;
         if($masterImage) {
             $x = self::BORDER;
@@ -307,7 +313,7 @@ class Table {
                 break;
         }
 
-        if(!is_null($masterImage) || $card->revealed) {       
+        if($card->revealed || !is_null($masterImage)) {
             $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
             if($colorMaster=='black') {
                 $textColor = imagecolorallocate($masterCardImage, 255, 255, 255);
@@ -315,7 +321,15 @@ class Table {
                 $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
             }
 
-            if($card->revealed) {
+            if($card->revealed) {       
+                if($game->mode == 'ghost') {
+                    $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
+                    $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
+                    imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
+                    $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
+                    imagecopy($agentsCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+                }
+
                 if(in_array($card->text, self::EASTER_EGGS)) {
                     $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
                     imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, 210, 140);

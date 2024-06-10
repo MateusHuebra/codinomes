@@ -74,7 +74,7 @@ class Game extends Model
     }
 
     public function getLastHint() {
-        $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
+        $regex = '/\*['.implode('', self::COLORS).'❔]+ (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
         if(!$this->lastHint) {
             preg_match($regex, $this->history, $matches);
             $this->lastHint = $matches['hint'];

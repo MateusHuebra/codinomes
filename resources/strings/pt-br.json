@@ -39,6 +39,12 @@
         ],
         "mineswp_info": [
             "Modo campo minado, é como o modo clássico só que cheio de cartas pretas e nenhuma branca\n\n8 cartas pra cada time (+1 pro time que começa), 0 brancas e 8 pretas"
+        ],
+        "ghost": [
+            "FANTASMA \\(beta\\)"
+        ],
+        "ghost_info": [
+            "Modo em testes..."
         ]
     },
     "game": {

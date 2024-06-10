@@ -39,6 +39,12 @@
         ],
         "mineswp_info": [
             "Minesweeper mode, similar to classic mode but full of black cards and no white cards\n\n8 cards for each team (+1 for the starting team), 0 white and 8 black"
+        ],
+        "ghost": [
+            "GHOST \\(beta\\)"
+        ],
+        "ghost_info": [
+            "Mode under testing..."
         ]
     },
     "game": {
