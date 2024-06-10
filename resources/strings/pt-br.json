@@ -58,7 +58,7 @@
             "*EQUIPE {a}\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\n"
         ],
         "mode": [
-            "*MODO {mode}*{info}\n\n"
+            "*MODO {mode} {emoji}* {info}\n\n"
         ],
         "choose_role": [
             "Escolha seu time e papel:"

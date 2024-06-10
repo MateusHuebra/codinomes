@@ -33,6 +33,13 @@ class Game extends Model
         'black' => '◼️'
     ];
 
+    const MODES = [
+        'classic' => '🃏',
+        'fast' => '⚡️',
+        'ghost' => '👻',
+        'mineswp' => '💣'
+    ];
+
     public $timestamps = false;
     public $auxMenu = null;
     public $auxSubMenu = null;
