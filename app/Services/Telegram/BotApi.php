@@ -71,4 +71,12 @@ class BotApi extends OriginalBotApi {
         }
     }
 
+    public function editMessageText($chatId, $messageId, $text, $parseMode = null, $disablePreview = false, $replyMarkup = null, $inlineMessageId = null) {
+        try {
+            return parent::editMessageText($chatId, $messageId, $text, $parseMode, $disablePreview, $replyMarkup, $inlineMessageId);
+        } catch(Exception $e) {
+            return parent::editMessageText($chatId, $messageId, $text, $parseMode, $disablePreview, $replyMarkup, $inlineMessageId);
+        }
+    }
+
 }
