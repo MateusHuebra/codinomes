@@ -39,7 +39,7 @@ class Menu {
     public static function getLobbyText(Game $game, bool $showInfo = false) {
         $textMessage = AppString::get('game.mode', [
             'mode' => AppString::get('mode.'.$game->mode),
-            'info' => ($showInfo ? '   /info' : '')
+            'info' => ($showInfo ? '  /info' : '')
         ]);
         $textMessage.= $game->getTeamAndPlayersList();
         return $textMessage;

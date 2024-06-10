@@ -17,31 +17,7 @@ class GameCard extends Model
         }
         $cards = $game->chat->packs->getCards();
 
-        switch ($game->mode) {
-            case 'fast':
-                self::$cardsCounts = [
-                    'base' => 4,
-                    'black' => 2,
-                    'max' => 14
-                ];
-                break;
-
-            case 'mineswp':
-                self::$cardsCounts = [
-                    'base' => 8,
-                    'black' => 8,
-                    'max' => 25
-                ];
-                break;
-            
-            default:
-                self::$cardsCounts = [
-                    'base' => 8,
-                    'black' => 1,
-                    'max' => 25
-                ];
-                break;
-        }
+        self::setCardsCountsByMode($game->mode);
 
         if($cards->count() < self::$cardsCounts['max']) {
             return false;
@@ -65,6 +41,34 @@ class GameCard extends Model
             $gameCard->save();
         }
         return true;
+    }
+
+    private static function setCardsCountsByMode(string $gameMode) {
+        switch ($gameMode) {
+            case 'fast':
+                self::$cardsCounts = [
+                    'base' => 4,
+                    'black' => 1,
+                    'max' => 13
+                ];
+                break;
+
+            case 'mineswp':
+                self::$cardsCounts = [
+                    'base' => 8,
+                    'black' => 8,
+                    'max' => 25
+                ];
+                break;
+            
+            default:
+                self::$cardsCounts = [
+                    'base' => 8,
+                    'black' => 1,
+                    'max' => 25
+                ];
+                break;
+        }
     }
 
     private static function getColoredCards(array $shuffledCards, string $firstTeam) {

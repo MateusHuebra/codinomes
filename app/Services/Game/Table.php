@@ -19,8 +19,13 @@ class Table {
     const FONT_SIZE = 21;
     const EASTER_EGGS = ['MANOEL GOMES','THE WEEKND']; // might add later: 'LADY GAGA','AMOR','MEDO','SANGUE','MORTE','ENERGIA','CONHECIMENTO','KIAN'
     static $fontPath;
+    static $imageWidth;
+    static $imageHeight;
+    static $captionSpacing;
+    static $firstCardToBePushed;
 
     static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
+        self::setVarsByGameMode($game->mode);
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatLanguage = $game->chat->language;
 
@@ -39,12 +44,16 @@ class Table {
         
         $sendToMasters = ($sendToBothMasters || $game->role == 'master' || $winner);
 
+        $backgroundImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
         if($sendToMasters) {
-            $masterImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
+            $masterImage = imagecreatetruecolor(self::$imageWidth, self::$imageHeight);
+            imagecopy($masterImage, $backgroundImage, 0, 0, 0, 0, self::$imageWidth, self::$imageHeight);
         }
         if(!$winner) {
-            $agentsImage = imagecreatefrompng(public_path('images/'.$backgroundColor.'_background.png'));
+            $agentsImage = imagecreatetruecolor(self::$imageWidth, self::$imageHeight);
+            imagecopy($agentsImage, $backgroundImage, 0, 0, 0, 0, self::$imageWidth, self::$imageHeight);
         }
+        imagedestroy($backgroundImage);
 
         self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB);
         foreach($cards as $card) {
@@ -109,6 +118,23 @@ class Table {
         }
     }
 
+    private static function setVarsByGameMode(string $gameMode) {
+        self::$imageWidth = 860;
+        switch ($gameMode) {
+            case 'fast':
+                self::$imageHeight = 680;
+                self::$captionSpacing = 1000 - 420;
+                self::$firstCardToBePushed = 10;
+                break;
+            
+            default:
+                self::$imageHeight = 1100;
+                self::$captionSpacing = 1000;
+                self::$firstCardToBePushed = 22;
+                break;
+        }
+    }
+
     private static function getCURLFileFromImage($image, $tempFileName, string $fileName) : CURLFile {
         imagepng($image, $tempFileName);
         imagedestroy($image);
@@ -157,7 +183,7 @@ class Table {
     private static function addCaption($masterImage, $agentsImage, Caption $caption) {
         $title = $caption->title;
         $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 82);
-        $axis['y']+= + 1000;
+        $axis['y']+= + self::$captionSpacing;
 
         if(!is_null($caption->text)) {
             $text = $caption->text;
@@ -212,6 +238,8 @@ class Table {
             $x = self::BORDER+(3*210);
             imagecopy($agentsImage, $squareB, $x, $y, 0, 0, 210, 140);
         }
+        imagedestroy($squareA);
+        imagedestroy($squareB);
     }
 
     private static function getAxisToCenterText($fontSize, $text, $width, $height) {
@@ -246,7 +274,7 @@ class Table {
         
         $cardX = self::BORDER+($x*210);
         $cardY = self::BORDER+($y*140);
-        if($card->position > 21) {
+        if($card->position >= self::$firstCardToBePushed) {
             $cardX+= 105;
         }
 
@@ -315,11 +343,15 @@ class Table {
         
         if(!is_null($masterImage)) {
             imagecopy($masterImage, $masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
+            imagedestroy($masterCardImage);
         }
         if(!is_null($agentsImage)) {
             imagecopy($agentsImage, $agentsCardImage??$masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
+            if(isset($agentsCardImage)) {
+                imagedestroy($agentsCardImage);
+            }
         }
-        
+
     }
 
 }

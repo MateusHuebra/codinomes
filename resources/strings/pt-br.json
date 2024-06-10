@@ -32,13 +32,13 @@
             "RÁPIDO"
         ],
         "fast_info": [
-            "Modo rápido de jogo, é como o modo clássico só que reduzido\n\n4 cartas pra cada time (+1 pro time que começa), 3 brancas e 2 pretas"
+            "Modo rápido de jogo, é como o modo clássico só que reduzido\n\n4 cartas pra cada time (+1 pro time que começa), 3 brancas e 1 preta"
         ],
         "mineswp": [
             "CAMPO MINADO"
         ],
         "mineswp_info": [
-            "Modo campo minado, é como o modo clássico só que cheio de cartas pretas e nenhuma branca\n\n8 cartas pra cada time (+1 pro time que começa), 0 brancas e 8 preta"
+            "Modo campo minado, é como o modo clássico só que cheio de cartas pretas e nenhuma branca\n\n8 cartas pra cada time (+1 pro time que começa), 0 brancas e 8 pretas"
         ]
     },
     "game": {
