@@ -335,7 +335,6 @@ class Table {
             if($card->revealed) {       
                 if($game->mode == 'ghost') {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
-                    $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
                     imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
                     self::markCardAsRevealed($agentsCardImage);
                     if(false === self::highlightCardIfNeeded($agentsCardImage, $card, $highlightCard)) {
