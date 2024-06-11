@@ -213,11 +213,13 @@ class Table {
 
     private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
         $fontSize = 65;
+        if($masterImage) {
+            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+        }
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
         }
         if($masterImage || $game->mode != 'ghost') {
-            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
             $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
             $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
             $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
@@ -336,6 +338,9 @@ class Table {
                     $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
                     imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
                     self::markCardAsRevealed($agentsCardImage);
+                    if(false === self::highlightCardIfNeeded($agentsCardImage, $card, $highlightCard)) {
+                        $textColor = imagecolorallocate($agentsCardImage, 150, 150, 150);
+                    }
                 }
 
                 if(in_array($card->text, self::EASTER_EGGS)) {
@@ -345,10 +350,7 @@ class Table {
                     self::markCardAsRevealed($masterCardImage);
                 }
 
-                if($card->position === $highlightCard) {
-                    $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
-                    imagecopy($masterCardImage, $highlightedImage, 0, 0, 0, 0, 210, 140);
-                } else {
+                if(false === self::highlightCardIfNeeded($masterCardImage, $card, $highlightCard)) {
                     $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
                 }
             }
@@ -379,6 +381,16 @@ class Table {
         $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
         imagecopy($image, $revealedImage, 0, 0, 0, 0, 210, 140);
         imagedestroy($revealedImage);
+    }
+
+    private static function highlightCardIfNeeded($image, GameCard $card, int $highlightCard = null) {
+        if($card->position === $highlightCard) {
+            $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
+            imagecopy($image, $highlightedImage, 0, 0, 0, 0, 210, 140);
+            imagedestroy($highlightedImage);
+            return true;
+        }
+        return false;
     }
 
 }
