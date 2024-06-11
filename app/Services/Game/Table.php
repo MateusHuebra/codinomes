@@ -216,7 +216,7 @@ class Table {
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
         }
-        if($masterImage) {
+        if($masterImage || $game->mode != 'ghost') {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
             $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
             $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
@@ -247,8 +247,10 @@ class Table {
             $x = self::BORDER+(3*210);
             imagecopy($agentsImage, $ghostSquareB ?? $squareB, $x, $y, 0, 0, 210, 140);
         }
-        imagedestroy($squareA);
-        imagedestroy($squareB);
+        if($masterImage || $game->mode != 'ghost') {
+            imagedestroy($squareA);
+            imagedestroy($squareB);
+        }
         if($game->mode == 'ghost') {
             imagedestroy($ghostSquareA);
             imagedestroy($ghostSquareB);

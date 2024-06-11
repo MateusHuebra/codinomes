@@ -229,7 +229,7 @@ class Game extends Model
             return null;
         }
         if($ghost) {
-            $regex = '/ ['.implode('', self::COLORS).']+/ug';
+            $regex = '/ ['.implode('', self::COLORS).']+/u';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
         return str_replace(['.', '-'], ['\.', '\-'], $result??$this->history).'||';
