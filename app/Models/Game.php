@@ -192,6 +192,7 @@ class Game extends Model
 
         $this->team = $winner;
         $this->role = null;
+        $this->attempts_left = null;
         $this->save();
 
         if($this->status == 'canceled') {
@@ -228,7 +229,7 @@ class Game extends Model
             return null;
         }
         if($ghost) {
-            $regex = ' ['.implode('', self::COLORS).']+';
+            $regex = '/ ['.implode('', self::COLORS).']+/ug';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
         return str_replace(['.', '-'], ['\.', '\-'], $result??$this->history).'||';

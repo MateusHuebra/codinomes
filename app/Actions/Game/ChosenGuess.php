@@ -64,14 +64,15 @@ class ChosenGuess implements Action {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
 
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
+        
+        if($game->attempts_left!==null) {
+            $game->attempts_left--;
+            $game->save();
+        }
 
         //correct guess
         if($card->team == $player->team) {
             $attemptType = 'ally';
-            if($game->attempts_left!==null) {
-                $game->attempts_left--;
-            }
-
             //won
             if($cardsLeft <= 0) {
                 $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
