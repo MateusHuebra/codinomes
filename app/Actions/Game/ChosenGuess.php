@@ -59,16 +59,15 @@ class ChosenGuess implements Action {
             'b' => Game::COLORS[$game->color_b]
         ];
         $emoji = $emojis[$card->team];
+
+        if($game->attempts_left!==null) {
+            $game->attempts_left--;
+        }
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
         
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
 
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
-        
-        if($game->attempts_left!==null) {
-            $game->attempts_left--;
-            $game->save();
-        }
 
         //correct guess
         if($card->team == $player->team) {
@@ -142,7 +141,7 @@ class ChosenGuess implements Action {
             
             //skip
             } else {
-                if($game->mode != 'ghost') {
+                if($game->mode != 'ghost' || $game->attempts_left < 0) {
                     $game->nextStatus($user);
                 }
 
