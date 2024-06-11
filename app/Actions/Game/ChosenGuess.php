@@ -58,7 +58,7 @@ class ChosenGuess implements Action {
             'a' => Game::COLORS[$game->color_a],
             'b' => Game::COLORS[$game->color_b]
         ];
-        $emoji = ($game->mode == 'ghost') ? '❔' : $emojis[$card->team];
+        $emoji = $emojis[$card->team];
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
         
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
@@ -164,6 +164,7 @@ class ChosenGuess implements Action {
     }
 
     private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot) {
+        $emoji = ($game->mode == 'ghost') ? '❔' : $emoji;
         $chatLanguage = $game->chat->language;
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [

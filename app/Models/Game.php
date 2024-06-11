@@ -80,9 +80,9 @@ class Game extends Model
         return $this->chat->hasPermission($user, $bot);
     }
 
-    public function getLastHint() {
-        $regex = '/\*['.implode('', self::COLORS).'❔]+ (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
+    public function getLastHint(bool $ghost = false) {
         if(!$this->lastHint) {
+            $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
             preg_match($regex, $this->history, $matches);
             $this->lastHint = $matches['hint'];
         }
@@ -223,11 +223,15 @@ class Game extends Model
         $this->save();
     }
     
-    public function getHistory() {
+    public function getHistory(bool $ghost = false) {
         if(is_null($this->history)) {
             return null;
         }
-        return str_replace(['.', '-'], ['\.', '\-'], $this->history).'||';
+        if($ghost) {
+            $regex = ' ['.implode('', self::COLORS).']+';
+            $result = preg_replace($regex, ' ❔', $this->history);
+        }
+        return str_replace(['.', '-'], ['\.', '\-'], $result??$this->history).'||';
     }
 
     public function hasRequiredPlayers() : Bool {

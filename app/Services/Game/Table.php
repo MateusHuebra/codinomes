@@ -326,16 +326,14 @@ class Table {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
                     $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
                     imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
-                    $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-                    imagecopy($agentsCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+                    self::markCardAsRevealed($agentsCardImage);
                 }
 
                 if(in_array($card->text, self::EASTER_EGGS)) {
                     $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
                     imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, 210, 140);
                 } else {
-                    $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-                    imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, 210, 140);
+                    self::markCardAsRevealed($masterCardImage);
                 }
 
                 if($card->position === $highlightCard) {
@@ -366,6 +364,12 @@ class Table {
             }
         }
 
+    }
+
+    private static function markCardAsRevealed($image) {
+        $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
+        imagecopy($image, $revealedImage, 0, 0, 0, 0, 210, 140);
+        imagedestroy($revealedImage);
     }
 
 }
