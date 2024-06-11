@@ -212,25 +212,28 @@ class Table {
     }
 
     private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
-        if($masterImage) {
-            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
-        }
+        $fontSize = 65;
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
         }
-        $fontSize = 65; 
-        $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
-        $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
-        $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
-        $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
-        if($game->mode == 'ghost') {
-            $textA = $textB = '?';
-        } else {
-            $textA = $leftA;
-            $textB = $leftB;
+        if($masterImage) {
+            $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+            $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
+            $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+            $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
+            $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
+            imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
+            imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
         }
-        imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $textA);
-        imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $textB);
+        if($game->mode == 'ghost') {
+            $ghostSquareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
+            $ghostSquareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+            $ghostLeft = '?';
+            $axisA = self::getAxisToCenterText($fontSize, $ghostLeft, 210, 140);
+            $axisB = self::getAxisToCenterText($fontSize, $ghostLeft, 210, 140);
+            imagefttext($ghostSquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $ghostLeft);
+            imagefttext($ghostSquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $ghostLeft);
+        }
         $y = self::BORDER;
         if($masterImage) {
             $x = self::BORDER;
@@ -240,12 +243,16 @@ class Table {
         }
         if($agentsImage) {
             $x = self::BORDER;
-            imagecopy($agentsImage, $squareA, $x, $y, 0, 0, 210, 140);
+            imagecopy($agentsImage, $ghostSquareA ?? $squareA, $x, $y, 0, 0, 210, 140);
             $x = self::BORDER+(3*210);
-            imagecopy($agentsImage, $squareB, $x, $y, 0, 0, 210, 140);
+            imagecopy($agentsImage, $ghostSquareB ?? $squareB, $x, $y, 0, 0, 210, 140);
         }
         imagedestroy($squareA);
         imagedestroy($squareB);
+        if($game->mode == 'ghost') {
+            imagedestroy($ghostSquareA);
+            imagedestroy($ghostSquareB);
+        }
     }
 
     private static function getAxisToCenterText($fontSize, $text, $width, $height) {
