@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -41,6 +42,34 @@ class GameCard extends Model
             $gameCard->save();
         }
         return true;
+    }
+
+    public static function randomizeUnrevealedCardsColors(Game $game) {
+        $cards = $game->cards()
+            ->where('revealed', false)
+            ->get();
+        
+        $aTeamCount = $cards->where('color', 'a')->count();
+        $bTeamCount = $cards->where('color', 'b')->count();
+        $whiteCount = $cards->where('color', 'w')->count();
+        $blackCount = $cards->where('color', 'x')->count();
+
+        $cards = self::setColors($cards, $aTeamCount, 'a');
+        $cards = self::setColors($cards, $bTeamCount, 'b');
+        $cards = self::setColors($cards, $whiteCount, 'w');
+        $cards = self::setColors($cards, $blackCount, 'x');
+
+    }
+
+    private static function setColors(Collection $cards, int $quantity, string $team) {
+        while($quantity > 0) {
+            $card = $cards->random();
+            $cards->forget($card->id);
+            $card->team = $team;
+            $card->save();
+            $quantity--;
+        }
+        return $cards;
     }
 
     private static function setCardsCountsByMode(string $gameMode) {
@@ -110,4 +139,5 @@ class GameCard extends Model
 
         return $shuffledCards;
     }
+
 }

@@ -50,7 +50,13 @@
             "EIGHT-BALL \\(beta\\)"
         ],
         "8ball_info": [
-            "Modo em testes..."
+            "Mode under testing..."
+        ],
+        "crazy": [
+            "CRAZY \\(beta\\)"
+        ],
+        "crazy_info": [
+            "Mode under testing..."
         ]
     },
     "game": {
