@@ -32,9 +32,8 @@ class ChosenGuess implements Action {
         }
 
         if($update->isType(Update::MESSAGE)) {
-            $text = $update->getMessageText();
             $card = GameCard::where('game_id', $game->id)
-                ->whereRaw('BINARY text = ?', [$text])
+                ->whereRaw('BINARY text = ?', [$update->getMessageText()])
                 ->first();
             if(!$card) {
                 return;
@@ -84,7 +83,8 @@ class ChosenGuess implements Action {
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
-                $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
+                $title = AppString::get('game.correct', null, $chatLanguage);
+                $text = $game->getLastHint();
                 $winner = null;
 
             //skip
@@ -97,7 +97,8 @@ class ChosenGuess implements Action {
                 } else {
                     $game->nextStatus($user);
 
-                    $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
+                    $title = AppString::get('game.correct', null, $chatLanguage);
+                    $text = $game->getLastHint();
                 }
 
                 $winner = null;
@@ -153,7 +154,8 @@ class ChosenGuess implements Action {
                         $game->nextStatus($user);
                     }
 
-                    $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
+                    $title = AppString::get('game.incorrect', null, $chatLanguage);
+                    $text = $game->getLastHint();
                 }
 
                 $winner = null;
