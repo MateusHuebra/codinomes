@@ -77,7 +77,7 @@ class Table {
             $keyboard = self::getKeyboard($game, $chatLanguage);
             $text = $game->getPhotoCaption();
             if($game->history !== null) {
-                $text.- PHP_EOL.PHP_EOL.$game->getHistory($game->mode == 'ghost');
+                $text.= PHP_EOL.PHP_EOL.$game->getHistory($game->mode == 'ghost');
             }
             
             $message = $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
@@ -86,7 +86,7 @@ class Table {
             if($sendToMasters) {
                 $text = AppString::getParsed('game.send_hint');
                 if($game->history !== null) {
-                    $text.- PHP_EOL.PHP_EOL.$game->getHistory();
+                    $text.= PHP_EOL.PHP_EOL.$game->getHistory();
                 }
                 try{
                     if($sendToBothMasters || $game->team == 'a') {
