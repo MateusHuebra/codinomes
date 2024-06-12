@@ -84,7 +84,7 @@ class Game extends Model
 
     public function getLastHint(bool $ghost = false) {
         if(!$this->lastHint) {
-            $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\s\S]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
+            $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[A-Z\- ]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
             preg_match($regex, $this->history, $matches);
             $this->lastHint = $matches['hint'];
         }
@@ -215,7 +215,7 @@ class Game extends Model
         if($this->mode == 'crazy') {
             GameCard::randomizeUnrevealedCardsColors($this);
         }
-        
+
         $this->updateStatus('playing', $user->getEnemyTeam(), 'master');
         $this->attempts_left = null;
         $this->save();

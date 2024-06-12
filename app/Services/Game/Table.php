@@ -28,12 +28,8 @@ class Table {
         self::setVarsByGameMode($game->mode);
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatLanguage = $game->chat->language;
+        $backgroundColor = ($winner) ? $game->{'color_'.$winner} : $game->{'color_'.$game->team};
 
-        if($winner) {
-            $backgroundColor = $game->{'color_'.$winner};
-        } else {
-            $backgroundColor = $game->{'color_'.$game->team};
-        }
         if($game->mode == 'crazy') {
             $cards = $game->cards()->get();
         } else {
