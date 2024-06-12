@@ -50,13 +50,13 @@
             "BILHAR \\(beta\\)"
         ],
         "8ball_info": [
-            "Modo em testes..."
+            "Modo bilhar, é como o modo clássico só que ao achar todas as suas cartas, você deve finalizar encontrando a carta preta para ganhar sem dica alguma\n\n7 cartas pra cada time (+1 pro time que começa), 9 brancas e 1 preta"
         ],
         "crazy": [
             "MALUCO \\(beta\\)"
         ],
         "crazy_info": [
-            "Modo em testes..."
+            "Modo maluco, toda rodada as cartas não reveladas trocam de cor entre si, fazendo as dicas anteriores serem completamente inúteis, porém dando a possibilidade de novas combinações de dicas para a rodada atual\n\nMesma quantidade de cartas do clássico"
         ]
     },
     "game": {

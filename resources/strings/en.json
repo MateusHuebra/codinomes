@@ -26,19 +26,19 @@
             "CLASSIC"
         ],
         "classic_info": [
-            "Classic game mode\n\n8 cards for each team (+1 for the starting team), 7 white and 1 black"
+            "Classic game mode\n\n8 cards for each team (+1 for the team that starts), 7 white and 1 black"
         ],
         "fast": [
             "FAST"
         ],
         "fast_info": [
-            "Fast game mode, similar to classic mode but shorter\n\n4 cards for each team (+1 for the starting team), 3 white and 1 black"
+            "Fast game mode, similar to classic mode but shorter\n\n4 cards for each team (+1 for the team that starts), 3 white and 1 black"
         ],
         "mineswp": [
             "MINESWEEPER"
         ],
         "mineswp_info": [
-            "Minesweeper mode, similar to classic mode but full of black cards and no white cards\n\n8 cards for each team (+1 for the starting team), 0 white and 8 black"
+            "Minesweeper mode, similar to classic mode but full of black cards and no white cards\n\n8 cards for each team (+1 for the team that starts), 0 white and 8 black"
         ],
         "ghost": [
             "GHOST"
@@ -50,13 +50,13 @@
             "EIGHT-BALL \\(beta\\)"
         ],
         "8ball_info": [
-            "Mode under testing..."
+            "Eight-ball mode, it's like the classic mode, but after finding all your cards, you must finish by finding the black card to win without any hints\n\n7 cards for each team (+1 for the team that starts), 9 white, and 1 black"
         ],
         "crazy": [
             "CRAZY \\(beta\\)"
         ],
         "crazy_info": [
-            "Mode under testing..."
+            "Crazy mode, each round the unrevealed cards swap colors with each other, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
         ]
     },
     "game": {
