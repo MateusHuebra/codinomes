@@ -169,7 +169,7 @@ class Game extends Model
         } catch(Exception $e) {}
 
         $caption = new Caption(AppString::get('game.started'), null, 50);
-        Table::send($this, $bot, $caption, null, null, true);
+        Table::send($this, $bot, $caption);
 
         return true;
     }

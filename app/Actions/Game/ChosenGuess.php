@@ -175,7 +175,7 @@ class ChosenGuess implements Action {
             $caption = new Caption($title, $text??null);
         }
 
-        Table::send($game, $bot, $caption, $card->position, $winner, $game->mode == 'crazy' && $game->role == 'master');
+        Table::send($game, $bot, $caption, $card->position, $winner);
         UserStats::addAttempt($game, $player->team, $attemptType, $bot);
 
     }
