@@ -131,6 +131,19 @@ class UserAchievement extends Model
         }
     }
 
+    public static function checkBlackCard(Game $game, int $cardsLeft, $player, BotApi $bot) {
+        if($game->mode == 'classic') {
+            if($cardsLeft == 1) {
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                self::add($agents, 'day_is_night', $bot, $game->chat_id);
+                
+            } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                self::add($agents, 'good_start', $bot, $game->chat_id);
+            }
+        }
+    }
+
     private static function doesUserHaveAllColors(Collection $colorStats) {
         $result = true;
         foreach(Game::COLORS as $color => $emoji) {

@@ -122,16 +122,7 @@ class ChosenGuess implements Action {
                 $text = AppString::get('game.win_black', null, $chatLanguage);
                 $winner = $user->getEnemyTeam();
                 
-                if($game->mode == 'classic') {
-                    if($cardsLeft == 1) {
-                        $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                        UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
-                        
-                    } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
-                        $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                        UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
-                    }
-                }
+                UserAchievement::checkBlackCard($game, $cardsLeft, $player, $bot);
             }
 
         //incorrect guess
