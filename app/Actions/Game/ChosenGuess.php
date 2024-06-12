@@ -164,7 +164,7 @@ class ChosenGuess implements Action {
 
                     $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
                 }
-                
+
                 $winner = null;
             }
         }
@@ -172,7 +172,7 @@ class ChosenGuess implements Action {
         if($game->mode == 'ghost' && $winner === null) {
             $caption = new Caption($game->getLastHint(), null, 50);
         } else {
-            $caption = new Caption($title, $text);
+            $caption = new Caption($title, $text??null);
         }
 
         Table::send($game, $bot, $caption, $card->position, $winner);
