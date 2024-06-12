@@ -44,7 +44,7 @@
             "FANTASMA \\(beta\\)"
         ],
         "ghost_info": [
-            "Modo em testes..."
+            "Modo fantasma, é como o modo clássico só que os agentes não sabem qual a cor das cartas viradas até alguém ganhar o jogo\n\nErrar não pula a vez, mas acertar uma preta ainda perde na hora"
         ]
     },
     "game": {
