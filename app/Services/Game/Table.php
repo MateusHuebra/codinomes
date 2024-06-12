@@ -76,6 +76,9 @@ class Table {
 
             $keyboard = self::getKeyboard($game, $chatLanguage);
             $text = $game->getPhotoCaption();
+            if($game->history !== null) {
+                $text.- PHP_EOL.PHP_EOL.$game->getHistory($game->mode == 'ghost');
+            }
             
             $message = $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
             unlink($tempAgentsImageFileName);
@@ -83,10 +86,10 @@ class Table {
             if($sendToMasters) {
                 try{
                     if($sendToBothMasters || $game->team == 'a') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->team=='a')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->team=='a')?AppString::getParsed('game.send_hint').PHP_EOL.PHP_EOL.$game->getHistory():null, null, null, false, 'MarkdownV2', null, true);
                     }
                     if($sendToBothMasters || $game->team == 'b') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?AppString::getParsed('game.send_hint'):null, null, null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?AppString::getParsed('game.send_hint').PHP_EOL.PHP_EOL.$game->getHistory():null, null, null, false, 'MarkdownV2', null, true);
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
