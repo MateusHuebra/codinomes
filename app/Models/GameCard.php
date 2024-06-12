@@ -49,10 +49,10 @@ class GameCard extends Model
             ->where('revealed', false)
             ->get();
         
-        $aTeamCount = $cards->where('color', 'a')->count();
-        $bTeamCount = $cards->where('color', 'b')->count();
-        $whiteCount = $cards->where('color', 'w')->count();
-        $blackCount = $cards->where('color', 'x')->count();
+        $aTeamCount = $cards->where('team', 'a')->count();
+        $bTeamCount = $cards->where('team', 'b')->count();
+        $whiteCount = $cards->where('team', 'w')->count();
+        $blackCount = $cards->where('team', 'x')->count();
 
         $cards = self::setColors($cards, $aTeamCount, 'a');
         $cards = self::setColors($cards, $bTeamCount, 'b');
