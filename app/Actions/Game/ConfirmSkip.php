@@ -57,7 +57,7 @@ class ConfirmSkip implements Action {
         }
 
         $caption = new Caption($title, $game->getLastHint());
-        Table::send($game, $bot, $caption);
+        Table::send($game, $bot, $caption, null, null, $game->mode == 'crazy' && $game->role == 'master');
     }
 
 }
