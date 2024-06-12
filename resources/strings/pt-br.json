@@ -195,6 +195,9 @@
         "8ball": [
             "Encontre a carta preta!"
         ],
+        "8ball_hint": [
+            "BOLA 8"
+        ],
         "started": [
             "Partida iniciada!"
         ],

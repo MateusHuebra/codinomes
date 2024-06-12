@@ -195,6 +195,9 @@
         "8ball": [
             "Find the black card!"
         ],
+        "8ball_hint": [
+            "BALL 8"
+        ],
         "started": [
             "Game started!"
         ],

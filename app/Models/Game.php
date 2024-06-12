@@ -216,6 +216,13 @@ class Game extends Model
         $this->save();
     }
 
+    public function setEightBallToHistory($player) {
+        $color = ($player->team == 'a') ? $this->color_a : $this->color_b;
+        $emoji = self::COLORS[$color];
+        $historyLine = $emoji.' '.AppString::get('game.8ball_hint');
+        $this->addToHistory('*'.$historyLine.'*');
+    }
+
     public function addToHistory(string $line) {
         if($this->history === null) {
             $this->history = '**>'.$line;
