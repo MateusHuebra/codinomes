@@ -73,7 +73,7 @@ class ChosenGuess implements Action {
         if($card->team == $player->team) {
             $attemptType = 'ally';
             //won
-            if($cardsLeft <= 0) {
+            if($cardsLeft <= 0 && $game->mode != '8ball') {
                 $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
@@ -101,33 +101,44 @@ class ChosenGuess implements Action {
 
         //black card
         } else if($card->team == 'x') {
-            $attemptType = 'black';
-            $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_black', null, $chatLanguage);
+            if($game->mode == '8ball' && $cardsLeft == 0) {
+                $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
+                $title = AppString::get('game.win', [
+                    'team' => AppString::get('color.'.$color)
+                ], $chatLanguage);
+                $text = AppString::get('game.win_color', null, $chatLanguage);
 
-            $winner = $user->getEnemyTeam();
-            
-            if($game->mode == 'classic') {
-                if($cardsLeft == 1) {
-                    $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                    UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
-                    
-                } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
-                    $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-                    UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
+                $winner = $player->team;
+
+            } else {
+                $attemptType = 'black';
+                $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
+                $title = AppString::get('game.win', [
+                    'team' => AppString::get('color.'.$color)
+                ], $chatLanguage);
+                $text = AppString::get('game.win_black', null, $chatLanguage);
+    
+                $winner = $user->getEnemyTeam();
+                
+                if($game->mode == 'classic') {
+                    if($cardsLeft == 1) {
+                        $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                        UserAchievement::add($agents, 'day_is_night', $bot, $game->chat_id);
+                        
+                    } else if ($cardsLeft == $game->cards->where('team', $player->team)->count()) {
+                        $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                        UserAchievement::add($agents, 'good_start', $bot, $game->chat_id);
+                    }
                 }
             }
-            
+
         //incorrect guess
         } else {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             $cardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
             
             //won
-            if($cardsLeft <= 0) {
+            if($cardsLeft <= 0 && $game->mode != '8ball') {
                 $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)

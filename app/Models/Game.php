@@ -37,7 +37,8 @@ class Game extends Model
         'classic' => '🃏',
         'fast' => '⚡️',
         'ghost' => '👻',
-        'mineswp' => '💣'
+        'mineswp' => '💣',
+        '8ball' => '🎱'
     ];
 
     public $timestamps = false;

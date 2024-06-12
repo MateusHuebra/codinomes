@@ -100,6 +100,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_ghost', 'novo_fantasma'])) {
             return new Create('ghost');
 
+        } else if(in_array($command, ['new_eightball', 'novo_bilhar'])) {
+            return new Create('8ball');
+
         } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;
 
