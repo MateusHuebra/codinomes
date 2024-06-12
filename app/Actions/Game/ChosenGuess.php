@@ -83,8 +83,13 @@ class ChosenGuess implements Action {
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
-                $title = AppString::get('game.correct', null, $chatLanguage);
-                $text = $game->getLastHint();
+                if($game->mode == '8ball' && $opponentCardsLeft == 0) {
+                    $title = AppString::get('game.8ball', null, $chatLanguage);
+
+                } else {
+                    $title = AppString::get('game.correct', null, $chatLanguage);
+                    $text = $game->getLastHint();
+                }
                 $winner = null;
 
             //skip
