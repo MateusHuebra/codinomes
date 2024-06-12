@@ -54,6 +54,13 @@ class GameCard extends Model
         $whiteCount = $cards->where('team', 'w')->count();
         $blackCount = $cards->where('team', 'x')->count();
 
+        var_dump([
+            'aTeamCount' => $aTeamCount,
+            'bTeamCount' => $bTeamCount,
+            'whiteCount' => $whiteCount,
+            'blackCount' => $blackCount
+        ]);
+
         $cards = self::setColors($cards, $aTeamCount, 'a');
         $cards = self::setColors($cards, $bTeamCount, 'b');
         $cards = self::setColors($cards, $whiteCount, 'w');
@@ -64,7 +71,8 @@ class GameCard extends Model
     private static function setColors(Collection $cards, int $quantity, string $team) {
         while($quantity > 0) {
             $card = $cards->random();
-            $cards->forget($card->id);
+            $key = $cards->search($card);
+            $cards->forget($key);
             $card->team = $team;
             $card->save();
             $quantity--;
