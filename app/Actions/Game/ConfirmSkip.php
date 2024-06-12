@@ -53,10 +53,10 @@ class ConfirmSkip implements Action {
         } else {
             $game->nextStatus($user);
 
-            $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
+            $title = AppString::get('game.skipped', null, $chatLanguage);
         }
 
-        $caption = new Caption($title);
+        $caption = new Caption($title, $game->getLastHint());
         Table::send($game, $bot, $caption);
     }
 
