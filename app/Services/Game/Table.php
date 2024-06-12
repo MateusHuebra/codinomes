@@ -112,7 +112,7 @@ class Table {
             $text.= AppString::getParsed('game.win', [
                 'team' => $team
             ], $chatLanguage);
-            $text.= PHP_EOL.PHP_EOL.$game->getHistory();
+            $text.= PHP_EOL.$game->getHistory();
 
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
             $title = '\\'.$game->chat_id."\n".AppString::parseMarkdownV2($game->chat->title)."\n\n";
