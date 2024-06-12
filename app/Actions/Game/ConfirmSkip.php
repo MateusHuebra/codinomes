@@ -44,12 +44,18 @@ class ConfirmSkip implements Action {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        $game->updateStatus('playing', $user->getEnemyTeam(), 'master');
-        $game->attempts_left = null;
+        if($game->mode == '8ball' && $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count() == 0) {
+            $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
 
-        $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
-        $text = AppString::get('game.history', null, $chatLanguage);
-        $caption = new Caption($title, $text);
+            $title = AppString::get('game.8ball', null, $chatLanguage);
+
+        } else {
+            $game->nextStatus($user);
+
+            $title = AppString::get('game.skipped', null, $chatLanguage).' '.$game->getLastHint();
+        }
+
+        $caption = new Caption($title);
         Table::send($game, $bot, $caption);
     }
 

@@ -68,6 +68,7 @@ class ChosenGuess implements Action {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
 
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
+        $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
 
         //correct guess
         if($card->team == $player->team) {
@@ -79,22 +80,25 @@ class ChosenGuess implements Action {
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-
                 $winner = $player->team;
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
                 $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
-                $text = AppString::get('game.history', null, $chatLanguage);
-
                 $winner = null;
 
             //skip
             } else {
-                $game->nextStatus($user);
+                if($game->mode == '8ball' && $opponentCardsLeft == 0) {
+                    $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
 
-                $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
-                $text = AppString::get('game.history', null, $chatLanguage);
+                    $title = AppString::get('game.8ball', null, $chatLanguage);
+
+                } else {
+                    $game->nextStatus($user);
+
+                    $title = AppString::get('game.correct', null, $chatLanguage).' '.$game->getLastHint();
+                }
 
                 $winner = null;
             }
@@ -107,7 +111,6 @@ class ChosenGuess implements Action {
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-
                 $winner = $player->team;
 
             } else {
@@ -117,7 +120,6 @@ class ChosenGuess implements Action {
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_black', null, $chatLanguage);
-    
                 $winner = $user->getEnemyTeam();
                 
                 if($game->mode == 'classic') {
@@ -135,16 +137,14 @@ class ChosenGuess implements Action {
         //incorrect guess
         } else {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
-            $cardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
             
             //won
-            if($cardsLeft <= 0 && $game->mode != '8ball') {
+            if($opponentCardsLeft <= 0 && $game->mode != '8ball') {
                 $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-
                 $winner = $user->getEnemyTeam();
                 
                 $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
@@ -152,23 +152,29 @@ class ChosenGuess implements Action {
             
             //skip
             } else {
-                if($game->mode != 'ghost' || $game->attempts_left < 0) {
-                    $game->nextStatus($user);
+                if($game->mode == '8ball' && $opponentCardsLeft == 0) {
+                    $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
+
+                    $title = AppString::get('game.8ball', null, $chatLanguage);
+
+                } else {
+                    if($game->mode != 'ghost' || $game->attempts_left < 0) {
+                        $game->nextStatus($user);
+                    }
+
+                    $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
                 }
-
-                $title = AppString::get('game.incorrect', null, $chatLanguage).' '.$game->getLastHint();
-                $text = AppString::get('game.history', null, $chatLanguage);
-
+                
                 $winner = null;
             }
         }
 
         if($game->mode == 'ghost' && $winner === null) {
-            $title = $game->getLastHint();
-            $text = AppString::get('game.history', null, $chatLanguage);
+            $caption = new Caption($game->getLastHint(), null, 50);
+        } else {
+            $caption = new Caption($title, $text);
         }
 
-        $caption = new Caption($title, $text);
         Table::send($game, $bot, $caption, $card->position, $winner);
         UserStats::addAttempt($game, $player->team, $attemptType, $bot);
 
