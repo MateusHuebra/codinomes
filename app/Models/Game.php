@@ -38,7 +38,8 @@ class Game extends Model
         'fast' => '⚡️',
         'ghost' => '👻',
         'mineswp' => '💣',
-        '8ball' => '🎱'
+        '8ball' => '🎱',
+        'crazy' => '🤯'
     ];
 
     public $timestamps = false;
@@ -217,7 +218,7 @@ class Game extends Model
     }
 
     public function setEightBallToHistory($player) {
-        $color = ($player->team == 'a') ? $this->color_a : $this->color_b;
+        $color = ($player->team == 'a') ? $this->color_b : $this->color_a;
         $emoji = self::COLORS[$color];
         $historyLine = $emoji.' '.AppString::get('game.8ball_hint');
         $this->addToHistory('*'.$historyLine.'*');
