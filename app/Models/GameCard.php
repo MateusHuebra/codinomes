@@ -60,6 +60,14 @@ class GameCard extends Model
                     'max' => 25
                 ];
                 break;
+
+            case '8ball':
+                self::$cardsCounts = [
+                    'base' => 7,
+                    'black' => 1,
+                    'max' => 25
+                ];
+                break;
             
             default:
                 self::$cardsCounts = [
