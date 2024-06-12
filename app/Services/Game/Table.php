@@ -34,7 +34,7 @@ class Table {
         } else {
             $backgroundColor = $game->{'color_'.$game->team};
         }
-        $cards = $game->cards;
+        $cards = GameCard::where('game_id', $game->id)->get();
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
 
