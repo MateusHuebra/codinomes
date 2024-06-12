@@ -84,12 +84,16 @@ class Table {
             unlink($tempAgentsImageFileName);
 
             if($sendToMasters) {
+                $text = AppString::getParsed('game.send_hint');
+                if($game->history !== null) {
+                    $text.- PHP_EOL.PHP_EOL.$game->getHistory();
+                }
                 try{
                     if($sendToBothMasters || $game->team == 'a') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->team=='a')?AppString::getParsed('game.send_hint').PHP_EOL.PHP_EOL.$game->getHistory():null, null, null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('a', 'master')->first()->id, $masterPhoto, ($game->team=='a')?$text:null, null, null, false, 'MarkdownV2', null, true);
                     }
                     if($sendToBothMasters || $game->team == 'b') {
-                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?AppString::getParsed('game.send_hint').PHP_EOL.PHP_EOL.$game->getHistory():null, null, null, false, 'MarkdownV2', null, true);
+                        $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?$text:null, null, null, false, 'MarkdownV2', null, true);
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
