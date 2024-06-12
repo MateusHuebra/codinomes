@@ -112,6 +112,7 @@ class ChosenGuess implements Action {
 
         //black card
         } else if($card->team == 'x') {
+            $attemptType = 'black';
             if($game->mode == '8ball' && $cardsLeft == 0) {
                 $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
@@ -121,7 +122,6 @@ class ChosenGuess implements Action {
                 $winner = $player->team;
 
             } else {
-                $attemptType = 'black';
                 $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
