@@ -194,7 +194,7 @@ class Table {
 
         if(!is_null($caption->text)) {
             $text = $caption->text;
-            $textSize = floor($caption->titleSize*0.7);
+            $textSize = floor($caption->titleSize*0.8);
             $axisText = self::getAxisToCenterText($textSize, $text, 860, 90);
             $axisText['y'] = $axis['y'] + ($textSize/2) + 5;
             $axis['y'] = $axis['y'] - ($textSize/2) - 5;
