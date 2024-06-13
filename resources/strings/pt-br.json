@@ -319,7 +319,7 @@
             "Digite uma dica"
         ],
         "wrong_hint_format_desc": [
-            "Uma palavra de até 16 letras + número de cartas a qual essa dica se refere. Exemplos: Medo 2, 3 Brilhoso..."
+            "Uma dica de até 16 letras + número de cartas a qual essa dica se refere. Exemplos: Medo 2, 3 Brilhoso..."
         ],
         "wrong_guess_format_title": [
             "Digite seu chute"
@@ -356,6 +356,9 @@
         ],
         "no_achievements": [
             "Nenhuma conquista"
+        ],
+        "dm_inline": [
+            "Não use inline no pv do bot, apenas envie a dica como uma simples mensagem"
         ]
     },
     "time": {

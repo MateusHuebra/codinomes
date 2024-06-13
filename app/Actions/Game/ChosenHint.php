@@ -24,9 +24,14 @@ class ChosenHint implements Action {
         }
 
         if($update->isType(Update::MESSAGE)) {
+            if($update->getMessage()->getViaBot()) {
+                $bot->sendMessage($user->id, AppString::get('error.dm_inline'));
+                return;
+            }
             $hint = new Hint;
             $data = CDM::toArray($hint->run($update, $bot, $update->getMessageText()));
             if($data[CDM::EVENT] == CDM::IGNORE) {
+                $bot->sendMessage($user->id, AppString::get('error.wrong_hint_format_desc'));
                 $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
                 return;
             }

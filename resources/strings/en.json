@@ -319,7 +319,7 @@
             "Enter a hint"
         ],
         "wrong_hint_format_desc": [
-            "A single word up to 16 characters + number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
+            "A hint up to 16 characters + number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
         ],
         "wrong_guess_format_title": [
             "Enter your guess"
@@ -356,6 +356,9 @@
         ],
         "no_achievements": [
             "No achievements"
+        ],
+        "dm_inline": [
+            "Don't use inline in the bot's private chat, just send the hint as a simple message"
         ]
     },
     "time": {
