@@ -107,6 +107,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_crazy', 'novo_maluco'])) {
             return new Create('crazy');
 
+        } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
+            return new Create('random');
+
         } else if(in_array($command, ['table', 'tabela'])) {
             return new Table;
 

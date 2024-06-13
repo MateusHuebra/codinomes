@@ -40,6 +40,10 @@ class Create implements Action {
             $bot->sendMessage($chat->id, AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
+
+        if($this->mode == 'random') {
+            $this->mode = array_rand(Game::MODES);
+        }
         
         $message = $bot->sendMessage($chat->id, AppString::get('game.creating'));
 
