@@ -9,6 +9,7 @@ use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Actions\Game\Info;
+use App\Actions\Game\Table;
 use App\Actions\GetColors;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\Create;
@@ -105,6 +106,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['new_crazy', 'novo_maluco'])) {
             return new Create('crazy');
+
+        } else if(in_array($command, ['table', 'tabela'])) {
+            return new Table;
 
         } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;

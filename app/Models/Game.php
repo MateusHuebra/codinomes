@@ -82,11 +82,14 @@ class Game extends Model
         return $this->chat->hasPermission($user, $bot);
     }
 
-    public function getLastHint(bool $ghost = false) {
+    public function getLastHint() {
         if(!$this->lastHint) {
             $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\- ]{1,16} [0-9∞]+)\*(\R>  - .+)*$/u';
-            preg_match($regex, $this->history, $matches);
-            $this->lastHint = $matches['hint'];
+            if(preg_match($regex, $this->history, $matches)) {
+                $this->lastHint = $matches['hint'];
+            } else {
+                $this->lastHint = '';
+            }
         }
         return $this->lastHint;
     }
