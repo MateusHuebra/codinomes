@@ -157,7 +157,7 @@ class ChosenGuess implements Action {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
-                    if($game->mode != 'ghost' || $game->attempts_left < 0) {
+                    if($game->mode != 'mystery' || $game->attempts_left < 0) {
                         $game->nextStatus($user);
                     }
 
@@ -169,7 +169,7 @@ class ChosenGuess implements Action {
             }
         }
 
-        if($game->mode == 'ghost' && $winner === null) {
+        if($game->mode == 'mystery' && $winner === null) {
             $caption = new Caption($game->getLastHint(), null, 50);
         } else {
             $caption = new Caption($title, $text??null);
@@ -181,7 +181,7 @@ class ChosenGuess implements Action {
     }
 
     private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot) {
-        $emoji = ($game->mode == 'ghost') ? '❔' : $emoji;
+        $emoji = ($game->mode == 'mystery') ? '❔' : $emoji;
         $chatLanguage = $game->chat->language;
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [

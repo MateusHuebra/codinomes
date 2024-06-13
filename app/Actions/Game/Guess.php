@@ -39,7 +39,7 @@ class Guess implements Action {
                 $results[] = $this->getErrorResult();
             } else {
                 foreach($filteredCards as $card) {
-                    $emoji = ($game->mode == 'ghost') ? '❔' : $emojis[$card->team];
+                    $emoji = ($game->mode == 'mystery') ? '❔' : $emojis[$card->team];
                     $title = $card->text;
                     $messageContent = new Text($emoji.' '.$title);
                     $data = CDM::toString([

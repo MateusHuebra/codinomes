@@ -40,11 +40,11 @@
         "mineswp_info": [
             "Minesweeper mode, similar to classic mode but full of black cards and no white cards\n\n8 cards for each team (+1 for the team that starts), 0 white and 8 black"
         ],
-        "ghost": [
-            "GHOST"
+        "mystery": [
+            "MYSTERY"
         ],
-        "ghost_info": [
-            "Ghost Mode, it's like the classic mode but the agents don't know the color of the revealed cards until someone wins the game\n\nGuessing wrong doesn't skip the turn, but guessing a black card still results in an immediate loss"
+        "mystery_info": [
+            "Mystery Mode, it's like the classic mode but the agents don't know the color of the revealed cards until someone wins the game\n\nGuessing wrong doesn't skip the turn, but guessing a black card still results in an immediate loss"
         ],
         "8ball": [
             "EIGHT-BALL \\(beta\\)"

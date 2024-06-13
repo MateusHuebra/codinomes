@@ -77,7 +77,7 @@ class Table {
             $keyboard = self::getKeyboard($game, $chatLanguage);
             $text = $game->getPhotoCaption();
             if($game->history !== null) {
-                $text.= PHP_EOL.$game->getHistory($game->mode == 'ghost');
+                $text.= PHP_EOL.$game->getHistory($game->mode == 'mystery');
             }
             
             $message = $bot->sendPhoto($game->chat_id, $agentsPhoto, $text, null, $keyboard, false, 'MarkdownV2');
@@ -226,7 +226,7 @@ class Table {
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
         }
-        if($masterImage || $game->mode != 'ghost') {
+        if($masterImage || $game->mode != 'mystery') {
             $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
             $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
             $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
@@ -234,14 +234,14 @@ class Table {
             imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
             imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
         }
-        if($game->mode == 'ghost') {
-            $ghostSquareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
-            $ghostSquareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
-            $ghostLeft = '?';
-            $axisA = self::getAxisToCenterText($fontSize, $ghostLeft, 210, 140);
-            $axisB = self::getAxisToCenterText($fontSize, $ghostLeft, 210, 140);
-            imagefttext($ghostSquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $ghostLeft);
-            imagefttext($ghostSquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $ghostLeft);
+        if($game->mode == 'mystery') {
+            $mysterySquareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
+            $mysterySquareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+            $mysteryLeft = '?';
+            $axisA = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
+            $axisB = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
+            imagefttext($mysterySquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $mysteryLeft);
+            imagefttext($mysterySquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $mysteryLeft);
         }
         $y = self::BORDER;
         if($masterImage) {
@@ -252,17 +252,17 @@ class Table {
         }
         if($agentsImage) {
             $x = self::BORDER;
-            imagecopy($agentsImage, $ghostSquareA ?? $squareA, $x, $y, 0, 0, 210, 140);
+            imagecopy($agentsImage, $mysterySquareA ?? $squareA, $x, $y, 0, 0, 210, 140);
             $x = self::BORDER+(3*210);
-            imagecopy($agentsImage, $ghostSquareB ?? $squareB, $x, $y, 0, 0, 210, 140);
+            imagecopy($agentsImage, $mysterySquareB ?? $squareB, $x, $y, 0, 0, 210, 140);
         }
-        if($masterImage || $game->mode != 'ghost') {
+        if($masterImage || $game->mode != 'mystery') {
             imagedestroy($squareA);
             imagedestroy($squareB);
         }
-        if($game->mode == 'ghost') {
-            imagedestroy($ghostSquareA);
-            imagedestroy($ghostSquareB);
+        if($game->mode == 'mystery') {
+            imagedestroy($mysterySquareA);
+            imagedestroy($mysterySquareB);
         }
     }
 
@@ -340,7 +340,7 @@ class Table {
             }
 
             if($card->revealed) {       
-                if($game->mode == 'ghost') {
+                if($game->mode == 'mystery') {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
                     imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
                     self::markCardAsRevealed($agentsCardImage);

@@ -40,11 +40,11 @@
         "mineswp_info": [
             "Modo campo minado, é como o modo clássico só que cheio de cartas pretas e nenhuma branca\n\n8 cartas pra cada time (+1 pro time que começa), 0 brancas e 8 pretas"
         ],
-        "ghost": [
-            "FANTASMA"
+        "mystery": [
+            "MISTÉRIO"
         ],
-        "ghost_info": [
-            "Modo fantasma, é como o modo clássico só que os agentes não sabem qual a cor das cartas viradas até alguém ganhar o jogo\n\nErrar não pula a vez, mas acertar uma preta ainda perde na hora"
+        "mystery_info": [
+            "Modo mistério, é como o modo clássico só que os agentes não sabem qual a cor das cartas viradas até alguém ganhar o jogo\n\nErrar não pula a vez, mas acertar uma preta ainda perde na hora"
         ],
         "8ball": [
             "BILHAR \\(beta\\)"

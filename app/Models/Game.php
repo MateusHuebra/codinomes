@@ -36,7 +36,7 @@ class Game extends Model
     const MODES = [
         'classic' => '🃏',
         'fast' => '⚡️',
-        'ghost' => '👻',
+        'mystery' => '❔',
         'mineswp' => '💣',
         '8ball' => '🎱',
         'crazy' => '🤯'
@@ -240,11 +240,11 @@ class Game extends Model
         $this->save();
     }
     
-    public function getHistory(bool $ghost = false) {
+    public function getHistory(bool $mystery = false) {
         if(is_null($this->history)) {
             return null;
         }
-        if($ghost) {
+        if($mystery) {
             $regex = '/ ['.implode('', self::COLORS).']+/u';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
