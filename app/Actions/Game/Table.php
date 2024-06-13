@@ -17,12 +17,20 @@ class Table implements Action {
             return;
         }
         $game = $chat->currentGame();
+
         if ($game) {
             if($game->status == 'playing') {
-                \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint()));
+                if($game->role == 'agent') {
+                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint()));
+                    
+                } else {
+                    $bot->sendMessage($chat->id, AppString::get('error.only_agent_role'), null, false, $update->getMessageId(), null, false, null, null, true);
+                }
+
             } else {
                 Menu::send($game, $bot);
             }
+
         } else {
             $bot->sendMessage($chat->id, AppString::get('error.no_game'), null, false, $update->getMessageId(), null, false, null, null, true);
         }

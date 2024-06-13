@@ -359,6 +359,9 @@
         ],
         "dm_inline": [
             "Não use inline no pv do bot, apenas envie a dica como uma simples mensagem"
+        ],
+        "only_agent_role": [
+            "O mestre já recebeu a tabela no privado"
         ]
     },
     "time": {

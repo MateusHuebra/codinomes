@@ -359,6 +359,9 @@
         ],
         "dm_inline": [
             "Don't use inline in the bot's private chat, just send the hint as a simple message"
+        ],
+        "only_agent_role": [
+            "The master has already received the table in private"
         ]
     },
     "time": {
