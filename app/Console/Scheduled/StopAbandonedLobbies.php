@@ -17,7 +17,7 @@ class StopAbandonedLobbies {
         $games = Game::where('status', 'creating')->get();
         foreach ($games as $game) {
             $time = strtotime($game->status_updated_at);
-            if($now - $time >= 600*1.5) {
+            if($now - $time >= 600) { //10 minutes
                 if($game->start($bot)) {
                     return;
                 }
