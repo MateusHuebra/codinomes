@@ -3,7 +3,6 @@
 namespace App\Services\Game;
 
 use App\Models\Game;
-use App\Models\User;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
