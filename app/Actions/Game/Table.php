@@ -28,7 +28,7 @@ class Table implements Action {
                 }
 
             } else {
-                Menu::send($game, $bot);
+                Menu::send($game, $bot, true);
             }
 
         } else {

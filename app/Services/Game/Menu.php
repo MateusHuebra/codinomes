@@ -12,7 +12,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Menu {
     
-    static function send(Game $game, BotApi $bot) : Void {
+    static function send(Game $game, BotApi $bot, bool $forceResend = false) : Void {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $textMessage = self::getLobbyText($game, true) . AppString::get('game.choose_role');
@@ -20,6 +20,9 @@ class Menu {
 
         if($game->lobby_message_id !== null) {
             try {
+                if($forceResend) {
+                    throw new Exception();
+                }
                 $bot->editMessageText($game->chat_id, $game->lobby_message_id, $textMessage, 'MarkdownV2', false, $keyboard);
                 return;
             } catch(Exception $e) {
