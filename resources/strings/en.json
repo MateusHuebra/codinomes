@@ -422,6 +422,12 @@
         "possessed_info": [
             "Hit 6 cards in a row"
         ],
+        "hurry": [
+            "Hurry Up"
+        ],
+        "hurry_info": [
+            "Flip all your cards in a single round in fast mode"
+        ],
         "good_start": [
             "Good Start"
         ],

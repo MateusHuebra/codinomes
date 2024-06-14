@@ -422,6 +422,12 @@
         "possessed_info": [
             "Acerte 6 cartas seguidas"
         ],
+        "hurry": [
+            "Apressadinho"
+        ],
+        "hurry_info": [
+            "Acerte todas as suas cartas em uma única rodada no modo rápido"
+        ],
         "good_start": [
             "Começamos Bem"
         ],

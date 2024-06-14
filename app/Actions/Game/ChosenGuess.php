@@ -74,6 +74,11 @@ class ChosenGuess implements Action {
             $attemptType = 'ally';
             //won
             if($cardsLeft <= 0 && $game->mode != '8ball') {
+                if($game->mode == 'fast' && $game->countLastStreak() == $game->cards->where('team', $player->team)->count()) {
+                    $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                    UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
+                }
+
                 $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
