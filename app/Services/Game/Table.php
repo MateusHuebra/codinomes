@@ -22,6 +22,7 @@ class Table {
     static $imageWidth;
     static $imageHeight;
     static $captionSpacing;
+    static $modeSpacing;
     static $firstCardToBePushed;
 
     static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
@@ -60,6 +61,7 @@ class Table {
             self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
         }
         self::addCaption($masterImage??null, $agentsImage??null, $caption);
+        self::addMode($masterImage??null, $agentsImage??null, $game->mode);
 
         if($sendToMasters) {
             $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
@@ -131,12 +133,14 @@ class Table {
             case 'fast':
                 self::$imageHeight = 680;
                 self::$captionSpacing = 1000 - 420;
+                self::$modeSpacing = 960 - 420;
                 self::$firstCardToBePushed = 10;
                 break;
             
             default:
                 self::$imageHeight = 1100;
                 self::$captionSpacing = 1000;
+                self::$modeSpacing = 960;
                 self::$firstCardToBePushed = 22;
                 break;
         }
@@ -215,6 +219,26 @@ class Table {
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
             imagefttext($agentsImage, $caption->titleSize, 0, $axis['x'], $axis['y'], $textColor, self::$fontPath, $title);
+        }
+    }
+
+    private static function addMode($masterImage, $agentsImage, string $gameMode) {
+        if($gameMode == 'classic') {
+            return;
+        }
+        
+        try {
+            $modeImage = imagecreatefrompng(public_path("images/{$gameMode}_mode.png"));
+
+            if($masterImage) {
+                imagecopy($masterImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 140);
+            }
+            if($agentsImage) {
+                imagecopy($agentsImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 140);
+            }
+            imagedestroy($modeImage);
+        } catch(Exception $e) {
+            return;
         }
     }
 
