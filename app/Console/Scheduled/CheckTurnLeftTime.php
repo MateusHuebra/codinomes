@@ -85,9 +85,7 @@ class CheckTurnLeftTime {
             $title = AppString::get('game.8ball', null, $game->chat->language);
 
         } else {
-            $game->updateStatus('playing', $otherTeam, 'master');
-            $game->attempts_left = null;
-            $game->save();
+            $game->nextStatus($otherTeam);
 
             $title = AppString::get('time.out', null, $game->chat->language);
         }

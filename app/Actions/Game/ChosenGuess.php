@@ -106,7 +106,7 @@ class ChosenGuess implements Action {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
-                    $game->nextStatus($user);
+                    $game->nextStatus($user->getEnemyTeam());
 
                     $title = AppString::get('game.correct', null, $chatLanguage);
                     $text = $game->getLastHint();
@@ -163,7 +163,7 @@ class ChosenGuess implements Action {
 
                 } else {
                     if($game->mode != 'mystery' || $game->attempts_left < 0) {
-                        $game->nextStatus($user);
+                        $game->nextStatus($user->getEnemyTeam());
                     }
 
                     $title = AppString::get('game.incorrect', null, $chatLanguage);

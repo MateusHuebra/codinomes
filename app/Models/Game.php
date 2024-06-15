@@ -215,7 +215,7 @@ class Game extends Model
         $this->save();
     }
 
-    public function nextStatus(User $user) {
+    public function nextStatus(string $nextTeam) {
         if($this->mode == 'crazy') {
             GameCard::randomizeUnrevealedCardsColors($this);
         } else if($this->mode == 'sp_crazy') {
@@ -223,7 +223,7 @@ class Game extends Model
             GameCard::randomizeUnrevealedCardsColors($this);
         }
 
-        $this->updateStatus('playing', $user->getEnemyTeam(), 'master');
+        $this->updateStatus('playing', $nextTeam, 'master');
         $this->attempts_left = null;
         $this->save();
     }
