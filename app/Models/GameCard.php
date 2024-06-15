@@ -55,7 +55,7 @@ class GameCard extends Model
 
         foreach($cardsToBeAdded as $cardToBeAdded) {
             $card = $cards->first();
-            $card = $cardToBeAdded->text;
+            $card->text = $cardToBeAdded->text;
             $key = $cards->search($card);
             $cards->forget($key);
             $card->save();
