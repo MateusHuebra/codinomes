@@ -207,7 +207,12 @@ class Settings implements Action {
         $take = 5;
         $skip = ($data[CDM::PAGE]) * $take;
         $totalPages = $packs->count() / $take;
-        $packs = $packs->orderBy('id', 'asc')->skip($skip)->take($take)->get();
+        $packs = $packs->orderByRaw('CASE WHEN id = 1 or id = 5 THEN 0 ELSE 1 END')
+            ->orderByRaw('CASE WHEN user_id IS NULL THEN 0 ELSE 1 END')
+            ->orderBy('name', 'asc')
+            ->skip($skip)
+            ->take($take)
+            ->get();
 
         $view = AppString::get('settings.view');
         $activate = AppString::get('settings.activate');
@@ -227,12 +232,13 @@ class Settings implements Action {
 
         foreach ($packs as $pack) {
             if($chatPacks->find($pack->id)) {
-                $text = '• '.$pack->name.' ('.$pack->cards()->count().')';
+                $text = '• ';
                 $bool = 0;
             } else {
-                $text = $pack->name.' ('.$pack->cards()->count().')';
+                $text = '';
                 $bool = 1;
             }
+            $text.= $pack->name.' ('.$pack->cards()->count().') '.AppString::get('language.emoji', null, $pack->language);
             $buttonsArray[] = [[
                 'text' => $text,
                 'callback_data' => CDM::toString([
