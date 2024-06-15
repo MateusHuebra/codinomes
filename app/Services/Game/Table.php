@@ -31,7 +31,7 @@ class Table {
         $chatLanguage = $game->chat->language;
         $backgroundColor = ($winner) ? $game->{'color_'.$winner} : $game->{'color_'.$game->team};
 
-        if($game->mode == 'crazy') {
+        if(in_array($game->mode, ['crazy, sp_crazy'])) {
             $cards = $game->cards()->get();
         } else {
             $cards = $game->cards;
