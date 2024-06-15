@@ -49,7 +49,10 @@ class GameCard extends Model
             ->where('revealed', false)
             ->get();
 
-        $cardsToBeAdded = $game->chat->packs->getCards();
+        $texts = $cards->pluck('text');
+        $allCards = implode(',', $texts->toArray());
+        
+        $cardsToBeAdded = $game->chat->packs->getCards()->whereNotIn('text', $allCards)->get();
         $cardsToBeAdded = $cardsToBeAdded->random($cards->count());
         $cardsToBeAdded = $cardsToBeAdded->shuffle();
 
