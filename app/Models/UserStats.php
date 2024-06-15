@@ -20,7 +20,7 @@ class UserStats extends Model
     ];
 
     public static function addAttempt(Game $game, string $team, string $type, BotApi $bot) {
-        if($game->mode != 'classic') {
+        if(in_array($game->mode, ['ghost', '8ball', 'mineswp'])) {
             return;
         }
 
@@ -38,9 +38,6 @@ class UserStats extends Model
     }
 
     public static function addGame(Game $game, string $winner = null) {
-        if($game->mode != 'classic') {
-            return;
-        }
         if($winner == null) {
             return;
         }
