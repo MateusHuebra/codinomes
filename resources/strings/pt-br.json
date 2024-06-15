@@ -306,6 +306,9 @@
         ],
         "activate": [
             "ativar"
+        ],
+        "and_more": [
+            "e mais..."
         ]
     },
     "error": {
