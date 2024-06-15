@@ -206,10 +206,10 @@ class Settings implements Action {
         $chatPacks = $chat->packs;
         $take = 5;
         $skip = ($data[CDM::PAGE]) * $take;
-        $packs = $packs->orderBy('id', 'asc')->skip($skip)->take($take);
         $totalPages = $packs->count() / $take;
+        $packs = $packs->orderBy('id', 'asc')->skip($skip)->take($take)->get();
 
-        foreach ($packs->get() as $pack) {
+        foreach ($packs as $pack) {
             if($chatPacks->find($pack->id)) {
                 $text = '• '.$pack->name.' ('.$pack->cards()->count().')';
                 $bool = 0;
