@@ -53,7 +53,7 @@ class GameCard extends Model
         $cardsToBeAdded = $game->chat->packs->getCards()
             ->reject(function ($item) use ($texts) {
                 return in_array($item->text, $texts);
-            })->get();
+            });
         $cardsToBeAdded = $cardsToBeAdded->random($cards->count());
         $cardsToBeAdded = $cardsToBeAdded->shuffle();
 
