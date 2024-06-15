@@ -88,7 +88,7 @@ class UserStats extends Model
             $stats = self::firstOrNew([
                 'user_id' => $user->id
             ]);
-            $stats->{$streakColumn} = ($type != 'ally' || $stats->{$streakColumn} > $streak) ? $stats->{$streakColumn} : $streak;
+            $stats->{$streakColumn} = ($type != 'ally' || $stats->{$streakColumn} > $streak) ? $stats->{$streakColumn}??0 : $streak;
             $stats->{$statsColumn}+= 1;
             $stats->save();
         }
