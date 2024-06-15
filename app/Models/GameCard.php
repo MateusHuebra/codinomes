@@ -50,7 +50,7 @@ class GameCard extends Model
             ->get();
 
         $cardsToBeAdded = $game->chat->packs->getCards();
-        $cardsToBeAdded = $cards->random($cards->count());
+        $cardsToBeAdded = $cardsToBeAdded->random($cards->count());
         $cardsToBeAdded = $cardsToBeAdded->shuffle();
 
         foreach($cardsToBeAdded as $cardToBeAdded) {
