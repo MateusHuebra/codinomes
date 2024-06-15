@@ -4,7 +4,9 @@ namespace App\Actions\Chat;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Chat;
 use App\Models\Pack as PackModel;
+use App\Models\User;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
@@ -32,6 +34,15 @@ class Pack implements Action {
             return;
         }
 
+        if($chat->click_to_save) {
+            $this->activate($update, $bot, $chat, $user, $data, $pack);
+        } else {
+            $this->view($update->getCallbackQueryId(), $chat->id, $pack, $bot);
+        }
+        
+    }
+
+    private function activate(Update $update, BotApi $bot, Chat $chat, User $user, Array $data, PackModel $pack) {
         if($data[CDM::NUMBER]) {
             $chat->packs()->attach($pack->id);
         } else {
@@ -42,4 +53,21 @@ class Pack implements Action {
         $settings->prepareAndSend($update, $bot, $chat, $user);
     }
 
+    private function view($callbackQueryId, int $chatId, PackModel $pack, BotApi $bot) {
+        $text = '*'.AppString::parseMarkdownV2($pack->name).':*'.PHP_EOL.'**';
+        $words = null;
+        foreach($pack->cards as $card) {
+            if($words !== null) {
+                $words.= PHP_EOL;
+            }
+            $words.= '>'.$card->text;
+            if(strlen($text) >= 4000) {
+                break;
+            }
+        }
+        $text.= $words.'||';
+        
+        $bot->sendMessage($chatId, $text, 'MarkdownV2');
+        $bot->answerCallbackQuery($callbackQueryId);
+    }
 }

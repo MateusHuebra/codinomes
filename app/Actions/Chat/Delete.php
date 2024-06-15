@@ -10,7 +10,8 @@ class Delete implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $chat = $update->findChat();
-        $chat->delete();
+        $chat->actived = false;
+        $chat->save();
     }
 
 }

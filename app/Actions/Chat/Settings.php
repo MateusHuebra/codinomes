@@ -209,6 +209,22 @@ class Settings implements Action {
         $totalPages = $packs->count() / $take;
         $packs = $packs->orderBy('id', 'asc')->skip($skip)->take($take)->get();
 
+        $view = AppString::get('settings.view');
+        $activate = AppString::get('settings.activate');
+        if($chat->click_to_save) {
+            $activate = strtoupper($activate);
+        } else {
+            $view = strtoupper($view);
+        }
+        $buttonsArray[] = [[
+            'text' => "$view  |  $activate",
+            'callback_data' => CDM::toString([
+                CDM::EVENT => CDM::CHANGE_CLICK_TO_SAVE,
+                CDM::MENU => $data[CDM::MENU],
+                CDM::PAGE => $data[CDM::PAGE]
+            ])
+        ]];
+
         foreach ($packs as $pack) {
             if($chatPacks->find($pack->id)) {
                 $text = '• '.$pack->name.' ('.$pack->cards()->count().')';

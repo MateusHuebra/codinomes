@@ -58,10 +58,10 @@
         "crazy_info": [
             "Crazy mode, each round the unrevealed cards swap colors with each other, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
         ],
-        "crazy": [
+        "sp_crazy": [
             "SUPER CRAZY \\(beta\\)"
         ],
-        "crazy_info": [
+        "sp_crazy_info": [
             "Crazy mode, each round the unrevealed cards swap colors with each other, and also even the words are changed, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
         ]
     },
@@ -300,6 +300,12 @@
         ],
         "turn_off": [
             "Turn off"
+        ],
+        "view": [
+            "view"
+        ],
+        "activate": [
+            "activate"
         ]
     },
     "error": {

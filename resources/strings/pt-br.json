@@ -300,6 +300,12 @@
         ],
         "turn_off": [
             "Desligar"
+        ],
+        "view": [
+            "ver"
+        ],
+        "activate": [
+            "ativar"
         ]
     },
     "error": {

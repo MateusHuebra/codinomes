@@ -3,6 +3,7 @@
 namespace App\UpdateHandlers;
 
 use App\Actions\Chat\AdminOnly;
+use App\Actions\Chat\ClickToSave;
 use App\Actions\Chat\CompoundWords;
 use App\Actions\Chat\Settings;
 use App\Actions\Chat\Timer;
@@ -64,6 +65,9 @@ class CallbackQuery implements UpdateHandler {
 
         } else if($data[CDM::EVENT] === CDM::CHANGE_COMPOUND_WORDS) {
             return new CompoundWords;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_CLICK_TO_SAVE) {
+            return new ClickToSave;
 
         } else if($data[CDM::EVENT] === CDM::CHANGE_TIMER) {
             return new Timer;
