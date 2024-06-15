@@ -22,6 +22,8 @@ class GameCard extends Model
 
         if($cards->count() < self::$cardsCounts['max']) {
             return false;
+        } else if($game->mode == 'sp_crazy' && $cards->count() < self::$cardsCounts['max']*2) {
+            return false;
         }
 
         $randomizedCards = $cards->random(self::$cardsCounts['max']);
