@@ -47,16 +47,22 @@
             "Modo mistério, é como o modo clássico só que os agentes não sabem qual a cor das cartas viradas até alguém ganhar o jogo\n\nErrar não pula a vez, mas acertar uma preta ainda perde na hora"
         ],
         "8ball": [
-            "BILHAR \\(beta\\)"
+            "BILHAR"
         ],
         "8ball_info": [
             "Modo bilhar, é como o modo clássico só que ao achar todas as suas cartas, você deve finalizar encontrando a carta preta para ganhar sem dica alguma\n\n7 cartas pra cada time (+1 pro time que começa), 9 brancas e 1 preta"
         ],
         "crazy": [
-            "MALUCO \\(beta\\)"
+            "MALUCO"
         ],
         "crazy_info": [
             "Modo maluco, toda rodada as cartas não reveladas trocam de cor entre si, fazendo as dicas anteriores serem completamente inúteis, porém dando a possibilidade de novas combinações de dicas para a rodada atual\n\nMesma quantidade de cartas do clássico"
+        ],
+        "sp_crazy": [
+            "SUPER MALUCO \\(beta\\)"
+        ],
+        "sp_crazy_info": [
+            "Modo super maluco, toda rodada as cartas não reveladas trocam de cor entre si, e mudam também as próprias palavras do jogo, fazendo as dicas anteriores serem completamente inúteis, porém dando a possibilidade de novas combinações de dicas para a rodada atual\n\nMesma quantidade de cartas do clássico"
         ]
     },
     "game": {

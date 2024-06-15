@@ -44,6 +44,24 @@ class GameCard extends Model
         return true;
     }
 
+    public static function randomizeUnrevealedCardsWords(Game $game) {
+        $cards = $game->cards()
+            ->where('revealed', false)
+            ->get();
+
+        $cardsToBeAdded = $game->chat->packs->getCards();
+        $cardsToBeAdded = $cards->random($cards->count());
+        $cardsToBeAdded = $cardsToBeAdded->shuffle();
+
+        foreach($cardsToBeAdded as $cardToBeAdded) {
+            $card = $cards->first();
+            $card = $cardToBeAdded->text;
+            $key = $cards->search($card);
+            $cards->forget($key);
+            $card->save();
+        }
+    }
+
     public static function randomizeUnrevealedCardsColors(Game $game) {
         $cards = $game->cards()
             ->where('revealed', false)

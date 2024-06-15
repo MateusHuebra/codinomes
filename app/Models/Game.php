@@ -39,7 +39,8 @@ class Game extends Model
         'mystery' => '❔',
         'mineswp' => '💣',
         '8ball' => '🎱',
-        'crazy' => '🤯'
+        'crazy' => '🤪',
+        'sp_crazy' => '🤯'
     ];
 
     public $timestamps = false;
@@ -216,6 +217,9 @@ class Game extends Model
 
     public function nextStatus(User $user) {
         if($this->mode == 'crazy') {
+            GameCard::randomizeUnrevealedCardsColors($this);
+        } else if($this->mode == 'sp_crazy') {
+            GameCard::randomizeUnrevealedCardsWords($this);
             GameCard::randomizeUnrevealedCardsColors($this);
         }
 

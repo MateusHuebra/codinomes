@@ -47,16 +47,22 @@
             "Mystery Mode, it's like the classic mode but the agents don't know the color of the revealed cards until someone wins the game\n\nGuessing wrong doesn't skip the turn, but guessing a black card still results in an immediate loss"
         ],
         "8ball": [
-            "EIGHT-BALL \\(beta\\)"
+            "EIGHT-BALL"
         ],
         "8ball_info": [
             "Eight-ball mode, it's like the classic mode, but after finding all your cards, you must finish by finding the black card to win without any hints\n\n7 cards for each team (+1 for the team that starts), 9 white, and 1 black"
         ],
         "crazy": [
-            "CRAZY \\(beta\\)"
+            "CRAZY"
         ],
         "crazy_info": [
             "Crazy mode, each round the unrevealed cards swap colors with each other, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
+        ],
+        "crazy": [
+            "SUPER CRAZY \\(beta\\)"
+        ],
+        "crazy_info": [
+            "Crazy mode, each round the unrevealed cards swap colors with each other, and also even the words are changed, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
         ]
     },
     "game": {
