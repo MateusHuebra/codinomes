@@ -61,7 +61,7 @@ class Pack implements Action {
                 $words.= PHP_EOL;
             }
             $words.= '>'.AppString::parseMarkdownV2($card->text);
-            if(strlen($text) >= 4000) {
+            if(strlen($words) >= 4000) {
                 break;
             }
         }
