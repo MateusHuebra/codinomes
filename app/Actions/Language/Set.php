@@ -27,6 +27,10 @@ class Set implements Action {
             
         } else if($update->isChatType('supergroup')) {
             $chat = $update->findChat();
+            if(!$chat) {
+                $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'));
+                return;
+            }
             $chatId = $chat->id;
             if($data[CDM::FIRST_TIME] || $chat->isAdmin($user, $bot)) {
                 $this->setUserOrChatLanguage($chat, $data, $bot, $update->getMessage());
@@ -34,6 +38,8 @@ class Set implements Action {
                 $bot->sendMessage($chatId, AppString::get('error.admin_only'));
             }
 
+        } else {
+            $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'));
         }
 
         if($data[CDM::FIRST_TIME]) {
