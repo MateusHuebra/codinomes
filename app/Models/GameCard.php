@@ -47,10 +47,9 @@ class GameCard extends Model
     }
 
     public static function randomizeUnrevealedCardsWords(Game $game) {
-        $cards = $game->cards()
-            ->where('revealed', false)
-            ->get();
+        $cards = $game->cards()->get();
         $texts = $cards->pluck('text')->toArray();
+        $cards = $cards->where('revealed', false);
 
         $cardsToBeAdded = $game->chat->packs->getCards()
             ->reject(function ($item) use ($texts) {
