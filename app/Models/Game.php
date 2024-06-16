@@ -29,6 +29,8 @@ class Game extends Model
         'gray' => '🩶',
         'brown' => '🍪',
         'cyan' => '🧩',
+        'rbow' => '🌈',
+        'cotton' => '🏳️‍⚧️',
         'white' => '◽️',
         'black' => '◼️'
     ];
@@ -274,8 +276,8 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
 
-        $teamA = mb_strtoupper(AppString::get('color.'.$this->color_a), 'UTF-8').' '.self::COLORS[$this->color_a];
-        $teamB = mb_strtoupper(AppString::get('color.'.$this->color_b), 'UTF-8').' '.self::COLORS[$this->color_b];
+        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->color_a), 'UTF-8').' '.self::COLORS[$this->color_a];
+        $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->color_b), 'UTF-8').' '.self::COLORS[$this->color_b];
         $empty = '_'.AppString::get('game.empty').'_';
         $textMessage = AppString::get('game.teams_lists', [
             'master_a' => $this->masterA->get()->getStringList($mention)??$empty,

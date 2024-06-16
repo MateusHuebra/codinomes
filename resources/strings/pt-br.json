@@ -260,6 +260,12 @@
         "gray" : [
             "Cinza"
         ],
+        "rbow" : [
+            "Arco-Íris"
+        ],
+        "cotton" : [
+            "Algodão-Doce"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

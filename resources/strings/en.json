@@ -260,6 +260,12 @@
         "gray" : [
             "Gray"
         ],
+        "rbow" : [
+            "Rainbow"
+        ],
+        "cotton" : [
+            "Cotton Candy"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

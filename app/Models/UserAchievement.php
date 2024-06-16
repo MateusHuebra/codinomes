@@ -148,7 +148,7 @@ class UserAchievement extends Model
     private static function doesUserHaveAllColors(Collection $colorStats) {
         $result = true;
         foreach(Game::COLORS as $color => $emoji) {
-            if(in_array($color, ['white', 'black'])) {
+            if(in_array($color, ['white', 'black', 'rbow', 'cotton'])) {
                 continue;
             }
             
