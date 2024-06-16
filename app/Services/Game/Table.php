@@ -133,14 +133,14 @@ class Table {
             case 'fast':
                 self::$imageHeight = 680;
                 self::$captionSpacing = 1000 - 420;
-                self::$modeSpacing = 960 - 420;
+                self::$modeSpacing = 1100 - 250 - 420;
                 self::$firstCardToBePushed = 10;
                 break;
             
             default:
                 self::$imageHeight = 1100;
                 self::$captionSpacing = 1000;
-                self::$modeSpacing = 960;
+                self::$modeSpacing = 1100 - 250;
                 self::$firstCardToBePushed = 22;
                 break;
         }
