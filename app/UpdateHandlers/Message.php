@@ -83,6 +83,7 @@ class Message implements UpdateHandler {
                 return new ChosenGuess;
             }
         }
+        return null;
     }
 
     private function getActionForCommand(string $command) {
