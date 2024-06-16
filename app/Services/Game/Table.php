@@ -231,10 +231,10 @@ class Table {
             $modeImage = imagecreatefrompng(public_path("images/{$gameMode}_mode.png"));
 
             if($masterImage) {
-                imagecopy($masterImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 140);
+                imagecopy($masterImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 250);
             }
             if($agentsImage) {
-                imagecopy($agentsImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 140);
+                imagecopy($agentsImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 250);
             }
             imagedestroy($modeImage);
         } catch(Exception $e) {
