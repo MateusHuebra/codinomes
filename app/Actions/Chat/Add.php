@@ -12,6 +12,10 @@ use App\Actions\Language\Get as GetLanguage;
 class Add implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
+        if(!$update->isChatType('supergroup')) {
+            $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'));
+        }
+
         if($chat = $update->findChat()) {
             $chat->username = $update->getChatUsername();
             $chat->title = mb_substr($update->getChatTitle(), 0, 32, 'UTF-8');
