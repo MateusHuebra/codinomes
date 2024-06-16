@@ -136,12 +136,15 @@ class Menu {
         return $buttonsArray;
     }
 
-    public static function addColorsToKeyboard(array $buttonsArray = [], string $event = CDM::CHANGE_COLOR) {
+    public static function addColorsToKeyboard(array $buttonsArray = [], string $event = CDM::CHANGE_COLOR, bool $ignoreExtraColors = false) {
         $line = [];
         $i = 0;
         foreach(Game::COLORS as $color => $emoji) {
             $i++;
             if(in_array($color, ['white', 'black'])) {
+                continue;
+            }
+            if($ignoreExtraColors && in_array($color, ['rbow', 'cotton'])) {
                 continue;
             }
             $line[] = [

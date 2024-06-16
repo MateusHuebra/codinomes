@@ -26,7 +26,7 @@ class GetColors implements Action {
             $color = '-';
         }
 
-        $buttonsArray = Menu::addColorsToKeyboard([], CDM::CHANGE_DEFAULT_COLOR);
+        $buttonsArray = Menu::addColorsToKeyboard([], CDM::CHANGE_DEFAULT_COLOR, true);
         $buttonsArray[] = [[
             'text' => AppString::get('settings.turn_off'),
             'callback_data' => CDM::toString([
