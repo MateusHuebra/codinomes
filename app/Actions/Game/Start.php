@@ -19,6 +19,9 @@ class Start implements Action {
         if($game->status != 'creating') {
             return;
         }
+        if($game->cards()->exists()) {
+            return;
+        }
 
         $user = $update->findUser();
         $game->start($bot, $user, $update->getId());
