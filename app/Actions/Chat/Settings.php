@@ -36,7 +36,7 @@ class Settings implements Action {
             }
             return;
         }
-
+        /*
         if(!$chat->hasPermission($user, $bot)) {
             if($update->isType(Update::CALLBACK_QUERY)) {
                 $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
@@ -45,7 +45,7 @@ class Settings implements Action {
             }
             return;
         }
-
+        */
         $this->prepareAndSend($update, $bot, $chat, $user);
         
     }
