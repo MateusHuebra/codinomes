@@ -266,6 +266,9 @@
         "cotton" : [
             "Algodão-Doce"
         ],
+        "flower" : [
+            "Flores"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

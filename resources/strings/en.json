@@ -266,6 +266,9 @@
         "cotton" : [
             "Cotton Candy"
         ],
+        "flower" : [
+            "Flowers"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

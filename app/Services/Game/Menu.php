@@ -144,7 +144,7 @@ class Menu {
             if(in_array($color, ['white', 'black'])) {
                 continue;
             }
-            if($ignoreExtraColors && in_array($color, ['rbow', 'cotton'])) {
+            if($ignoreExtraColors && in_array($color, ['rbow', 'cotton', 'flower'])) {
                 continue;
             }
             $line[] = [
