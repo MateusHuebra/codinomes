@@ -48,6 +48,7 @@ class ConfirmSkip implements Action {
 
         if($game->mode == '8ball' && $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count() == 0) {
             $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
+            $game->attempts_left = null;
             $game->setEightBallToHistory($player);
 
             $title = AppString::get('game.8ball', null, $chatLanguage);
