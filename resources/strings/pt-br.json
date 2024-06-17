@@ -272,6 +272,12 @@
         "flower" : [
             "Flores"
         ],
+        "dna" : [
+            "DNA"
+        ],
+        "moon" : [
+            "Lunar"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

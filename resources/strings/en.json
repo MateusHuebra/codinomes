@@ -272,6 +272,12 @@
         "flower" : [
             "Flowers"
         ],
+        "dna" : [
+            "DNA"
+        ],
+        "moon" : [
+            "Moon"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

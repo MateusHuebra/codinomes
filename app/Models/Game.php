@@ -32,6 +32,8 @@ class Game extends Model
         'rbow' => '🌈',
         'cotton' => '🏳️‍⚧️',
         'flower' => '💐',
+        'dna' => '🧬',
+        'moon' => '🌗',
         'white' => '◽️',
         'black' => '◼️'
     ];
