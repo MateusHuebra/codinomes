@@ -153,6 +153,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['help_commands', 'ajuda_comandos'])) {
             return new Help('commands');
 
+        } else if(in_array($command, ['help_modes', 'ajuda_modos'])) {
+            return new Help('modes');
+
         } else if(in_array($command, ['packs', 'pacotes'])) {
             return new WebApp;
 

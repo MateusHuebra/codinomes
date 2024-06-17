@@ -59,13 +59,16 @@
             "CRAZY"
         ],
         "crazy_info": [
-            "Crazy mode, each round the unrevealed cards swap colors with each other, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
+            "Crazy mode, each round the unrevealed cards swap colors with each other, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round"
         ],
         "sp_crazy": [
             "SUPER CRAZY"
         ],
         "sp_crazy_info": [
-            "Crazy mode, each round the unrevealed cards swap colors with each other, and also even the words are changed, making previous hints completely useless, but providing the opportunity for new hint combinations for the current round\n\nSame number of cards as the classic mode"
+            "Super Crazy Mode, it's like Crazy Mode, but in addition to the colors, the actual words in play are also changed"
+        ],
+        "check_other": [
+            "Check other modes: /help_modes"
         ]
     },
     "game": {
@@ -415,19 +418,19 @@
     },
     "help": {
         "base" : [
-            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n\nIf you have any questions, ask in @CodinomesGrupo"
+            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n• Game modes: /help\\_modes\n\nIf you have any questions, ask in @CodinomesGrupo"
         ],
         "roles": [
-            "*Master:*\n• See the color of all the cards;\n• \\.\n\n*Agentes*: Your goal is to give hints that guide to as many words as possible in your team's color so that your agents can find them\\.\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."
+            "*Master:*\n• See the color of all the cards;\n• Your goal is to give hints that relate as many words as possible of your team's color so that your agents can find them\\.\n\n*Agentes*:\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."
         ],
         "hints": [
-            "Hints must be a single word followed by the number of cards that are related to that clue\\.\n\n*Example: EVEREST 3*\n*Words:* SNOW, COLD and MOUNTAIN\n\nYour agents can try to guess up to the number of the current hint \\+ 1 extra card\\.\n\n*Infinity Hint ∞:* If you need your agents to try more cards than this, you can submit your hint without the number and it will become an Infinity Hint\\. They can try as many cards as they want until they make a wrong guess, but they won't know how many words relate to the current hint\\.\n\n*Zero Hint 0:* You can also submit a hint with the number 0\\. It also has infinite attempts, but it serves to give hint on which cards your agents should avoid\\."
+            "*Basic hints:*\n**>Hints must be a single word followed by the number of cards that are related to that clue\\.\n>\n>*Example: EVEREST 3*\n>*Words:* SNOW, COLD and MOUNTAIN\n>\n>Your agents can try to guess up to the number of the current hint \\+ 1 extra card\\.||\n*Special hints*\n**>*Infinity Hint ∞:* If you need your agents to try more cards than this, you can submit your hint without the number and it will become an Infinity Hint\\. They can try as many cards as they want until they make a wrong guess, but they won't know how many words relate to the current hint\\.\n>\n>*Zero Hint 0:* You can also submit a hint with the number 0\\. It also has infinite attempts, but it serves to give hint on which cards your agents should avoid\\.||"
         ],
         "colors": [
-            "What happens depending on the color of the card chosen:\n\n🟣 *Your color:* keep guessing;\n\n⚪️ *White:* skip the turn immediately;\n\n🟠 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n\n⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\."
+            "What happens depending on the color of the card chosen:\n**>🔴 *Your color:* keep guessing;\n>\n>⚪️ *White:* skip the turn immediately;\n>\n>🔷 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n>\n>⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\.||"
         ],
         "commands": [
-            "*Codinomes Commands:*\n\n• /new creates a new game lobby\n• /skip skip your turn in the game\n• /stop interrupts and cancels the match\n\n• /notify send it to a group to be notified whenever a new match takes place in it, send it again to cancel\n\n• /history view the history of hints and attempts from the match, it also works via DM\n\n• /settings group settings \\(as timer and word packs\\)\n\n• /color choose your default color that will be set automatically when you enter as a master\n\n• /packs send it to DM to create and manage your own word packages"
+            "*Codinomes Commands:*\n**>• /new creates a new game lobby\n>• /skip skip your turn in the game\n>• /stop interrupts and cancels the match\n>\n>• /notify send it to a group to be notified whenever a new match takes place in it, send it again to cancel\n>\n>• /history view the history of hints and attempts from the match, it also works via DM\n>\n>• /settings group settings \\(as timer and word packs\\)\n>\n>• /color choose your default color that will be set automatically when you enter as a master\n>\n>• /packs send it to DM to create and manage your own word packages||"
         ]
     },
     "achievements": {

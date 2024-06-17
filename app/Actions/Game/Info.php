@@ -20,7 +20,7 @@ class Info implements Action {
         $game = $chat->currentGame();
 
         if ($game) {
-            $text = AppString::get('mode.'.$game->mode.'_info');
+            $text = AppString::get('mode.'.$game->mode.'_info').PHP_EOL.PHP_EOL.AppString::get('mode.check_other');
         } else {
             $text = AppString::get('error.no_game');
         }
