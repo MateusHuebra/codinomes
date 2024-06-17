@@ -389,6 +389,9 @@
         ],
         "only_agent_role": [
             "The master has already received the table in private"
+        ],
+        "hidden_on_mystery": [
+            "Hidden Statistics during matches in Mystery Mode"
         ]
     },
     "time": {

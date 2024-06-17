@@ -389,6 +389,9 @@
         ],
         "only_agent_role": [
             "O mestre já recebeu a tabela no privado"
+        ],
+        "hidden_on_mystery": [
+            "Estatísticas ocultas durante partidas no Modo Mistério"
         ]
     },
     "time": {

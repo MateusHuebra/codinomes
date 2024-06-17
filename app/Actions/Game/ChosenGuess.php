@@ -117,8 +117,8 @@ class ChosenGuess implements Action {
 
         //black card
         } else if($card->team == 'x') {
-            $attemptType = 'black';
             if($game->mode == '8ball' && $cardsLeft == 0) {
+                $attemptType = 'ally';
                 $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
@@ -127,6 +127,7 @@ class ChosenGuess implements Action {
                 $winner = $player->team;
 
             } else {
+                $attemptType = 'black';
                 $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
@@ -140,7 +141,6 @@ class ChosenGuess implements Action {
         //incorrect guess
         } else {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
-            
             //won
             if($opponentCardsLeft <= 0 && $game->mode != '8ball') {
                 $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
