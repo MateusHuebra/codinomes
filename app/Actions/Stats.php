@@ -16,11 +16,11 @@ class Stats implements Action {
             $bot->sendMessage($update->getChatId(), AppString::get('error.no_enough_stats'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if(!$user->currentGame() || !$stats = $user->stats) {
+        if(!$stats = $user->stats) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.no_enough_stats'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if($user->currentGame()->mode == 'mystery') {
+        if($user->currentGame() && $user->currentGame()->mode == 'mystery') {
             $bot->sendMessage($update->getChatId(), AppString::get('error.hidden_on_mystery'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
