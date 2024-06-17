@@ -101,6 +101,7 @@ class ChosenGuess implements Action {
             } else {
                 if($game->mode == '8ball' && $opponentCardsLeft == 0) {
                     $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
+                    $game->attempts_left = null;
                     $game->setEightBallToHistory($player);
 
                     $title = AppString::get('game.8ball', null, $chatLanguage);
@@ -157,6 +158,7 @@ class ChosenGuess implements Action {
             } else {
                 if($game->mode == '8ball' && $opponentCardsLeft == 0) {
                     $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
+                    $game->attempts_left = null;
                     $game->setEightBallToHistory($player);
 
                     $title = AppString::get('game.8ball', null, $chatLanguage);
