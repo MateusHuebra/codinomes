@@ -13,9 +13,13 @@ use TelegramBot\Api\BotApi;
 class ConfirmSkip implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
+        if(!$update->isChatType('supergroup')) {
+            return;
+        }
         $user = $update->findUser();
-        $game = $user->currentGame();
-        $chatLanguage = $game->chat->language;
+        $chat = $update->findUser();
+        $game = $chat->currentGame();
+        $chatLanguage = $chat->language;
 
         if($update->isType(Update::CALLBACK_QUERY)) {
             try {
@@ -28,11 +32,9 @@ class ConfirmSkip implements Action {
         if(!$user || !$game) {
             return;
         }
-        $player = $game->player;
-        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)) {
-            if(!$game->chat->isAdmin($user, $bot)) {
-                return;
-            }
+        $player = $user->currentGame()->player;
+        if(!$game->chat->isAdmin($user, $bot) && !($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team && $game->id === $user->currentGame()->id)) {
+            return;
         }
 
         $mention = AppString::get('game.mention', [
@@ -46,15 +48,17 @@ class ConfirmSkip implements Action {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        if($game->mode == '8ball' && $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count() == 0) {
-            $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
+        $currentPlayer = $game->users()->fromTeamRole('agent', $game->role)->first();
+
+        if($game->mode == '8ball' && $game->cards->where('team', $currentPlayer->getEnemyTeam())->where('revealed', false)->count() == 0) {
+            $game->updateStatus('playing', $currentPlayer->getEnemyTeam(), 'agent');
             $game->attempts_left = null;
             $game->setEightBallToHistory($player);
 
             $title = AppString::get('game.8ball', null, $chatLanguage);
 
         } else {
-            $game->nextStatus($user->getEnemyTeam());
+            $game->nextStatus($currentPlayer->getEnemyTeam());
 
             $title = AppString::get('game.skipped', null, $chatLanguage);
         }
