@@ -59,6 +59,7 @@ class Game extends Model
     private $agentsA;
     private $masterB;
     private $agentsB;
+    private $colors = [];
     private $hasRequiredPlayers = null; 
 
     public function users()
@@ -69,6 +70,31 @@ class Game extends Model
     public function cards(): HasMany
     {
         return $this->hasMany(GameCard::class);
+    }
+
+    public function teamColors(): HasMany
+    {
+        return $this->hasMany(GameTeamColor::class);
+    }
+
+    public function getColor(string $team): String
+    {
+        if(!isset($this->colors[$team])) {
+            $this->colors[$team] = $this->hasMany(GameTeamColor::class)
+                                        ->where('team', $team)
+                                        ->first()
+                                        ->color;
+        }
+        return $this->colors[$team];
+    }
+
+    public function setColor(string $team, string $color): int
+    {
+        return GameTeamColor::where('game_id', $this->id)
+                            ->where('team', $team)
+                            ->update([
+                                'color' => $color
+                            ]);
     }
 
     public function chat(): BelongsTo
@@ -107,7 +133,7 @@ class Game extends Model
 
     public function getPhotoCaption() {
         $role = $this->role=='master' ? 'game.master' : 'game.agents';
-        $teamColor = $this->{'color_'.$this->team};
+        $teamColor = $this->getColor($this->team);
         $playersList = $this->users()->fromTeamRole($this->team, $this->role)->get()->getStringList(true, PHP_EOL);
 
         return AppString::get('game.turn', [
@@ -208,6 +234,7 @@ class Game extends Model
 
         if($this->status == 'canceled') {
             $this->users()->detach();
+            $this->teamColors()->delete();
             parent::delete();
         }
     }
@@ -234,7 +261,7 @@ class Game extends Model
     }
 
     public function setEightBallToHistory($player) {
-        $color = ($player->team == 'a') ? $this->color_b : $this->color_a;
+        $color = $this->getColor($player->team == 'a' ? 'b' : 'a');
         $emoji = self::COLORS[$color];
         $historyLine = $emoji.' '.AppString::get('game.8ball_hint');
         $this->addToHistory('*'.$historyLine.'*');
@@ -279,8 +306,8 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
 
-        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->color_a), 'UTF-8').' '.self::COLORS[$this->color_a];
-        $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->color_b), 'UTF-8').' '.self::COLORS[$this->color_b];
+        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
+        $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
         $empty = '_'.AppString::get('game.empty').'_';
         $textMessage = AppString::get('game.teams_lists', [
             'master_a' => $this->masterA->get()->getStringList($mention)??$empty,

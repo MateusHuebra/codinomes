@@ -29,7 +29,7 @@ class Table {
         self::setVarsByGameMode($game->mode);
         self::$fontPath = public_path('open-sans.bold.ttf');
         $chatLanguage = $game->chat->language;
-        $backgroundColor = ($winner) ? $game->{'color_'.$winner} : $game->{'color_'.$game->team};
+        $backgroundColor = ($winner) ? $game->getColor($winner) : $game->getColor($game->team);
 
         if(in_array($game->mode, ['crazy', 'sp_crazy'])) {
             $cards = $game->cards()->get();
@@ -107,7 +107,7 @@ class Table {
             $game->save();
             
         } else {
-            $color = ($winner == 'a') ? $game->color_a : $game->color_b;
+            $color = $game->getColor($winner);
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
 
             $text = Menu::getLobbyText($game);
@@ -251,16 +251,16 @@ class Table {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
         }
         if($masterImage || $game->mode != 'mystery') {
-            $squareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
-            $squareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+            $squareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
+            $squareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
             $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
             $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
             imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
             imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
         }
         if($game->mode == 'mystery') {
-            $mysterySquareA = imagecreatefrompng(public_path("images/{$game->color_a}_square.png"));
-            $mysterySquareB = imagecreatefrompng(public_path("images/{$game->color_b}_square.png"));
+            $mysterySquareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
+            $mysterySquareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
             $mysteryLeft = '?';
             $axisA = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
             $axisB = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
@@ -341,10 +341,10 @@ class Table {
 
         switch ($card->team) {
             case 'a':
-                $colorMaster = $game->color_a;
+                $colorMaster = $game->getColor('a');
                 break;
             case 'b':
-                $colorMaster = $game->color_b;
+                $colorMaster = $game->getColor('b');
                 break;
             case 'x':
                 $colorMaster = 'black';

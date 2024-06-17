@@ -40,7 +40,7 @@ class ChosenHint implements Action {
         }
         
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
-        $color = $game->{'color_'.$player->team};
+        $color = $game->getColor($player->team);
         $emoji = Game::COLORS[$color];
         $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');

@@ -45,7 +45,7 @@ class UserStats extends Model
             ]);
             $colorStats = UserColorStats::firstOrNew([
                 'user_id' => $user->id,
-                'color' => $game->{'color_'.$player->team}
+                'color' => $game->getColor($player->team)
             ]);
 
             if($player->role == 'master') {

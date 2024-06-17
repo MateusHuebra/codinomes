@@ -55,6 +55,15 @@ class Create implements Action {
         $game->lobby_message_id = $message->getMessageId();
         $game->save();
 
+        $game->teamColors()->create([
+            'team' => 'a',
+            'color' => 'red'
+        ]);
+        $game->teamColors()->create([
+            'team' => 'b',
+            'color' => 'blue'
+        ]);
+
         $chat->notifiableUsers->notify($game, $bot);
         Menu::send($game, $bot);
         $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());

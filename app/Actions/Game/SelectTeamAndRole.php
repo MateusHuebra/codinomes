@@ -58,7 +58,7 @@ class SelectTeamAndRole implements Action {
             $game->id => [
                 'team' => $data[CDM::TEAM],
                 'role' => $role
-                ]
+            ]
         ]);
 
         $this->changeColorToUsersDefault($game, $user);
@@ -87,20 +87,19 @@ class SelectTeamAndRole implements Action {
             return;
         }
         if(
-            $user->default_color == $game->{'color_'.$player->team}
+            $user->default_color == $game->getColor($player->team)
             ||
-            ($user->default_color == $game->{'color_'.$user->getEnemyTeam()} && $game->hasMaster($user->getEnemyTeam()))
+            ($user->default_color == $game->getColor($user->getEnemyTeam()) && $game->hasMaster($user->getEnemyTeam()))
         ) {
             return;
         }
 
-        if($user->default_color == $game->{'color_'.$user->getEnemyTeam()}) {
+        if($user->default_color == $game->getColor($user->getEnemyTeam())) {
             $colors = ['red', 'blue'];
-            $game->{'color_'.$user->getEnemyTeam()} = $colors[rand(0, 1)];
+            $game->setColor($user->getEnemyTeam(), $colors[rand(0, 1)]);
         }
 
-        $game->{'color_'.$player->team} = $user->default_color;
-        $game->save();
+        $game->setColor($player->team, $user->default_color);
     }
 
 }

@@ -54,8 +54,8 @@ class ChosenGuess implements Action {
         $emojis = [
             'w' => Game::COLORS['white'],
             'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->color_a],
-            'b' => Game::COLORS[$game->color_b]
+            'a' => Game::COLORS[$game->getColor('a')],
+            'b' => Game::COLORS[$game->getColor('b')]
         ];
         $emoji = $emojis[$card->team];
 
@@ -79,7 +79,7 @@ class ChosenGuess implements Action {
                     UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
                 }
 
-                $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
+                $color = $game->getColor($player->team);
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
@@ -119,7 +119,7 @@ class ChosenGuess implements Action {
         } else if($card->team == 'x') {
             if($game->mode == '8ball' && $cardsLeft == 0) {
                 $attemptType = 'ally';
-                $color = ($player->team == 'a') ? $game->color_a : $game->color_b;
+                $color = $game->getColor($player->team);
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
@@ -128,7 +128,7 @@ class ChosenGuess implements Action {
 
             } else {
                 $attemptType = 'black';
-                $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
+                $color = $game->getColor($user->getEnemyTeam());
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
@@ -143,7 +143,7 @@ class ChosenGuess implements Action {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             //won
             if($opponentCardsLeft <= 0 && $game->mode != '8ball') {
-                $color = ($user->getEnemyTeam() == 'a') ? $game->color_a : $game->color_b;
+                $color = $game->getColor($user->getEnemyTeam());
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);

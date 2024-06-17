@@ -69,7 +69,7 @@ class Menu {
     private static function getFirstButtons(Game $game, Array $buttonsArray) {
         $buttonsArray[] = [
             [
-                'text' => Game::COLORS[$game->color_a].' '.AppString::get('game.master'),
+                'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -77,7 +77,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->color_a],
+                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('a')],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'a',
@@ -87,7 +87,7 @@ class Menu {
         ];
         $buttonsArray[] = [
             [
-                'text' => Game::COLORS[$game->color_b].' '.AppString::get('game.master'),
+                'text' => Game::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',
@@ -95,7 +95,7 @@ class Menu {
                 ])
             ],
             [
-                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->color_b],
+                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('b')],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                     CDM::TEAM => 'b',

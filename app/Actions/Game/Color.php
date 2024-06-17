@@ -27,20 +27,13 @@ class Color implements Action {
 
         $data = CDM::toArray($update->getData());
         $newColor = $data[CDM::TEXT];
-        if($player->team=='a') {
-            $yourColor = 'color_a';
-            $enemyColor = 'color_b';
-        } else {
-            $yourColor = 'color_b';
-            $enemyColor = 'color_a';
-        }
 
-        if($newColor == $game->$enemyColor) {
+        if($newColor == $game->getColor($user->getEnemyTeam())) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.color_taken');
             return;
         }
         
-        $game->$yourColor = $newColor;
+        $game->setColor($player->team, $newColor);
         $game->menu = null;
         $game->save();
         

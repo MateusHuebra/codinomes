@@ -20,8 +20,8 @@ class Guess implements Action {
         $emojis = [
             'w' => Game::COLORS['white'],
             'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->color_a],
-            'b' => Game::COLORS[$game->color_b]
+            'a' => Game::COLORS[$game->getColor('a')],
+            'b' => Game::COLORS[$game->getColor('b')]
         ];
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
