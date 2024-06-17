@@ -77,7 +77,7 @@ class PacksController extends Controller
         if($data['status'] != 'public') {
             $bot = new BotApi(env('TG_TOKEN'));
             try {
-                $bot->sendMessage(env('TG_MY_ID'), 'New pack!');
+                $bot->sendMessage(env('TG_MY_ID'), "Saved pack!\n$pack->name\n$pack->id");
             } catch(Exception $e) {}
         }
 
