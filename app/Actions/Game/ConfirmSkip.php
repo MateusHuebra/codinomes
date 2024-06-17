@@ -48,7 +48,7 @@ class ConfirmSkip implements Action {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        $currentPlayer = $game->users()->fromTeamRole($game->role, 'agent')->first();
+        $currentPlayer = $game->users()->fromTeamRole($game->team, 'agent')->first();
 
         if($game->mode == '8ball' && $game->cards->where('team', $currentPlayer->getEnemyTeam())->where('revealed', false)->count() == 0) {
             $game->updateStatus('playing', $currentPlayer->getEnemyTeam(), 'agent');
