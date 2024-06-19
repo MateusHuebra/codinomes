@@ -85,6 +85,19 @@ class CheckTurnLeftTime {
             $title = AppString::get('game.8ball', null, $game->chat->language);
 
         } else {
+            if($game->mode == 'triple') {
+                switch ($game->team) {
+                    case 'a':
+                        $otherTeam = 'b';
+                        break;
+                    case 'b':
+                        $otherTeam = 'c';
+                        break;
+                    case 'c':
+                        $otherTeam = 'a';
+                        break;
+                }
+            }
             $game->nextStatus($otherTeam);
 
             $title = AppString::get('time.out', null, $game->chat->language);

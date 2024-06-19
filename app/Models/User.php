@@ -70,6 +70,31 @@ class User extends Model
         return 'a';
     }
 
+    public function getNextTeam() : String {
+        switch ($this->currentGame()->player->team) {
+            case 'a':
+                return 'b';
+            case 'b':
+                return 'c';
+            default:
+                return 'a';
+        }
+    }
+
+    public function getEnemyTeams(bool $triple = false) {
+        $array = [];
+        if($this->currentGame()->player->team !== 'a') {
+            $array[] = 'a';
+        }
+        if($this->currentGame()->player->team !== 'b') {
+            $array[] = 'b';
+        }
+        if($triple && $this->currentGame()->player->team !== 'c') {
+            $array[] = 'c';
+        }
+        return $array;
+    }
+
     static function createFromTGModel(TGUser $tgUser) : User {
         return self::create([
             'id' => $tgUser->getId(),

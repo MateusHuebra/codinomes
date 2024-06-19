@@ -67,6 +67,12 @@
         "sp_crazy_info": [
             "Super Crazy Mode, it's like Crazy Mode, but in addition to the colors, the actual words in play are also changed"
         ],
+        "triple": [
+            "TRIPLE"
+        ],
+        "triple_info": [
+            "Testing..."
+        ],
         "check_other": [
             "Check other modes: /help_modes"
         ]
@@ -80,6 +86,9 @@
         ],
         "teams_lists": [
             "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n"
+        ],
+        "teams_lists_triple": [
+            "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n*TEAM {c}\nMaster:* {master_c}\n*Agents:* {agents_c}\n\n"
         ],
         "mode": [
             "*{mode} MODE {emoji}* {info}\n\n"

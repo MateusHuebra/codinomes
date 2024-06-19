@@ -45,7 +45,8 @@ class Game extends Model
         'mineswp' => '💣',
         '8ball' => '🎱',
         'crazy' => '🤪',
-        'sp_crazy' => '🤯'
+        'sp_crazy' => '🤯',
+        'triple' => '3️⃣'
     ];
 
     public $timestamps = false;
@@ -59,6 +60,8 @@ class Game extends Model
     private $agentsA;
     private $masterB;
     private $agentsB;
+    private $masterC;
+    private $agentsC;
     private $colors = [];
     private $hasRequiredPlayers = null; 
 
@@ -88,8 +91,18 @@ class Game extends Model
         return $this->colors[$team];
     }
 
+    public function getColors(array $colors): Array
+    {
+        $array = [];
+        foreach($colors as $color) {
+            $array[] = $this->getColor($color);
+        }
+        return $array;
+    }
+
     public function setColor(string $team, string $color): int
     {
+        $this->colors[$team] = $color;
         return GameTeamColor::where('game_id', $this->id)
                             ->where('team', $team)
                             ->update([
@@ -190,7 +203,11 @@ class Game extends Model
             }
         }
 
-        $firstTeam = rand(0, 1) ? 'a' : 'b';
+        if($this->mode == 'triple') {
+            $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
+        } else {
+            $firstTeam = rand(0, 1) ? 'a' : 'b';
+        }
         $isCardsSetted = GameCard::set($this, $firstTeam);
         if(!$isCardsSetted) {
             $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
@@ -292,7 +309,19 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
         if($this->hasRequiredPlayers === null) {
-            if($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0) {
+            if(
+                (
+                    $this->mode != 'triple'
+                    &&
+                    ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0)
+                )
+                ||
+                (
+                    $this->mode == 'triple'
+                    &&
+                    ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0|| $this->masterC->count()==0 || $this->agentsC->count()==0)
+                )
+            ) {
                 $this->hasRequiredPlayers = false;
             } else {
                 $this->hasRequiredPlayers = true;
@@ -306,17 +335,29 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
 
+        $string = 'teams_lists';
+        $empty = '_'.AppString::get('game.empty').'_';
         $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
         $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
-        $empty = '_'.AppString::get('game.empty').'_';
-        $textMessage = AppString::get('game.teams_lists', [
+        $vars = [
             'master_a' => $this->masterA->get()->getStringList($mention)??$empty,
             'agents_a' => $this->agentsA->get()->getStringList($mention)??$empty,
             'master_b' => $this->masterB->get()->getStringList($mention)??$empty,
             'agents_b' => $this->agentsB->get()->getStringList($mention)??$empty,
             'a' => $teamA,
             'b' => $teamB
-        ]);
+        ];
+        if($this->mode == 'triple') {
+            $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
+            $vars+= [
+                'master_c' => $this->masterC->get()->getStringList($mention)??$empty,
+                'agents_c' => $this->agentsC->get()->getStringList($mention)??$empty,
+                'c' => $teamC
+            ];
+            $string = 'teams_lists_triple';
+        }
+        
+        $textMessage = AppString::get('game.'.$string, $vars);
         return $textMessage;
     }
 
@@ -334,6 +375,10 @@ class Game extends Model
         $this->agentsA = $this->users()->fromTeamRole('a', 'agent');
         $this->masterB = $this->users()->fromTeamRole('b', 'master');
         $this->agentsB = $this->users()->fromTeamRole('b', 'agent');
+        if($this->mode == 'triple') {
+            $this->masterC = $this->users()->fromTeamRole('c', 'master');
+            $this->agentsC = $this->users()->fromTeamRole('c', 'agent');
+        }
         $this->isTeamAndRolesSet = true;
     }
 

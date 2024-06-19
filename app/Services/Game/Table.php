@@ -17,6 +17,8 @@ class Table {
     
     const BORDER = 10;
     const FONT_SIZE = 21;
+    const CARD_HEIGHT = 140;
+    const CARD_WIDTH = 210;
     const EASTER_EGGS = ['MANOEL GOMES','THE WEEKND']; // might add later: 'LADY GAGA','AMOR','MEDO','SANGUE','MORTE','ENERGIA','CONHECIMENTO','KIAN'
     static $fontPath;
     static $imageWidth;
@@ -38,8 +40,10 @@ class Table {
         }
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
         $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
-
-        if(($leftA==1 && $leftB==7) || ($leftA==7 && $leftB==1)) {
+        $leftC = null;
+        if($game->mode == 'triple') {
+            $leftC = $cards->where('team', 'c')->where('revealed', false)->count();
+        } else if(($leftA==1 && $leftB==7) || ($leftA==7 && $leftB==1)) {
             UserAchievement::add($game->users, 'seven_one', $bot, $game->chat_id);
         }
         
@@ -56,10 +60,10 @@ class Table {
         }
         imagedestroy($backgroundImage);
 
-        self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB);
         foreach($cards as $card) {
             self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
         }
+        self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB, $leftC);
         self::addCaption($masterImage??null, $agentsImage??null, $caption);
         self::addMode($masterImage??null, $agentsImage??null, $game->mode);
 
@@ -96,6 +100,9 @@ class Table {
                     }
                     if($sendToBothMasters || $game->team == 'b') {
                         $bot->sendPhoto($game->users()->fromTeamRole('b', 'master')->first()->id, $masterPhoto, ($game->team=='b')?$text:null, null, null, false, 'MarkdownV2', null, true);
+                    }
+                    if($sendToBothMasters || $game->team == 'c') {
+                        $bot->sendPhoto($game->users()->fromTeamRole('c', 'master')->first()->id, $masterPhoto, ($game->team=='c')?$text:null, null, null, false, 'MarkdownV2', null, true);
                     }
                     unlink($tempMasterImageFileName);
                 } catch(Exception $e) {
@@ -242,7 +249,7 @@ class Table {
         }
     }
 
-    private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB) {
+    private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB, int $leftC = null) {
         $fontSize = 65;
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
@@ -253,36 +260,59 @@ class Table {
         if($masterImage || $game->mode != 'mystery') {
             $squareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
             $squareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
-            $axisA = self::getAxisToCenterText($fontSize, $leftA, 210, 140);
-            $axisB = self::getAxisToCenterText($fontSize, $leftB, 210, 140);
+            $axisA = self::getAxisToCenterText($fontSize, $leftA, self::CARD_WIDTH, self::CARD_HEIGHT);
+            $axisB = self::getAxisToCenterText($fontSize, $leftB, self::CARD_WIDTH, self::CARD_HEIGHT);
             imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $leftA);
             imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $leftB);
+            if($game->mode == 'triple') {
+                $squareC = imagecreatefrompng(public_path('images/'.$game->getColor('c').'_square.png'));
+                $axisC = self::getAxisToCenterText($fontSize, $leftC, self::CARD_WIDTH, self::CARD_HEIGHT);
+                imagefttext($squareC, $fontSize, 0, $axisC['x'], $axisC['y'], $textColor, self::$fontPath, $leftC);
+            }
         }
         if($game->mode == 'mystery') {
             $mysterySquareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
             $mysterySquareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
             $mysteryLeft = '?';
-            $axisA = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
-            $axisB = self::getAxisToCenterText($fontSize, $mysteryLeft, 210, 140);
+            $axisA = self::getAxisToCenterText($fontSize, $mysteryLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
+            $axisB = self::getAxisToCenterText($fontSize, $mysteryLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
             imagefttext($mysterySquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $mysteryLeft);
             imagefttext($mysterySquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $mysteryLeft);
         }
         $y = self::BORDER;
         if($masterImage) {
             $x = self::BORDER;
-            imagecopy($masterImage, $squareA, $x, $y, 0, 0, 210, 140);
-            $x = self::BORDER+(3*210);
-            imagecopy($masterImage, $squareB, $x, $y, 0, 0, 210, 140);
+            imagecopy($masterImage, $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            if($game->mode == 'triple') {
+                $x = self::BORDER+(1.5*self::CARD_WIDTH);
+                imagecopy($masterImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+                $x = self::BORDER+(3*self::CARD_WIDTH);
+                imagecopy($masterImage, $squareC, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            } else {
+                $x = self::BORDER+(3*self::CARD_WIDTH);
+                imagecopy($masterImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            }
         }
+        $y = self::BORDER;
         if($agentsImage) {
             $x = self::BORDER;
-            imagecopy($agentsImage, $mysterySquareA ?? $squareA, $x, $y, 0, 0, 210, 140);
-            $x = self::BORDER+(3*210);
-            imagecopy($agentsImage, $mysterySquareB ?? $squareB, $x, $y, 0, 0, 210, 140);
+            imagecopy($agentsImage, $mysterySquareA ?? $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            if($game->mode == 'triple') {
+                $x = self::BORDER+(1.5*self::CARD_WIDTH);
+                imagecopy($agentsImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+                $x = self::BORDER+(3*self::CARD_WIDTH);
+                imagecopy($agentsImage, $squareC, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            } else {
+                $x = self::BORDER+(3*self::CARD_WIDTH);
+                imagecopy($agentsImage, $mysterySquareB ?? $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            }
         }
         if($masterImage || $game->mode != 'mystery') {
             imagedestroy($squareA);
             imagedestroy($squareB);
+            if($game->mode == 'triple') {
+                imagedestroy($squareC);
+            }
         }
         if($game->mode == 'mystery') {
             imagedestroy($mysterySquareA);
@@ -312,6 +342,12 @@ class Table {
         #region calculations
         //card position
         $cardByLine = 4;
+        if($game->mode == 'triple') {
+            $card->position+=2;
+            if($highlightCard) {
+                $highlightCard+= 2;
+            }
+        }
         if($card->position<2) {
             $y = 0;
             $x = $card->position + 1;
@@ -320,10 +356,10 @@ class Table {
             $x = $card->position+2 - ($cardByLine*$y);
         }
         
-        $cardX = self::BORDER+($x*210);
-        $cardY = self::BORDER+($y*140);
-        if($card->position >= self::$firstCardToBePushed) {
-            $cardX+= 105;
+        $cardX = self::BORDER+($x*self::CARD_WIDTH);
+        $cardY = self::BORDER+($y*self::CARD_HEIGHT);
+        if($game->mode != 'triple' && $card->position >= self::$firstCardToBePushed) {
+            $cardX+= self::CARD_WIDTH/2;
         }
 
         //text position and size
@@ -333,10 +369,10 @@ class Table {
         $textAxis = [];
         while(empty($textAxis) || $textAxis['width'] >= $inputWidth - 30) {
             $fontSize-=1;
-            $textAxis = self::getAxisToCenterText($fontSize, $card->text, 210, $inputHeight);
+            $textAxis = self::getAxisToCenterText($fontSize, $card->text, self::CARD_WIDTH, $inputHeight);
         }
         $bottomSpace = 23;
-        $textAxis['y'] = 140-$bottomSpace-$inputHeight+$textAxis['y'];
+        $textAxis['y'] = self::CARD_HEIGHT-$bottomSpace-$inputHeight+$textAxis['y'];
         #endregion
 
         switch ($card->team) {
@@ -345,6 +381,9 @@ class Table {
                 break;
             case 'b':
                 $colorMaster = $game->getColor('b');
+                break;
+            case 'c':
+                $colorMaster = $game->getColor('c');
                 break;
             case 'x':
                 $colorMaster = 'black';
@@ -375,7 +414,7 @@ class Table {
 
                 if(in_array($card->text, self::EASTER_EGGS)) {
                     $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
-                    imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, 210, 140);
+                    imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
                 } else {
                     self::markCardAsRevealed($masterCardImage);
                 }
@@ -395,11 +434,11 @@ class Table {
         }
         
         if(!is_null($masterImage)) {
-            imagecopy($masterImage, $masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
+            imagecopy($masterImage, $masterCardImage, $cardX, $cardY, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             imagedestroy($masterCardImage);
         }
         if(!is_null($agentsImage)) {
-            imagecopy($agentsImage, $agentsCardImage??$masterCardImage, $cardX, $cardY, 0, 0, 210, 140);
+            imagecopy($agentsImage, $agentsCardImage??$masterCardImage, $cardX, $cardY, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             if(isset($agentsCardImage)) {
                 imagedestroy($agentsCardImage);
             }
@@ -409,14 +448,14 @@ class Table {
 
     private static function markCardAsRevealed($image) {
         $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
-        imagecopy($image, $revealedImage, 0, 0, 0, 0, 210, 140);
+        imagecopy($image, $revealedImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
         imagedestroy($revealedImage);
     }
 
     private static function highlightCardIfNeeded($image, GameCard $card, int $highlightCard = null) {
         if($card->position === $highlightCard) {
             $highlightedImage = imagecreatefrompng(public_path("images/highlighted_card.png"));
-            imagecopy($image, $highlightedImage, 0, 0, 0, 0, 210, 140);
+            imagecopy($image, $highlightedImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             imagedestroy($highlightedImage);
             return true;
         }

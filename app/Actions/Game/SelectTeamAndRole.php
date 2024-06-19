@@ -86,17 +86,25 @@ class SelectTeamAndRole implements Action {
         if(!$user->default_color) {
             return;
         }
-        if(
-            $user->default_color == $game->getColor($player->team)
-            ||
-            ($user->default_color == $game->getColor($user->getEnemyTeam()) && $game->hasMaster($user->getEnemyTeam()))
-        ) {
+        if($user->default_color == $game->getColor($player->team)) {
             return;
         }
 
-        if($user->default_color == $game->getColor($user->getEnemyTeam())) {
-            $colors = ['red', 'blue'];
-            $game->setColor($user->getEnemyTeam(), $colors[rand(0, 1)]);
+        foreach($user->getEnemyTeams($game->mode == 'triple') as $team) {
+            if($user->default_color == $game->getColor($team)) {
+                if($game->hasMaster($team)) {
+                    return;
+                }
+                $backupColor = ['red', 'blue', 'orange'];
+                foreach($backupColor as $color) {
+                    if($color != $user->default_color && !in_array($color, $game->getColors($user->getEnemyTeams($game->mode == 'triple')))) {
+                        $backupColor = $color;
+                        break;
+                    }
+                }
+                $game->setColor($team, $backupColor);
+                break;
+            };
         }
 
         $game->setColor($player->team, $user->default_color);

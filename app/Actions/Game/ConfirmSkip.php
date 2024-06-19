@@ -16,9 +16,15 @@ class ConfirmSkip implements Action {
         if(!$update->isChatType('supergroup')) {
             return;
         }
-        $user = $update->findUser();
-        $chat = $update->findUser();
-        $game = $chat->currentGame();
+        if(!$chat = $update->findChat()) {
+            return;
+        }
+        if(!$user = $update->findUser()) {
+            return;
+        }
+        if(!$game = $chat->currentGame()) {
+            return;
+        }
         $chatLanguage = $chat->language;
 
         if($update->isType(Update::CALLBACK_QUERY)) {
@@ -29,7 +35,7 @@ class ConfirmSkip implements Action {
             $bot->tryToDeleteMessage($update->getChatId(), $update->getMessageId());
         }
 
-        if(!$user || !$game) {
+        if(!$game) {
             return;
         }
         $player = $user->currentGame()->player;
@@ -58,7 +64,11 @@ class ConfirmSkip implements Action {
             $title = AppString::get('game.8ball', null, $chatLanguage);
 
         } else {
-            $game->nextStatus($currentPlayer->getEnemyTeam());
+            if($game->mode == 'triple') {
+                $game->nextStatus($currentPlayer->getNextTeam());
+            } else {
+                $game->nextStatus($currentPlayer->getEnemyTeam());
+            }
 
             $title = AppString::get('game.skipped', null, $chatLanguage);
         }

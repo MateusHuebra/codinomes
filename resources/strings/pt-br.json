@@ -67,6 +67,12 @@
         "sp_crazy_info": [
             "Modo super maluco, é como o modo maluco só que além das cores as próprias palavras em jogo são trocadas também"
         ],
+        "triple": [
+            "TRIPLO"
+        ],
+        "triple_info": [
+            "Modo em teste"
+        ],
         "check_other": [
             "Veja outros modos: /ajuda_modos"
         ]
@@ -80,6 +86,9 @@
         ],
         "teams_lists": [
             "*EQUIPE {a}\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\n"
+        ],
+        "teams_lists_triple": [
+            "*EQUIPE {a}\nMestre:* {master_a}\n*Agentes:* {agents_a}\n\n*EQUIPE {b}\nMestre:* {master_b}\n*Agentes:* {agents_b}\n\n*EQUIPE {c}\nMestre:* {master_c}\n*Agentes:* {agents_c}\n\n"
         ],
         "mode": [
             "*MODO {mode} {emoji}* {info}\n\n"

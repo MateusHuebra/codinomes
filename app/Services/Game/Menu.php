@@ -103,6 +103,26 @@ class Menu {
                 ])
             ]
         ];
+        if($game->mode == 'triple') {
+            $buttonsArray[] = [
+                [
+                    'text' => Game::COLORS[$game->getColor('c')].' '.AppString::get('game.master'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'c',
+                        CDM::ROLE => CDM::MASTER
+                    ])
+                ],
+                [
+                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('c')],
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'c',
+                        CDM::ROLE => CDM::AGENT
+                    ])
+                ]
+            ];
+        }
 
         $line = [];
         if(!$game->menu || $game->isMenu('color')) {

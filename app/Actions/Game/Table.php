@@ -12,16 +12,34 @@ use TelegramBot\Api\BotApi;
 class Table implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
-        $chat = $update->findChat();
-        if (!$chat) {
+        $user = $update->findUser();
+        if (!$user) {
             return;
         }
-        $game = $chat->currentGame();
+        if($update->isChatType('private')) {
+            $game = $user->currentGame();
+        } else {
+            $chat = $update->findChat();
+            if (!$chat) {
+                return;
+            }
+            $game = $chat->currentGame();
+        }
 
         if ($game) {
             if($game->status == 'playing') {
-                if($game->role == 'agent') {
-                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint()));
+                if(
+                    $game->role == 'agent'
+                    ||
+                    (
+                        $user->currentGame()
+                        &&
+                        $user->currentGame()->player->role == 'master'
+                        &&
+                        $user->currentGame()->player->team == $game->team
+                    )
+                ) {
+                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40));
                     
                 } else {
                     $bot->sendMessage($chat->id, AppString::get('error.only_agent_role'), null, false, $update->getMessageId(), null, false, null, null, true);

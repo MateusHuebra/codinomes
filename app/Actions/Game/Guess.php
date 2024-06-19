@@ -23,6 +23,9 @@ class Guess implements Action {
             'a' => Game::COLORS[$game->getColor('a')],
             'b' => Game::COLORS[$game->getColor('b')]
         ];
+        if($game->mode == 'triple') {
+            $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
+        }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
         $cards = $game->cards;

@@ -63,6 +63,12 @@ class Create implements Action {
             'team' => 'b',
             'color' => 'blue'
         ]);
+        if($game->mode == 'triple') {
+            $game->teamColors()->create([
+                'team' => 'c',
+                'color' => 'orange'
+            ]);
+        }
 
         $chat->notifiableUsers->notify($game, $bot);
         Menu::send($game, $bot);

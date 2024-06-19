@@ -57,6 +57,9 @@ class ChosenGuess implements Action {
             'a' => Game::COLORS[$game->getColor('a')],
             'b' => Game::COLORS[$game->getColor('b')]
         ];
+        if($game->mode == 'triple') {
+            $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
+        }
         $emoji = $emojis[$card->team];
 
         if($game->attempts_left!==null) {
@@ -107,7 +110,11 @@ class ChosenGuess implements Action {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
-                    $game->nextStatus($user->getEnemyTeam());
+                    if($game->mode == 'triple') {
+                        $game->nextStatus($user->getNextTeam());
+                    } else {
+                        $game->nextStatus($user->getEnemyTeam());
+                    }
 
                     $title = AppString::get('game.correct', null, $chatLanguage);
                     $text = $game->getLastHint();
@@ -143,13 +150,13 @@ class ChosenGuess implements Action {
         } else {
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             //won
-            if($opponentCardsLeft <= 0 && $game->mode != '8ball') {
-                $color = $game->getColor($user->getEnemyTeam());
+            if($game->mode != '8ball' && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
+                $color = $game->getColor($card->team);
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
                 ], $chatLanguage);
                 $text = AppString::get('game.win_color', null, $chatLanguage);
-                $winner = $user->getEnemyTeam();
+                $winner = $card->team;
                 
                 $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
                 UserAchievement::add($agents, 'impostor', $bot, $game->chat_id);
@@ -165,7 +172,11 @@ class ChosenGuess implements Action {
 
                 } else {
                     if($game->mode != 'mystery' || $game->attempts_left < 0) {
-                        $game->nextStatus($user->getEnemyTeam());
+                        if($game->mode == 'triple') {
+                            $game->nextStatus($user->getNextTeam());
+                        } else {
+                            $game->nextStatus($user->getEnemyTeam());
+                        }
                     }
 
                     $title = AppString::get('game.incorrect', null, $chatLanguage);
