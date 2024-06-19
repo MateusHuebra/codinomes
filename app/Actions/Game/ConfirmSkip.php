@@ -39,8 +39,13 @@ class ConfirmSkip implements Action {
             return;
         }
         $player = $user->currentGame()->player;
-        if(!$game->chat->isAdmin($user, $bot) && !($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team && $game->id === $user->currentGame()->id)) {
-            return;
+        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team && $game->id === $user->currentGame()->id)) {
+            if(!$game->chat->isAdmin($user, $bot)) {
+                return;
+            }
+            $adm = true;
+        } else {
+            $adm = false;
         }
 
         $mention = AppString::get('game.mention', [
@@ -49,6 +54,9 @@ class ConfirmSkip implements Action {
         ], $chatLanguage, true);
         $skipped = strtolower(AppString::getParsed('game.skipped', null, $chatLanguage));
         $text = $mention.' '.$skipped;
+        if($adm) {
+            $text = '⚠️ Admin '.$text;
+        }
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
