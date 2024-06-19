@@ -38,13 +38,13 @@ class Menu {
         $game->save();
     }
 
-    public static function getLobbyText(Game $game, bool $showInfo = false) {
+    public static function getLobbyText(Game $game, bool $showInfo = false, string $winner = null) {
         $textMessage = AppString::get('game.mode', [
             'mode' => AppString::get('mode.'.$game->mode),
             'info' => ($showInfo ? '/info' : ''),
             'emoji' => Game::MODES[$game->mode]
         ]);
-        $textMessage.= $game->getTeamAndPlayersList();
+        $textMessage.= $game->getTeamAndPlayersList($winner);
         return $textMessage;
     }
 

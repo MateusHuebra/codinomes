@@ -330,7 +330,7 @@ class Game extends Model
         return $this->hasRequiredPlayers;
     }
 
-    public function getTeamAndPlayersList(bool $mention = true) {
+    public function getTeamAndPlayersList(string $winner = null) {
         if($this->isTeamAndRolesSet===false) {
             $this->setPlayerTeamAndRoles();
         }
@@ -340,19 +340,19 @@ class Game extends Model
         $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
         $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
         $vars = [
-            'master_a' => $this->masterA->get()->getStringList($mention)??$empty,
-            'agents_a' => $this->agentsA->get()->getStringList($mention)??$empty,
-            'master_b' => $this->masterB->get()->getStringList($mention)??$empty,
-            'agents_b' => $this->agentsB->get()->getStringList($mention)??$empty,
-            'a' => $teamA,
-            'b' => $teamB
+            'master_a' => $this->masterA->get()->getStringList()??$empty,
+            'agents_a' => $this->agentsA->get()->getStringList()??$empty,
+            'master_b' => $this->masterB->get()->getStringList()??$empty,
+            'agents_b' => $this->agentsB->get()->getStringList()??$empty,
+            'a' => $teamA . $winner == 'a' ? ' '.AppString::get('game.won') : '',
+            'b' => $teamB . $winner == 'b' ? ' '.AppString::get('game.won') : ''
         ];
         if($this->mode == 'triple') {
             $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
             $vars+= [
-                'master_c' => $this->masterC->get()->getStringList($mention)??$empty,
-                'agents_c' => $this->agentsC->get()->getStringList($mention)??$empty,
-                'c' => $teamC
+                'master_c' => $this->masterC->get()->getStringList()??$empty,
+                'agents_c' => $this->agentsC->get()->getStringList()??$empty,
+                'c' => $teamC . $winner == 'c' ? ' '.AppString::get('game.won') : ''
             ];
             $string = 'teams_lists_triple';
         }

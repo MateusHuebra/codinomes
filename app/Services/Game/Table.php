@@ -117,10 +117,7 @@ class Table {
             $color = $game->getColor($winner);
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
 
-            $text = Menu::getLobbyText($game);
-            $text.= AppString::getParsed('game.win', [
-                'team' => $team
-            ], $chatLanguage);
+            $text = Menu::getLobbyText($game, false, $winner);
             $text.= PHP_EOL.$game->getHistory();
 
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');

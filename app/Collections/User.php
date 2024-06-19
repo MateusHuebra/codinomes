@@ -11,7 +11,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class User extends Collection {
 
-    public function getStringList(bool $mention, $separator = ', ') {
+    public function getStringList(bool $mention = true, $separator = ', ') {
         if($this->count()==0) {
             return null;
         }

@@ -201,6 +201,9 @@
         "win": [
             "Team {team} won the game!"
         ],
+        "won": [
+            "WON! 🏆"
+        ],
         "win_black": [
             "Opponent guessed a black card"
         ],

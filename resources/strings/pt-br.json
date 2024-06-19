@@ -201,6 +201,9 @@
         "win": [
             "A equipe {team} venceu o jogo!"
         ],
+        "won": [
+            "VENCEU! 🏆"
+        ],
         "win_black": [
             "Oponente tentou uma carta preta"
         ],
