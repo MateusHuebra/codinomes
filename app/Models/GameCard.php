@@ -131,7 +131,7 @@ class GameCard extends Model
 
             case 'triple':
                 self::$cardsCounts = [
-                    'base' => 8,
+                    'base' => 6,
                     'black' => 0,
                     'max' => 24
                 ];
