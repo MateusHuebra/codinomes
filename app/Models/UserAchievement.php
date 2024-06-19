@@ -21,6 +21,7 @@ class UserAchievement extends Model
 
     const AVAILABLE = [
         'seven_one',
+        'sixsixsix',
         'possessed',
         'hurry',
         'good_start',

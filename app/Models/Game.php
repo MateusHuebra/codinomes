@@ -344,15 +344,15 @@ class Game extends Model
             'agents_a' => $this->agentsA->get()->getStringList()??$empty,
             'master_b' => $this->masterB->get()->getStringList()??$empty,
             'agents_b' => $this->agentsB->get()->getStringList()??$empty,
-            'a' => $teamA . $winner == 'a' ? ' '.AppString::get('game.won') : '',
-            'b' => $teamB . $winner == 'b' ? ' '.AppString::get('game.won') : ''
+            'a' => $teamA . ($winner == 'a' ? ' '.AppString::get('game.won') : ''),
+            'b' => $teamB . ($winner == 'b' ? ' '.AppString::get('game.won') : '')
         ];
         if($this->mode == 'triple') {
             $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
             $vars+= [
                 'master_c' => $this->masterC->get()->getStringList()??$empty,
                 'agents_c' => $this->agentsC->get()->getStringList()??$empty,
-                'c' => $teamC . $winner == 'c' ? ' '.AppString::get('game.won') : ''
+                'c' => $teamC . ($winner == 'c' ? ' '.AppString::get('game.won') : '')
             ];
             $string = 'teams_lists_triple';
         }

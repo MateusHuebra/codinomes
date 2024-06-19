@@ -43,6 +43,9 @@ class Table {
         $leftC = null;
         if($game->mode == 'triple') {
             $leftC = $cards->where('team', 'c')->where('revealed', false)->count();
+            if($leftA==6 && $leftB==6 && $leftC==6) {
+                UserAchievement::add($game->users, 'sixsixsix', $bot, $game->chat_id);
+            }
         } else if(($leftA==1 && $leftB==7) || ($leftA==7 && $leftB==1)) {
             UserAchievement::add($game->users, 'seven_one', $bot, $game->chat_id);
         }
