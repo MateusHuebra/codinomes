@@ -66,14 +66,15 @@ class ChosenGuess implements Action {
             $game->attempts_left--;
         }
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
-        
-        $this->handleMessage($update, $user, $card, $game, $emoji, $bot);
+
+        $isGuessCorrect = $card->team == $player->team;
+        $this->handleMessage($update, $user, $card, $game, $emoji, $bot, $isGuessCorrect);
 
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
         $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
 
         //correct guess
-        if($card->team == $player->team) {
+        if($isGuessCorrect) {
             $attemptType = 'ally';
             //won
             if($cardsLeft <= 0 && $game->mode != '8ball') {
@@ -198,15 +199,16 @@ class ChosenGuess implements Action {
 
     }
 
-    private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot) {
+    private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot, bool $isGuessCorrect) {
         $emoji = ($game->mode == 'mystery') ? '❔' : $emoji;
+        $string = $isGuessCorrect ? 'attempted_correct' : 'attempted';
         $chatLanguage = $game->chat->language;
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [
                 'name' => $user->name,
                 'id' => $user->id
             ], $chatLanguage, true);
-            $text = AppString::get('game.attempted', [
+            $text = AppString::get('game.'.$string, [
                 'user' => $mention,
                 'card' => AppString::parseMarkdownV2($card->text).' '.$emoji
             ], $chatLanguage);

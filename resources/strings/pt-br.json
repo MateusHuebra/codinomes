@@ -237,6 +237,9 @@
         "attempted": [
             "{user} tentou {card}"
         ],
+        "attempted_correct": [
+            "{user} acertou {card}"
+        ],
         "hinted": [
             "{user} deu a dica {hint}"
         ]
