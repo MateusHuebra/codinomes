@@ -94,6 +94,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new', 'novo'])) {
             return new Create;
 
+        } else if(in_array($command, ['new_triple', 'novo_triplo'])) {
+            return new Create('triple');
+
         } else if(in_array($command, ['new_fast', 'novo_rapido'])) {
             return new Create('fast');
 
