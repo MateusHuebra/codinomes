@@ -121,10 +121,10 @@ class Table {
             $team = AppString::get('color.'.$color).' '.Game::COLORS[$color];
 
             $text = Menu::getLobbyText($game, false, $winner);
-            $text.= PHP_EOL.$game->getHistory();
+            $text.= $game->getHistory();
 
             $message = $bot->sendPhoto($game->chat_id, $masterPhoto, $text, null, null, false, 'MarkdownV2');
-            $title = '\\'.$game->chat_id."\n".AppString::parseMarkdownV2($game->chat->title)."\n\n";
+            $title = AppString::parseMarkdownV2($game->chat->title)."\n\\".$game->chat_id."\n\n";
             $message = $bot->sendPhoto(env('TG_MY_ID'), $masterPhoto, $title.$text, null, null, false, 'MarkdownV2');
             unlink($tempMasterImageFileName);
 
