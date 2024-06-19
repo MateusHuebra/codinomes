@@ -364,7 +364,7 @@
             "Digite uma dica"
         ],
         "wrong_hint_format_desc": [
-            "Uma dica de até 16 letras + número de cartas a qual essa dica se refere. Exemplos: Medo 2, 3 Brilhoso..."
+            "Uma dica de até 20 letras + número de cartas a qual essa dica se refere. Exemplos: Medo 2, Brilhoso 3..."
         ],
         "wrong_guess_format_title": [
             "Digite seu chute"

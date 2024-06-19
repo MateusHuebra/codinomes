@@ -53,7 +53,8 @@ class ChosenHint implements Action {
         }
         $game->save();
 
-        $caption = new Caption($hint, null, 50);
+        $titleSize = strlen($hint) >= 16 ? 40 : 50;
+        $caption = new Caption($hint, null, $titleSize);
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
             'id' => $user->id

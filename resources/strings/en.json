@@ -364,7 +364,7 @@
             "Enter a hint"
         ],
         "wrong_hint_format_desc": [
-            "A hint up to 16 characters + number of cards which this hint refers to. Examples: Fear 2, 3 Shiny..."
+            "A hint up to 20 characters + number of cards which this hint refers to. Examples: Fear 2, Shiny 3..."
         ],
         "wrong_guess_format_title": [
             "Enter your guess"
