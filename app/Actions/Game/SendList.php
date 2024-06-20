@@ -54,7 +54,12 @@ class SendList implements Action {
 
             $text = '**>';
             $cardsToImplode = [];
-            $cards = $game->cards()->where('revealed', false)->orderBy('team')->orderBy('position')->get();
+            $cards = $game->cards()
+                            ->where('revealed', false)
+                            ->orderByRaw("CASE WHEN team = '".$game->player->team."' THEN 0 ELSE 1 END")
+                            ->orderBy('team')
+                            ->orderBy('position')
+                            ->get();
             foreach ($cards as $card) {
                 $cardsToImplode[] = $emojis[$card->team].' '.AppString::parseMarkdownV2($card->text);
             }
