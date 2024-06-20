@@ -16,7 +16,7 @@ class Start implements Action {
             $bot->deleteMessage($chat->id, $update->getMessageId());
             return;
         }
-        if(in_array($game->status, ['creating', 'lobby'])) {
+        if(!in_array($game->status, ['creating', 'lobby'])) {
             return;
         }
         if($game->cards()->exists()) {
