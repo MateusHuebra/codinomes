@@ -24,7 +24,7 @@ class Create implements Action {
         }
         $chat = $update->findChat();
         $chat->username = $update->getChatUsername();
-        $chat->title = substr($update->getChatTitle(), 0, 32);
+        $chat->title = mb_substr($update->getChatTitle(), 0, 32, 'UTF-8');
         $chat->save();
 
         $user = $update->findUser();

@@ -50,7 +50,7 @@ class SelectTeamAndRole implements Action {
             }
         }
 
-        $user->name = substr($update->getFrom()->getFirstName(), 0, 32);
+        $user->name = mb_substr($update->getFrom()->getFirstName(), 0, 32, 'UTF-8');
         $user->username = $update->getFrom()->getUsername();
         $user->save();
         
