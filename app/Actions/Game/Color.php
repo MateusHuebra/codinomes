@@ -20,7 +20,7 @@ class Color implements Action {
 
         $game = $user->currentGame();
         $player = $game->player;
-        if(!($game->status=='creating' && $player->role=='master')) {
+        if(!(in_array($game->status, ['creating', 'lobby']) && $player->role=='master')) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.master_only');
             return;
         }

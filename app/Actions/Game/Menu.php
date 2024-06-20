@@ -27,7 +27,7 @@ class Menu implements Action {
             return;
         }
 
-        if($game->status != 'creating') {
+        if(!in_array($game->status, ['creating', 'lobby'])) {
             return;
         }
 

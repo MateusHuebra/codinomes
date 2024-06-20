@@ -29,7 +29,7 @@ class Chat extends Model
 
     public function currentGame()
     {
-        return $this->hasMany(Game::class)->whereIn('status', ['creating', 'playing'])->first();
+        return $this->hasMany(Game::class)->whereIn('status', ['creating', 'lobby', 'playing'])->first();
     }
 
     public function packs()

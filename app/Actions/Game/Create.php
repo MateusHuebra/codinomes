@@ -44,15 +44,12 @@ class Create implements Action {
         if($this->mode == 'random') {
             $this->mode = array_rand(Game::MODES);
         }
-        
-        $message = $bot->sendMessage($chat->id, AppString::get('game.creating'));
 
         $game = new Game();
         $game->status = 'creating';
         $game->mode = $this->mode;
         $game->chat_id = $chat->id;
         $game->creator_id = $user->id;
-        $game->lobby_message_id = $message->getMessageId();
         $game->save();
 
         $game->teamColors()->create([
@@ -70,9 +67,7 @@ class Create implements Action {
             ]);
         }
 
-        $chat->notifiableUsers->notify($game, $bot);
         Menu::send($game, $bot);
-        $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
 
         if($game->chat->packs()->count() == 0) {
             $bot->sendMessage($chat->id, AppString::get('error.no_packs'));

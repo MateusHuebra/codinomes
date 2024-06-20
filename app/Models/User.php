@@ -47,7 +47,7 @@ class User extends Model
     public function currentGame()
     {
         return $this->belongsToMany(Game::class)
-            ->whereIn('games.status', ['playing', 'creating'])
+            ->whereIn('games.status', ['playing', 'lobby', 'creating'])
             ->withPivot('team', 'role')
             ->as('player')
             ->first();

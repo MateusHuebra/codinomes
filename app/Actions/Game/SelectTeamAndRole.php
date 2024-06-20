@@ -23,7 +23,7 @@ class SelectTeamAndRole implements Action {
         }
 
         $game = $chat->currentGame();
-        if(!$game || $game->status != 'creating') {
+        if(!$game || !in_array($game->status, ['creating', 'lobby'])) {
             if(!$game) {
                 $bot->deleteMessage($chat->id, $update->getMessageId());
             }

@@ -186,7 +186,7 @@ class Game extends Model
     }
 
     public function start(BotApi $bot, User $user = null, $callbackId = null) : Bool {
-        if($this->status != 'creating') {
+        if(!in_array($this->status, ['creating', 'lobby'])) {
             $bot->deleteMessage($this->chat_id, $this->message_id);
             return false;
         }
@@ -228,7 +228,7 @@ class Game extends Model
 
     public function stop(BotApi $bot, string $winner = null) {
         if($winner == null) {
-            if($this->status == 'creating') {
+            if(in_array($this->status, ['creating', 'lobby'])) {
                 $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
             } else {
                 $bot->tryToDeleteMessage($this->chat_id, $this->message_id);
