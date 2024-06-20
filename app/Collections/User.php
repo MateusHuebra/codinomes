@@ -32,22 +32,24 @@ class User extends Collection {
     public function notify(Game $game, BotApi $bot) {
         $game->refresh();
         $chat = $game->chat;
+        $title = AppString::parseMarkdownV2($chat->title);
         $url = $chat->getUrl();
-        $text = AppString::get('game.notification', [
-            'title' => AppString::parseMarkdownV2($chat->title),
-            'url' => $url
-        ]);
-        $keyboard = new InlineKeyboardMarkup([
-            [
-                [
-                    'text' => AppString::get('game.open'),
-                    'url' => $url
-                ]
-            ]
-        ]);
         $attachmentsToUpdate = [];
 
         foreach($this->items as $user) {
+            $text = AppString::get('game.notification', [
+                'title' => $title,
+                'url' => $url
+            ], $user->language);
+            $keyboard = new InlineKeyboardMarkup([
+                [
+                    [
+                        'text' => AppString::get('game.open', null, $user->language),
+                        'url' => $url
+                    ]
+                ]
+            ]);
+
             if($user->pivot->message_id) {
                 $bot->tryToDeleteMessage($user->id, $user->pivot->message_id);
             }
