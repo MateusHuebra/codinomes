@@ -60,7 +60,7 @@ class Chat extends Model
     }
 
     public function getUrl() {
-        return str_replace('-100', 'https://t.me/c/', $this->id);
+        return str_replace('-100', 'https://t.me/c/', $this->id).'/9999999';
     }
 
     static function createFromTGModel(TGChat $tgChat) : Chat {
