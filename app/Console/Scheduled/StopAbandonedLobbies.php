@@ -22,10 +22,10 @@ class StopAbandonedLobbies {
                     return;
                 }
                 try {
-                    $bot->sendMessage($game->chat_id, AppString::get('game.stopped_by_time'));
+                    $bot->sendMessage($game->chat_id, AppString::get('game.stopped_by_time', null, $game->chat->language));
 
                     if(!in_array($game->chat_id, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
-                        $bot->sendMessage($game->chat_id, AppString::get('game.try_official_group'));
+                        $bot->sendMessage($game->chat_id, AppString::get('game.try_official_group', null, $game->chat->language));
                     }
                 } catch(Exception $e) {}
 
