@@ -22,8 +22,18 @@ class DidYouKnow {
                 $bot->sendMessage($chat->id, $text, 'MarkdownV2');
 
             } catch (Exception $e) {
-                $title = $chat->title;
-                $bot->sendMessage(env('TG_MY_ID'), $title.' didyouknow error: '.$e->getMessage());
+                if(in_array($e->getMessage(), [
+                    'Bad Request: chat not found',
+                    'Bad Request: group chat was upgraded to a supergroup chat'
+                ])) {
+                    $chat->actived = false;
+                    $chat->save();
+                    
+                } else {
+                    $title = $chat->title;
+                    $bot->sendMessage(env('TG_MY_ID'), $title.' didyouknow error: '.$e->getMessage());
+                }
+
             }
         }
     }
