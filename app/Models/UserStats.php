@@ -23,7 +23,7 @@ class UserStats extends Model
         if($game->mode == 'triple') {
             return;
         }
-        $streak = $type == 'ally' ? $game->countLastStreak() : 0;
+        $streak = $type == 'ally' && $game->mode != 'mystery' ? $game->countLastStreak() : 0;
 
         $master = $game->users()->fromTeamRole($team, 'master')->get();
         self::setStatsForUsers($master, 'master', $type, $streak);
