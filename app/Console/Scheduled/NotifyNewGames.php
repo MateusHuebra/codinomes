@@ -3,8 +3,6 @@
 namespace App\Console\Scheduled;
 
 use App\Models\Game;
-use App\Services\AppString;
-use Exception;
 use App\Services\Telegram\BotApi;
 
 class NotifyNewGames {

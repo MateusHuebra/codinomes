@@ -25,7 +25,7 @@ class AppString {
         $keys = explode('.', $path);
         foreach ($keys as $key) {
             if(!property_exists($string, $key)) {
-                return '- string not found: '.$path;
+                return 'string not found: '.$path;
             }
             $string = $string->$key;
         }

@@ -39,6 +39,12 @@ class Start implements Action {
             $bot->sendMessage($model->id, AppString::get($stringPath), null, false, null, $keyboard);
             return false;
         }
+        if(get_class($model) == 'App\Models\User') {
+            $model->status = 'actived';
+        } else if(get_class($model) == 'App\Models\Chat') {
+            $model->actived = true;
+        }
+        $model->save();
         return $model;
         
     }

@@ -68,7 +68,7 @@
             "Super Crazy Mode, it's like Crazy Mode, but in addition to the colors, the actual words in play are also changed"
         ],
         "triple": [
-            "TRIPLE \\(beta\\)"
+            "TRIPLE (beta)"
         ],
         "triple_info": [
             "Testing..."
@@ -457,7 +457,7 @@
             "What happens depending on the color of the card chosen:\n**>🔴 *Your color:* keep guessing;\n>\n>⚪️ *White:* skip the turn immediately;\n>\n>🔷 *Opponent color:* skip the turn immediately, and brings the opposing team one card closer to victory;\n>\n>⚫️ *Black:* loses the game immediately, giving victory to the opposing team\\.||"
         ],
         "commands": [
-            "*Codinomes Commands:*\n**>• /new creates a new game lobby\n>• /skip skip your turn in the game\n>• /stop interrupts and cancels the match\n>\n>• /notify send it to a group to be notified whenever a new match takes place in it, send it again to cancel\n>\n>• /history view the history of hints and attempts from the match, it also works via DM\n>\n>• /settings group settings \\(as timer and word packs\\)\n>\n>• /color choose your default color that will be set automatically when you enter as a master\n>\n>• /packs send it to DM to create and manage your own word packages||"
+            "*Codinomes Commands:*\n**>• /new creates a new game lobby\n>• /skip skip your turn in the game\n>• /stop interrupts and cancels the match\n>\n>• /notify send it to a group to be notified whenever a new match takes place in it (send it again to cancel), sending in private will show a list of all enabled notifications for you to disable\n>\n>• /history view the history of hints and attempts from the match, it also works via DM\n>\n>• /settings group settings \\(as timer and word packs\\)\n>\n>• /color choose your default color that will be set automatically when you enter as a master\n>\n>• /packs send it to DM to create and manage your own word packages||"
         ]
     },
     "achievements": {
@@ -554,6 +554,22 @@
         "kian_knows_info": [
             "Play a match with the developer"
         ]
+    },
+    "did_you_know": {
+        "title": [
+            "ℹ️ Did you know?"
+        ],
+        "text": [
+            "🎨 You can choose a default /color to be automatically activated whenever you enter a game as the master",
+            "🔔 You can send /notify in a group to be alerted whenever there's a new game there",
+            "🔕 You can send /notify in private to list the enabled notifications and turn them off",
+            "⏭️ Admins can /skip any player's turn to address hints that broke group rules or possible bugs during the game",
+            "⏯️ When Admin Only mode is enabled, only Admins and the lobby creator can start or cancel a game",
+            "🖼️ You can use the /table command to pull the most recent image down (super useful with sending image bugs)",
+            "🗒️ The bot can /list all the available words for you",
+            "📦 You can create your own word /packs in the bot's private chat and activate them in /settings > My Packs",
+            "🛡️ Make the bot an Admin for it to be able to pin the game lobby and clean up game messages from others",
+            "🔤 You can send your guesses as regular uppercase messages LIKE THIS in the group"
+        ]
     }
-    
 }

@@ -68,7 +68,7 @@
             "Modo super maluco, é como o modo maluco só que além das cores as próprias palavras em jogo são trocadas também"
         ],
         "triple": [
-            "TRIPLO \\(beta\\)"
+            "TRIPLO (beta)"
         ],
         "triple_info": [
             "Modo em teste"
@@ -457,7 +457,7 @@
             "O que acontece dependendo da cor da carta escolhida:\n**>🔴 *Sua cor:* continua chutando;\n>\n>⚪️ *Branca:* passa a vez imediatamente;\n>\n>🔷 *Cor do oponente:* passa a vez imediatamente, e deixa o time oponente uma carta mais próximo da vitória;\n>\n>⚫️ *Preta:* perde o jogo imediatamente, dando a vitória ao time oponente\\.||"
         ],
         "commands": [
-            "*Comandos do Codinomes:*\n**>• /novo cria uma nova sala de partida\n>• /pular pula sua vez na partida\n>• /parar interrompe e cancela a partida\n>\n>• /notificar envie no grupo para ser avisado sempre que rolar uma nova partida, envie novamente para cancelar\n>\n>• /historico visualize o histórico de dicas e tentativas da partida, funciona também no pv\n>\n>• /config configurações do grupo \\(como timer e pacotes de palavras\\)\n>\n>• /cor escolha sua cor padrão que será definida automaticamente quando entrar como mestre\n>\n>• /pacotes envie no pv para criar e gerenciar seus próprios pacotes de palavras||"
+            "*Comandos do Codinomes:*\n**>• /novo cria uma nova sala de partida\n>• /pular pula sua vez na partida\n>• /parar interrompe e cancela a partida\n>\n>• /notificar envie no grupo para ser avisado sempre que rolar uma nova partida (envie novamente para cancelar), enviando no pv aparecerá a lista de todas as notificações ativadas para você desativar\n>\n>• /historico visualize o histórico de dicas e tentativas da partida, funciona também no pv\n>\n>• /config configurações do grupo \\(como timer e pacotes de palavras\\)\n>\n>• /cor escolha sua cor padrão que será definida automaticamente quando entrar como mestre\n>\n>• /pacotes envie no pv para criar e gerenciar seus próprios pacotes de palavras||"
         ]
     },
     "achievements": {
@@ -553,6 +553,23 @@
         ],
         "kian_knows_info": [
             "Jogue uma partida com o desenvolvedor"
+        ]
+    },
+    "did_you_know": {
+        "title": [
+            "ℹ️ Você sabia?"
+        ],
+        "text": [
+            "🎨 Você pode escolher uma /cor padrão para ser ativada automaticamente sempre que entrar em uma partida como mestre",
+            "🔔 Você pode mandar /notificar em um grupo para ser avisado sempre que haver uma nova partida lá",
+            "🔕 Você pode mandar /notificar no privado para listar as notificações ativadas e desligá-las",
+            "⏭️ Admins podem /pular a vez de qualquer jogador, para contornar dicas que foram contra as regras do grupo ou possíveis bugs em meio a partida",
+            "⏯️ Quando o modo Apenas Admin estiver ativado, somentes Admins e o próprio criador do lobby pode iniciar ou cancelar uma partida",
+            "🖼️ Você pode usar o comando /tabela quando para puxar a imagem mais recente pra baixo (super útil quando o envio bugar)",
+            "🗒️ O bot pode /listar todas as palavras disponíveis para você",
+            "📦 Você pode criar seus próprios /pacotes de palavras no pv do bot e ativá-las em /config > Meus Packs",
+            "🛡️ Dê admin para o bot fixar o lobby do jogo e ir limpando mensagens de jogo dos outros",
+            "🔤 Você pode enviar seus chutes como mensagens normais maiúsculas ASSIM no grupo"
         ]
     }
 }

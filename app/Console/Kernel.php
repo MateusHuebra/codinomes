@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Scheduled\CheckTurnLeftTime;
 use App\Console\Scheduled\DeleteOldLinesFromUpdatesTable;
+use App\Console\Scheduled\DidYouKnow;
 use App\Console\Scheduled\NotifyNewGames;
 use App\Console\Scheduled\StopAbandonedLobbies;
 use Illuminate\Console\Scheduling\Schedule;
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(new CheckTurnLeftTime)->everyMinute();
         $schedule->call(New NotifyNewGames)->everyMinute();
         $schedule->call(new StopAbandonedLobbies)->everyFiveMinutes();
+        $schedule->call(new DidYouKnow)->dailyAt(14);
         $schedule->call(new DeleteOldLinesFromUpdatesTable)->daily();
     }
 
