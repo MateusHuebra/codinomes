@@ -27,8 +27,12 @@ class SendList implements Action {
             }
             $game = $user->currentGame();
 
-            if($game->player->role == 'master') {
+            if(!$game) {
+                $text = AppString::get('error.no_game');
+
+            } else if($game->player->role == 'master') {
                 $text = $this->getPrivateList($game);
+                
             } else {
                 $text = $this->getPublicList($game);
             }
@@ -41,32 +45,28 @@ class SendList implements Action {
     }
 
     private function getPrivateList(Game $game) {
-        if ($game) {
-            $emojis = [
-                'w' => Game::COLORS['white'],
-                'x' => Game::COLORS['black'],
-                'a' => Game::COLORS[$game->getColor('a')],
-                'b' => Game::COLORS[$game->getColor('b')]
-            ];
-            if($game->mode == 'triple') {
-                $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
-            }
-
-            $text = '**>';
-            $cardsToImplode = [];
-            $cards = $game->cards()
-                            ->where('revealed', false)
-                            ->orderByRaw("CASE WHEN team = '".$game->player->team."' THEN 0 ELSE 1 END")
-                            ->orderBy('team')
-                            ->orderBy('position')
-                            ->get();
-            foreach ($cards as $card) {
-                $cardsToImplode[] = $emojis[$card->team].' '.AppString::parseMarkdownV2($card->text);
-            }
-            $text.= implode("\n>", $cardsToImplode).'||';
-        } else {
-            $text = AppString::get('error.no_game');
+        $emojis = [
+            'w' => Game::COLORS['white'],
+            'x' => Game::COLORS['black'],
+            'a' => Game::COLORS[$game->getColor('a')],
+            'b' => Game::COLORS[$game->getColor('b')]
+        ];
+        if($game->mode == 'triple') {
+            $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
         }
+
+        $text = '**>';
+        $cardsToImplode = [];
+        $cards = $game->cards()
+                        ->where('revealed', false)
+                        ->orderByRaw("CASE WHEN team = '".$game->player->team."' THEN 0 ELSE 1 END")
+                        ->orderBy('team')
+                        ->orderBy('position')
+                        ->get();
+        foreach ($cards as $card) {
+            $cardsToImplode[] = $emojis[$card->team].' '.AppString::parseMarkdownV2($card->text);
+        }
+        $text.= implode("\n>", $cardsToImplode).'||';
         return $text;
     }
 
