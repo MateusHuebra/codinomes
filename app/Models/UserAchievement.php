@@ -31,6 +31,7 @@ class UserAchievement extends Model
         'graduated',
         'addicted',
         'proplayer',
+        'pride',
         'kian_knows',
         'making_friends'
     ];
@@ -76,6 +77,7 @@ class UserAchievement extends Model
         $usersForGratuated = new Collection();
         $usersForAddicted = new Collection();
         $usersForProPlayer = new Collection();
+        $usersForPride = new Collection();
 
         foreach($users as $user) {
             $winColorStats = $user->colorStats()
@@ -85,6 +87,10 @@ class UserAchievement extends Model
                 })
                 ->get();
             
+            if(self::doesUserHaveAllJuneColors($user->colorStats)) {
+                $usersForPride->add($user);
+            }
+
             if(self::doesUserHaveAllColors($winColorStats)) {
                 $usersForRainbow->add($user);
                 $usersForGratuated->add($user);
@@ -124,6 +130,9 @@ class UserAchievement extends Model
         if($usersForProPlayer->count() != 0) {
             self::add($usersForProPlayer, 'proplayer', $bot, $chatId);
         }
+        if($usersForPride->count() != 0) {
+            self::add($usersForPride, 'pride', $bot, $chatId);
+        }
 
         if($users->contains('id', env('TG_MY_ID'))) {
             self::add($users, 'kian_knows', $bot, $chatId);
@@ -149,10 +158,21 @@ class UserAchievement extends Model
     private static function doesUserHaveAllColors(Collection $colorStats) {
         $result = true;
         foreach(Game::COLORS as $color => $emoji) {
-            if(in_array($color, ['white', 'black', 'rbow', 'cotton'])) {
+            if(in_array($color, ['white', 'black', 'rbow', 'cotton', 'flower', 'dna', 'moon'])) {
                 continue;
             }
             
+            if(!$colorStats->contains('color', $color)) {
+                $result = false;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    private static function doesUserHaveAllJuneColors(Collection $colorStats) {
+        $result = true;
+        foreach(['rbow', 'cotton', 'flower', 'dna', 'moon'] as $color) {
             if(!$colorStats->contains('color', $color)) {
                 $result = false;
                 break;
