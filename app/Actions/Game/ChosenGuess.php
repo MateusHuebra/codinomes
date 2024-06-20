@@ -190,7 +190,9 @@ class ChosenGuess implements Action {
         }
 
         if($game->mode == 'mystery' && $winner === null) {
-            $caption = new Caption($game->getLastHint(), null, 50);
+            $hint = $game->getLastHint();
+            $titleSize = strlen($hint) >= 16 ? 40 : 50;
+            $caption = new Caption($hint, null, $titleSize);
         } else {
             $caption = new Caption($title, $text??null);
         }
