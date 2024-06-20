@@ -422,6 +422,9 @@
         ],
         "no_notify": [
             "Nenhum grupo para notificar"
+        ],
+        "your_turn_only": [
+            "Você só pode usar esse comando na sua vez de jogar"
         ]
     },
     "time": {

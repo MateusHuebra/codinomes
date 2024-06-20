@@ -31,7 +31,12 @@ class SendList implements Action {
                 $text = AppString::get('error.no_game');
 
             } else if($game->player->role == 'master') {
-                $text = $this->getPrivateList($game);
+                if($game->role == 'master' && $game->team == $game->player->team) {
+                    $text = $this->getPrivateList($game);
+                    
+                } else {
+                    $text = AppString::get('error.your_turn_only');
+                }
 
             } else {
                 $text = $this->getPublicList($game);
@@ -61,7 +66,8 @@ class SendList implements Action {
                         ->where('revealed', false)
                         ->orderByRaw("CASE WHEN team = '".$game->player->team."' THEN 0 ELSE 1 END")
                         ->orderBy('team')
-                        ->orderBy('position')
+                        ->orderBy('position')                        ->orderBy('position')
+
                         ->get();
         foreach ($cards as $card) {
             $cardsToImplode[] = $emojis[$card->team].' '.AppString::parseMarkdownV2($card->text);

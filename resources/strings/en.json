@@ -422,6 +422,9 @@
         ],
         "no_notify": [
             "No group to notify"
+        ],
+        "your_turn_only": [
+            "You can only use this command on your turn to play"
         ]
     },
     "time": {
