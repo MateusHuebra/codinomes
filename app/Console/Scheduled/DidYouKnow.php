@@ -19,7 +19,7 @@ class DidYouKnow {
             try {
                 $text = '*'.AppString::get('did_you_know.title', null, $chat->language).'*';
                 $text.= PHP_EOL.PHP_EOL.AppString::getParsed('did_you_know.text', null, $chat->language);
-                $bot->sendMessage($chat->id, $text);
+                $bot->sendMessage($chat->id, $text, 'MarkdownV2');
 
             } catch (Exception $e) {
                 $title = $chat->title;
