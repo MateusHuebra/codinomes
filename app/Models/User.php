@@ -53,6 +53,11 @@ class User extends Model
             ->first();
     }
 
+    public function chatsToNotify()
+    {
+        return $this->belongsToMany(Chat::class, 'notifiable_chat_users')->withPivot('message_id');
+    }
+
     public function scopeFromTeamRole(Builder $query, string $team, string $role): void
     {
         $query->where('team', $team)->where('role', $role);

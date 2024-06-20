@@ -14,6 +14,7 @@ use App\Actions\Game\Skip;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\CancelSkip;
 use App\Actions\Language\Set as SetLanguage;
+use App\Actions\Notify;
 use App\Actions\SetColor;
 use App\Actions\Start;
 use App\Actions\Ping;
@@ -59,6 +60,9 @@ class CallbackQuery implements UpdateHandler {
 
         } else if($data[CDM::EVENT] === CDM::SETTINGS) {
             return new Settings;
+
+        } else if($data[CDM::EVENT] === CDM::TURN_NOTIFY_OFF) {
+            return new Notify;
 
         } else if($data[CDM::EVENT] === CDM::CHANGE_ADMIN_ONLY) {
             return new AdminOnly;

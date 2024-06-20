@@ -25,6 +25,7 @@ class CallbackDataManager {
     const CHANGE_ADMIN_ONLY = 'cao';
     const CHANGE_COMPOUND_WORDS = 'ccw';
     const CHANGE_CLICK_TO_SAVE = 'ccs';
+    const TURN_NOTIFY_OFF = 'tno';
     const MENU = 'mn';
     const SETTINGS = 'st';
     const INFO = 'i';

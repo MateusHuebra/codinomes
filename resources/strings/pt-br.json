@@ -345,6 +345,9 @@
         ],
         "and_more": [
             "e mais..."
+        ],
+        "notify_list": [
+            "Notificações ativadas nos seguintes grupos (toque para desligar):"
         ]
     },
     "error": {
@@ -416,6 +419,9 @@
         ],
         "hidden_on_mystery": [
             "Estatísticas ocultas durante partidas no Modo Mistério"
+        ],
+        "no_notify": [
+            "Nenhum grupo para notificar"
         ]
     },
     "time": {

@@ -345,6 +345,9 @@
         ],
         "and_more": [
             "and more..."
+        ],
+        "notify_list": [
+            "Notifications enabled in the following groups (tap to turn off):"
         ]
     },
     "error": {
@@ -416,6 +419,9 @@
         ],
         "hidden_on_mystery": [
             "Hidden Statistics during matches in Mystery Mode"
+        ],
+        "no_notify": [
+            "No group to notify"
         ]
     },
     "time": {
