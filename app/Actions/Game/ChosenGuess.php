@@ -67,14 +67,12 @@ class ChosenGuess implements Action {
         }
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
 
-        $isGuessCorrect = $card->team == $player->team;
-        $this->handleMessage($update, $user, $card, $game, $emoji, $bot, $isGuessCorrect);
-
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
         $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
 
         //correct guess
-        if($isGuessCorrect) {
+        if($card->team == $player->team) {
+            $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
             $attemptType = 'ally';
             //won
             if($cardsLeft <= 0 && $game->mode != '8ball') {
@@ -127,6 +125,7 @@ class ChosenGuess implements Action {
         //black card
         } else if($card->team == 'x') {
             if($game->mode == '8ball' && $cardsLeft == 0) {
+                $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
                 $attemptType = 'ally';
                 $color = $game->getColor($player->team);
                 $title = AppString::get('game.win', [
@@ -136,6 +135,7 @@ class ChosenGuess implements Action {
                 $winner = $player->team;
 
             } else {
+                $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
                 $attemptType = 'black';
                 $color = $game->getColor($user->getEnemyTeam());
                 $title = AppString::get('game.win', [
@@ -149,6 +149,7 @@ class ChosenGuess implements Action {
 
         //incorrect guess
         } else {
+            $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             //won
             if($game->mode != '8ball' && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
@@ -201,7 +202,7 @@ class ChosenGuess implements Action {
 
     private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot, bool $isGuessCorrect) {
         $emoji = ($game->mode == 'mystery') ? '❔' : $emoji;
-        $string = $isGuessCorrect ? 'attempted_correct' : 'attempted';
+        $string = ($isGuessCorrect && $game->mode != 'mystery') ? 'attempted_correct' : 'attempted';
         $chatLanguage = $game->chat->language;
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [
