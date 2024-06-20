@@ -3,9 +3,9 @@
 namespace App\Console\Scheduled;
 
 use App\Models\Chat;
-use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
+use Carbon\Carbon;
 use Exception;
 
 class DidYouKnow {
@@ -13,7 +13,12 @@ class DidYouKnow {
     public function __invoke()
     {
         $bot = new BotApi(env('TG_TOKEN'));
-        $chats = Chat::where('actived', true)->get();
+        $oneWeekAgo = Carbon::now()->subWeek();
+        $chats = Chat::where('actived', true)
+                        ->whereHas('games', function ($query) use ($oneWeekAgo) {
+                            $query->where('created_at', '>=', $oneWeekAgo);
+                        })
+                        ->get();
 
         foreach ($chats as $chat) {
             try {
