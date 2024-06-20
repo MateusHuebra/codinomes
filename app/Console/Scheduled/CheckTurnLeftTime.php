@@ -57,7 +57,7 @@ class CheckTurnLeftTime {
     }
 
     private function skipMaster(Game $game, BotApi $bot) {
-        $hint = AppString::get('error.no_hint').' ∞';
+        $hint = AppString::get('error.no_hint', null, $game->chat->language).' ∞';
         $color = $game->getColor($game->team);
         $historyLine = Game::COLORS[$color].' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
@@ -66,8 +66,8 @@ class CheckTurnLeftTime {
         $game->attempts_left = null;
         $game->save();
 
-        $title = AppString::get('time.out');
-        $text = AppString::get('game.history');
+        $title = AppString::get('time.out', null, $game->chat->language);
+        $text = AppString::get('game.history', null, $game->chat->language);
         $caption = new Caption($title, $text);
         
         try {
@@ -114,14 +114,14 @@ class CheckTurnLeftTime {
             $chatId = $game->chat_id;
         }
         if($time==1){
-            $minute = AppString::get('time.minute');
+            $minute = AppString::get('time.minute', null, $game->chat->language);
         } else {
-            $minute = AppString::get('time.minutes');}
+            $minute = AppString::get('time.minutes', null, $game->chat->language);}
         try {
             $bot->sendMessage($chatId, AppString::get('time.left', [
                 'time' => $time,
                 'format' => $minute
-            ]));
+            ], $game->chat->language));
         } catch(Exception $e) {}
     }
 

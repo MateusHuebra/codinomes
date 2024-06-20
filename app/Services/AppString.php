@@ -12,7 +12,7 @@ class AppString {
     const RESERVED_CHARACTERS = ['\\', '_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
     const ESCAPED_CHARACTERS = ['\\\\', '\_', '\*', '\[', '\]', '\(', '\)', '\~', '\`', '\>', '\#', '\+', '\-', '\=', '\|', '\{', '\}', '\.', '\!'];
     
-    public static $language = 'pt-br';
+    public static $language = 'en';
     public static $allLanguages = ['pt-br', 'en'];
 
     static function get(string $path, array $variables = null, $language = null, $parseVariables = false) : String {

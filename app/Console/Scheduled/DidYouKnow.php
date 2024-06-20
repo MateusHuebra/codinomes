@@ -17,8 +17,8 @@ class DidYouKnow {
 
         foreach ($chats as $chat) {
             try {
-                $text = '*'.AppString::get('did_you_know.title').'*';
-                $text.= PHP_EOL.PHP_EOL.AppString::getParsed('did_you_know.text');
+                $text = '*'.AppString::get('did_you_know.title', null, $chat->language).'*';
+                $text.= PHP_EOL.PHP_EOL.AppString::getParsed('did_you_know.text', null, $chat->language);
                 $bot->sendMessage($chat->id, $text);
 
             } catch (Exception $e) {
