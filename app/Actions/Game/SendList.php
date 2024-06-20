@@ -27,12 +27,12 @@ class SendList implements Action {
             }
             $game = $user->currentGame();
 
-            if(!$game) {
+            if(!$game || $game->status != 'playing') {
                 $text = AppString::get('error.no_game');
 
             } else if($game->player->role == 'master') {
                 $text = $this->getPrivateList($game);
-                
+
             } else {
                 $text = $this->getPublicList($game);
             }
@@ -71,7 +71,7 @@ class SendList implements Action {
     }
 
     private function getPublicList(Game $game) {
-        if ($game) {
+        if ($game && $game->status == 'playing') {
             $text = '**>';
             $cards = $game->cards()->where('revealed', false)->orderBy('position')->get()->pluck('text')->toArray();
             foreach ($cards as $key => $card) {
