@@ -38,14 +38,23 @@ class ConfirmSkip implements Action {
         if(!$game) {
             return;
         }
-        $player = $user->currentGame()->player;
-        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team && $game->id === $user->currentGame()->id)) {
+        
+        if($user->currentGame()) {
+            $player = $user->currentGame()->player;
+            if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team && $game->id === $user->currentGame()->id)) {
+                if(!$game->chat->isAdmin($user, $bot)) {
+                    return;
+                }
+                $adm = true;
+            } else {
+                $adm = false;
+            }
+            
+        } else {
             if(!$game->chat->isAdmin($user, $bot)) {
                 return;
             }
             $adm = true;
-        } else {
-            $adm = false;
         }
 
         $mention = AppString::get('game.mention', [
