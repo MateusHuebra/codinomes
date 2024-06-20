@@ -37,7 +37,7 @@ class SendList implements Action {
             return;
         }
             
-        $bot->sendMessage($chat->id, $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
+        $bot->sendMessage($update->getChatId(), $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
     }
 
     private function getPrivateList(Game $game) {
