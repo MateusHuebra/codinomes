@@ -16,7 +16,7 @@ class Notify implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
         if(!$user || $user->status != 'actived') {
-            $bot->sendMessage($update->chatId, AppString::get('error.user_not_registered'), null, false, $update->getMessageId(), null, false, null, null, true);
+            $bot->sendMessage($update->getChatId(), AppString::get('error.user_not_registered'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
 
@@ -34,7 +34,7 @@ class Notify implements Action {
     private function handleForSupergroup(Update $update, BotApi $bot, User $user) {
         $chat = $update->findChat();
         if(!$chat) {
-            $bot->sendMessage($update->chatId, AppString::get('error.must_be_supergroup'), null, false, $update->getMessageId(), null, false, null, null, true);
+            $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
 
@@ -48,12 +48,12 @@ class Notify implements Action {
 
     private function handleForPrivate(Update $update, BotApi $bot, User $user) {
         if($user->chatsToNotify()->count() == 0) {
-            $bot->sendMessage($update->chatId, AppString::get('error.no_notify'));
+            $bot->sendMessage($update->getChatId(), AppString::get('error.no_notify'));
             return;
         }
 
         $keyboard = $this->getKeyboard($user);
-        $bot->sendMessage($update->chatId, AppString::get('settings.notify_list'), null, false, null, $keyboard);
+        $bot->sendMessage($update->getChatId(), AppString::get('settings.notify_list'), null, false, null, $keyboard);
     }
 
     private function handleCallbackQuery(Update $update, BotApi $bot, User $user) {
@@ -62,12 +62,12 @@ class Notify implements Action {
         $chat->notifiableUsers()->toggle([$user->id]);
 
         if($user->chatsToNotify()->count() == 0) {
-            $bot->editMessageText($update->chatId, $update->getMessageId(), AppString::get('error.no_notify'));
+            $bot->editMessageText($update->getChatId(), $update->getMessageId(), AppString::get('error.no_notify'));
             return;
         }
 
         $keyboard = $this->getKeyboard($user);
-        $bot->editMessageReplyMarkup($update->chatId, $update->getMessageId(), $keyboard);
+        $bot->editMessageReplyMarkup($update->getChatId(), $update->getMessageId(), $keyboard);
     }
 
     private function getKeyboard(User $user) {
