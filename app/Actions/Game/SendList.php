@@ -4,21 +4,68 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 
 class SendList implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
-        if(!$update->isChatType('supergroup')) {
-            return;
-        }
-        $chat = $update->findChat();
-        if (!$chat) {
-            return;
-        }
-        $game = $chat->currentGame();
+        if($update->isChatType('supergroup')) {
+            $chat = $update->findChat();
+            if (!$chat) {
+                return;
+            }
+            $game = $chat->currentGame();
 
+            $text = $this->getPublicList($game);
+        
+        } else if($update->isChatType('private')) {
+            $user = $update->findUser();
+            if (!$user) {
+                return;
+            }
+            $game = $user->currentGame();
+
+            if($game->player->role == 'master') {
+                $text = $this->getPrivateList($game);
+            } else {
+                $text = $this->getPublicList($game);
+            }
+
+        } else {
+            return;
+        }
+            
+        $bot->sendMessage($chat->id, $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
+    }
+
+    private function getPrivateList(Game $game) {
+        if ($game) {
+            $emojis = [
+                'w' => Game::COLORS['white'],
+                'x' => Game::COLORS['black'],
+                'a' => Game::COLORS[$game->getColor('a')],
+                'b' => Game::COLORS[$game->getColor('b')]
+            ];
+            if($game->mode == 'triple') {
+                $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
+            }
+
+            $text = '**>';
+            $cardsToImplode = [];
+            $cards = $game->cards()->where('revealed', false)->orderBy('position')->orderBy('team')->get();
+            foreach ($cards as $card) {
+                $cardsToImplode[] = $emojis[$card->team].' '.AppString::parseMarkdownV2($card);
+            }
+            $text.= implode("\n>", $cardsToImplode).'||';
+        } else {
+            $text = AppString::get('error.no_game');
+        }
+        return $text;
+    }
+
+    private function getPublicList(Game $game) {
         if ($game) {
             $text = '**>';
             $cards = $game->cards()->where('revealed', false)->orderBy('position')->get()->pluck('text')->toArray();
@@ -29,8 +76,7 @@ class SendList implements Action {
         } else {
             $text = AppString::get('error.no_game');
         }
-        
-        $bot->sendMessage($chat->id, $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
+        return $text;
     }
 
 }
