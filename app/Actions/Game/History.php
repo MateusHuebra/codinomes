@@ -12,10 +12,10 @@ class History implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         if($update->isChatType('private')) {
             $game = $update->findUser()->currentGame();
-            $mystery = $game->mode == 'mystery' && $game->player->role == 'agent';
+            $mystery = $game->mode??null == 'mystery' && $game->player->role == 'agent';
         } else {
             $game = $update->findChat()->currentGame();
-            $mystery = $game->mode == 'mystery';
+            $mystery = $game->mode??null == 'mystery';
         }
         
         if($game) {
