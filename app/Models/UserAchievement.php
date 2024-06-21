@@ -143,7 +143,7 @@ class UserAchievement extends Model
     }
 
     public static function checkBlackCard(Game $game, int $cardsLeft, $player, BotApi $bot) {
-        if($game->mode == 'classic') {
+        if(in_array($game->mode, ['classic', 'mystery', 'crazy', 'sp_crazy', 'triple'])) {
             if($cardsLeft == 1) {
                 $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
                 self::add($agents, 'day_is_night', $bot, $game->chat_id);

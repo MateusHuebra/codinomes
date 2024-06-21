@@ -501,13 +501,13 @@
             "Começamos Bem"
         ],
         "good_start_info": [
-            "Vire uma carta preta de primeira \\(apenas modo clássico\\)"
+            "Vire uma carta preta de primeira \\(apenas nos modos 🃏❔🤪🤯3️⃣\\)"
         ],
         "day_is_night": [
             "Tem Dia Que É Noite"
         ],
         "day_is_night_info": [
-            "Vire a carta preta faltando uma carta para ganhar o jogo \\(apenas modo clássico\\)"
+            "Vire a carta preta faltando uma carta para ganhar o jogo \\(apenas nos modos 🃏❔🤪🤯3️⃣\\)"
         ],
         "impostor": [
             "Impostor"
@@ -519,13 +519,13 @@
             "No Fim do Arco\\-Íris"
         ],
         "rainbow_info": [
-            "Jogue com todas as cores possíveis"
+            "Jogue com todas as cores base"
         ],
         "graduated": [
             "Formado em Codinomes"
         ],
         "graduated_info": [
-            "Ganhe com todas as cores possíveis"
+            "Ganhe com todas as cores base"
         ],
         "addicted": [
             "Viciado"
@@ -564,7 +564,7 @@
         ],
         "text": [
             "🎨 Você pode escolher uma /cor padrão para ser ativada automaticamente sempre que entrar em uma partida como mestre",
-            "🔔 Você pode mandar /notificar em um grupo para ser avisado sempre que haver uma nova partida lá",
+            "🔔 Você pode mandar /notificar em um grupo para ser avisado sempre que houver uma nova partida lá",
             "🔕 Você pode mandar /notificar no privado para listar as notificações ativadas e desligá-las",
             "⏭️ Admins podem /pular a vez de qualquer jogador, para contornar dicas que foram contra as regras do grupo ou possíveis bugs em meio a partida",
             "⏯️ Quando o modo Apenas Admin estiver ativado, somentes Admins e o próprio criador do lobby pode iniciar ou cancelar uma partida",
@@ -573,6 +573,9 @@
             "📦 Você pode criar seus próprios /pacotes de palavras no pv do bot e ativá-las em /config > Meus Packs",
             "🛡️ Dê admin para o bot fixar o lobby do jogo e ir limpando mensagens de jogo dos outros",
             "🔤 Você pode enviar seus chutes como mensagens normais maiúsculas ASSIM no grupo"
+        ],
+        "randomize": [
+            "Aleatório ↻"
         ]
     }
 }

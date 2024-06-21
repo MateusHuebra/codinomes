@@ -20,9 +20,6 @@ class UserStats extends Model
     ];
 
     public static function addAttempt(Game $game, string $team, string $type, BotApi $bot) {
-        if($game->mode == 'triple') {
-            return;
-        }
         $streak = $type == 'ally' && $game->mode != 'mystery' ? $game->countLastStreak() : 0;
 
         $master = $game->users()->fromTeamRole($team, 'master')->get();
@@ -37,7 +34,7 @@ class UserStats extends Model
     }
 
     public static function addGame(Game $game, string $winner = null) {
-        if($winner == null || $game->mode == 'triple') {
+        if($winner == null) {
             return;
         }
 

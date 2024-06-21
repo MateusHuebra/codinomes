@@ -501,13 +501,13 @@
             "Good Start"
         ],
         "good_start_info": [
-            "Flip a black card on the first try \\(classic mode only\\)"
+            "Flip a black card on the first try \\(🃏❔🤪🤯3️⃣ modes only\\)"
         ],
         "day_is_night": [
             "Some Days Are Nights"
         ],
         "day_is_night_info": [
-            "Flip the black card missing one card to win the game \\(classic mode only\\)"
+            "Flip the black card missing one card to win the game \\(🃏❔🤪🤯3️⃣ modes only\\)"
         ],
         "impostor": [
             "Impostor"
@@ -519,13 +519,13 @@
             "At the End of the Rainbow"
         ],
         "rainbow_info": [
-            "Play with all possible colors"
+            "Play with all base colors"
         ],
         "graduated": [
             "Graduated in Codinomes"
         ],
         "graduated_info": [
-            "Win with all possible colors"
+            "Win with all base colors"
         ],
         "addicted": [
             "Addicted"
@@ -573,6 +573,9 @@
             "📦 You can create your own word /packs in the bot's private chat and activate them in /settings > My Packs",
             "🛡️ Make the bot an Admin for it to be able to pin the game lobby and clean up game messages from others",
             "🔤 You can send your guesses as regular uppercase messages LIKE THIS in the group"
+        ],
+        "randomize": [
+            "Aleatório ↻"
         ]
     }
 }
