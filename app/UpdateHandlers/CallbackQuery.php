@@ -13,6 +13,7 @@ use App\Actions\Chat\Pack;
 use App\Actions\Game\Skip;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\CancelSkip;
+use App\Actions\DidYouKnow;
 use App\Actions\Language\Set as SetLanguage;
 use App\Actions\Notify;
 use App\Actions\SetColor;
@@ -84,6 +85,9 @@ class CallbackQuery implements UpdateHandler {
             
         } else if($data[CDM::EVENT] === CDM::MENU) {
             return new Menu;
+            
+        } else if($data[CDM::EVENT] === CDM::DID_YOU_KNOW) {
+            return new DidYouKnow;
             
         } else {
             return null;

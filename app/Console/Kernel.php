@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(new CheckTurnLeftTime)->everyMinute();
         $schedule->call(New NotifyNewGames)->everyMinute();
         $schedule->call(new StopAbandonedLobbies)->everyFiveMinutes();
-        $schedule->call(new DidYouKnow)->dailyAt(19);
+        $schedule->call(new DidYouKnow)->dailyAt(18);
         $schedule->call(new DeleteOldLinesFromUpdatesTable)->daily();
     }
 

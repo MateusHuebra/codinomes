@@ -2,11 +2,13 @@
 
 namespace App\Console\Scheduled;
 
+use App\Actions\Info;
 use App\Models\Chat;
 use App\Services\AppString;
 use App\Services\Telegram\BotApi;
 use Carbon\Carbon;
 use Exception;
+use App\Actions\DidYouKnow as DidYouKnowAction;
 
 class DidYouKnow {
 
@@ -19,12 +21,15 @@ class DidYouKnow {
                             $query->where('created_at', '>=', $oneWeekAgo);
                         })
                         ->get();
+        $keyboard = [];
+        foreach(AppString::$allLanguages as $language) {
+             $keyboard[$language] = DidYouKnowAction::getKeyboard($language);
+        }
 
         foreach ($chats as $chat) {
             try {
-                $text = '*'.AppString::get('did_you_know.title', null, $chat->language).'*';
-                $text.= PHP_EOL.PHP_EOL.AppString::getParsed('did_you_know.text', null, $chat->language);
-                $bot->sendMessage($chat->id, $text, 'MarkdownV2');
+                $text = DidYouKnowAction::getText($chat->language);
+                $bot->sendMessage($chat->id, $text, 'MarkdownV2', false, null, $keyboard[$chat->language]);
 
             } catch (Exception $e) {
                 if(in_array($e->getMessage(), [

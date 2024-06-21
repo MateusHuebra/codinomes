@@ -26,6 +26,7 @@ class CallbackDataManager {
     const CHANGE_COMPOUND_WORDS = 'ccw';
     const CHANGE_CLICK_TO_SAVE = 'ccs';
     const TURN_NOTIFY_OFF = 'tno';
+    const DID_YOU_KNOW = 'dyk';
     const MENU = 'mn';
     const SETTINGS = 'st';
     const INFO = 'i';
