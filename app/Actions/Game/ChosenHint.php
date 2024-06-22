@@ -54,8 +54,8 @@ class ChosenHint implements Action {
         $game->save();
 
         $titleSize = strlen($hint) >= 16 ? 40 : 50;
-        $hint = $game->mode == 'emoji' ? AppString::get('mode.emoji') : $hint;
-        $caption = new Caption($hint, null, $titleSize);
+        $captionText = $game->mode == 'emoji' ? AppString::get('mode.emoji').' '.$data[CDM::NUMBER] : $hint;
+        $caption = new Caption($captionText, null, $titleSize);
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
             'id' => $user->id
