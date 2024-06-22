@@ -12,19 +12,26 @@ class History implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         if($update->isChatType('private')) {
             $game = $update->findUser()->currentGame();
-            $mystery = $game->mode??null == 'mystery' && $game->player->role == 'agent';
+            $isMystery = $this->isMystery($game) && $game->player->role == 'agent';
         } else {
             $game = $update->findChat()->currentGame();
-            $mystery = $game->mode??null == 'mystery';
+            $isMystery = $this->isMystery($game);
         }
         
         if($game) {
-            $text = $game->getHistory($mystery)??AppString::get('error.no_history');
+            $text = $game->getHistory($isMystery)??AppString::get('error.no_history');
         } else {
             $text = AppString::get('error.no_game');
         }
         
         $bot->sendMessage($update->getChatId(), $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
+    }
+
+    private function isMystery($game) {
+        if(!$game) {
+            return false;
+        }
+        return $game->mode == 'mystery';
     }
 
 }

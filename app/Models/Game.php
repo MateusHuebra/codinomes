@@ -293,11 +293,11 @@ class Game extends Model
         $this->save();
     }
     
-    public function getHistory(bool $mystery = false) {
+    public function getHistory(bool $isMystery = false) {
         if(is_null($this->history)) {
             return null;
         }
-        if($mystery) {
+        if($isMystery) {
             $regex = '/ ['.implode('', self::COLORS).']+/u';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
