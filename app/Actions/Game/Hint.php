@@ -74,7 +74,9 @@ class Hint implements Action {
             ($codepoint >= 0x2700 && $codepoint <= 0x27BF) ||
             ($codepoint >= 0x1F900 && $codepoint <= 0x1F9FF) ||
             ($codepoint >= 0x1FA70 && $codepoint <= 0x1FAFF) ||
-            ($codepoint >= 0x2B50 && $codepoint <= 0x2B55)
+            ($codepoint >= 0x2B50 && $codepoint <= 0x2B55) ||
+            ($codepoint >= 0x1F680 && $codepoint <= 0x1F6FF) ||
+            ($codepoint >= 0x1F700 && $codepoint <= 0x1F77F)
         );
     }
 
