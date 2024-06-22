@@ -37,7 +37,11 @@ class Create implements Action {
             $bot->sendMessage($chat->id, AppString::get('game.already_exists'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if(GlobalSettings::first()->official_groups_only && !in_array($chat->id, explode(',', env('TG_OFICIAL_GROUPS_IDS')))) {
+        if(
+            (GlobalSettings::first()->official_groups_only || $this->mode == 'emoji')
+            &&
+            !in_array($chat->id, explode(',', env('TG_OFICIAL_GROUPS_IDS')))
+        ) {
             $bot->sendMessage($chat->id, AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }

@@ -46,7 +46,8 @@ class Game extends Model
         '8ball' => '🎱',
         'crazy' => '🤪',
         'sp_crazy' => '🤯',
-        'triple' => '3️⃣'
+        'triple' => '3️⃣',
+        'emoji' => '📲'
     ];
 
     public $timestamps = false;

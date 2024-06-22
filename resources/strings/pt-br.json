@@ -73,6 +73,12 @@
         "triple_info": [
             "Modo em teste"
         ],
+        "emoji": [
+            "EMOJI (beta)"
+        ],
+        "emoji_info": [
+            "Modo em teste"
+        ],
         "check_other": [
             "Veja outros modos: /ajuda_modos"
         ]

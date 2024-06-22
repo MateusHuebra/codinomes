@@ -127,6 +127,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_supercrazy', 'novo_supermaluco'])) {
             return new Create('sp_crazy');
 
+        } else if(in_array($command, ['new_emoji', 'novo_emoji'])) {
+            return new Create('emoji');
+
         } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
             return new Create('random');
 
