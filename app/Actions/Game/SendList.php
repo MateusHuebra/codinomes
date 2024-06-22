@@ -17,8 +17,14 @@ class SendList implements Action {
                 return;
             }
             $game = $chat->currentGame();
+            
+            if(!$game || $game->status != 'playing') {
+                $text = AppString::get('error.no_game');
 
-            $text = $this->getPublicList($game);
+            } else {
+                $text = $this->getPublicList($game);
+            }
+
         
         } else if($update->isChatType('private')) {
             $user = $update->findUser();
