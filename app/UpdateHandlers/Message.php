@@ -18,6 +18,7 @@ use App\Actions\Game\History;
 use App\Actions\Game\Stop;
 use App\Actions\Help;
 use App\Actions\Language\Get;
+use App\Actions\LookingForAGame;
 use App\Actions\Notify;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
@@ -28,6 +29,8 @@ use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Message as MessageType;
 
 class Message implements UpdateHandler {
+
+    const LOOKING_FOR_A_GAME = '/(cad[eê]|vamos?|quero|bora|puxa) ((o|a) )?(codinomes?|codenames?|jogar?|jogo|codis?|codes?|((uma? )?(partida|jogo|game)))/i';
 
     public function getAction($update) {
         $commandMatches = $this->getCommand($update->getMessage());
@@ -83,6 +86,15 @@ class Message implements UpdateHandler {
             ) {
                 return new ChosenGuess;
             }
+        }
+        if(
+            $update->isChatType('supergroup')
+            &&
+            !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
+            &&
+            preg_match(self::LOOKING_FOR_A_GAME, $update->getMessageText())
+        ) {
+            return new LookingForAGame;
         }
         return null;
     }
