@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a560b38e9749041bad935b13442aa0a2",
+    "content-hash": "dc3d67577e4ce380b9fe2b9f11b9a26e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2549,6 +2549,53 @@
                 "source": "https://github.com/opis/closure/tree/3.6.3"
             },
             "time": "2022-01-27T09:35:39+00:00"
+        },
+        {
+            "name": "p3k/emoji-detector",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aaronpk/emoji-detector-php.git",
+                "reference": "dce4638e215622181d272f08145a3f97b735b1c7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aaronpk/emoji-detector-php/zipball/dce4638e215622181d272f08145a3f97b735b1c7",
+                "reference": "dce4638e215622181d272f08145a3f97b735b1c7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Emoji.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Parecki",
+                    "email": "aaron@parecki.com",
+                    "homepage": "https://aaronparecki.com/"
+                }
+            ],
+            "description": "Detect and return all emoji found in a string",
+            "homepage": "https://github.com/aaronpk/emoji-detector-php",
+            "support": {
+                "issues": "https://github.com/aaronpk/emoji-detector-php/issues",
+                "source": "https://github.com/aaronpk/emoji-detector-php/tree/1.2.0"
+            },
+            "time": "2024-02-19T18:29:05+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -8260,5 +8307,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

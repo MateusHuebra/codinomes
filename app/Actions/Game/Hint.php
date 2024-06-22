@@ -14,7 +14,7 @@ use App\Services\CallbackDataManager as CDM;
 class Hint implements Action {
 
     const REGEX_HINT_NUMBER = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,20})( (?<number>[0-9]))?$/';
-    const REGEX_HINT_EMOJI = '/^(?<hint>.)( (?<number>[0-9]))?$/u';
+    const REGEX_HINT_EMOJI = '/^(?<hint>\S+)( (?<number>[0-9]))?$/u';
     const REGEX_HINT_NUMBER_COMPOUND = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ -]{1,20})( (?<number>[0-9]))?$/';
 
     public function run(Update $update, BotApi $bot, string $forceText = null) {
@@ -33,7 +33,7 @@ class Hint implements Action {
             &&
             (!isset($matches['number']) || $matches['number'] <= $cardsLeft)
             &&
-            ($game->mode != 'emoji' || $this->isEmoji($matches['hint']))
+            ($game->mode != 'emoji' || \Emoji\is_single_emoji($matches['hint']))
         ) {
             if(!isset($matches['number'])) {
                 $matches['number'] = '∞';
@@ -61,23 +61,6 @@ class Hint implements Action {
         
         $results[] = new Article($data, $title, $desc, null, null, null, $messageContent);
         $bot->answerInlineQuery($update->getId(), $results, 5, true);
-    }
-
-    public function isEmoji($char) {
-        $codepoint = IntlChar::ord($char);
-        return (
-            ($codepoint >= 0x1F600 && $codepoint <= 0x1F64F) ||
-            ($codepoint >= 0x1F300 && $codepoint <= 0x1F5FF) ||
-            ($codepoint >= 0x1F680 && $codepoint <= 0x1F6FF) ||
-            ($codepoint >= 0x1F1E0 && $codepoint <= 0x1F1FF) ||
-            ($codepoint >= 0x2600 && $codepoint <= 0x26FF) ||
-            ($codepoint >= 0x2700 && $codepoint <= 0x27BF) ||
-            ($codepoint >= 0x1F900 && $codepoint <= 0x1F9FF) ||
-            ($codepoint >= 0x1FA70 && $codepoint <= 0x1FAFF) ||
-            ($codepoint >= 0x2B50 && $codepoint <= 0x2B55) ||
-            ($codepoint >= 0x1F680 && $codepoint <= 0x1F6FF) ||
-            ($codepoint >= 0x1F700 && $codepoint <= 0x1F77F)
-        );
     }
 
 }
