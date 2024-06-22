@@ -106,6 +106,10 @@ class Message implements UpdateHandler {
                     return new ReactToMessage('🤮');
                 }
             }
+
+            if(str_contains($update->getMessageText(), 'TermogramBot')) {
+                return new ReactToMessage('❤️');
+            }
         }
         
         return null;
