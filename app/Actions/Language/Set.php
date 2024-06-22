@@ -40,6 +40,7 @@ class Set implements Action {
 
         } else {
             $bot->sendMessage($update->getChatId(), AppString::get('error.must_be_supergroup'));
+            return;
         }
 
         if($data[CDM::FIRST_TIME]) {
