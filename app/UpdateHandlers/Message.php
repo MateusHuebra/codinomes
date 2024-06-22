@@ -22,6 +22,7 @@ use App\Actions\LookingForAGame;
 use App\Actions\Notify;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
+use App\Actions\ReactToMessage;
 use App\Actions\Start;
 use App\Actions\Stats;
 use App\Actions\Test;
@@ -87,15 +88,26 @@ class Message implements UpdateHandler {
                 return new ChosenGuess;
             }
         }
-        if(
-            $update->isChatType('supergroup')
-            &&
-            !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
-            &&
-            preg_match(self::LOOKING_FOR_A_GAME, $update->getMessageText())
-        ) {
-            return new LookingForAGame;
+
+        if($update->isChatType('supergroup')) {
+            if(
+                !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
+                &&
+                preg_match(self::LOOKING_FOR_A_GAME, $update->getMessageText())
+            ) {
+                return new LookingForAGame;
+            }
+
+            if($update->getViaBot()) {
+                if(str_contains($update->getViaBotUsername(), 'last')) {
+                    return new ReactToMessage('🔥');
+
+                } else if(str_contains($update->getViaBotUsername(), 'ww') || str_contains($update->getViaBotUsername(), 'werewolf')) {
+                    return new ReactToMessage('🤮');
+                }
+            }
         }
+        
         return null;
     }
 

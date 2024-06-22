@@ -24,7 +24,7 @@ class ChosenHint implements Action {
         }
 
         if($update->isType(Update::MESSAGE)) {
-            if($update->getMessage()->getViaBot()) {
+            if($update->getViaBot()) {
                 $bot->sendMessage($user->id, AppString::get('error.dm_inline'));
                 return;
             }

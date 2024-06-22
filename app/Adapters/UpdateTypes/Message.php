@@ -20,4 +20,25 @@ class Message extends Update {
         return $this->message;
     }
 
+    public function getViaBot() {
+        if(!isset($this->viaBot)) {
+            $this->viaBot = $this->getMessage()->getViaBot();
+        }
+        return $this->viaBot;
+    }
+
+    public function getViaBotId() : int {
+        if(!isset($this->viaBotId)) {
+            $this->viaBotId = $this->getViaBot()->getId();
+        }
+        return $this->viaBotId;
+    }
+
+    public function getViaBotUsername() : string {
+        if(!isset($this->getViaBotUsername)) {
+            $this->getViaBotUsername = $this->getViaBot()->getUsername();
+        }
+        return $this->getViaBotUsername;
+    }
+
 }
