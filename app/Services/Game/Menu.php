@@ -43,7 +43,7 @@ class Menu {
             'mode' => AppString::getParsed('mode.'.$game->mode),
             'info' => ($showInfo ? '/info' : ''),
             'emoji' => Game::MODES[$game->mode]
-        ]);
+        ], $game->chat->language);
         $textMessage.= $game->getTeamAndPlayersList($winner);
         return $textMessage;
     }
