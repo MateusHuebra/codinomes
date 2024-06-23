@@ -54,13 +54,20 @@ class ChosenHint implements Action {
         $game->save();
 
         $titleSize = strlen($hint) >= 16 ? 40 : 50;
-        $captionText = $game->mode == 'emoji' ? AppString::get('mode.emoji').' '.$data[CDM::NUMBER] : $hint;
-        $caption = new Caption($captionText, null, $titleSize);
         $mention = AppString::get('game.mention', [
             'name' => $user->name,
             'id' => $user->id
         ], null, true);
-        $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($hint);
+
+        if($game->mode == 'emoji') {
+            $captionText = $data[CDM::NUMBER];
+            $text = $mention.' '.$emoji.' '.$data[CDM::NUMBER].':';
+        } else {
+            $captionText = $hint;
+            $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($hint);
+        }
+        
+        $caption = new Caption($captionText, null, $titleSize);
         /*
         $text = $emoji.' '.AppString::get('game.hinted', [
             'user' => $mention,
@@ -70,6 +77,9 @@ class ChosenHint implements Action {
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
+            if($game->mode == 'emoji') {
+                $bot->sendMessage($game->chat_id, $data[CDM::TEXT]);
+            }
         } catch(Exception $e) {}
         Table::send($game, $bot, $caption);
     }
