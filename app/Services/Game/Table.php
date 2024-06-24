@@ -139,14 +139,14 @@ class Table {
         switch ($gameMode) {
             case 'fast':
                 self::$imageHeight = 1100 - (self::CARD_HEIGHT*3);
-                self::$captionSpacing = 1000 - 420;
+                self::$captionSpacing = 1000 - 5 - 420;
                 self::$modeSpacing = 1100 - 250 - 420 + 70;
                 self::$firstCardToBePushed = 10;
                 break;
             
             default:
                 self::$imageHeight = 1100;
-                self::$captionSpacing = 1000;
+                self::$captionSpacing = 1000 - 5;
                 self::$modeSpacing = 1100 - 250 + 70;
                 self::$firstCardToBePushed = 22;
                 break;
@@ -279,7 +279,7 @@ class Table {
             imagefttext($mysterySquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, self::$fontPath, $mysteryLeft);
             imagefttext($mysterySquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, self::$fontPath, $mysteryLeft);
         }
-        $y = self::BORDER;
+        $y = 0;
         if($masterImage) {
             $x = self::BORDER;
             imagecopy($masterImage, $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
@@ -293,7 +293,6 @@ class Table {
                 imagecopy($masterImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             }
         }
-        $y = self::BORDER;
         if($agentsImage) {
             $x = self::BORDER;
             imagecopy($agentsImage, $mysterySquareA ?? $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
@@ -345,7 +344,7 @@ class Table {
         $y = floor(($card->position) / $cardByLine);
         $x = $card->position - ($cardByLine*$y);
         $cardX = self::BORDER+($x*self::CARD_WIDTH);
-        $cardY = self::BORDER+($y*self::CARD_HEIGHT)+self::CARD_HEIGHT;
+        $cardY = ($y*self::CARD_HEIGHT)+self::CARD_HEIGHT;
 
         //text position and size
         $fontSize = self::FONT_SIZE + 1;
