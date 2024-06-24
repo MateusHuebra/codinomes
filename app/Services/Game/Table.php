@@ -63,12 +63,12 @@ class Table {
         }
         imagedestroy($backgroundImage);
 
+        self::addMode($masterImage??null, $agentsImage??null, $game->mode);
         foreach($cards as $card) {
             self::addCard($masterImage??null, $agentsImage??null, $card, $game, $highlightCard);
         }
         self::addCardsLeft($masterImage??null, $agentsImage??null, $game, $leftA, $leftB, $leftC);
         self::addCaption($masterImage??null, $agentsImage??null, $caption);
-        self::addMode($masterImage??null, $agentsImage??null, $game->mode);
 
         if($sendToMasters) {
             $tempMasterImageFileName = tempnam(sys_get_temp_dir(), 'm_image_');
@@ -138,16 +138,16 @@ class Table {
         self::$imageWidth = 860;
         switch ($gameMode) {
             case 'fast':
-                self::$imageHeight = 680;
+                self::$imageHeight = 1100 - (self::CARD_HEIGHT*3);
                 self::$captionSpacing = 1000 - 420;
-                self::$modeSpacing = 1100 - 250 - 420;
+                self::$modeSpacing = 1100 - 250 - 420 + 70;
                 self::$firstCardToBePushed = 10;
                 break;
             
             default:
                 self::$imageHeight = 1100;
                 self::$captionSpacing = 1000;
-                self::$modeSpacing = 1100 - 250;
+                self::$modeSpacing = 1100 - 250 + 70;
                 self::$firstCardToBePushed = 22;
                 break;
         }
@@ -342,25 +342,10 @@ class Table {
         #region calculations
         //card position
         $cardByLine = 4;
-        if($game->mode == 'triple') {
-            $card->position+=2;
-            if($highlightCard) {
-                $highlightCard+= 2;
-            }
-        }
-        if($card->position<2) {
-            $y = 0;
-            $x = $card->position + 1;
-        } else {
-            $y = floor(($card->position+2) / $cardByLine);
-            $x = $card->position+2 - ($cardByLine*$y);
-        }
-        
+        $y = floor(($card->position) / $cardByLine);
+        $x = $card->position - ($cardByLine*$y);
         $cardX = self::BORDER+($x*self::CARD_WIDTH);
-        $cardY = self::BORDER+($y*self::CARD_HEIGHT);
-        if($game->mode != 'triple' && $card->position >= self::$firstCardToBePushed) {
-            $cardX+= self::CARD_WIDTH/2;
-        }
+        $cardY = self::BORDER+($y*self::CARD_HEIGHT)+self::CARD_HEIGHT;
 
         //text position and size
         $fontSize = self::FONT_SIZE + 1;

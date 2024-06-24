@@ -109,15 +109,15 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 4,
                     'black' => 1,
-                    'max' => 13
+                    'max' => 12
                 ];
                 break;
 
             case 'mineswp':
                 self::$cardsCounts = [
                     'base' => 8,
-                    'black' => 8,
-                    'max' => 25
+                    'black' => 7,
+                    'max' => 24
                 ];
                 break;
 
@@ -125,7 +125,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 7,
                     'black' => 1,
-                    'max' => 25
+                    'max' => 24
                 ];
                 break;
 
@@ -141,7 +141,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 8,
                     'black' => 1,
-                    'max' => 25
+                    'max' => 24
                 ];
                 break;
         }
