@@ -136,18 +136,17 @@ class Table {
 
     private static function setVarsByGameMode(string $gameMode) {
         self::$imageWidth = 860;
+        self::$captionSpacing = 3;
         switch ($gameMode) {
             case 'fast':
                 self::$imageHeight = 1100 - (self::CARD_HEIGHT*3);
-                self::$captionSpacing = 1000 - 5 - 420;
                 self::$modeSpacing = 1100 - 250 - 420 + 70;
                 self::$firstCardToBePushed = 10;
                 break;
             
             default:
                 self::$imageHeight = 1100;
-                self::$captionSpacing = 1000 - 5;
-                self::$modeSpacing = 1100 - 250 + 70;
+                self::$modeSpacing = self::CARD_HEIGHT*7;
                 self::$firstCardToBePushed = 22;
                 break;
         }
@@ -199,16 +198,16 @@ class Table {
     }
 
     private static function addCaption($masterImage, $agentsImage, Caption $caption) {
-        $title = $caption->title;
-        $axis = self::getAxisToCenterText($caption->titleSize, $title, 860, 82);
-        $axis['y']+= + self::$captionSpacing;
+        $title = strtoupper($caption->title);
+        $axisTitle = self::getAxisToCenterText($caption->titleSize, $title, 860, 120);
+        $axisTitle['y'] = self::$imageHeight-self::$captionSpacing-120+$axisTitle['y'];
 
         if(!is_null($caption->text)) {
             $text = $caption->text;
             $textSize = floor($caption->titleSize*0.8);
-            $axisText = self::getAxisToCenterText($textSize, $text, 860, 90);
-            $axisText['y'] = $axis['y'] + ($textSize/2) + 5;
-            $axis['y'] = $axis['y'] - ($textSize/2) - 5;
+            $axisText = self::getAxisToCenterText($textSize, $text, 860, 120);
+            $axisText['y'] = $axisTitle['y'] + ($textSize/2) + 10;
+            $axisTitle['y'] = $axisTitle['y'] - ($textSize/2);
             if($masterImage) {
                 $textColor = imagecolorallocate($masterImage, 255, 255, 255);
                 imagefttext($masterImage, $textSize, 0, $axisText['x'], $axisText['y'], $textColor, self::$fontPath, $text);
@@ -221,27 +220,28 @@ class Table {
         
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);
-            imagefttext($masterImage, $caption->titleSize, 0, $axis['x'], $axis['y'], $textColor, self::$fontPath, $title);
+            imagefttext($masterImage, $caption->titleSize, 0, $axisTitle['x'], $axisTitle['y'], $textColor, self::$fontPath, $title);
         }
         if($agentsImage) {
             $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
-            imagefttext($agentsImage, $caption->titleSize, 0, $axis['x'], $axis['y'], $textColor, self::$fontPath, $title);
+            imagefttext($agentsImage, $caption->titleSize, 0, $axisTitle['x'], $axisTitle['y'], $textColor, self::$fontPath, $title);
         }
     }
 
     private static function addMode($masterImage, $agentsImage, string $gameMode) {
-        if($gameMode == 'classic') {
+        if($gameMode == 'triple') {
             return;
         }
+        $x = self::BORDER+(1.5*self::CARD_WIDTH);
         
         try {
             $modeImage = imagecreatefrompng(public_path("images/{$gameMode}_mode.png"));
 
             if($masterImage) {
-                imagecopy($masterImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 250);
+                imagecopy($masterImage, $modeImage, $x, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             }
             if($agentsImage) {
-                imagecopy($agentsImage, $modeImage, 0, self::$modeSpacing, 0, 0,860, 250);
+                imagecopy($agentsImage, $modeImage, $x, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             }
             imagedestroy($modeImage);
         } catch(Exception $e) {
