@@ -71,13 +71,13 @@
             "TRIPLE beta"
         ],
         "triple_info": [
-            "Testing..."
+            "Triple mode, it's the classic game mode adapted for three teams\n\nEach team gets 8, 6, and 7 cards respectively, with 3 white and 0 black cards"
         ],
         "emoji": [
             "EMOJI beta"
         ],
         "emoji_info": [
-            "Testing..."
+            "Emoji mode, it's identical to the classic mode, but the hints must be a single emoji instead of a word"
         ],
         "check_other": [
             "Check other modes: /help_modes"
