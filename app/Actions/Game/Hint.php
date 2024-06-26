@@ -14,7 +14,7 @@ use App\Services\CallbackDataManager as CDM;
 class Hint implements Action {
 
     const REGEX_HINT_NUMBER = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{1,20})( +(?<number>[0-9]))?$/';
-    const REGEX_HINT_EMOJI = '/^(?<hint>\S+)( *(?<number>[0-9]))?$/u';
+    const REGEX_HINT_EMOJI = '/^(?<hint>\S+)( +(?<number>[0-9]))?$/u';
     const REGEX_HINT_NUMBER_COMPOUND = '/^(?<hint>[A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ -]{1,20})( +(?<number>[0-9]))?$/';
 
     public function run(Update $update, BotApi $bot, string $forceText = null) {

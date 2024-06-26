@@ -90,7 +90,7 @@ class ConfirmSkip implements Action {
             $title = AppString::get('game.skipped', null, $chatLanguage);
         }
 
-        $caption = new Caption($title, $game->getLastHint());
+        $caption = new Caption($title, $game->getLastHint(), 30, $game->mode=='emoji');
         Table::send($game, $bot, $caption, null);
     }
 

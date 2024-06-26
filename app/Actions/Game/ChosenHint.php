@@ -59,17 +59,17 @@ class ChosenHint implements Action {
             'id' => $user->id
         ], null, true);
 
+        $captionText = $hint;
         if($game->mode == 'emoji') {
-            $captionText = $data[CDM::NUMBER];
-            $emoji = true;
+            $isEmoji = true;
             $text = $mention.' '.$emoji.' '.$data[CDM::NUMBER].':';
+            echo $text;
         } else {
-            $captionText = $hint;
-            $emoji = false;
+            $isEmoji = false;
             $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($hint);
         }
         
-        $caption = new Caption($captionText, null, $titleSize, $emoji);
+        $caption = new Caption($captionText, null, $titleSize, $isEmoji);
         /*
         $text = $emoji.' '.AppString::get('game.hinted', [
             'user' => $mention,
@@ -79,7 +79,7 @@ class ChosenHint implements Action {
         
         try {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
-            if($game->mode == 'emoji') {
+            if($isEmoji) {
                 $bot->sendMessage($game->chat_id, $data[CDM::TEXT]);
             }
         } catch(Exception $e) {}
