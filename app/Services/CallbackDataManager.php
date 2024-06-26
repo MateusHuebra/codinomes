@@ -27,6 +27,7 @@ class CallbackDataManager {
     const CHANGE_CLICK_TO_SAVE = 'ccs';
     const TURN_NOTIFY_OFF = 'tno';
     const DID_YOU_KNOW = 'dyk';
+    const SHUFFLE_PLAYERS = 'sfp';
     const MENU = 'mn';
     const SETTINGS = 'st';
     const INFO = 'i';

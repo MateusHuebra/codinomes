@@ -10,6 +10,7 @@ use App\Actions\Chat\Timer;
 use App\Actions\Game\Color;
 use App\Actions\Game\Menu;
 use App\Actions\Chat\Pack;
+use App\Actions\Game\ShufflePlayers;
 use App\Actions\Game\Skip;
 use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\CancelSkip;
@@ -55,6 +56,9 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_COLOR) {
             return new Color;
+        
+        } else if($data[CDM::EVENT] === CDM::SHUFFLE_PLAYERS) {
+            return new ShufflePlayers;
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_DEFAULT_COLOR) {
             return new SetColor;

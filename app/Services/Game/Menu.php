@@ -50,7 +50,7 @@ class Menu {
 
     private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
         $buttonsArray = [];
-        $buttonsArray = self::getFirstButtons($game, $buttonsArray);
+        $buttonsArray = self::getFirstButtons($game, $buttonsArray, $hasRequiredPlayers);
 
         if($hasRequiredPlayers && !$game->menu) {
             $buttonsArray[] = [
@@ -66,7 +66,7 @@ class Menu {
         return new InlineKeyboardMarkup($buttonsArray);
     }
 
-    private static function getFirstButtons(Game $game, Array $buttonsArray) {
+    private static function getFirstButtons(Game $game, Array $buttonsArray, bool $hasRequiredPlayers) {
         $buttonsArray[] = [
             [
                 'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
@@ -127,7 +127,7 @@ class Menu {
         $line = [];
         if(!$game->menu || $game->isMenu('color')) {
             $line[] = [
-                'text' => AppString::get('game.color').'  '.($game->menu == 'color' ? 'X' : '\\/'),
+                'text' => '🎨  '.($game->menu == 'color' ? 'X' : '\\/'),
                 'callback_data' => CDM::toString([
                     CDM::EVENT => CDM::MENU,
                     CDM::TEXT => ($game->menu == 'color' ? null : 'color')
@@ -135,8 +135,17 @@ class Menu {
             ];
         }
         
+        if($hasRequiredPlayers && $game->mode != 'triple') {
+            $line[] = [
+                'text' => '🎲',
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SHUFFLE_PLAYERS
+                ])
+            ];
+        }
+        
         $line[] = [
-            'text' => AppString::get('game.settings'),
+            'text' => '⚙️',
             'callback_data' => CDM::toString([
                 CDM::EVENT => CDM::SETTINGS
             ])
