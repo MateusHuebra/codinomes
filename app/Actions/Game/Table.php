@@ -39,7 +39,7 @@ class Table implements Action {
                         $user->currentGame()->player->team == $game->team
                     )
                 ) {
-                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40));
+                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40, $game->mode=='emoji'));
                     
                 } else {
                     $bot->sendMessage($chat->id, AppString::get('error.only_agent_role'), null, false, $update->getMessageId(), null, false, null, null, true);

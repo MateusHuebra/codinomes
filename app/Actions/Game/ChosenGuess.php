@@ -194,7 +194,7 @@ class ChosenGuess implements Action {
             $titleSize = strlen($hint) >= 16 ? 40 : 50;
             $caption = new Caption($hint, null, $titleSize);
         } else {
-            $caption = new Caption($title, $text??null);
+            $caption = new Caption($title, $text??null, 30, $game->mode == 'emoji');
         }
 
         Table::send($game, $bot, $caption, $card->position, $winner);

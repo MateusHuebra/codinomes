@@ -61,13 +61,15 @@ class ChosenHint implements Action {
 
         if($game->mode == 'emoji') {
             $captionText = $data[CDM::NUMBER];
+            $emoji = true;
             $text = $mention.' '.$emoji.' '.$data[CDM::NUMBER].':';
         } else {
             $captionText = $hint;
+            $emoji = false;
             $text = $mention.' '.$emoji.' '.AppString::parseMarkdownV2($hint);
         }
         
-        $caption = new Caption($captionText, null, $titleSize);
+        $caption = new Caption($captionText, null, $titleSize, $emoji);
         /*
         $text = $emoji.' '.AppString::get('game.hinted', [
             'user' => $mention,

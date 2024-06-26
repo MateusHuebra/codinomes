@@ -2,6 +2,8 @@
 
 namespace App\Services\Game;
 
+use App\Actions\Game\ChosenHint;
+use App\Actions\Game\Hint;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\UserAchievement;
@@ -198,7 +200,21 @@ class Table {
     }
 
     private static function addCaption($masterImage, $agentsImage, Caption $caption) {
-        $title = strtoupper($caption->title);
+        if($caption->isEmoji) {
+            $caption->isEmoji = false;
+            $subject = !is_null($caption->text) ? 'text' : 'title';
+            if(preg_match('/^(?<hint>\S+)( *(?<number>[0-9∞]))?$/u', $caption->{$subject}, $matches)) {
+                $emoji = \Emoji\is_single_emoji($matches['hint'])['hex_str'];
+                $emojiPath = public_path("images/openmoji-72x72-color/{$emoji}.png");
+                if(file_exists($emojiPath)) {
+                    $caption->{$subject} = '       '.$matches['number'];
+                    $caption->isEmoji = true;
+                } else {
+                    $caption->{$subject} = $matches['number'];
+                }
+            }          
+        }
+        $title = mb_strtoupper($caption->title, 'UTF-8');
         $axisTitle = self::getAxisToCenterText($caption->titleSize, $title, 860, 120);
         $axisTitle['y'] = self::$imageHeight-self::$captionSpacing-120+$axisTitle['y'];
 
@@ -215,6 +231,31 @@ class Table {
             if($agentsImage) {
                 $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
                 imagefttext($agentsImage, $textSize, 0, $axisText['x'], $axisText['y'], $textColor, self::$fontPath, $text);
+            }
+        }
+        if($caption->isEmoji) {
+            $emojiImage = imagecreatefrompng($emojiPath);
+            if($subject == 'title') {
+                $axisEmoji = [
+                    'x' => 360,
+                    'y' => self::$imageHeight - 113,
+                    'size' => 100
+                ];
+            } else {
+                $axisEmoji = [
+                    'x' => 380,
+                    'y' => self::$imageHeight - 65,
+                    'size' => 60
+                ];
+            }
+            if($masterImage) {
+                $textColor = imagecolorallocate($masterImage, 255, 255, 255);
+                imagecopyresampled($masterImage, $emojiImage, $axisEmoji['x'], $axisEmoji['y'], 0, 0, $axisEmoji['size'], $axisEmoji['size'], 72, 72);
+                
+            }
+            if($agentsImage) {
+                $textColor = imagecolorallocate($agentsImage, 255, 255, 255);
+                imagecopyresampled($agentsImage, $emojiImage, $axisEmoji['x'], $axisEmoji['y'], 0, 0, $axisEmoji['size'], $axisEmoji['size'], 72, 72);
             }
         }
         
