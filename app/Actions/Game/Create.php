@@ -47,7 +47,9 @@ class Create implements Action {
         }
 
         if($this->mode == 'random') {
-            $this->mode = array_rand(Game::MODES);
+            while($this->mode == 'random' || $this->mode == 'emoji') {
+                $this->mode = array_rand(Game::MODES);
+            }
         }
 
         $game = new Game();
