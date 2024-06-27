@@ -55,7 +55,10 @@ class Menu {
         $buttonsArray = [];
         $buttonsArray = self::getFirstButtons($game, $buttonsArray, $hasRequiredNumberOfPlayers);
 
-        if($hasRequiredPlayers && !$game->menu) {
+        if($game->menu) {
+            //show nothing
+
+        } else if($hasRequiredPlayers) {
             $buttonsArray[] = [
                 [
                     'text' => AppString::get('game.start'),
@@ -64,9 +67,10 @@ class Menu {
                     ])
                 ]
             ];
+
         } else if($game->mode == 'coop') {
             $url = 'https://t.me/share/url?url='
-                    .rawurlencode("https://t.me/codinomesbot?start=coop.$game->creator_id.$game->id")
+                    .rawurlencode("https://t.me/codinomesbot?start=coop_{$game->creator_id}_{$game->id}")
                     .'&text='
                     .rawurlencode(AppString::get('game.invite_coop_text'));
             $buttonsArray[] = [
@@ -152,7 +156,7 @@ class Menu {
             ];
         }
         
-        if($hasRequiredNumberOfPlayers && $game->mode != 'triple') {
+        if($hasRequiredNumberOfPlayers && !in_array($game->mode, ['triple', 'coop'])) {
             $line[] = [
                 'text' => '🎲',
                 'callback_data' => CDM::toString([

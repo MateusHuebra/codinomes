@@ -191,40 +191,47 @@ class Game extends Model
 
     public function start(BotApi $bot, User $user = null, $callbackId = null) : Bool {
         if(!in_array($this->status, ['creating', 'lobby'])) {
-            $bot->deleteMessage($this->chat_id, $this->message_id);
             return false;
         }
 
         if($callbackId && (!$user || !$this->hasPermission($user, $bot))) {
-            $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.admin_only');
+            $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.admin_only');
             return false;
         }
 
         if(!$this->hasRequiredPlayers()) {
-            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_required_players') : null;
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.no_required_players') : null;
             if(env('APP_ENV')!='local') {
                 return false;
             }
         }
 
-        if($this->mode == 'triple') {
-            $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
-        } else {
-            $firstTeam = rand(0, 1) ? 'a' : 'b';
+        switch ($this->mode) {
+            case 'triple':
+                $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
+                break;
+
+            case 'coop':
+                $firstTeam = 'a';
+                break;
+            
+            default:
+                $firstTeam = rand(0, 1) ? 'a' : 'b';
+                break;
         }
         $isCardsSetted = GameCard::set($this, $firstTeam);
         if(!$isCardsSetted) {
-            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.no_enough_cards') : null;
             return false;
         }
         $this->updateStatus('playing', $firstTeam, 'master');
 
         $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, $this->chat->language);
         try {
-            $bot->editMessageText($this->chat_id, $this->lobby_message_id, $text, 'MarkdownV2');
+            $bot->editMessageText($this->chat_id??$this->creator_id, $this->lobby_message_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        $caption = new Caption(AppString::get('game.started', null, $this->chat->language), null, 50);
+        $caption = new Caption(AppString::get('game.started', null, ($this->chat??$this->creator)->language), null, 50);
         Table::send($this, $bot, $caption);
 
         return true;
@@ -315,7 +322,7 @@ class Game extends Model
         if($this->hasRequiredPlayers === null) {
             if(
                 (
-                    $this->mode != 'triple'
+                    !in_array($this->mode, ['triple', 'coop'])
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0)
                 )

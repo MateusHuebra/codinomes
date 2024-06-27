@@ -24,6 +24,7 @@ use App\Actions\Notify;
 use App\Actions\OfficialGroupOnly;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
+use App\Actions\PrivateCoopMessage;
 use App\Actions\ReactToMessage;
 use App\Actions\Start;
 use App\Actions\Stats;
@@ -112,6 +113,10 @@ class Message implements UpdateHandler {
             if(str_contains($update->getMessageText(), 'TermogramBot')) {
                 return new ReactToMessage('❤️');
             }
+        }
+
+        if($update->isChatType('private')) {
+            return new PrivateCoopMessage;
         }
         
         return null;

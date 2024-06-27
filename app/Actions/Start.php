@@ -54,7 +54,7 @@ class Start implements Action {
     }
 
     private function startCoop(string $text, User $user, Update $update, BotApi $bot) {
-        if(preg_match('/\/start coop\.(?<user>[0-9]+)\.(?<game>[0-9]+)/u', $text, $matches)) {
+        if(preg_match('/\/start coop_(?<user>[0-9]+)_(?<game>[0-9]+)/u', $text, $matches)) {
             $game = Game::where('creator_id', $matches['user'])
                         ->where('id', $matches['game'])
                         ->where('status', 'lobby')
