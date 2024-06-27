@@ -14,8 +14,9 @@ class Menu {
     static function send(Game $game, BotApi $bot, bool $forceResend = false) : Void {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
+        $hasRequiredNumberOfPlayers = $hasRequiredPlayers ? true : $game->users->count() >= 4;
         $textMessage = self::getLobbyText($game, true) . AppString::get('game.choose_role');
-        $keyboard = self::getKeyboard($hasRequiredPlayers, $game);
+        $keyboard = self::getKeyboard($game, $hasRequiredPlayers, $hasRequiredNumberOfPlayers);
 
         if($game->lobby_message_id !== null) {
             try {
@@ -48,9 +49,9 @@ class Menu {
         return $textMessage;
     }
 
-    private static function getKeyboard(bool $hasRequiredPlayers, Game $game) {
+    private static function getKeyboard(Game $game, bool $hasRequiredPlayers, bool $hasRequiredNumberOfPlayers) {
         $buttonsArray = [];
-        $buttonsArray = self::getFirstButtons($game, $buttonsArray, $hasRequiredPlayers);
+        $buttonsArray = self::getFirstButtons($game, $buttonsArray, $hasRequiredNumberOfPlayers);
 
         if($hasRequiredPlayers && !$game->menu) {
             $buttonsArray[] = [
@@ -66,7 +67,7 @@ class Menu {
         return new InlineKeyboardMarkup($buttonsArray);
     }
 
-    private static function getFirstButtons(Game $game, Array $buttonsArray, bool $hasRequiredPlayers) {
+    private static function getFirstButtons(Game $game, Array $buttonsArray, bool $hasRequiredNumberOfPlayers) {
         $buttonsArray[] = [
             [
                 'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
@@ -135,7 +136,7 @@ class Menu {
             ];
         }
         
-        if($hasRequiredPlayers && $game->mode != 'triple') {
+        if($hasRequiredNumberOfPlayers && $game->mode != 'triple') {
             $line[] = [
                 'text' => '🎲',
                 'callback_data' => CDM::toString([
