@@ -21,6 +21,7 @@ use App\Actions\Help;
 use App\Actions\Language\Get;
 use App\Actions\LookingForAGame;
 use App\Actions\Notify;
+use App\Actions\OfficialGroupOnly;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
 use App\Actions\ReactToMessage;
@@ -209,6 +210,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'test') {
             return new Test;
+
+        } else if($command == 'off') {
+            return new OfficialGroupOnly;
 
         } else if($command == 'info') {
             return new Info;
