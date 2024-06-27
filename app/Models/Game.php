@@ -39,7 +39,7 @@ class Game extends Model
     ];
 
     const MODES = [
-        'classic' => '🃏',
+        'classic' => '🪪',
         'fast' => '⚡️',
         'mystery' => '❔',
         'mineswp' => '💣',
