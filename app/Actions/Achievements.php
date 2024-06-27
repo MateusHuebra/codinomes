@@ -29,7 +29,7 @@ class Achievements implements Action {
             $to++;
             if($achievements->contains('achievement_id', $achievement)) {
                 $from++;
-                $text.= '>*\[ '.AppString::get('achievements.'.$achievement).' \]*';
+                $text.= '>*「 '.AppString::get('achievements.'.$achievement).' 」*';
                 $text.= "\n>  \-  ".AppString::get('achievements.'.$achievement.'_info')."\n>\n";
             }
         }

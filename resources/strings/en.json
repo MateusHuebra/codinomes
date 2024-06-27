@@ -471,10 +471,10 @@
     },
     "achievements": {
         "from": [
-            "*🏆 Achievements of {user}* {from} \\/ {to}"
+            "*🏆 Achievements of {user}* 「{from}\\/{to}」"
         ],
         "new": [
-            "🏆 Achievement reached\\!\n*\\[ {title} \\]*\n\nBy {users}"
+            "🏆 Achievement reached\\!\n*「 {title} 」*\n\nBy {users}"
         ],
         "and": [
             "and"
