@@ -46,8 +46,9 @@ class Game extends Model
         '8ball' => '🎱',
         'crazy' => '🤪',
         'sp_crazy' => '🤯',
+        'emoji' => '📲',
         'triple' => '3️⃣',
-        'emoji' => '📲'
+        'coop' => '👥'
     ];
 
     public $timestamps = false;
@@ -232,15 +233,15 @@ class Game extends Model
     public function stop(BotApi $bot, string $winner = null) {
         if($winner == null) {
             if(in_array($this->status, ['creating', 'lobby'])) {
-                $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
+                $bot->tryToDeleteMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
             } else {
-                $bot->tryToDeleteMessage($this->chat_id, $this->message_id);
-                $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+                $bot->tryToDeleteMessage($this->chat_id??$this->creator_id, $this->message_id);
+                $bot->tryToUnpinChatMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
             }
             $this->status = 'canceled';
         } else {
             $this->status = 'ended';
-            $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+            $bot->tryToUnpinChatMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
         }
         
         UserStats::addGame($this, $winner);
@@ -324,6 +325,12 @@ class Game extends Model
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0|| $this->masterC->count()==0 || $this->agentsC->count()==0)
                 )
+                ||
+                (
+                    $this->mode == 'coop'
+                    &&
+                    ($this->masterA->count()==0 || $this->agentsA->count()==0)
+                )
             ) {
                 $this->hasRequiredPlayers = false;
             } else {
@@ -338,18 +345,26 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
 
-        $string = 'teams_lists';
         $empty = '_'.AppString::get('game.empty').'_';
         $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
-        $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
         $vars = [
             'master_a' => $this->masterA->get()->getStringList()??$empty,
             'agents_a' => $this->agentsA->get()->getStringList()??$empty,
-            'master_b' => $this->masterB->get()->getStringList()??$empty,
-            'agents_b' => $this->agentsB->get()->getStringList()??$empty,
-            'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : ''),
-            'b' => $teamB . ($winner == 'b' ? ' '.AppString::getParsed('game.won') : '')
+            'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : '')
         ];
+
+        if($this->mode != 'coop') {
+            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
+            $vars+= [
+                'master_b' => $this->masterB->get()->getStringList()??$empty,
+                'agents_b' => $this->agentsB->get()->getStringList()??$empty,
+                'b' => $teamB . ($winner == 'b' ? ' '.AppString::getParsed('game.won') : '')
+            ];
+            $string = 'teams_lists';
+        } else {
+            $string = 'teams_lists_coop';
+        }
+
         if($this->mode == 'triple') {
             $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
             $vars+= [

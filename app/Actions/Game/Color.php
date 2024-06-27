@@ -28,7 +28,7 @@ class Color implements Action {
         $data = CDM::toArray($update->getData());
         $newColor = $data[CDM::TEXT];
 
-        if(in_array($newColor, $game->getColors($user->getEnemyTeams($game->mode == 'triple')))) {
+        if($game->mode != 'coop' && in_array($newColor, $game->getColors($user->getEnemyTeams($game->mode == 'triple')))) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.color_taken');
             return;
         }

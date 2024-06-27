@@ -20,10 +20,10 @@ class Menu implements Action {
         $data = CDM::toArray($update->getData());
         $user = $update->findUser();
         $chat = $update->findChat();
-        $game = $chat->currentGame();
+        $game = ($update->isChatType('private') ? $user : $chat)->currentGame();
 
         if(!$game) {
-            $bot->deleteMessage($chat->id, $update->getMessageId());
+            $bot->deleteMessage($update->getChatId(), $update->getMessageId());
             return;
         }
 
@@ -41,7 +41,7 @@ class Menu implements Action {
 
         if($game->getMenu() == 'packs') {
             if(!$user || !$game->hasPermission($user, $bot)) {
-                $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
+                $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getChatId(), 'error.admin_only');
                 return;
             }
         }

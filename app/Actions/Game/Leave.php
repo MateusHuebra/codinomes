@@ -13,19 +13,32 @@ class Leave implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
         if(!$user || !$user->currentGame()) {
-            $bot->answerCallbackQuery($update->getCallbackQueryId());
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getChatId(), 'error.no_game');
             return;
         }
+        $game = $user->currentGame();
 
         $chat = $update->findChat();
-        if($user->currentGame()->id != $chat->currentGame()->id) {
+        if(!$update->isChatType('private') && $game->id != $chat->currentGame()->id) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.already_playing');
             return;
         }
+        
+        if(!in_array($game->status, ['creating', 'lobby'])) {
+            return;
+        }
 
-        $user->games()->detach($user->currentGame()->id);
-        Menu::send($chat->currentGame(), $bot);
-        $bot->answerCallbackQuery($update->getCallbackQueryId(), AppString::get('game.you_left'));
+        if($game->mode == 'coop') {
+            if($game->creator_id == $user->id) {
+                $game->stop($bot);
+                $bot->sendMessage($user->id, AppString::get('game.stopped'));
+                return;
+            }
+        }
+        
+        $user->games()->detach($game->id);
+        Menu::send($game, $bot);
+        $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getChatId(), 'game.you_left');
     }
 
 }

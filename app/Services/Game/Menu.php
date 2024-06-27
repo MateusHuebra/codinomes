@@ -15,7 +15,8 @@ class Menu {
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $hasRequiredNumberOfPlayers = $hasRequiredPlayers ? true : $game->users->count() >= 4;
-        $textMessage = self::getLobbyText($game, true) . AppString::get('game.choose_role');
+        $textMessage = self::getLobbyText($game, true);
+        $textMessage.= $game->mode == 'coop' ? '' : AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($game, $hasRequiredPlayers, $hasRequiredNumberOfPlayers);
 
         if($game->lobby_message_id !== null) {
@@ -23,28 +24,29 @@ class Menu {
                 if($forceResend) {
                     throw new Exception();
                 }
-                $bot->editMessageText($game->chat_id, $game->lobby_message_id, $textMessage, 'MarkdownV2', false, $keyboard);
+                $bot->editMessageText($game->chat_id??$game->creator_id, $game->lobby_message_id, $textMessage, 'MarkdownV2', false, $keyboard);
                 return;
             } catch(Exception $e) {
                 if($e->getMessage()=='Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message') {
                     return;
                 }
-                $bot->tryToDeleteMessage($game->chat_id, $game->lobby_message_id);
+                $bot->tryToDeleteMessage($game->chat_id??$game->creator_id, $game->lobby_message_id);
             }
         }
 
-        $message = $bot->sendMessage($game->chat_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
-        $bot->tryToPinChatMessage($game->chat_id, $message->getMessageId());
+        $message = $bot->sendMessage($game->chat_id??$game->creator_id, $textMessage, 'MarkdownV2', false, null, $keyboard);
+        $bot->tryToPinChatMessage($game->chat_id??$game->creator_id, $message->getMessageId());
         $game->lobby_message_id = $message->getMessageId();
         $game->save();
     }
 
     public static function getLobbyText(Game $game, bool $showInfo = false, string $winner = null) {
+        $language = $game->chat ? $game->chat->language : $game->creator->language;
         $textMessage = AppString::get('game.mode', [
             'mode' => AppString::getParsed('mode.'.$game->mode),
             'info' => ($showInfo ? '/info' : ''),
             'emoji' => Game::MODES[$game->mode]
-        ], $game->chat->language);
+        ], $language);
         $textMessage.= $game->getTeamAndPlayersList($winner);
         return $textMessage;
     }
@@ -62,48 +64,62 @@ class Menu {
                     ])
                 ]
             ];
+        } else if($game->mode == 'coop') {
+            $url = 'https://t.me/share/url?url='
+                    .rawurlencode("https://t.me/codinomesbot?start=coop.$game->creator_id.$game->id")
+                    .'&text='
+                    .rawurlencode(AppString::get('game.invite_coop_text'));
+            $buttonsArray[] = [
+                [
+                    'text' => AppString::get('game.invite_coop'),
+                    'url' => $url
+                ]
+            ];
         }
 
         return new InlineKeyboardMarkup($buttonsArray);
     }
 
     private static function getFirstButtons(Game $game, Array $buttonsArray, bool $hasRequiredNumberOfPlayers) {
-        $buttonsArray[] = [
-            [
-                'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                    CDM::TEAM => 'a',
-                    CDM::ROLE => CDM::MASTER
-                ])
-            ],
-            [
-                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('a')],
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                    CDM::TEAM => 'a',
-                    CDM::ROLE => CDM::AGENT
-                ])
-            ]
-        ];
-        $buttonsArray[] = [
-            [
-                'text' => Game::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                    CDM::TEAM => 'b',
-                    CDM::ROLE => CDM::MASTER
-                ])
-            ],
-            [
-                'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('b')],
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
-                    CDM::TEAM => 'b',
-                    CDM::ROLE => CDM::AGENT
-                ])
-            ]
-        ];
+        if($game->mode != 'coop') {
+            $buttonsArray[] = [
+                [
+                    'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'a',
+                        CDM::ROLE => CDM::MASTER
+                    ])
+                ],
+                [
+                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('a')],
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'a',
+                        CDM::ROLE => CDM::AGENT
+                    ])
+                ]
+            ];
+            $buttonsArray[] = [
+                [
+                    'text' => Game::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'b',
+                        CDM::ROLE => CDM::MASTER
+                    ])
+                ],
+                [
+                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('b')],
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
+                        CDM::TEAM => 'b',
+                        CDM::ROLE => CDM::AGENT
+                    ])
+                ]
+            ];
+        }
+        
         if($game->mode == 'triple') {
             $buttonsArray[] = [
                 [
@@ -144,13 +160,16 @@ class Menu {
                 ])
             ];
         }
+
+        if($game->mode != 'coop') {
+            $line[] = [
+                'text' => '⚙️',
+                'callback_data' => CDM::toString([
+                    CDM::EVENT => CDM::SETTINGS
+                ])
+            ];
+        }
         
-        $line[] = [
-            'text' => '⚙️',
-            'callback_data' => CDM::toString([
-                CDM::EVENT => CDM::SETTINGS
-            ])
-        ];
         $line[] = [
             'text' => AppString::get('game.leave'),
             'callback_data' => CDM::toString([

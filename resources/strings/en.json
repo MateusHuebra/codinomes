@@ -79,6 +79,12 @@
         "emoji_info": [
             "Emoji mode, it's identical to the classic mode, but the hints must be a single emoji instead of a word"
         ],
+        "coop": [
+            "COOP beta"
+        ],
+        "coop_info": [
+            "Tests"
+        ],
         "check_other": [
             "Check other modes: /help_modes"
         ]
@@ -95,6 +101,9 @@
         ],
         "teams_lists_triple": [
             "*TEAM {a}\nMaster:* {master_a}\n*Agents:* {agents_a}\n\n*TEAM {b}\nMaster:* {master_b}\n*Agents:* {agents_b}\n\n*TEAM {c}\nMaster:* {master_c}\n*Agents:* {agents_c}\n\n"
+        ],
+        "teams_lists_coop": [
+            "*COOP {a}\nCreator:* {master_a}\n*Partner:* {agents_a}\n\n"
         ],
         "mode": [
             "*{mode} MODE {emoji}* {info}\n\n"
@@ -129,8 +138,23 @@
         "agents": [
             "agents"
         ],
+        "creator": [
+            "Creator"
+        ],
+        "partner": [
+            "Partner"
+        ],
         "start": [
             "Start Game"
+        ],
+        "invite_coop": [
+            "Invite Player"
+        ],
+        "invite_coop_text": [
+            "⬆️ Play Codinomes Coop with me!"
+        ],
+        "invite_coop_accepted": [
+            "You have joined the match of {name}"
         ],
         "leave": [
             "Leave"

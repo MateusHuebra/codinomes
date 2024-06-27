@@ -9,6 +9,7 @@ use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Actions\Game\Info;
+use App\Actions\Game\Leave;
 use App\Actions\Game\SendList;
 use App\Actions\Game\Table;
 use App\Actions\GetColors;
@@ -146,6 +147,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_emoji', 'novo_emoji'])) {
             return new Create('emoji');
 
+        } else if(in_array($command, ['new_coop', 'novo_coop'])) {
+            return new Create('coop');
+
         } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
             return new Create('random');
 
@@ -157,6 +161,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;
+
+        } else if(in_array($command, ['leave', 'sair'])) {
+            return new Leave;
 
         } else if(in_array($command, ['history', 'historico'])) {
             return new History;
