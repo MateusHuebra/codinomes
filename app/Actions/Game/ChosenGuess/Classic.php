@@ -99,7 +99,7 @@ class Classic implements Action {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
         $attemptType = 'ally';
         //won
-        if($cardsLeft <= 0 && $game->mode != Game::EIGHTBALL) {
+        if($cardsLeft <= 0) {
             if($game->mode == Game::FAST && $game->countLastStreak() == $game->cards->where('team', $player->team)->count()) {
                 $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
                 UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
@@ -114,34 +114,20 @@ class Classic implements Action {
             
         //next
         } else if($game->attempts_left===null || $game->attempts_left >= 0) {
-            if($game->mode == Game::EIGHTBALL && $cardsLeft == 0) {
-                $title = AppString::get('game.8ball', null, $chatLanguage);
-
-            } else {
-                $title = AppString::get('game.correct', null, $chatLanguage);
-                $text = $game->getLastHint();
-            }
+            $title = AppString::get('game.correct', null, $chatLanguage);
+            $text = $game->getLastHint();
             $winner = null;
 
         //skip
         } else {
-            if($game->mode == Game::EIGHTBALL && $opponentCardsLeft == 0) {
-                $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
-                $game->attempts_left = null;
-                $game->setEightBallToHistory($player);
-
-                $title = AppString::get('game.8ball', null, $chatLanguage);
-
+            if($game->mode == Game::TRIPLE) {
+                $game->nextStatus($user->getNextTeam());
             } else {
-                if($game->mode == Game::TRIPLE) {
-                    $game->nextStatus($user->getNextTeam());
-                } else {
-                    $game->nextStatus($user->getEnemyTeam());
-                }
-
-                $title = AppString::get('game.correct', null, $chatLanguage);
-                $text = $game->getLastHint();
+                $game->nextStatus($user->getEnemyTeam());
             }
+
+            $title = AppString::get('game.correct', null, $chatLanguage);
+            $text = $game->getLastHint();
 
             $winner = null;
         }
@@ -150,28 +136,16 @@ class Classic implements Action {
     }
 
     protected function handleBlackGuess($game, $cardsLeft, $update, $user, $card, $emoji, $bot, $player, $chatLanguage) : GuessData {
-        if($game->mode == Game::EIGHTBALL && $cardsLeft == 0) {
-            $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
-            $attemptType = 'ally';
-            $color = $game->getColor($player->team);
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_color', null, $chatLanguage);
-            $winner = $player->team;
-
-        } else {
-            $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
-            $attemptType = 'black';
-            $color = $game->getColor($user->getEnemyTeam());
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_black', null, $chatLanguage);
-            $winner = $user->getEnemyTeam();
-            
-            UserAchievement::checkBlackCard($game, $cardsLeft, $player, $bot);
-        }
+        $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
+        $attemptType = 'black';
+        $color = $game->getColor($user->getEnemyTeam());
+        $title = AppString::get('game.win', [
+            'team' => AppString::get('color.'.$color)
+        ], $chatLanguage);
+        $text = AppString::get('game.win_black', null, $chatLanguage);
+        $winner = $user->getEnemyTeam();
+        
+        UserAchievement::checkBlackCard($game, $cardsLeft, $player, $bot);
 
         return new GuessData($title, $attemptType, $text, $winner);
     }
@@ -180,7 +154,7 @@ class Classic implements Action {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
         $attemptType = $card->team == 'w' ? 'white' : 'opponent';
         //won
-        if($game->mode != Game::EIGHTBALL && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
+        if($game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
             $color = $game->getColor($card->team);
             $title = AppString::get('game.win', [
                 'team' => AppString::get('color.'.$color)
@@ -193,23 +167,14 @@ class Classic implements Action {
         
         //skip
         } else {
-            if($game->mode == Game::EIGHTBALL && $opponentCardsLeft == 0) {
-                $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
-                $game->attempts_left = null;
-                $game->setEightBallToHistory($player);
-
-                $title = AppString::get('game.8ball', null, $chatLanguage);
-
+            if($game->mode == Game::TRIPLE) {
+                $game->nextStatus($user->getNextTeam());
             } else {
-                if($game->mode == Game::TRIPLE) {
-                    $game->nextStatus($user->getNextTeam());
-                } else {
-                    $game->nextStatus($user->getEnemyTeam());
-                }
-
-                $title = AppString::get('game.incorrect', null, $chatLanguage);
-                $text = $game->getLastHint();
+                $game->nextStatus($user->getEnemyTeam());
             }
+
+            $title = AppString::get('game.incorrect', null, $chatLanguage);
+            $text = $game->getLastHint();
 
             $winner = null;
         }

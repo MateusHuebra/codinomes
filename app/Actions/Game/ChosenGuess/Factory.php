@@ -9,10 +9,11 @@ class Factory {
     static function build($gameMode) {
         if($gameMode == Game::MYSTERY) {
             return new Mystery;
-        }/*else if($gameMode == Game::EIGHTBALL) {
+        
+        } else if($gameMode == Game::EIGHTBALL) {
             return new EightBall;
         }
-        */
+        
         return new Classic;
     }
 
