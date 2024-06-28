@@ -29,6 +29,7 @@ use App\Actions\ReactToMessage;
 use App\Actions\Start;
 use App\Actions\Stats;
 use App\Actions\Test;
+use App\Models\Game;
 use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Message as MessageType;
 
@@ -130,31 +131,31 @@ class Message implements UpdateHandler {
             return new Create;
 
         } else if(in_array($command, ['new_triple', 'novo_triplo'])) {
-            return new Create('triple');
+            return new Create(Game::TRIPLE);
 
         } else if(in_array($command, ['new_fast', 'novo_rapido'])) {
-            return new Create('fast');
+            return new Create(Game::FAST);
 
         } else if(in_array($command, ['new_minesweeper', 'novo_campominado'])) {
-            return new Create('mineswp');
+            return new Create(Game::MINESWEEPER);
 
         } else if(in_array($command, ['new_mystery', 'novo_fantasma'])) {
-            return new Create('mystery');
+            return new Create(Game::MYSTERY);
 
         } else if(in_array($command, ['new_eightball', 'novo_bilhar'])) {
-            return new Create('8ball');
+            return new Create(Game::EIGHTBALL);
 
         } else if(in_array($command, ['new_crazy', 'novo_maluco'])) {
-            return new Create('crazy');
+            return new Create(Game::CRAZY);
 
         } else if(in_array($command, ['new_supercrazy', 'novo_supermaluco'])) {
-            return new Create('sp_crazy');
+            return new Create(Game::SUPER_CRAZY);
 
         } else if(in_array($command, ['new_emoji', 'novo_emoji'])) {
-            return new Create('emoji');
+            return new Create(Game::EMOJI);
 
         } else if(in_array($command, ['new_coop', 'novo_coop'])) {
-            return new Create('coop');
+            //return new Create(Game::COOP);
 
         } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
             return new Create('random');

@@ -60,7 +60,7 @@ class ChosenHint implements Action {
         ], null, true);
 
         $captionText = $hint;
-        if($game->mode == 'emoji') {
+        if($game->mode == Game::EMOJI) {
             $isEmoji = true;
             $text = $mention.' '.$emoji.' '.$data[CDM::NUMBER].':';
             echo $text;

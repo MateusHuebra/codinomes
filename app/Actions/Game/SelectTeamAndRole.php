@@ -90,14 +90,14 @@ class SelectTeamAndRole implements Action {
             return;
         }
 
-        foreach($user->getEnemyTeams($game->mode == 'triple') as $team) {
+        foreach($user->getEnemyTeams($game->mode == Game::TRIPLE) as $team) {
             if($user->default_color == $game->getColor($team)) {
                 if($game->hasMaster($team)) {
                     return;
                 }
                 $backupColor = ['red', 'blue', 'orange'];
                 foreach($backupColor as $color) {
-                    if($color != $user->default_color && !in_array($color, $game->getColors($user->getEnemyTeams($game->mode == 'triple')))) {
+                    if($color != $user->default_color && !in_array($color, $game->getColors($user->getEnemyTeams($game->mode == Game::TRIPLE)))) {
                         $backupColor = $color;
                         break;
                     }

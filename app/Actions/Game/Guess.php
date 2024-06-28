@@ -23,7 +23,7 @@ class Guess implements Action {
             'a' => Game::COLORS[$game->getColor('a')],
             'b' => Game::COLORS[$game->getColor('b')]
         ];
-        if($game->mode == 'triple') {
+        if($game->mode == Game::TRIPLE) {
             $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
         }
 
@@ -42,7 +42,7 @@ class Guess implements Action {
                 $results[] = $this->getErrorResult();
             } else {
                 foreach($filteredCards as $card) {
-                    $emoji = ($game->mode == 'mystery') ? '❔' : $emojis[$card->team];
+                    $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$card->team];
                     $title = $card->text;
                     $messageContent = new Text($emoji.' '.$title);
                     $data = CDM::toString([

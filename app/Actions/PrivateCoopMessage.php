@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
-use App\Models\GlobalSettings;
 use TelegramBot\Api\BotApi;
 
 class PrivateCoopMessage implements Action {
@@ -16,7 +15,7 @@ class PrivateCoopMessage implements Action {
         if(!$game = $user->currentGame()) {
             return;
         }
-        if($game->mode != 'coop') {
+        if($game->mode != Game::COOP) {
             return;
         }
         if($game->users()->count() < 2) {

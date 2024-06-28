@@ -4,8 +4,8 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
-use IntlChar;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Inline\QueryResult\Article;
 use TelegramBot\Api\Types\Inline\InputMessageContent\Text;
@@ -20,10 +20,10 @@ class Hint implements Action {
     public function run(Update $update, BotApi $bot, string $forceText = null) {
         $query = mb_strtoupper($forceText??$update->getQuery(), 'UTF-8');
         $game = $update->findUser()->currentGame();
-        $cardsLeft = $game->mode == 'mystery' ? 9 : $game->cards->where('team', $game->team)->where('revealed', false)->count();
+        $cardsLeft = $game->mode == Game::MYSTERY ? 9 : $game->cards->where('team', $game->team)->where('revealed', false)->count();
 
         $results = [];
-        if($game->mode == 'emoji') {
+        if($game->mode == Game::EMOJI) {
             $regex = self::REGEX_HINT_EMOJI;
         } else {
             $regex = $game->chat->compound_words ? self::REGEX_HINT_NUMBER_COMPOUND : self::REGEX_HINT_NUMBER;
@@ -33,7 +33,7 @@ class Hint implements Action {
             &&
             (!isset($matches['number']) || $matches['number'] <= $cardsLeft)
             &&
-            ($game->mode != 'emoji' || \Emoji\is_single_emoji($matches['hint']))
+            ($game->mode != Game::EMOJI || \Emoji\is_single_emoji($matches['hint']))
         ) {
             if(!isset($matches['number'])) {
                 $matches['number'] = '∞';

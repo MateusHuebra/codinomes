@@ -57,7 +57,7 @@ class ChosenGuess implements Action {
             'a' => Game::COLORS[$game->getColor('a')],
             'b' => Game::COLORS[$game->getColor('b')]
         ];
-        if($game->mode == 'triple') {
+        if($game->mode == Game::TRIPLE) {
             $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
         }
         $emoji = $emojis[$card->team];
@@ -75,8 +75,8 @@ class ChosenGuess implements Action {
             $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
             $attemptType = 'ally';
             //won
-            if($cardsLeft <= 0 && $game->mode != '8ball') {
-                if($game->mode == 'fast' && $game->countLastStreak() == $game->cards->where('team', $player->team)->count()) {
+            if($cardsLeft <= 0 && $game->mode != Game::EIGHTBALL) {
+                if($game->mode == Game::FAST && $game->countLastStreak() == $game->cards->where('team', $player->team)->count()) {
                     $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
                     UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
                 }
@@ -90,7 +90,7 @@ class ChosenGuess implements Action {
                 
             //next
             } else if($game->attempts_left===null || $game->attempts_left >= 0) {
-                if($game->mode == '8ball' && $cardsLeft == 0) {
+                if($game->mode == Game::EIGHTBALL && $cardsLeft == 0) {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
@@ -101,7 +101,7 @@ class ChosenGuess implements Action {
 
             //skip
             } else {
-                if($game->mode == '8ball' && $opponentCardsLeft == 0) {
+                if($game->mode == Game::EIGHTBALL && $opponentCardsLeft == 0) {
                     $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
                     $game->attempts_left = null;
                     $game->setEightBallToHistory($player);
@@ -109,7 +109,7 @@ class ChosenGuess implements Action {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
-                    if($game->mode == 'triple') {
+                    if($game->mode == Game::TRIPLE) {
                         $game->nextStatus($user->getNextTeam());
                     } else {
                         $game->nextStatus($user->getEnemyTeam());
@@ -124,7 +124,7 @@ class ChosenGuess implements Action {
 
         //black card
         } else if($card->team == 'x') {
-            if($game->mode == '8ball' && $cardsLeft == 0) {
+            if($game->mode == Game::EIGHTBALL && $cardsLeft == 0) {
                 $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
                 $attemptType = 'ally';
                 $color = $game->getColor($player->team);
@@ -152,7 +152,7 @@ class ChosenGuess implements Action {
             $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
             $attemptType = $card->team == 'w' ? 'white' : 'opponent';
             //won
-            if($game->mode != '8ball' && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
+            if($game->mode != Game::EIGHTBALL && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
                 $color = $game->getColor($card->team);
                 $title = AppString::get('game.win', [
                     'team' => AppString::get('color.'.$color)
@@ -165,7 +165,7 @@ class ChosenGuess implements Action {
             
             //skip
             } else {
-                if($game->mode == '8ball' && $opponentCardsLeft == 0) {
+                if($game->mode == Game::EIGHTBALL && $opponentCardsLeft == 0) {
                     $game->updateStatus('playing', $user->getEnemyTeam(), 'agent');
                     $game->attempts_left = null;
                     $game->setEightBallToHistory($player);
@@ -173,8 +173,8 @@ class ChosenGuess implements Action {
                     $title = AppString::get('game.8ball', null, $chatLanguage);
 
                 } else {
-                    if($game->mode != 'mystery' || $game->attempts_left < 0) {
-                        if($game->mode == 'triple') {
+                    if($game->mode != Game::MYSTERY || $game->attempts_left < 0) {
+                        if($game->mode == Game::TRIPLE) {
                             $game->nextStatus($user->getNextTeam());
                         } else {
                             $game->nextStatus($user->getEnemyTeam());
@@ -189,12 +189,12 @@ class ChosenGuess implements Action {
             }
         }
 
-        if($game->mode == 'mystery' && $winner === null) {
+        if($game->mode == Game::MYSTERY && $winner === null) {
             $hint = $game->getLastHint();
             $titleSize = strlen($hint) >= 16 ? 40 : 50;
             $caption = new Caption($hint, null, $titleSize);
         } else {
-            $caption = new Caption($title, $text??null, 30, $game->mode == 'emoji');
+            $caption = new Caption($title, $text??null, 30, $game->mode == Game::EMOJI);
         }
 
         Table::send($game, $bot, $caption, $card->position, $winner);
@@ -203,8 +203,8 @@ class ChosenGuess implements Action {
     }
 
     private function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot, bool $isGuessCorrect) {
-        $emoji = ($game->mode == 'mystery') ? '❔' : $emoji;
-        $string = ($isGuessCorrect && $game->mode != 'mystery') ? 'attempted_correct' : 'attempted';
+        $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emoji;
+        $string = ($isGuessCorrect && $game->mode != Game::MYSTERY) ? 'attempted_correct' : 'attempted';
         $chatLanguage = $game->chat->language;
         if($update->isType(Update::MESSAGE)) {
             $mention = AppString::get('game.mention', [

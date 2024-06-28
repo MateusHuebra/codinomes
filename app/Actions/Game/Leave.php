@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -28,7 +29,7 @@ class Leave implements Action {
             return;
         }
 
-        if($game->mode == 'coop') {
+        if($game->mode == Game::COOP) {
             if($game->creator_id == $user->id) {
                 $partner = $game->users()
                                  ->where('id', '!=', $user->id)

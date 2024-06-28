@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -73,7 +74,7 @@ class ConfirmSkip implements Action {
 
         $currentPlayer = $game->users()->fromTeamRole($game->team, 'agent')->first();
 
-        if($game->mode == '8ball' && $game->cards->where('team', $currentPlayer->getEnemyTeam())->where('revealed', false)->count() == 0) {
+        if($game->mode == Game::EIGHTBALL && $game->cards->where('team', $currentPlayer->getEnemyTeam())->where('revealed', false)->count() == 0) {
             $game->updateStatus('playing', $currentPlayer->getEnemyTeam(), 'agent');
             $game->attempts_left = null;
             $game->setEightBallToHistory($player);
@@ -81,7 +82,7 @@ class ConfirmSkip implements Action {
             $title = AppString::get('game.8ball', null, $chatLanguage);
 
         } else {
-            if($game->mode == 'triple') {
+            if($game->mode == Game::TRIPLE) {
                 $game->nextStatus($currentPlayer->getNextTeam());
             } else {
                 $game->nextStatus($currentPlayer->getEnemyTeam());
@@ -90,7 +91,7 @@ class ConfirmSkip implements Action {
             $title = AppString::get('game.skipped', null, $chatLanguage);
         }
 
-        $caption = new Caption($title, $game->getLastHint(), 30, $game->mode=='emoji');
+        $caption = new Caption($title, $game->getLastHint(), 30, $game->mode==Game::EMOJI);
         Table::send($game, $bot, $caption, null);
     }
 

@@ -15,7 +15,7 @@ class StopAbandonedLobbies {
         $now = strtotime('now');
         
         $games = Game::whereIn('status', ['creating', 'lobby'])
-                      ->where('mode', '!=', 'coop')
+                      ->where('mode', '!=', Game::COOP)
                       ->get();
         foreach ($games as $game) {
             $time = strtotime($game->status_updated_at);

@@ -38,17 +38,28 @@ class Game extends Model
         'black' => '◼️'
     ];
 
+    const CLASSIC = 'classic';
+    const FAST = 'fast';
+    const MYSTERY = 'mystery';
+    const MINESWEEPER = 'mineswp';
+    const EIGHTBALL = '8ball';
+    const CRAZY = 'crazy';
+    const SUPER_CRAZY = 'sp_crazy';
+    const EMOJI = 'emoji';
+    const TRIPLE = 'triple';
+    const COOP = 'coop';
+
     const MODES = [
-        'classic' => '🪪',
-        'fast' => '⚡️',
-        'mystery' => '❔',
-        'mineswp' => '💣',
-        '8ball' => '🎱',
-        'crazy' => '🤪',
-        'sp_crazy' => '🤯',
-        'emoji' => '📲',
-        'triple' => '3️⃣',
-        'coop' => '👥'
+        self::CLASSIC => '🪪',
+        self::FAST => '⚡️',
+        self::MYSTERY => '❔',
+        self::MINESWEEPER => '💣',
+        self::EIGHTBALL => '🎱',
+        self::CRAZY => '🤪',
+        self::SUPER_CRAZY => '🤯',
+        self::EMOJI => '📲',
+        self::TRIPLE => '3️⃣',
+        self::COOP => '👥'
     ];
 
     public $timestamps = false;
@@ -131,7 +142,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            $regex = $this->mode == 'emoji'
+            $regex = $this->mode == self::EMOJI
                     ? '/(?<hint>(([\S]+) )?([0-9∞]){1})\*(\R>  - .+)*$/u'
                     : '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
             if(preg_match($regex, $this->history, $matches)) {
@@ -207,11 +218,11 @@ class Game extends Model
         }
 
         switch ($this->mode) {
-            case 'triple':
+            case self::TRIPLE:
                 $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
                 break;
 
-            case 'coop':
+            case self::COOP:
                 $firstTeam = 'a';
                 break;
             
@@ -276,9 +287,9 @@ class Game extends Model
     }
 
     public function nextStatus(string $nextTeam) {
-        if($this->mode == 'crazy') {
+        if($this->mode == self::CRAZY) {
             GameCard::randomizeUnrevealedCardsColors($this);
-        } else if($this->mode == 'sp_crazy') {
+        } else if($this->mode == self::SUPER_CRAZY) {
             GameCard::randomizeUnrevealedCardsWords($this);
             GameCard::randomizeUnrevealedCardsColors($this);
         }
@@ -322,19 +333,19 @@ class Game extends Model
         if($this->hasRequiredPlayers === null) {
             if(
                 (
-                    !in_array($this->mode, ['triple', 'coop'])
+                    !in_array($this->mode, [self::TRIPLE, self::COOP])
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0)
                 )
                 ||
                 (
-                    $this->mode == 'triple'
+                    $this->mode == self::TRIPLE
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0|| $this->masterC->count()==0 || $this->agentsC->count()==0)
                 )
                 ||
                 (
-                    $this->mode == 'coop'
+                    $this->mode == self::COOP
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0)
                 )
@@ -360,7 +371,7 @@ class Game extends Model
             'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : '')
         ];
 
-        if($this->mode != 'coop') {
+        if($this->mode != self::COOP) {
             $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
             $vars+= [
                 'master_b' => $this->masterB->get()->getStringList()??$empty,
@@ -372,7 +383,7 @@ class Game extends Model
             $string = 'teams_lists_coop';
         }
 
-        if($this->mode == 'triple') {
+        if($this->mode == self::TRIPLE) {
             $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
             $vars+= [
                 'master_c' => $this->masterC->get()->getStringList()??$empty,
@@ -400,7 +411,7 @@ class Game extends Model
         $this->agentsA = $this->users()->fromTeamRole('a', 'agent');
         $this->masterB = $this->users()->fromTeamRole('b', 'master');
         $this->agentsB = $this->users()->fromTeamRole('b', 'agent');
-        if($this->mode == 'triple') {
+        if($this->mode == self::TRIPLE) {
             $this->masterC = $this->users()->fromTeamRole('c', 'master');
             $this->agentsC = $this->users()->fromTeamRole('c', 'agent');
         }

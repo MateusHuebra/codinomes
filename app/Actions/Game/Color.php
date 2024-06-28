@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
@@ -28,7 +29,7 @@ class Color implements Action {
         $data = CDM::toArray($update->getData());
         $newColor = $data[CDM::TEXT];
 
-        if($game->mode != 'coop' && in_array($newColor, $game->getColors($user->getEnemyTeams($game->mode == 'triple')))) {
+        if($game->mode != Game::COOP && in_array($newColor, $game->getColors($user->getEnemyTeams($game->mode == Game::TRIPLE)))) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.color_taken');
             return;
         }

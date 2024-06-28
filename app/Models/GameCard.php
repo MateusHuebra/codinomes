@@ -13,7 +13,7 @@ class GameCard extends Model
     private static $cardsCounts = [];
 
     public static function set(Game $game, string $firstTeam) : Bool {
-        if($game->mode == 'coop') {
+        if($game->mode == Game::COOP) {
             $cards = Card::where('pack_id', 1)->get();
 
         } else {
@@ -27,14 +27,14 @@ class GameCard extends Model
 
         if($cards->count() < self::$cardsCounts['max']) {
             return false;
-        } else if($game->mode == 'sp_crazy' && $cards->count() < self::$cardsCounts['max']*2) {
+        } else if($game->mode == Game::SUPER_CRAZY && $cards->count() < self::$cardsCounts['max']*2) {
             return false;
         }
 
         $randomizedCards = $cards->random(self::$cardsCounts['max']);
         $shuffledCards = $randomizedCards->toArray();
         shuffle($shuffledCards);
-        $shuffledCards = self::getColoredCards($shuffledCards, $firstTeam, $game->mode == 'triple');
+        $shuffledCards = self::getColoredCards($shuffledCards, $firstTeam, $game->mode == Game::TRIPLE);
 
         foreach ($shuffledCards as $key => $card) {
             $gameCard = new GameCard;
@@ -110,7 +110,7 @@ class GameCard extends Model
 
     private static function setCardsCountsByMode(string $gameMode) {
         switch ($gameMode) {
-            case 'fast':
+            case Game::FAST:
                 self::$cardsCounts = [
                     'base' => 4,
                     'black' => 1,
@@ -118,7 +118,7 @@ class GameCard extends Model
                 ];
                 break;
 
-            case 'mineswp':
+            case Game::MINESWEEPER:
                 self::$cardsCounts = [
                     'base' => 8,
                     'black' => 7,
@@ -126,7 +126,7 @@ class GameCard extends Model
                 ];
                 break;
 
-            case '8ball':
+            case Game::EIGHTBALL:
                 self::$cardsCounts = [
                     'base' => 7,
                     'black' => 1,
@@ -134,7 +134,7 @@ class GameCard extends Model
                 ];
                 break;
 
-            case 'triple':
+            case Game::TRIPLE:
                 self::$cardsCounts = [
                     'base' => 7,
                     'black' => 0,

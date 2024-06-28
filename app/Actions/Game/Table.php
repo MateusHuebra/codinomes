@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Menu;
@@ -39,7 +40,7 @@ class Table implements Action {
                         $user->currentGame()->player->team == $game->team
                     )
                 ) {
-                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40, $game->mode=='emoji'));
+                    \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40, $game->mode==Game::EMOJI));
                     
                 } else {
                     $bot->sendMessage($chat->id, AppString::get('error.only_agent_role'), null, false, $update->getMessageId(), null, false, null, null, true);

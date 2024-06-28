@@ -14,13 +14,13 @@ class Create implements Action {
 
     private $mode;
 
-    public function __construct(string $mode = 'classic') {
+    public function __construct(string $mode = Game::CLASSIC) {
         $this->mode = $mode;
     }
 
     public function run(Update $update, BotApi $bot) : Void {
         if(
-            (GlobalSettings::first()->official_groups_only || $this->mode == 'emoji' || $this->mode == 'coop')
+            (GlobalSettings::first()->official_groups_only || $this->mode == Game::EMOJI || $this->mode == Game::COOP)
             &&
             (
                 !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
@@ -48,7 +48,7 @@ class Create implements Action {
     }
 
     private function groupGame(Update $update, BotApi $bot) {
-        if($this->mode == 'coop') {
+        if($this->mode == Game::COOP) {
             return;
         }
 
@@ -69,7 +69,7 @@ class Create implements Action {
         }
 
         if($this->mode == 'random') {
-            while($this->mode == 'random' || $this->mode == 'emoji' || $this->mode == 'coop') {
+            while($this->mode == 'random' || $this->mode == Game::EMOJI || $this->mode == Game::COOP) {
                 $this->mode = array_rand(Game::MODES);
             }
         }
@@ -91,7 +91,7 @@ class Create implements Action {
     }
 
     private function privateGame(Update $update, BotApi $bot) {
-        if($this->mode != 'coop') {
+        if($this->mode != Game::COOP) {
             return;
         }
 
@@ -124,20 +124,20 @@ class Create implements Action {
     }
 
     private function setGameColors(Game $game) {
-        $primaryColor = $game->mode=='coop' ? 'purple' : 'red';
+        $primaryColor = $game->mode==Game::COOP ? 'purple' : 'red';
         $game->teamColors()->create([
             'team' => 'a',
             'color' => $primaryColor
         ]);
 
-        if($game->mode != 'coop') {
+        if($game->mode != Game::COOP) {
             $game->teamColors()->create([
                 'team' => 'b',
                 'color' => 'blue'
             ]);
         }
 
-        if($game->mode == 'triple') {
+        if($game->mode == Game::TRIPLE) {
             $game->teamColors()->create([
                 'team' => 'c',
                 'color' => 'orange'

@@ -16,7 +16,7 @@ class Menu {
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $hasRequiredNumberOfPlayers = $hasRequiredPlayers ? true : $game->users->count() >= 4;
         $textMessage = self::getLobbyText($game, true);
-        $textMessage.= $game->mode == 'coop' ? '' : AppString::get('game.choose_role');
+        $textMessage.= $game->mode == Game::COOP ? '' : AppString::get('game.choose_role');
         $keyboard = self::getKeyboard($game, $hasRequiredPlayers, $hasRequiredNumberOfPlayers);
 
         if($game->lobby_message_id !== null) {
@@ -68,7 +68,7 @@ class Menu {
                 ]
             ];
 
-        } else if($game->mode == 'coop') {
+        } else if($game->mode == Game::COOP) {
             $url = 'https://t.me/share/url?url='
                     .rawurlencode("https://t.me/codinomesbot?start=coop_{$game->creator_id}_{$game->id}")
                     .'&text='
@@ -85,7 +85,7 @@ class Menu {
     }
 
     private static function getFirstButtons(Game $game, Array $buttonsArray, bool $hasRequiredNumberOfPlayers) {
-        if($game->mode != 'coop') {
+        if($game->mode != Game::COOP) {
             $buttonsArray[] = [
                 [
                     'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
@@ -124,7 +124,7 @@ class Menu {
             ];
         }
         
-        if($game->mode == 'triple') {
+        if($game->mode == Game::TRIPLE) {
             $buttonsArray[] = [
                 [
                     'text' => Game::COLORS[$game->getColor('c')].' '.AppString::get('game.master'),
@@ -156,7 +156,7 @@ class Menu {
             ];
         }
         
-        if($hasRequiredNumberOfPlayers && !in_array($game->mode, ['triple', 'coop'])) {
+        if($hasRequiredNumberOfPlayers && !in_array($game->mode, [Game::TRIPLE, Game::COOP])) {
             $line[] = [
                 'text' => '🎲',
                 'callback_data' => CDM::toString([
@@ -165,7 +165,7 @@ class Menu {
             ];
         }
 
-        if($game->mode != 'coop') {
+        if($game->mode != Game::COOP) {
             $line[] = [
                 'text' => '⚙️',
                 'callback_data' => CDM::toString([

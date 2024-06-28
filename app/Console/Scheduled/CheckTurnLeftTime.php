@@ -78,14 +78,14 @@ class CheckTurnLeftTime {
 
     private function skipAgent(Game $game, BotApi $bot) {
         $otherTeam = $game->team == 'a' ? 'b' : 'a';
-        if($game->mode == '8ball' && $game->cards->where('team', $otherTeam)->where('revealed', false)->count() == 0) {
+        if($game->mode == Game::EIGHTBALL && $game->cards->where('team', $otherTeam)->where('revealed', false)->count() == 0) {
             $game->updateStatus('playing', $otherTeam, 'agent');
             $game->setEightBallToHistory($game->users()->fromTeamRole($otherTeam, 'agent')->first()->player);
 
             $title = AppString::get('game.8ball', null, $game->chat->language);
 
         } else {
-            if($game->mode == 'triple') {
+            if($game->mode == Game::TRIPLE) {
                 switch ($game->team) {
                     case 'a':
                         $otherTeam = 'b';

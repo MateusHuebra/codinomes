@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 
@@ -31,7 +32,7 @@ class History implements Action {
         if(!$game) {
             return false;
         }
-        return $game->mode == 'mystery';
+        return $game->mode == Game::MYSTERY;
     }
 
 }

@@ -62,7 +62,7 @@ class SendList implements Action {
             'a' => Game::COLORS[$game->getColor('a')],
             'b' => Game::COLORS[$game->getColor('b')]
         ];
-        if($game->mode == 'triple') {
+        if($game->mode == Game::TRIPLE) {
             $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
         }
 

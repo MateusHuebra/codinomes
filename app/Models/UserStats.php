@@ -20,7 +20,7 @@ class UserStats extends Model
     ];
 
     public static function addAttempt(Game $game, string $team, string $type, BotApi $bot) {
-        $streak = $type == 'ally' && $game->mode != 'mystery' ? $game->countLastStreak() : 0;
+        $streak = $type == 'ally' && $game->mode != Game::MYSTERY ? $game->countLastStreak() : 0;
 
         $master = $game->users()->fromTeamRole($team, 'master')->get();
         self::setStatsForUsers($master, 'master', $type, $streak);

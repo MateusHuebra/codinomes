@@ -59,7 +59,7 @@ class Start implements Action {
         }
 
         $game = Game::where('creator_id', $user->id)
-                    ->where('mode', 'coop')
+                    ->where('mode', Game::COOP)
                     ->where('status', 'lobby')
                     ->first();
         if(!$game) {
@@ -72,7 +72,7 @@ class Start implements Action {
     private function startCoopWithInvite(string $text, User $user, Update $update, BotApi $bot) {
         if(preg_match('/\/start coop_(?<user>[0-9]+)_(?<game>[0-9]+)/u', $text, $matches)) {
             $game = Game::where('creator_id', $matches['user'])
-                        ->where('mode', 'coop')
+                        ->where('mode', Game::COOP)
                         ->where('id', $matches['game'])
                         ->where('status', 'lobby')
                         ->first();

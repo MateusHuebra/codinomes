@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Models\User;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
@@ -20,7 +21,7 @@ class Stats implements Action {
             $bot->sendMessage($update->getChatId(), AppString::get('error.no_enough_stats'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
-        if($user->currentGame() && $user->currentGame()->mode == 'mystery') {
+        if($user->currentGame() && $user->currentGame()->mode == Game::MYSTERY) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.hidden_on_mystery'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
