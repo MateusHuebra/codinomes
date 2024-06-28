@@ -42,10 +42,10 @@ class Mystery extends Classic implements Action {
             $title = AppString::get('game.incorrect', null, $chatLanguage);
             $text = $game->getLastHint();
 
-            $winner = null;
+            $guessData = new GuessData($title, $attemptType, $text);
         }
 
-        return new GuessData($title, $attemptType, $text, $winner);
+        return $guessData;
     }
 
     protected function getEmojiToHandleMessage(string $emoji) {
