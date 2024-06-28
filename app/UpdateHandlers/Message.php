@@ -6,7 +6,7 @@ use App\Actions\Achievements;
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
-use App\Actions\Game\ChosenGuess;
+use App\Actions\Game\ChosenGuess\Factory as ChosenGuessFactory;
 use App\Actions\Game\ChosenHint;
 use App\Actions\Game\Info;
 use App\Actions\Game\Leave;
@@ -89,7 +89,7 @@ class Message implements UpdateHandler {
                 &&
                 $game->team == $user->currentGame()->player->team
             ) {
-                return new ChosenGuess;
+                return ChosenGuessFactory::build($game->mode);
             }
         }
 
