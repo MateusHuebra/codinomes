@@ -11,10 +11,6 @@ use App\Services\Game\Aux\GuessData;
 
 class EightBall extends Classic implements Action {
 
-    protected function getCaption($game, $guessData) {
-        return new Caption($guessData->title, $guessData->title??null, 30, $game->mode == Game::EMOJI);
-    }
-
     protected function handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft,$player, $chatLanguage, $opponentCardsLeft) : GuessData {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
         $attemptType = 'ally';
