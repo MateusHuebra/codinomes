@@ -431,11 +431,11 @@ class Table {
             if($card->revealed) {       
                 if($game->mode == Game::MYSTERY) {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
-                    imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
                     self::markCardAsRevealed($agentsCardImage);
                     if(false === self::highlightCardIfNeeded($agentsCardImage, $card, $highlightCard)) {
                         $textColor = imagecolorallocate($agentsCardImage, 150, 150, 150);
                     }
+                    imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, self::$fontPath, $card->text);
                 }
 
                 if(in_array($card->text, self::EASTER_EGGS)) {
