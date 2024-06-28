@@ -32,20 +32,11 @@ class Classic implements Action {
             return;
         }
 
-        if($update->isType(Update::MESSAGE)) {
-            $card = GameCard::where('game_id', $game->id)
-                ->whereRaw('BINARY text = ?', [$update->getMessageText()])
-                ->first();
-            if(!$card) {
-                return;
-            }
-        } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
-            $data = CDM::toArray($update->getResultId());
-            $card = GameCard::where('game_id', $game->id)
-                ->where('position', $data[CDM::NUMBER])
-                ->first();
-        }
+        $card = $this->getChosenCard($update, $game->id);
 
+        if(!$card) {
+            return;
+        }
         if($card->revealed) {
             return;
         }
@@ -63,24 +54,36 @@ class Classic implements Action {
         $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
         $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
 
-        //correct guess
         if($card->team == $player->team) {
             $guessData = $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, $opponentCardsLeft);
 
-        //black card
         } else if($card->team == 'x') {
             $guessData = $this->handleBlackGuess($game, $cardsLeft, $update, $user, $card, $emoji, $bot, $player, $chatLanguage);
 
-        //incorrect guess
         } else {
             $guessData = $this->handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player);
         }
 
-        $caption = $this->getCaption($game, $guessData);
+        $caption = $this->getCaption($guessData, $game);
         
         Table::send($game, $bot, $caption, $card->position, $guessData->winner);
         UserStats::addAttempt($game, $player->team, $guessData->attemptType, $bot);
 
+    }
+
+    protected function getChosenCard(Update $update, int $gameId) {
+        if($update->isType(Update::MESSAGE)) {
+            return GameCard::where('game_id', $gameId)
+                ->whereRaw('BINARY text = ?', [$update->getMessageText()])
+                ->first();
+            
+        } else if($update->isType(Update::CHOSEN_INLINE_RESULT)) {
+            $data = CDM::toArray($update->getResultId());
+            return GameCard::where('game_id', $gameId)
+                ->where('position', $data[CDM::NUMBER])
+                ->first();
+        }
+        return null;
     }
 
     protected function getEmojis(Game $game) {
@@ -92,8 +95,8 @@ class Classic implements Action {
         ];
     }
 
-    protected function getCaption($game, $guessData) {
-        return new Caption($guessData->title, $guessData->title??null, 30, $game->mode == Game::EMOJI);
+    protected function getCaption(GuessData $guessData, Game $game) {
+        return new Caption($guessData->title, $guessData->title??null, 30, false);
     }
 
     protected function handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft,$player, $chatLanguage, $opponentCardsLeft) : GuessData {

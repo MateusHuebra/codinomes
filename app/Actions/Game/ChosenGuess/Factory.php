@@ -7,11 +7,17 @@ use App\Models\Game;
 class Factory {
 
     static function build($gameMode) {
-        if($gameMode == Game::MYSTERY) {
+        if($gameMode == Game::EIGHTBALL) {
+            return new EightBall;
+        
+        } else if($gameMode == Game::EMOJI) {
+            return new Emoji;
+        
+        } else if($gameMode == Game::MYSTERY) {
             return new Mystery;
         
-        } else if($gameMode == Game::EIGHTBALL) {
-            return new EightBall;
+        } else if($gameMode == Game::TRIPLE) {
+            return new Triple;
         }
         
         return new Classic;

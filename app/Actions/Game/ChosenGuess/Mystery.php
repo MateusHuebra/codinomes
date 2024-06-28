@@ -3,6 +3,7 @@
 namespace App\Actions\Game\ChosenGuess;
 
 use App\Actions\Action;
+use App\Models\Game;
 use App\Models\UserAchievement;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
@@ -10,14 +11,14 @@ use App\Services\Game\Aux\GuessData;
 
 class Mystery extends Classic implements Action {
 
-    protected function getCaption($game, $guessData) {
+    protected function getCaption(GuessData $guessData, Game $game) {
         if($guessData->winner === null) {
             $hint = $game->getLastHint();
             $titleSize = strlen($hint) >= 16 ? 40 : 50;
             return new Caption($hint, null, $titleSize);
 
         } else {
-            return parent::getCaption($game, $guessData);
+            return parent::getCaption($guessData, $game);
         }
     }
 
