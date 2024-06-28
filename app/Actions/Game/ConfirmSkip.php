@@ -82,11 +82,7 @@ class ConfirmSkip implements Action {
             $title = AppString::get('game.8ball', null, $chatLanguage);
 
         } else {
-            if($game->mode == Game::TRIPLE) {
-                $game->nextStatus($currentPlayer->getNextTeam());
-            } else {
-                $game->nextStatus($currentPlayer->getEnemyTeam());
-            }
+            $game->nextStatus($currentPlayer->getNextTeam());
 
             $title = AppString::get('game.skipped', null, $chatLanguage);
         }

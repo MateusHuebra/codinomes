@@ -52,15 +52,7 @@ class Classic implements Action {
         $card->revealed = true;
         $card->save();
 
-        $emojis = [
-            'w' => Game::COLORS['white'],
-            'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->getColor('a')],
-            'b' => Game::COLORS[$game->getColor('b')]
-        ];
-        if($game->mode == Game::TRIPLE) {
-            $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
-        }
+        $emojis = $this->getEmojis($game);
         $emoji = $emojis[$card->team];
 
         if($game->attempts_left!==null) {
@@ -89,6 +81,15 @@ class Classic implements Action {
         Table::send($game, $bot, $caption, $card->position, $guessData->winner);
         UserStats::addAttempt($game, $player->team, $guessData->attemptType, $bot);
 
+    }
+
+    protected function getEmojis(Game $game) {
+        return [
+            'w' => Game::COLORS['white'],
+            'x' => Game::COLORS['black'],
+            'a' => Game::COLORS[$game->getColor('a')],
+            'b' => Game::COLORS[$game->getColor('b')]
+        ];
     }
 
     protected function getCaption($game, $guessData) {
@@ -120,11 +121,7 @@ class Classic implements Action {
 
         //skip
         } else {
-            if($game->mode == Game::TRIPLE) {
-                $game->nextStatus($user->getNextTeam());
-            } else {
-                $game->nextStatus($user->getEnemyTeam());
-            }
+            $game->nextStatus($user->getNextTeam());
 
             $title = AppString::get('game.correct', null, $chatLanguage);
             $text = $game->getLastHint();
@@ -167,11 +164,7 @@ class Classic implements Action {
         
         //skip
         } else {
-            if($game->mode == Game::TRIPLE) {
-                $game->nextStatus($user->getNextTeam());
-            } else {
-                $game->nextStatus($user->getEnemyTeam());
-            }
+            $game->nextStatus($user->getNextTeam());
 
             $title = AppString::get('game.incorrect', null, $chatLanguage);
             $text = $game->getLastHint();

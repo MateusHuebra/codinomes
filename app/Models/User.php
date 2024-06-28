@@ -76,14 +76,21 @@ class User extends Model
     }
 
     public function getNextTeam() : String {
-        switch ($this->currentGame()->player->team) {
-            case 'a':
-                return 'b';
-            case 'b':
-                return 'c';
-            default:
-                return 'a';
+        $game = $this->currentGame();
+        $isTriple = $game->mode == Game::TRIPLE;
+        if($isTriple) {
+            switch ($game->player->team) {
+                case 'a':
+                    return 'b';
+                case 'b':
+                    return 'c';
+                default:
+                    return 'a';
+            }
+        } else {
+            return $this->getEnemyTeam();
         }
+        
     }
 
     public function getEnemyTeams(bool $triple = false) {
