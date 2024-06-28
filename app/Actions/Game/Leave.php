@@ -30,8 +30,14 @@ class Leave implements Action {
 
         if($game->mode == 'coop') {
             if($game->creator_id == $user->id) {
+                $partner = $game->users()
+                                 ->where('id', '!=', $user->id)
+                                 ->first();
                 $game->stop($bot);
                 $bot->sendMessage($user->id, AppString::get('game.stopped'));
+                if($partner) {
+                    $bot->sendMessage($partner->id, AppString::get('game.stopped'));
+                }
                 return;
             }
         }
