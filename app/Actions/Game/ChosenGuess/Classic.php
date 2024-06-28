@@ -96,7 +96,7 @@ class Classic implements Action {
     }
 
     protected function getCaption(GuessData $guessData, Game $game) {
-        return new Caption($guessData->title, $guessData->title??null, 30, false);
+        return new Caption($guessData->title, $guessData->text??null, 30, false);
     }
 
     protected function handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft,$player, $chatLanguage, $opponentCardsLeft) : GuessData {

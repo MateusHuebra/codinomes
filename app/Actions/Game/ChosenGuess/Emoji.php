@@ -10,7 +10,7 @@ use App\Services\Game\Aux\GuessData;
 class Emoji extends Classic implements Action {
 
     protected function getCaption(GuessData $guessData, Game $game) {
-        return new Caption($guessData->title, $guessData->title??null, 30, true);
+        return new Caption($guessData->title, $guessData->text??null, 30, true);
     }
 
 }

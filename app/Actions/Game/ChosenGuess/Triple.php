@@ -4,10 +4,6 @@ namespace App\Actions\Game\ChosenGuess;
 
 use App\Actions\Action;
 use App\Models\Game;
-use App\Models\UserAchievement;
-use App\Services\AppString;
-use App\Services\Game\Aux\Caption;
-use App\Services\Game\Aux\GuessData;
 
 class Triple extends Classic implements Action {
 
