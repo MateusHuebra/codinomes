@@ -9,11 +9,19 @@ use TelegramBot\Api\BotApi;
 class Start implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
-        $chat = $update->findChat();
-        $game = $chat->currentGame();
+        if($update->isChatType('private')) {
+            $user = $update->findUser();
 
+        } else if($update->isChatType('supergroup')) {
+            $chat = $update->findChat();
+
+        } else {
+            return;
+        }
+        
+        $game = ($chat??$user)->currentGame();
         if(!$game) {
-            $bot->deleteMessage($chat->id, $update->getMessageId());
+            $bot->deleteMessage($update->getChatId(), $update->getMessageId());
             return;
         }
         if(!in_array($game->status, ['creating', 'lobby'])) {
@@ -23,7 +31,6 @@ class Start implements Action {
             return;
         }
 
-        $user = $update->findUser();
         $game->start($bot, $user, $update->getId());
     }
 

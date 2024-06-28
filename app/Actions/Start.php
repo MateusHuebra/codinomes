@@ -54,8 +54,25 @@ class Start implements Action {
     }
 
     private function startCoop(string $text, User $user, Update $update, BotApi $bot) {
+        if(false !== $this->startCoopWithInvite($text, $user, $update, $bot)) {
+            return;
+        }
+
+        $game = Game::where('creator_id', $user->id)
+                    ->where('mode', 'coop')
+                    ->where('status', 'lobby')
+                    ->first();
+        if(!$game) {
+            return;
+        }
+
+        return $game->start($bot);
+    }
+
+    private function startCoopWithInvite(string $text, User $user, Update $update, BotApi $bot) {
         if(preg_match('/\/start coop_(?<user>[0-9]+)_(?<game>[0-9]+)/u', $text, $matches)) {
             $game = Game::where('creator_id', $matches['user'])
+                        ->where('mode', 'coop')
                         ->where('id', $matches['game'])
                         ->where('status', 'lobby')
                         ->first();
@@ -86,6 +103,7 @@ class Start implements Action {
             ]), 'MarkdownV2');
             return true;
         }
+        return false;
     }
 
 }

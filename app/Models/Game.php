@@ -226,7 +226,7 @@ class Game extends Model
         }
         $this->updateStatus('playing', $firstTeam, 'master');
 
-        $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, $this->chat->language);
+        $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, ($this->chat??$this->creator)->language);
         try {
             $bot->editMessageText($this->chat_id??$this->creator_id, $this->lobby_message_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}

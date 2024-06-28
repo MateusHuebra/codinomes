@@ -13,11 +13,16 @@ class GameCard extends Model
     private static $cardsCounts = [];
 
     public static function set(Game $game, string $firstTeam) : Bool {
-        if($game->chat->packs()->count() == 0) {
-            $game->chat->packs()->attach(1);
-        }
-        $cards = $game->chat->packs->getCards();
+        if($game->mode == 'coop') {
+            $cards = Card::where('pack_id', 1)->get();
 
+        } else {
+            if($game->chat->packs()->count() == 0) {
+                $game->chat->packs()->attach(1);
+            }
+            $cards = $game->chat->packs->getCards();
+        }
+        
         self::setCardsCountsByMode($game->mode);
 
         if($cards->count() < self::$cardsCounts['max']) {
