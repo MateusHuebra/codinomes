@@ -31,7 +31,8 @@ class Start implements Action {
             return;
         }
 
-        $game->start($bot, $user, $update->getId());
+        $user = $user??$update->findUser();
+        $game->start($bot, $user??$update->findUser(), $update->getId());
     }
 
 }
