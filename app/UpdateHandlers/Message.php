@@ -9,6 +9,7 @@ use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess;
 use App\Actions\Game\ChosenHint;
 use App\Actions\Game\Info;
+use App\Actions\Game\Leave;
 use App\Actions\Game\SendList;
 use App\Actions\Game\Table;
 use App\Actions\GetColors;
@@ -20,8 +21,10 @@ use App\Actions\Help;
 use App\Actions\Language\Get;
 use App\Actions\LookingForAGame;
 use App\Actions\Notify;
+use App\Actions\OfficialGroupOnly;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
+use App\Actions\PrivateCoopMessage;
 use App\Actions\ReactToMessage;
 use App\Actions\Start;
 use App\Actions\Stats;
@@ -111,6 +114,10 @@ class Message implements UpdateHandler {
                 return new ReactToMessage('❤️');
             }
         }
+
+        if($update->isChatType('private')) {
+            return new PrivateCoopMessage;
+        }
         
         return null;
     }
@@ -146,6 +153,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_emoji', 'novo_emoji'])) {
             return new Create('emoji');
 
+        } else if(in_array($command, ['new_coop', 'novo_coop'])) {
+            return new Create('coop');
+
         } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
             return new Create('random');
 
@@ -157,6 +167,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['stop', 'parar'])) {
             return new Stop;
+
+        } else if(in_array($command, ['leave', 'sair'])) {
+            return new Leave;
 
         } else if(in_array($command, ['history', 'historico'])) {
             return new History;
@@ -202,6 +215,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'test') {
             return new Test;
+
+        } else if($command == 'off') {
+            return new OfficialGroupOnly;
 
         } else if($command == 'info') {
             return new Info;

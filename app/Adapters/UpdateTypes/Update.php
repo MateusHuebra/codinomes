@@ -109,6 +109,13 @@ abstract class Update {
     public function isChatType(string $type) {
         return $this->getChatType() === $type;
     }
+
+    public function getCallbackQueryId() {
+        if(!isset($this->callbackQueryId)) {
+            $this->callbackQueryId = 1;
+        }
+        return $this->callbackQueryId;
+    }
     #endregion
     public function getReplyToMessage() {
         if(!isset($this->replyToMessage)) {

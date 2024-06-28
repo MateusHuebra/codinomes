@@ -14,7 +14,9 @@ class StopAbandonedLobbies {
         $bot = new BotApi(env('TG_TOKEN'));
         $now = strtotime('now');
         
-        $games = Game::whereIn('status', ['creating', 'lobby'])->get();
+        $games = Game::whereIn('status', ['creating', 'lobby'])
+                      ->where('mode', '!=', 'coop')
+                      ->get();
         foreach ($games as $game) {
             $time = strtotime($game->status_updated_at);
             if($now - $time >= 600) { //10 minutes

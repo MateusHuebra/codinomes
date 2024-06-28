@@ -2,8 +2,6 @@
 
 namespace App\Services\Game;
 
-use App\Actions\Game\ChosenHint;
-use App\Actions\Game\Hint;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\UserAchievement;
@@ -32,7 +30,7 @@ class Table {
     static function send(Game $game, BotApi $bot, Caption $caption, int $highlightCard = null, string $winner = null, bool $sendToBothMasters = false) {
         self::setVarsByGameMode($game->mode);
         self::$fontPath = public_path('open-sans.bold.ttf');
-        $chatLanguage = $game->chat->language;
+        $chatLanguage = ($game->chat??$game->creator)->language;
         $backgroundColor = ($winner) ? $game->getColor($winner) : $game->getColor($game->team);
 
         if(in_array($game->mode, ['crazy', 'sp_crazy'])) {
@@ -41,7 +39,10 @@ class Table {
             $cards = $game->cards;
         }
         $leftA = $cards->where('team', 'a')->where('revealed', false)->count();
-        $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
+        $leftB = null;
+        if($game->mode != 'coop') {
+            $leftB = $cards->where('team', 'b')->where('revealed', false)->count();
+        }
         $leftC = null;
         if($game->mode == 'triple') {
             $leftC = $cards->where('team', 'c')->where('revealed', false)->count();
@@ -290,7 +291,7 @@ class Table {
         }
     }
 
-    private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB, int $leftC = null) {
+    private static function addCardsLeft($masterImage, $agentsImage, Game $game, int $leftA, int $leftB = null, int $leftC = null) {
         $fontSize = 65;
         if($masterImage) {
             $textColor = imagecolorallocate($masterImage, 255, 255, 255);

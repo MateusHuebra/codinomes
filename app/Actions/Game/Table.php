@@ -50,7 +50,7 @@ class Table implements Action {
             }
 
         } else {
-            $bot->sendMessage($chat->id, AppString::get('error.no_game'), null, false, $update->getMessageId(), null, false, null, null, true);
+            $bot->sendMessage($update->getChatId(), AppString::get('error.no_game'), null, false, $update->getMessageId(), null, false, null, null, true);
         }
         
     }

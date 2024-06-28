@@ -46,8 +46,9 @@ class Game extends Model
         '8ball' => '🎱',
         'crazy' => '🤪',
         'sp_crazy' => '🤯',
+        'emoji' => '📲',
         'triple' => '3️⃣',
-        'emoji' => '📲'
+        'coop' => '👥'
     ];
 
     public $timestamps = false;
@@ -190,40 +191,47 @@ class Game extends Model
 
     public function start(BotApi $bot, User $user = null, $callbackId = null) : Bool {
         if(!in_array($this->status, ['creating', 'lobby'])) {
-            $bot->deleteMessage($this->chat_id, $this->message_id);
             return false;
         }
 
         if($callbackId && (!$user || !$this->hasPermission($user, $bot))) {
-            $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.admin_only');
+            $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.admin_only');
             return false;
         }
 
         if(!$this->hasRequiredPlayers()) {
-            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_required_players') : null;
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.no_required_players') : null;
             if(env('APP_ENV')!='local') {
                 return false;
             }
         }
 
-        if($this->mode == 'triple') {
-            $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
-        } else {
-            $firstTeam = rand(0, 1) ? 'a' : 'b';
+        switch ($this->mode) {
+            case 'triple':
+                $firstTeam = array('a', 'b', 'c')[rand(0, 2)];
+                break;
+
+            case 'coop':
+                $firstTeam = 'a';
+                break;
+            
+            default:
+                $firstTeam = rand(0, 1) ? 'a' : 'b';
+                break;
         }
         $isCardsSetted = GameCard::set($this, $firstTeam);
         if(!$isCardsSetted) {
-            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id, 'error.no_enough_cards') : null;
+            $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.no_enough_cards') : null;
             return false;
         }
         $this->updateStatus('playing', $firstTeam, 'master');
 
-        $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, $this->chat->language);
+        $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, ($this->chat??$this->creator)->language);
         try {
-            $bot->editMessageText($this->chat_id, $this->lobby_message_id, $text, 'MarkdownV2');
+            $bot->editMessageText($this->chat_id??$this->creator_id, $this->lobby_message_id, $text, 'MarkdownV2');
         } catch(Exception $e) {}
 
-        $caption = new Caption(AppString::get('game.started', null, $this->chat->language), null, 50);
+        $caption = new Caption(AppString::get('game.started', null, ($this->chat??$this->creator)->language), null, 50);
         Table::send($this, $bot, $caption);
 
         return true;
@@ -232,15 +240,15 @@ class Game extends Model
     public function stop(BotApi $bot, string $winner = null) {
         if($winner == null) {
             if(in_array($this->status, ['creating', 'lobby'])) {
-                $bot->tryToDeleteMessage($this->chat_id, $this->lobby_message_id);
+                $bot->tryToDeleteMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
             } else {
-                $bot->tryToDeleteMessage($this->chat_id, $this->message_id);
-                $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+                $bot->tryToDeleteMessage($this->chat_id??$this->creator_id, $this->message_id);
+                $bot->tryToUnpinChatMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
             }
             $this->status = 'canceled';
         } else {
             $this->status = 'ended';
-            $bot->tryToUnpinChatMessage($this->chat_id, $this->lobby_message_id);
+            $bot->tryToUnpinChatMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
         }
         
         UserStats::addGame($this, $winner);
@@ -314,7 +322,7 @@ class Game extends Model
         if($this->hasRequiredPlayers === null) {
             if(
                 (
-                    $this->mode != 'triple'
+                    !in_array($this->mode, ['triple', 'coop'])
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0)
                 )
@@ -323,6 +331,12 @@ class Game extends Model
                     $this->mode == 'triple'
                     &&
                     ($this->masterA->count()==0 || $this->agentsA->count()==0 || $this->masterB->count()==0 || $this->agentsB->count()==0|| $this->masterC->count()==0 || $this->agentsC->count()==0)
+                )
+                ||
+                (
+                    $this->mode == 'coop'
+                    &&
+                    ($this->masterA->count()==0 || $this->agentsA->count()==0)
                 )
             ) {
                 $this->hasRequiredPlayers = false;
@@ -338,18 +352,26 @@ class Game extends Model
             $this->setPlayerTeamAndRoles();
         }
 
-        $string = 'teams_lists';
         $empty = '_'.AppString::get('game.empty').'_';
         $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
-        $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
         $vars = [
             'master_a' => $this->masterA->get()->getStringList()??$empty,
             'agents_a' => $this->agentsA->get()->getStringList()??$empty,
-            'master_b' => $this->masterB->get()->getStringList()??$empty,
-            'agents_b' => $this->agentsB->get()->getStringList()??$empty,
-            'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : ''),
-            'b' => $teamB . ($winner == 'b' ? ' '.AppString::getParsed('game.won') : '')
+            'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : '')
         ];
+
+        if($this->mode != 'coop') {
+            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
+            $vars+= [
+                'master_b' => $this->masterB->get()->getStringList()??$empty,
+                'agents_b' => $this->agentsB->get()->getStringList()??$empty,
+                'b' => $teamB . ($winner == 'b' ? ' '.AppString::getParsed('game.won') : '')
+            ];
+            $string = 'teams_lists';
+        } else {
+            $string = 'teams_lists_coop';
+        }
+
         if($this->mode == 'triple') {
             $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
             $vars+= [
