@@ -9,7 +9,7 @@ class GuessData {
     public $winner;
     public $attemptType;
 
-    public function __construct(string $title, string $attemptType, string $text = null, string $winner = null) {
+    public function __construct(string $title = null, string $attemptType = null, string $text = null, string $winner = null) {
         $this->title = $title;
         $this->text = $text;
         $this->winner = $winner;

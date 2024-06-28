@@ -26,12 +26,8 @@ class Mystery extends Classic implements Action {
         $attemptType = $card->team == 'w' ? 'white' : 'opponent';
         //won
         if($game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
-            $color = $game->getColor($card->team);
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_color', null, $chatLanguage);
-            $winner = $card->team;
+            $guessData = $this->getWinningGuessData($game, $card->team, $chatLanguage);
+            $guessData->attemptType = $attemptType;
             
             $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
             UserAchievement::add($agents, 'impostor', $bot, $game->chat_id);

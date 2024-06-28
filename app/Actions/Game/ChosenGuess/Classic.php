@@ -106,18 +106,15 @@ class Classic implements Action {
                 UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
             }
 
-            $color = $game->getColor($player->team);
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_color', null, $chatLanguage);
-            $winner = $player->team;
+            $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
+            $guessData->attemptType =$attemptType;
             
         //next
         } else if($game->attempts_left===null || $game->attempts_left >= 0) {
             $title = AppString::get('game.correct', null, $chatLanguage);
             $text = $game->getLastHint();
-            $winner = null;
+
+            $guessData = new GuessData($title, $attemptType, $text);
 
         //skip
         } else {
@@ -126,10 +123,10 @@ class Classic implements Action {
             $title = AppString::get('game.correct', null, $chatLanguage);
             $text = $game->getLastHint();
 
-            $winner = null;
+            $guessData = new GuessData($title, $attemptType, $text);
         }
 
-        return new GuessData($title, $attemptType, $text, $winner); 
+        return $guessData; 
     }
 
     protected function handleBlackGuess($game, $cardsLeft, $update, $user, $card, $emoji, $bot, $player, $chatLanguage) : GuessData {
@@ -152,12 +149,8 @@ class Classic implements Action {
         $attemptType = $card->team == 'w' ? 'white' : 'opponent';
         //won
         if($game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
-            $color = $game->getColor($card->team);
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_color', null, $chatLanguage);
-            $winner = $card->team;
+            $guessData = $this->getWinningGuessData($game, $card->team, $chatLanguage);
+            $guessData->attemptType = $attemptType;
             
             $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
             UserAchievement::add($agents, 'impostor', $bot, $game->chat_id);
@@ -169,10 +162,10 @@ class Classic implements Action {
             $title = AppString::get('game.incorrect', null, $chatLanguage);
             $text = $game->getLastHint();
 
-            $winner = null;
+            $guessData = new GuessData($title, $attemptType, $text);
         }
 
-        return new GuessData($title, $attemptType, $text, $winner);
+        return $guessData;
     }
 
     protected function handleMessage(Update $update, User $user, GameCard $card, Game $game, $emoji, BotApi $bot, bool $isGuessCorrect) {
@@ -201,6 +194,18 @@ class Classic implements Action {
 
     protected function getStringToHandleMessage(bool $isGuessCorrect) {
         return $isGuessCorrect ? 'attempted_correct' : 'attempted';
+    }
+
+    protected function getWinningGuessData(Game $game, string $winner, string $chatLanguage) {
+        $guessData = new GuessData;
+        $color = $game->getColor($winner);
+        $guessData->title = AppString::get('game.win', [
+            'team' => AppString::get('color.'.$color)
+        ], $chatLanguage);
+        $guessData->text = AppString::get('game.win_color', null, $chatLanguage);
+        $guessData->winner = $winner;
+
+        return $guessData;
     }
 
 }

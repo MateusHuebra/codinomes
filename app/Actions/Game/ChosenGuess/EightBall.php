@@ -18,6 +18,7 @@ class EightBall extends Classic implements Action {
         if($game->attempts_left===null || $game->attempts_left >= 0) {
             if($cardsLeft == 0) {
                 $title = AppString::get('game.8ball', null, $chatLanguage);
+                $text = null;
 
             } else {
                 $title = AppString::get('game.correct', null, $chatLanguage);
@@ -33,6 +34,7 @@ class EightBall extends Classic implements Action {
                 $game->setEightBallToHistory($player);
 
                 $title = AppString::get('game.8ball', null, $chatLanguage);
+                $text = null;
 
             } else {
                 $game->nextStatus($user->getEnemyTeam());
@@ -52,12 +54,9 @@ class EightBall extends Classic implements Action {
         if($cardsLeft == 0) {
             $this->handleMessage($update, $user, $card, $game, $emoji, $bot, true);
             $attemptType = 'ally';
-            $color = $game->getColor($player->team);
-            $title = AppString::get('game.win', [
-                'team' => AppString::get('color.'.$color)
-            ], $chatLanguage);
-            $text = AppString::get('game.win_color', null, $chatLanguage);
-            $winner = $player->team;
+            $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
+            $guessData->attemptType = $attemptType;
+
         //black
         } else {
             $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
@@ -68,11 +67,13 @@ class EightBall extends Classic implements Action {
             ], $chatLanguage);
             $text = AppString::get('game.win_black', null, $chatLanguage);
             $winner = $user->getEnemyTeam();
+
+            $guessData = new GuessData($title, $text, $winner, $attemptType);
             
             UserAchievement::checkBlackCard($game, $cardsLeft, $player, $bot);
         }
 
-        return new GuessData($title, $attemptType, $text, $winner);
+        return $guessData;
     }
 
     protected function handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player) : GuessData {
@@ -85,6 +86,7 @@ class EightBall extends Classic implements Action {
             $game->setEightBallToHistory($player);
 
             $title = AppString::get('game.8ball', null, $chatLanguage);
+            $text = null;
 
         } else {
             $game->nextStatus($user->getEnemyTeam());
