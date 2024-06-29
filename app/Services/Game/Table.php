@@ -205,13 +205,16 @@ class Table {
             $caption->isEmoji = false;
             $subject = !is_null($caption->text) ? 'text' : 'title';
             if(preg_match('/^(?<hint>\S+)( +(?<number>[0-9∞]))?$/u', $caption->{$subject}, $matches)) {
-                $emoji = \Emoji\is_single_emoji($matches['hint'])['hex_str'];
-                $emojiPath = public_path("images/openmoji-72x72-color/{$emoji}.png");
-                if(file_exists($emojiPath)) {
-                    $caption->{$subject} = '       '.$matches['number'];
-                    $caption->isEmoji = true;
-                } else {
-                    $caption->{$subject} = $matches['number'];
+                $emoji = \Emoji\is_single_emoji($matches['hint']);
+                if($emoji) {
+                    $emoji = $emoji['hex_str'];
+                    $emojiPath = public_path("images/openmoji-72x72-color/{$emoji}.png");
+                    if(file_exists($emojiPath)) {
+                        $caption->{$subject} = '       '.$matches['number'];
+                        $caption->isEmoji = true;
+                    } else {
+                        $caption->{$subject} = $matches['number'];
+                    }
                 }
             }          
         }
