@@ -25,6 +25,7 @@ class Mystery extends Classic implements Action {
     protected function handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player) : GuessData {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
         $attemptType = $card->team == 'w' ? 'white' : 'opponent';
+        
         //won
         if($game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
             $guessData = $this->getWinningGuessData($game, $card->team, $chatLanguage);
