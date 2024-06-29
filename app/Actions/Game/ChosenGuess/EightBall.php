@@ -68,7 +68,7 @@ class EightBall extends Classic implements Action {
             $text = AppString::get('game.win_black', null, $chatLanguage);
             $winner = $user->getEnemyTeam();
 
-            $guessData = new GuessData($title, $text, $winner, $attemptType);
+            $guessData = new GuessData($title, $attemptType, $text, $winner);
             
             UserAchievement::checkBlackCard($game, $cardsLeft, $player, $bot);
         }
