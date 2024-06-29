@@ -498,7 +498,7 @@
             "*🏆 Conquistas de {user}* 「{from}\\/{to}」"
         ],
         "new": [
-            "🏆 Conquista alcançada\\!\n*\\「 {title} 」*\n\nPor {users}"
+            "🏆 Conquista alcançada\\!\n*「 {title} 」*\n\nPor {users}"
         ],
         "and": [
             "e"
