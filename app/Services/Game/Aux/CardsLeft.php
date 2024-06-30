@@ -13,7 +13,7 @@ class CardsLeft {
     public $B;
     public $C;
 
-    public function __construct(int $A, int $B = null, int $C = null) {
+    public function __construct($A, $B = null, $C = null) {
         $this->A = $A;
         $this->B = $B;
         $this->C = $C;
