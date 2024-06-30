@@ -261,7 +261,7 @@ class Classic {
         imagedestroy($squareB);
     }
 
-    protected function getCardsLeftSquare(Game $game, int $cardsLeft, string $team, $textColor) {
+    protected function getCardsLeftSquare(Game $game, $cardsLeft, string $team, $textColor) {
         $square = imagecreatefrompng(public_path('images/'.$game->getColor($team).'_square.png'));
         $axisA = self::getAxisToCenterText(65, $cardsLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
         imagefttext($square, 65, 0, $axisA['x'], $axisA['y'], $textColor, $this->fontPath, $cardsLeft);
