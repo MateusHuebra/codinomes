@@ -1,16 +1,11 @@
 <?php
 
 namespace App\Services\Game\ImageGen;
-
 use App\Models\Game;
-use App\Services\Game\Aux\Images;
 use App\Services\Game\Aux\CardsLeft;
+use App\Services\Game\Aux\Images;
 
-class Triple Extends Classic {
-
-    public function addMode(Images $images, string $gameMode) {
-        return;
-    }
+class Copp Extends Classic {
 
     public function addCardsLeft(Images $images, Game $game, CardsLeft $cardsLeft) {
         if($images->masterImage) {
@@ -19,30 +14,22 @@ class Triple Extends Classic {
         if($images->agentsImage) {
             $textColor = imagecolorallocate($images->agentsImage, 255, 255, 255);
         }
-
+        
         $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, 'a', $textColor);
-        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, 'b', $textColor);
-        $squareC = $this->getCardsLeftSquare($game, $cardsLeft->C, 'c', $textColor);
         
         if($images->masterImage) {
-            $this->AddCardsLeftToSingleImage($images->masterImage, $squareA, $squareB, $squareC);
+            $this->AddCardsLeftToSingleImage($images->masterImage, $squareA);
         }
         if($images->agentsImage) {
-            $this->AddCardsLeftToSingleImage($images->agentsImage, $squareA, $squareB, $squareC);
+            $this->AddCardsLeftToSingleImage($images->agentsImage, $squareA);
         }
-        
+
         imagedestroy($squareA);
-        imagedestroy($squareB);
-        imagedestroy($squareC);
     }
 
     protected function AddCardsLeftToSingleImage($image, $squareA, $squareB = null, $squareC = null) {
         $x = parent::BORDER;
         imagecopy($image, $squareA, $x, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
-        $x = parent::BORDER+(1.5*parent::CARD_WIDTH);
-        imagecopy($image, $squareB, $x, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
-        $x = parent::BORDER+(3*parent::CARD_WIDTH);
-        imagecopy($image, $squareC, $x, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
     }
 
 }

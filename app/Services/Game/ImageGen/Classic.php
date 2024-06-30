@@ -240,77 +240,39 @@ class Classic {
     }
 
     public function addCardsLeft(Images $images, Game $game, CardsLeft $cardsLeft) {
-        $fontSize = 65;
         if($images->masterImage) {
             $textColor = imagecolorallocate($images->masterImage, 255, 255, 255);
         }
         if($images->agentsImage) {
             $textColor = imagecolorallocate($images->agentsImage, 255, 255, 255);
         }
-        if($images->masterImage || $game->mode != Game::MYSTERY) {
-            $squareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
-            $axisA = self::getAxisToCenterText($fontSize, $cardsLeft->A, self::CARD_WIDTH, self::CARD_HEIGHT);
-            imagefttext($squareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, $this->fontPath, $cardsLeft->A);
-            if($game->mode != Game::COOP) {
-                $squareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
-                $axisB = self::getAxisToCenterText($fontSize, $cardsLeft->B, self::CARD_WIDTH, self::CARD_HEIGHT);
-                imagefttext($squareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, $this->fontPath, $cardsLeft->B);
-            }
-            if($game->mode == Game::TRIPLE) {
-                $squareC = imagecreatefrompng(public_path('images/'.$game->getColor('c').'_square.png'));
-                $axisC = self::getAxisToCenterText($fontSize, $cardsLeft->C, self::CARD_WIDTH, self::CARD_HEIGHT);
-                imagefttext($squareC, $fontSize, 0, $axisC['x'], $axisC['y'], $textColor, $this->fontPath, $cardsLeft->C);
-            }
-        }
-        if($game->mode == Game::MYSTERY) {
-            $mysterySquareA = imagecreatefrompng(public_path('images/'.$game->getColor('a').'_square.png'));
-            $mysterySquareB = imagecreatefrompng(public_path('images/'.$game->getColor('b').'_square.png'));
-            $mysteryLeft = '?';
-            $axisA = self::getAxisToCenterText($fontSize, $mysteryLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
-            $axisB = self::getAxisToCenterText($fontSize, $mysteryLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
-            imagefttext($mysterySquareA, $fontSize, 0, $axisA['x'], $axisA['y'], $textColor, $this->fontPath, $mysteryLeft);
-            imagefttext($mysterySquareB, $fontSize, 0, $axisB['x'], $axisB['y'], $textColor, $this->fontPath, $mysteryLeft);
-        }
-        $y = 0;
+
+        $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, 'a', $textColor);
+        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, 'b', $textColor);
+        
         if($images->masterImage) {
-            $x = self::BORDER;
-            imagecopy($images->masterImage, $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            if($game->mode == Game::TRIPLE) {
-                $x = self::BORDER+(1.5*self::CARD_WIDTH);
-                imagecopy($images->masterImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-                $x = self::BORDER+(3*self::CARD_WIDTH);
-                imagecopy($images->masterImage, $squareC, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            } else if($game->mode != Game::COOP) {
-                $x = self::BORDER+(3*self::CARD_WIDTH);
-                imagecopy($images->masterImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            }
+            $this->AddCardsLeftToSingleImage($images->masterImage, $squareA, $squareB);
         }
         if($images->agentsImage) {
-            $x = self::BORDER;
-            imagecopy($images->agentsImage, $mysterySquareA ?? $squareA, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            if($game->mode == Game::TRIPLE) {
-                $x = self::BORDER+(1.5*self::CARD_WIDTH);
-                imagecopy($images->agentsImage, $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-                $x = self::BORDER+(3*self::CARD_WIDTH);
-                imagecopy($images->agentsImage, $squareC, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            } else if($game->mode != Game::COOP) {
-                $x = self::BORDER+(3*self::CARD_WIDTH);
-                imagecopy($images->agentsImage, $mysterySquareB ?? $squareB, $x, $y, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-            }
+            $this->AddCardsLeftToSingleImage($images->agentsImage, $squareA, $squareB);
         }
-        if($images->masterImage || $game->mode != Game::MYSTERY) {
-            imagedestroy($squareA);
-            if($game->mode != Game::COOP) {
-                imagedestroy($squareB);
-            }
-            if($game->mode == Game::TRIPLE) {
-                imagedestroy($squareC);
-            }
-        }
-        if($game->mode == Game::MYSTERY) {
-            imagedestroy($mysterySquareA);
-            imagedestroy($mysterySquareB);
-        }
+
+        imagedestroy($squareA);
+        imagedestroy($squareB);
+    }
+
+    protected function getCardsLeftSquare(Game $game, $cardsLeft, string $team, $textColor) {
+        $square = imagecreatefrompng(public_path('images/'.$game->getColor($team).'_square.png'));
+        $axisA = self::getAxisToCenterText(65, $cardsLeft->A, self::CARD_WIDTH, self::CARD_HEIGHT);
+        imagefttext($square, 65, 0, $axisA['x'], $axisA['y'], $textColor, $this->fontPath, $cardsLeft->A);
+        return $square;
+    }
+
+    protected function AddCardsLeftToSingleImage($image, $squareA, $squareB = null, $squareC = null) {
+        $x = self::BORDER;
+        imagecopy($image, $squareA, $x, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+        $x = self::BORDER+(3*self::CARD_WIDTH);
+        imagecopy($image, $squareB, $x, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
     }
 
     protected function getAxisToCenterText($fontSize, $text, $width, $height) {
