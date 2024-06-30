@@ -5,7 +5,7 @@ use App\Models\Game;
 use App\Services\Game\Aux\CardsLeft;
 use App\Services\Game\Aux\Images;
 
-class Copp Extends Classic {
+class Coop Extends Classic {
 
     public function addCardsLeft(Images $images, Game $game, CardsLeft $cardsLeft) {
         if($images->masterImage) {

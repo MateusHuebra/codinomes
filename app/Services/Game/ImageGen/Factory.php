@@ -9,8 +9,16 @@ class Factory {
         if($gameMode == Game::FAST) {
             return new Fast;
         
-        }
+        } else if($gameMode == Game::MYSTERY) {
+            return new Mystery;
+
+        } else if($gameMode == Game::TRIPLE) {
+            return new Triple;
         
+        } else if($gameMode == Game::COOP) {
+            return new Coop;
+        }
+
         return new Classic;
     }
 
