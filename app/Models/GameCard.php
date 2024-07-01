@@ -14,40 +14,46 @@ class GameCard extends Model
 
     public static function set(Game $game, string $firstTeam) : Bool {
         if($game->mode == Game::COOP) {
-            $cards = Card::where('pack_id', 1)->get();
+            $cardsToBeAdded = Card::where('pack_id', 1)->get();
 
         } else {
             if($game->chat->packs()->count() == 0) {
                 $game->chat->packs()->attach(1);
             }
-            $cards = $game->chat->packs->getCards();
+            $cardsToBeAdded = $game->chat->packs->getCards();
         }
         
         self::setCardsCountsByMode($game->mode);
 
-        if($cards->count() < self::$cardsCounts['max']) {
+        if($cardsToBeAdded->count() < self::$cardsCounts['max']) {
             return false;
-        } else if($game->mode == Game::SUPER_CRAZY && $cards->count() < self::$cardsCounts['max']*2) {
+        } else if($game->mode == Game::SUPER_CRAZY && $cardsToBeAdded->count() < self::$cardsCounts['max']*2) {
             return false;
         }
 
-        $randomizedCards = $cards->random(self::$cardsCounts['max']);
-        $shuffledCards = $randomizedCards->toArray();
-        shuffle($shuffledCards);
-        $shuffledCards = self::getColoredCards($shuffledCards, $firstTeam, $game->mode == Game::TRIPLE);
-
-        foreach ($shuffledCards as $key => $card) {
+        $cardsToBeAdded = $cardsToBeAdded->random(self::$cardsCounts['max']);
+        $cardsToBeAdded = $cardsToBeAdded->shuffle();
+        $gameCards = new Collection();
+        
+        $position = 0;
+        foreach ($cardsToBeAdded as $card) {
             $gameCard = new GameCard;
             $gameCard->game_id = $game->id;
-            $gameCard->position = $key;
-            $gameCard->text = $card['text'];
-            $gameCard->team = $card['team']??'w';
-            $gameCard->revealed = false;
-            if(env('APP_ENV')=='local') {
-                $gameCard->revealed = rand(0,1)?true:false;
-            }
-            $gameCard->save();
+            $gameCard->position = $position;
+            $gameCard->text = $card->text;
+            $gameCard->revealed = (env('APP_ENV')=='local') ? rand(0,1) : false;
+            $gameCards->add($gameCard);
+            $position++;
         }
+
+        $teamCount = self::getTeamCount($firstTeam, $game->mode);
+
+        $gameCards = self::setColors($gameCards, $teamCount['a'], 'a');
+        $gameCards = self::setColors($gameCards, $teamCount['b'], 'b');
+        $gameCards = self::setColors($gameCards, $teamCount['c'], 'c');
+        $gameCards = self::setColors($gameCards, $teamCount['w'], 'w');
+        $gameCards = self::setColors($gameCards, $teamCount['x'], 'x');
+
         return true;
     }
 
@@ -82,13 +88,6 @@ class GameCard extends Model
         $whiteCount = $cards->where('team', 'w')->count();
         $blackCount = $cards->where('team', 'x')->count();
 
-        var_dump([
-            'aTeamCount' => $aTeamCount,
-            'bTeamCount' => $bTeamCount,
-            'whiteCount' => $whiteCount,
-            'blackCount' => $blackCount
-        ]);
-
         $cards = self::setColors($cards, $aTeamCount, 'a');
         $cards = self::setColors($cards, $bTeamCount, 'b');
         $cards = self::setColors($cards, $whiteCount, 'w');
@@ -114,6 +113,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 4,
                     'black' => 1,
+                    'white' => 2,
                     'max' => 12
                 ];
                 break;
@@ -122,6 +122,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 8,
                     'black' => 7,
+                    'white' => 0,
                     'max' => 24
                 ];
                 break;
@@ -130,6 +131,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 7,
                     'black' => 1,
+                    'white' => 8,
                     'max' => 24
                 ];
                 break;
@@ -138,6 +140,7 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 7,
                     'black' => 0,
+                    'white' => 3,
                     'max' => 24
                 ];
                 break;
@@ -146,55 +149,30 @@ class GameCard extends Model
                 self::$cardsCounts = [
                     'base' => 8,
                     'black' => 1,
+                    'white' => 6,
                     'max' => 24
                 ];
                 break;
         }
     }
 
-    private static function getColoredCards(array $shuffledCards, string $firstTeam, bool $triple = false) {
+    private static function getTeamCount(string $firstTeam, string $gameMode) {
         $teams = [
             'a' => self::$cardsCounts['base'] + ($firstTeam=='a'?1:0),
-            'b' => self::$cardsCounts['base'] + ($firstTeam=='b'?1:0),
+            'b' => $gameMode == Game::COOP
+                   ? 0
+                   : self::$cardsCounts['base'] + ($firstTeam=='b'?1:0),
+            'c' => $gameMode == Game::TRIPLE
+                   ? self::$cardsCounts['base'] + ($firstTeam=='c'?1:0)
+                   : 0,
+            'w' => self::$cardsCounts['white'],
             'x' => self::$cardsCounts['black']
         ];
-        if($triple) {
-            $teams+= [
-                'c' => self::$cardsCounts['base'] + ($firstTeam=='c'?1:0),
-            ];
+        if($gameMode == Game::TRIPLE) {
             $teams = self::removeOneCardForLastTeam($teams, $firstTeam);
         }
         
-        while($teams['a']>0) {
-            $randomIndex = rand(0, self::$cardsCounts['max']-1);
-            if(!isset($shuffledCards[$randomIndex]['team'])) {
-                $shuffledCards[$randomIndex]['team'] = 'a';
-                $teams['a']--;
-            }
-        }
-        while($teams['b']>0) {
-            $randomIndex = rand(0, self::$cardsCounts['max']-1);
-            if(!isset($shuffledCards[$randomIndex]['team'])) {
-                $shuffledCards[$randomIndex]['team'] = 'b';
-                $teams['b']--;
-            }
-        }
-        while($triple && $teams['c']>0) {
-            $randomIndex = rand(0, self::$cardsCounts['max']-1);
-            if(!isset($shuffledCards[$randomIndex]['team'])) {
-                $shuffledCards[$randomIndex]['team'] = 'c';
-                $teams['c']--;
-            }
-        }
-        while($teams['x']>0) {
-            $randomIndex = rand(0, self::$cardsCounts['max']-1);
-            if(!isset($shuffledCards[$randomIndex]['team'])) {
-                $shuffledCards[$randomIndex]['team'] = 'x';
-                $teams['x']--;
-            }
-        }
-
-        return $shuffledCards;
+        return $teams;
     }
 
     private static function removeOneCardForLastTeam(array $teams, string $firstTeam) {
