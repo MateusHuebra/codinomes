@@ -23,7 +23,7 @@ class ShufflePlayers implements Action {
         }
 
         if(!$game->hasPermission($user, $bot)) {
-            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $this->chat_id, 'error.admin_only');
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
             return;
         }
         
