@@ -20,7 +20,7 @@ class Create implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         if(
-            (GlobalSettings::first()->official_groups_only || $this->mode == Game::EMOJI || $this->mode == Game::COOP)
+            (GlobalSettings::first()->official_groups_only || $this->mode == Game::COOP)
             &&
             (
                 !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
@@ -69,7 +69,7 @@ class Create implements Action {
         }
 
         if($this->mode == 'random') {
-            while($this->mode == 'random' || $this->mode == Game::EMOJI || $this->mode == Game::COOP) {
+            while($this->mode == 'random' || $this->mode == Game::COOP) {
                 $this->mode = array_rand(Game::MODES);
             }
         }
