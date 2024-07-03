@@ -27,7 +27,7 @@ class Mystery extends Classic implements Action {
         $attemptType = $card->team == 'w' ? 'white' : 'opponent';
         
         //won
-        if($game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
+        if($attemptType == 'opponent' && $game->cards->where('team', $card->team)->where('revealed', false)->count() <= 0) {
             $guessData = $this->getWinningGuessData($game, $card->team, $chatLanguage);
             $guessData->attemptType = $attemptType;
             
