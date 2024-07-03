@@ -142,15 +142,9 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            $regex = $this->mode == self::EMOJI
-                    ? '/(?<hint>(([\S]+) )?([0-9∞]){1})\*(\R>  - .+)*$/u'
-                    : '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
+            $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
             if(preg_match($regex, $this->history, $matches)) {
-                try {
                 $this->lastHint = $matches['hint'];
-                } catch(Exception $e) {
-                    $this->lastHint = '';
-                }
             } else {
                 $this->lastHint = '';
             }
