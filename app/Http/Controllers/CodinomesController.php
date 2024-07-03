@@ -42,7 +42,7 @@ class CodinomesController extends Controller
             $errorMessage.= $e->getMessage().PHP_EOL.PHP_EOL;
             $errorMessage.= $e->getFile().' line '.$e->getLine().'```';
             ServerLog::log($errorMessage);
-            $bot->sendMessage(env('TG_MY_ID'), $errorMessage, 'MarkdownV2');
+            $bot->sendMessage(env('TG_LOG_ID'), $errorMessage, 'MarkdownV2');
         }
         ServerLog::log('end -----> CodinomesController > listen');
     }

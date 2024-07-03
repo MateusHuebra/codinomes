@@ -71,7 +71,7 @@ class Table {
 
         $bot->sendPhoto($game->chat_id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2');
         $title = AppString::parseMarkdownV2($game->chat->title)."\n\\".$game->chat_id."\n\n";
-        $bot->sendPhoto(env('TG_MY_ID'), $images->masterCURLImage, $title.$text, null, null, false, 'MarkdownV2');
+        $bot->sendPhoto(env('TG_LOG_ID'), $images->masterCURLImage, $title.$text, null, null, false, 'MarkdownV2');
         unlink($images->masterTempImageFileName);
 
         $game->stop($bot, $winner);
