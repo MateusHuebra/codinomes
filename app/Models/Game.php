@@ -146,7 +146,11 @@ class Game extends Model
                     ? '/(?<hint>(([\S]+) )?([0-9∞]){1})\*(\R>  - .+)*$/u'
                     : '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
             if(preg_match($regex, $this->history, $matches)) {
+                try {
                 $this->lastHint = $matches['hint'];
+                } catch(Exception $e) {
+                    $this->lastHint = '';
+                }
             } else {
                 $this->lastHint = '';
             }
