@@ -29,6 +29,7 @@ use App\Actions\PrivateCoopMessage;
 use App\Actions\ReactToMessage;
 use App\Actions\Start;
 use App\Actions\Stats;
+use App\Actions\Status;
 use App\Actions\Test;
 use App\Models\Game;
 use TelegramBot\Api\Client;
@@ -226,6 +227,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'stats') {
             return new Stats;
+
+        } else if($command == 'status') {
+            return new Status;
 
         } else if($command == 'privacy') {
             return new Privacy;
