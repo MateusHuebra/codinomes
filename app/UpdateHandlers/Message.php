@@ -24,6 +24,7 @@ use App\Actions\Notify;
 use App\Actions\OfficialGroupOnly;
 use App\Actions\Pack\WebApp;
 use App\Actions\Ping;
+use App\Actions\Privacy;
 use App\Actions\PrivateCoopMessage;
 use App\Actions\ReactToMessage;
 use App\Actions\Start;
@@ -225,6 +226,9 @@ class Message implements UpdateHandler {
 
         } else if($command == 'stats') {
             return new Stats;
+
+        } else if($command == 'privacy') {
+            return new Privacy;
 
         } else if($command == 'ping') {
             return new Ping;
