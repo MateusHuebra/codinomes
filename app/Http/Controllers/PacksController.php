@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\Game\Guess;
 use App\Models\Card;
 use App\Models\Pack;
+use App\Models\User;
+use App\Services\AppString;
 use Exception;
 use Illuminate\Http\Request;
 use TelegramBot\Api\BotApi;
@@ -35,6 +37,20 @@ class PacksController extends Controller
         $pack->cards()->delete();
         $pack->chats()->detach();
         return $pack->delete();
+    }
+
+    public function approve(int $id) {
+        $pack = Pack::find($id);
+        $pack->status = 'public';
+        $pack->save();
+
+        $user = User::find($pack->user_id);
+        $text = AppString::get('settings.pack_approved', [
+            'name' => AppString::parseMarkdownV2($pack->name)
+        ], $user->language);
+        
+        $bot = new BotApi(env('TG_TOKEN'));
+        $bot->sendMessage($user->id, $text, 'MarkdownV2');
     }
 
     public function save(Request $request) {
@@ -77,7 +93,7 @@ class PacksController extends Controller
         if($data['status'] != 'public') {
             $bot = new BotApi(env('TG_TOKEN'));
             try {
-                $bot->sendMessage(env('TG_MY_ID'), "Saved pack!\n$pack->name\n$pack->id");
+                $bot->sendMessage(env('TG_MY_ID'), "Saved pack!\n$pack->name\n$pack->id $pack->status");
             } catch(Exception $e) {}
         }
 
