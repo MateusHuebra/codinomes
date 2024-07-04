@@ -9,6 +9,7 @@ use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Aux\CardsLeft;
 use App\Services\Game\Aux\Images;
+use App\Services\ServerLog;
 use TelegramBot\Api\BotApi;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
@@ -78,7 +79,9 @@ class Table {
         foreach($masters as $user) {
             try {
                 $bot->editMessageMedia($user->id, $user->message_id, new InputMediaPhoto($images->masterCURLImage)); 
-            } catch(Exception $e) {}
+            } catch(Exception $e) {
+                ServerLog::log($e->getMessage());
+            }
         }
         unlink($images->masterTempImageFileName);
 
