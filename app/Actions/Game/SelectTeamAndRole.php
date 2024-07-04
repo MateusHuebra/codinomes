@@ -52,6 +52,7 @@ class SelectTeamAndRole implements Action {
 
         $user->name = mb_substr($update->getFrom()->getFirstName(), 0, 32, 'UTF-8');
         $user->username = $update->getFrom()->getUsername();
+        $user->message_id = null;
         $user->save();
         
         $user->games()->syncWithoutDetaching([
