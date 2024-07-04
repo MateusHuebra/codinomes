@@ -3,6 +3,7 @@
 namespace App\Services\Game;
 
 use App\Models\Game;
+use App\Models\User;
 use App\Models\UserAchievement;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
@@ -29,13 +30,22 @@ class Table {
         $imageGen->addCaption($images, $caption);
         $images->makeCURLFilesFromImages();
 
-        self::deleteCurrentMessage($game, $bot);
+        self::deleteCurrentChatMessage($game, $bot);
 
-        if($winner) {
-            self::handleWithWinner($game, $images, $winner, $bot);
+        if($game->mode == Game::COOP) {
+            if($winner) {
+
+            } else {
+                self::handleCoopNoWinner($game, $images, $chatLanguage, $bot);
+            }
         } else {
-            self::handleNoWinner($game, $images, $sendToMasters, $chatLanguage, $bot);
+            if($winner) {
+                self::handleWithWinner($game, $images, $winner, $bot);
+            } else {
+                self::handleNoWinner($game, $images, $sendToMasters, $chatLanguage, $bot);
+            }
         }
+        
     }
 
     private static function handleNoWinner(Game $game, Images $images, bool $sendToMasters, string $chatLanguage, BotApi $bot) {
@@ -54,7 +64,10 @@ class Table {
                 $text.= PHP_EOL.$game->getHistory();
             }
             try{
-                $bot->sendPhoto($game->users()->fromTeamRole($game->team, 'master')->first()->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true);
+                $user = $game->users()->fromTeamRole($game->team, 'master')->first();
+                self::deleteCurrentUserMessage($user, $bot);
+                $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
+                $user->save();
                 unlink($images->masterTempImageFileName);
             } catch(Exception $e) {
                 $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered', null, $chatLanguage));
@@ -62,6 +75,21 @@ class Table {
         }
 
         $game->message_id = $message->getMessageId();
+        $game->save();
+    }
+    
+    private static function handleCoopNoWinner(Game $game, Images $images, string $chatLanguage, BotApi $bot) {
+        $keyboard = self::getKeyboard($game, $chatLanguage);
+        $text = $game->getPhotoCaption();
+        if($game->history !== null) {
+            $text.= PHP_EOL.$game->getHistory($game->mode == Game::MYSTERY);
+        }
+        
+        $bot->sendPhoto($game->creator_id, $images->masterCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
+        unlink($images->masterTempImageFileName);
+        $bot->sendPhoto($game->getPartner()->id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
+        unlink($images->agentsTempImageFileName);
+
         $game->save();
     }
 
@@ -79,9 +107,15 @@ class Table {
         UserAchievement::testEndGame($game->users, $bot, $game->chat_id);
     }
 
-    private static function deleteCurrentMessage(Game $game, BotApi $bot) {
+    private static function deleteCurrentChatMessage(Game $game, BotApi $bot) {
         if(!is_null($game->message_id)) {
             $bot->tryToDeleteMessage($game->chat_id, $game->message_id);
+        }
+    }
+
+    private static function deleteCurrentUserMessage(User $user, BotApi $bot) {
+        if(!is_null($user->message_id)) {
+            $bot->tryToDeleteMessage($user->id, $user->message_id);
         }
     }
 

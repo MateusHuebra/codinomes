@@ -14,8 +14,8 @@ class CoopChangesAtGameCardTable extends Migration
     public function up()
     {
         Schema::table('game_cards', function (Blueprint $table) {
-            $table->bool('coop_team');
-            $table->bool('coop_revealed');
+            $table->string('coop_team', 1)->nullable();
+            $table->boolean('coop_revealed')->nullable();
         });
     }
 
