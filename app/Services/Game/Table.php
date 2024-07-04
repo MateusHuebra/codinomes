@@ -74,9 +74,9 @@ class Table {
             } catch(Exception $e) {
                 $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered', null, $chatLanguage));
             }
+            self::deleteCurrentUserMessage($user->id, $bot, $oldUserMessageId);
         }
 
-        self::deleteCurrentUserMessage($user->id, $bot, $oldUserMessageId);
     }
     
     private static function handleCoopNoWinner(Game $game, Images $images, string $chatLanguage, BotApi $bot) {
