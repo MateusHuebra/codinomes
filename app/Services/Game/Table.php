@@ -25,7 +25,7 @@ class Table {
         $cardsLeft = CardsLeft::get($cards, $game, $bot);
         $imageGen = ImageGen\Factory::build($game->mode);
 
-        $images = $imageGen->getBaseImages($game, true, $winner);
+        $images = $imageGen->getBaseImages($game, $sendToMasters, $winner);
         $imageGen->addMode($images, $game->mode);
         $imageGen->addCards($images, $cards, $game, $highlightCard);
         $imageGen->addCardsLeft($images, $game, $cardsLeft);
@@ -56,7 +56,8 @@ class Table {
             $text.= PHP_EOL.$game->getHistory($game->mode == Game::MYSTERY);
         }
         
-        $message = $bot->sendPhoto($game->chat_id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
+        $game->message_id = $bot->sendPhoto($game->chat_id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2')->getMessageId();
+        $game->save();
         unlink($images->agentsTempImageFileName);
 
         if($sendToMasters) {
@@ -66,7 +67,7 @@ class Table {
             }
             try{
                 $user = $game->users()->fromTeamRole($game->team, 'master')->first();
-                self::deleteCurrentUserMessage($user, $bot);
+                $oldUserMessageId = $user->message_id;
                 $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
                 $user->save();
                 unlink($images->masterTempImageFileName);
@@ -75,8 +76,7 @@ class Table {
             }
         }
 
-        $game->message_id = $message->getMessageId();
-        $game->save();
+        self::deleteCurrentUserMessage($user->id, $bot, $oldUserMessageId);
     }
     
     private static function handleCoopNoWinner(Game $game, Images $images, string $chatLanguage, BotApi $bot) {
@@ -114,9 +114,9 @@ class Table {
         }
     }
 
-    private static function deleteCurrentUserMessage(User $user, BotApi $bot) {
-        if(!is_null($user->message_id)) {
-            $bot->tryToDeleteMessage($user->id, $user->message_id);
+    private static function deleteCurrentUserMessage(int $userId, BotApi $bot, int $messageId = null) {
+        if(!is_null($messageId)) {
+            $bot->tryToDeleteMessage($userId, $messageId);
         }
     }
 
