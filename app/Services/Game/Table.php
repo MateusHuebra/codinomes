@@ -13,6 +13,7 @@ use TelegramBot\Api\BotApi;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use App\Services\CallbackDataManager as CDM;
+use TelegramBot\Api\Types\InputMedia\InputMediaPhoto;
 
 class Table {
 
@@ -23,14 +24,12 @@ class Table {
         $cardsLeft = CardsLeft::get($cards, $game, $bot);
         $imageGen = ImageGen\Factory::build($game->mode);
 
-        $images = $imageGen->getBaseImages($game, $sendToMasters, $winner);
+        $images = $imageGen->getBaseImages($game, true, $winner);
         $imageGen->addMode($images, $game->mode);
         $imageGen->addCards($images, $cards, $game, $highlightCard);
         $imageGen->addCardsLeft($images, $game, $cardsLeft);
         $imageGen->addCaption($images, $caption);
         $images->makeCURLFilesFromImages();
-
-        self::deleteCurrentChatMessage($game, $bot);
 
         if($game->mode == Game::COOP) {
             if($winner) {
@@ -39,6 +38,7 @@ class Table {
                 self::handleCoopNoWinner($game, $images, $chatLanguage, $bot);
             }
         } else {
+            self::deleteCurrentChatMessage($game, $bot);
             if($winner) {
                 self::handleWithWinner($game, $images, $winner, $bot);
             } else {
@@ -58,21 +58,29 @@ class Table {
         $message = $bot->sendPhoto($game->chat_id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
         unlink($images->agentsTempImageFileName);
 
+        $masters = $game->users()->where('role', 'master')->get();
         if($sendToMasters) {
             $text = AppString::getParsed('game.send_hint');
             if($game->history !== null) {
                 $text.= PHP_EOL.$game->getHistory();
             }
             try{
-                $user = $game->users()->fromTeamRole($game->team, 'master')->first();
+                $user = $masters->where('team', $game->team)->first();
+                $masters->forget($masters->search($user));
                 self::deleteCurrentUserMessage($user, $bot);
                 $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
                 $user->save();
-                unlink($images->masterTempImageFileName);
             } catch(Exception $e) {
                 $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered', null, $chatLanguage));
             }
         }
+
+        foreach($masters as $user) {
+            try {
+                $bot->editMessageMedia($user->id, $user->message_id, new InputMediaPhoto($images->masterCURLImage)); 
+            } catch(Exception $e) {}
+        }
+        unlink($images->masterTempImageFileName);
 
         $game->message_id = $message->getMessageId();
         $game->save();
