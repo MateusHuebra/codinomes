@@ -198,6 +198,9 @@
         "send_hint": [
             "Envie sua dica   /ajuda_dicas"
         ],
+        "coop_waiting": [
+            "Envie sua dica ou espere uma do seu parceito"
+        ],
         "open_dm": [
             "Abrir PV"
         ],
@@ -474,6 +477,12 @@
     "stats": {
         "general": [
             "*📊 Estatísticas de {name}*\n**>Partidas jogadas:   {totalGames}\n>Vitórias:                   {totalWins}   {totalWinsPercent}%\n>  \\-  como Mestre:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  como Agente:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cartas escolhidas como Agente:*\n>  \\-  Aliada:          {attemptsOnAlly}   \\(🔥{attemptsOnAllyStreak}\\)\n>  \\-  Oponente:    {attemptsOnOpponent}\n>  \\-  Branca:         {attemptsOnWhite}\n>  \\-  Preta:            {attemptsOnBlack}\n>  \n>*Cartas guiadas como Mestre:*\n>  \\-  Aliada:          {hintedToAlly}   \\(🔥{hintedToAllyStreak}\\)\n>  \\-  Oponente:    {hintedToOpponent}\n>  \\-  Branca:         {hintedToWhite}\n>  \\-  Preta:            {hintedToBlack}||"
+        ],
+        "daily": [
+            "*Estatísticas para o dia {date}:*\n\n{endedCount} Partidas finalizadas"
+        ],
+        "status": [
+            "Partidas rolando: {playingCount}\nPartidas em lobby: {lobbyCount}\nPartidas finalizadas hoje: {endedCount}"
         ]
     },
     "help": {

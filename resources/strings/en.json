@@ -198,6 +198,9 @@
         "send_hint": [
             "Send your hint   /help_hints"
         ],
+        "coop_waiting": [
+            "Send your hint or wait one from your partner"
+        ],
         "open_dm": [
             "Open DM"
         ],
@@ -474,6 +477,12 @@
     "stats": {
         "general": [
             "*📊 Statistics of {name}*\n**>Games played:   {totalGames}\n>Wins:                   {totalWins}   {totalWinsPercent}%\n>  \\-  as Master:    {winsAsMaster} / {gamesAsMaster}   {winsAsMasterPercent}%\n>  \\-  as Agent:    {winsAsAgent} / {gamesAsAgent}   {winsAsAgentPercent}%\n>  \n>*Cards chosen as Agent:*\n>  \\-  Ally:          {attemptsOnAlly}   \\(🔥{attemptsOnAllyStreak}\\)\n>  \\-  Opponent:   {attemptsOnOpponent}\n>  \\-  White:         {attemptsOnWhite}\n>  \\-  Black:            {attemptsOnBlack}\n>  \n>*Cards hinted to as Master:*\n>  \\-  Ally:          {hintedToAlly}   \\(🔥{hintedToAllyStreak}\\)\n>  \\-  Opponent:   {hintedToOpponent}\n>  \\-  White:         {hintedToWhite}\n>  \\-  Black:            {hintedToBlack}||"
+        ],
+        "daily": [
+            "*Statistics for {date}:*\n\n{endedCount} ended games"
+        ],
+        "status": [
+            "Games going on: {playingCount}\nGames in lobby: {lobbyCount}\nEnded games today: {endedCount}"
         ]
     },
     "help": {

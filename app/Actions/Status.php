@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use Illuminate\Support\Facades\DB;
+use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use Carbon\Carbon;
 
@@ -19,8 +20,12 @@ class Status implements Action {
         $lobbyCount = $gameStatusCounts->firstWhere('status', 'lobby')->count ?? 0;
         $endedCount = $gameStatusCounts->firstWhere('status', 'ended')->count ?? 0;
 
-        $text = "Partidas rolando: $playingCount\nPartidas em lobby: $lobbyCount\nPartidas finalizadas hoje: $endedCount";
-        
+        $text = AppString::get('stats.status', [
+            'playingCount' => $playingCount,
+            'lobbyCount' => $lobbyCount,
+            'endedCount' => $endedCount
+        ]);
+
         $bot->sendMessage($update->getChatId(), $text, null, false, $update->getMessageId(), null, false, null, null, true);
     }
 
