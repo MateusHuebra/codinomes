@@ -41,7 +41,7 @@ class Menu {
     }
 
     public static function getLobbyText(Game $game, bool $showInfo = false, string $winner = null) {
-        $language = $game->chat ? $game->chat->language : $game->creator->language;
+        $language = ($game->chat ?? $game->creator)->language;
         $textMessage = AppString::get('game.mode', [
             'mode' => AppString::getParsed('mode.'.$game->mode),
             'info' => ($showInfo ? '/info' : ''),

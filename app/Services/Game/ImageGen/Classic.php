@@ -19,10 +19,14 @@ class Classic {
     protected $modeSpacing;
     protected $firstCardToBePushed;
     
+    const CARDS_BY_LINE = 4;
     const BORDER = 10;
     const FONT_SIZE = 21;
     const CARD_HEIGHT = 140;
     const CARD_WIDTH = 210;
+    const CARD_INPUT_WIDTH = 192;
+    const CARD_INPUT_HEIGHT = 34;
+    const CARD_BOTTOM_SPACE = 23;
 
     public function __construct() {
         $this->fontPath = public_path('open-sans.bold.ttf');
@@ -57,54 +61,14 @@ class Classic {
     }
 
     protected function addCard(Images $images, GameCard $card, Game $game, int $highlightCard = null) {
-        #region calculations
-        //card position
-        $cardByLine = 4;
-        $y = floor(($card->position) / $cardByLine);
-        $x = $card->position - ($cardByLine*$y);
-        $cardX = self::BORDER+($x*self::CARD_WIDTH);
-        $cardY = ($y*self::CARD_HEIGHT)+self::CARD_HEIGHT;
-
-        //text position and size
-        $fontSize = self::FONT_SIZE + 1;
-        $inputWidth = 192;
-        $inputHeight = 34;
-        $textAxis = [];
-        while(empty($textAxis) || $textAxis['width'] >= $inputWidth - 30) {
-            $fontSize-=1;
-            $textAxis = $this->getAxisToCenterText($fontSize, $card->text, self::CARD_WIDTH, $inputHeight);
-        }
-        $bottomSpace = 23;
-        $textAxis['y'] = self::CARD_HEIGHT-$bottomSpace-$inputHeight+$textAxis['y'];
-        #endregion
-
-        switch ($card->team) {
-            case 'a':
-                $colorMaster = $game->getColor('a');
-                break;
-            case 'b':
-                $colorMaster = $game->getColor('b');
-                break;
-            case 'c':
-                $colorMaster = $game->getColor('c');
-                break;
-            case 'x':
-                $colorMaster = 'black';
-                break;
-            
-            default:
-                $colorMaster = 'white';
-                break;
-        }
+        $cardAxis = $this->getCardPositonAxis($card->position);
+        $textAxis = $this->getCardTextAxis($card->text);
+        $colorMaster = $this->getColorMaster($card->team, $game);
 
         if($card->revealed || !is_null($images->masterImage)) {
             $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));
-            if($colorMaster=='black') {
-                $textColor = imagecolorallocate($masterCardImage, 255, 255, 255);
-            } else {
-                $textColor = imagecolorallocate($masterCardImage, 0, 0, 0);
-            }
-
+            $rgbTextColor = $colorMaster=='black' ? 255 : 0;
+            
             if($card->revealed) {       
                 if($game->mode == Game::MYSTERY) {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
@@ -112,41 +76,73 @@ class Classic {
                     if(false === $this->highlightCardIfNeeded($agentsCardImage, $card, $highlightCard)) {
                         $textColor = imagecolorallocate($agentsCardImage, 150, 150, 150);
                     }
-                    imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
+                    imagefttext($agentsCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
                 }
 
-                if(in_array($card->text, self::EASTER_EGGS)) {
-                    $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$card->text}.png"));
-                    imagecopy($masterCardImage, $easterEggImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
-                } else {
-                    $this->markCardAsRevealed($masterCardImage);
-                }
-
+                $this->markCardAsRevealedConsideringEasterEgg($masterCardImage, $card->text);
                 if(false === $this->highlightCardIfNeeded($masterCardImage, $card, $highlightCard)) {
-                    $textColor = imagecolorallocate($masterCardImage, 150, 150, 150);
+                    $rgbTextColor = 150;
                 }
             }
 
-            imagefttext($masterCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
+            $textColor = imagecolorallocate($masterCardImage, $rgbTextColor, $rgbTextColor, $rgbTextColor);
+            imagefttext($masterCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
         }
-
         if(!$card->revealed) {
             $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
             $textColor = imagecolorallocate($agentsCardImage, 0, 0, 0);
-            imagefttext($agentsCardImage, $fontSize, 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
+            imagefttext($agentsCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
         }
         
         if(!is_null($images->masterImage)) {
-            imagecopy($images->masterImage, $masterCardImage, $cardX, $cardY, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            imagecopy($images->masterImage, $masterCardImage, $cardAxis['x'], $cardAxis['y'], 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             imagedestroy($masterCardImage);
         }
         if(!is_null($images->agentsImage)) {
-            imagecopy($images->agentsImage, $agentsCardImage??$masterCardImage, $cardX, $cardY, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+            imagecopy($images->agentsImage, $agentsCardImage??$masterCardImage, $cardAxis['x'], $cardAxis['y'], 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
             if(isset($agentsCardImage)) {
                 imagedestroy($agentsCardImage);
             }
         }
 
+    }
+
+    protected function getColorMaster(string $team, Game $game) {
+        switch ($team) {
+            case 'a':
+                return $game->getColor('a');
+            case 'b':
+                return $game->getColor('b');
+            case 'c':
+                return $game->getColor('c');
+            case 'x':
+                return 'black';
+            default:
+                return 'white';        
+        }
+    }
+
+    protected function getCardPositonAxis(int $position) {
+        $y = floor(($position) / self::CARDS_BY_LINE);
+        $x = $position - (self::CARDS_BY_LINE*$y);
+        $cardX = self::BORDER+($x*self::CARD_WIDTH);
+        $cardY = ($y*self::CARD_HEIGHT)+self::CARD_HEIGHT;
+        return [
+            'x' => $cardX,
+            'y' => $cardY
+        ];
+    }
+
+    protected function getCardTextAxis(string $text) {
+        $fontSize = self::FONT_SIZE;
+        $textAxis = [];
+        while(empty($textAxis) || $textAxis['width'] >= self::CARD_INPUT_WIDTH - 30) {
+            $textAxis = $this->getAxisToCenterText($fontSize, $text, self::CARD_WIDTH, self::CARD_INPUT_HEIGHT);
+            $fontSize-=1;
+        }
+        $textAxis['y'] = self::CARD_HEIGHT - self::CARD_BOTTOM_SPACE - self::CARD_INPUT_HEIGHT + $textAxis['y'];
+        $textAxis['size'] = $fontSize + 1;
+        return $textAxis;
     }
 
     public function addMode(Images $images, string $gameMode) {
@@ -291,6 +287,15 @@ class Classic {
         $result['y'] = ($height + $textHeight) / 2;
 
         return $result;
+    }
+
+    protected function markCardAsRevealedConsideringEasterEgg($image, string $text) {
+        if(in_array($text, self::EASTER_EGGS)) {
+            $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$text}.png"));
+            imagecopy($image, $easterEggImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
+        } else {
+            $this->markCardAsRevealed($image);
+        }
     }
 
     protected function markCardAsRevealed($image) {
