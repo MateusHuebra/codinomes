@@ -59,33 +59,21 @@ class Table {
         $message = $bot->sendPhoto($game->chat_id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
         unlink($images->agentsTempImageFileName);
 
-        $masters = $game->users()->where('role', 'master')->get();
         if($sendToMasters) {
             $text = AppString::getParsed('game.send_hint');
             if($game->history !== null) {
                 $text.= PHP_EOL.$game->getHistory();
             }
             try{
-                $user = $masters->first(function ($master) use ($game) {
-                    return $master->player->team === $game->team;
-                });
-                $masters->forget($masters->search($user));
+                $user = $game->users()->fromTeamRole($game->team, 'master')->first();
                 self::deleteCurrentUserMessage($user, $bot);
                 $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
                 $user->save();
+                unlink($images->masterTempImageFileName);
             } catch(Exception $e) {
                 $bot->sendMessage($game->chat_id, AppString::get('error.master_not_registered', null, $chatLanguage));
             }
         }
-
-        foreach($masters as $user) {
-            try {
-                $bot->editMessageMedia($user->id, $user->message_id, new InputMediaPhoto($images->masterCURLImage)); 
-            } catch(Exception $e) {
-                ServerLog::log($e->getMessage());
-            }
-        }
-        unlink($images->masterTempImageFileName);
 
         $game->message_id = $message->getMessageId();
         $game->save();
