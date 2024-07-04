@@ -61,13 +61,13 @@ class Table {
         unlink($images->agentsTempImageFileName);
 
         if($sendToMasters) {
+            $user = $game->users()->fromTeamRole($game->team, 'master')->first();
+            $oldUserMessageId = $user->message_id;
             $text = AppString::getParsed('game.send_hint');
             if($game->history !== null) {
                 $text.= PHP_EOL.$game->getHistory();
             }
             try{
-                $user = $game->users()->fromTeamRole($game->team, 'master')->first();
-                $oldUserMessageId = $user->message_id;
                 $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
                 $user->save();
                 unlink($images->masterTempImageFileName);
