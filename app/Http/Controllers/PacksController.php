@@ -48,6 +48,21 @@ class PacksController extends Controller
         $text = AppString::get('settings.pack_approved', [
             'name' => AppString::parseMarkdownV2($pack->name)
         ], $user->language);
+
+        $bot = new BotApi(env('TG_TOKEN'));
+        $bot->sendMessage($user->id, $text, 'MarkdownV2');
+    }
+
+    public function deny(Request $request) {
+        $pack = Pack::find($request->input('id'));
+        $pack->status = 'public';
+        $pack->save();
+
+        $user = User::find($pack->user_id);
+        $text = AppString::get('settings.pack_denied', [
+            'name' => AppString::parseMarkdownV2($pack->name),
+            'text' => AppString::parseMarkdownV2($request->input('text'))
+        ], $user->language);
         
         $bot = new BotApi(env('TG_TOKEN'));
         $bot->sendMessage($user->id, $text, 'MarkdownV2');

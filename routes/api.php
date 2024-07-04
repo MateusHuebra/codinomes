@@ -22,6 +22,7 @@ Route::get('/packs/get', [PacksController::class, 'get']);
 Route::get('/packs/getall', [PacksController::class, 'getAll']);
 Route::delete('/packs/delete/{id}', [PacksController::class, 'delete']);
 Route::post('/packs/approve/{id}', [PacksController::class, 'approve']);
+Route::post('/packs/deny', [PacksController::class, 'deny']);
 Route::post('/packs/save', [PacksController::class, 'save']);
 
 /*
