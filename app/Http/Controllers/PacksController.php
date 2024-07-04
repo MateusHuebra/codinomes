@@ -55,7 +55,7 @@ class PacksController extends Controller
 
     public function deny(Request $request) {
         $pack = Pack::find($request->input('id'));
-        $pack->status = 'public';
+        $pack->status = 'private';
         $pack->save();
 
         $user = User::find($pack->user_id);
