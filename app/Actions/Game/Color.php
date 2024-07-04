@@ -14,7 +14,7 @@ class Color implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        if(!$user->currentGame()) {
+        if(!$user && !$user->currentGame()) {
             $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }

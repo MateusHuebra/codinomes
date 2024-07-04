@@ -381,6 +381,9 @@
         ],
         "notify_list": [
             "Notificações ativadas nos seguintes grupos (toque para desligar):"
+        ],
+        "pack_approved": [
+            "Seu pacote *{name}* foi aprovado!"
         ]
     },
     "error": {
