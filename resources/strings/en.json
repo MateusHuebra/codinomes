@@ -383,7 +383,7 @@
             "Notifications enabled in the following groups (tap to turn off):"
         ],
         "pack_approved": [
-            "Your pack *{name}* has been approved!"
+            "Your pack *{name}* has been approved\\!"
         ]
     },
     "error": {
