@@ -66,7 +66,9 @@ class Table {
                 $text.= PHP_EOL.$game->getHistory();
             }
             try{
-                $user = $masters->firstWhere('team', $game->team);
+                $user = $masters->first(function ($master) use ($game) {
+                    return $master->player->team === $game->team;
+                });
                 $masters->forget($masters->search($user));
                 self::deleteCurrentUserMessage($user, $bot);
                 $user->message_id = $bot->sendPhoto($user->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2', null, true)->getMessageId();
