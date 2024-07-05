@@ -74,9 +74,11 @@ class Classic {
                     $agentsCardImage = imagecreatefrompng(public_path("images/white_card.png"));
                     $this->markCardAsRevealed($agentsCardImage);
                     if(false === $this->highlightCardIfNeeded($agentsCardImage, $card, $highlightCard)) {
-                        $textColor = imagecolorallocate($agentsCardImage, 150, 150, 150);
+                        $rgbTextColor = 150;
                     }
+                    $textColor = imagecolorallocate($agentsCardImage, $rgbTextColor, $rgbTextColor, $rgbTextColor);
                     imagefttext($agentsCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
+                    
                 }
 
                 $this->markCardAsRevealedConsideringEasterEgg($masterCardImage, $card->text);
