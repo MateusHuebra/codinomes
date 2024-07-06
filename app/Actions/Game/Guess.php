@@ -28,20 +28,22 @@ class Guess implements Action {
         }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
-        $cards = $game->cards;
+        $cards = $game->cards()
+            ->where('revealed', false)
+            ->orderBy('position')
+            ->get();
 
         $results = [];
         if(preg_match(self::REGEX, $query, $matches)) {
-            $filteredCards = $cards->where('revealed', false);
             if(strlen($query)) {
-                $filteredCards = $filteredCards->filter(function ($card) use ($query) {
+                $cards = $cards->filter(function ($card) use ($query) {
                     return mb_strpos($card->text, $query, 0, 'UTF-8') === 0;
                 });
             }
-            if($filteredCards->count() == 0) {
+            if($cards->count() == 0) {
                 $results[] = $this->getErrorResult();
             } else {
-                foreach($filteredCards as $card) {
+                foreach($cards as $card) {
                     $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$card->team];
                     $title = $card->text;
                     $messageContent = new Text($emoji.' '.$title);
