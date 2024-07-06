@@ -14,12 +14,11 @@ class Color implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
-        if(!$user && !$user->currentGame()) {
+        if(!$user || !$game = $user->currentGame()) {
             $bot->answerCallbackQuery($update->getCallbackQueryId());
             return;
         }
 
-        $game = $user->currentGame();
         $player = $game->player;
         if(!(in_array($game->status, ['creating', 'lobby']) && $player->role=='master')) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.master_only');
