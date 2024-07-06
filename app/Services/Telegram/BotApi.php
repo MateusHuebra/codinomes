@@ -19,6 +19,14 @@ class BotApi extends OriginalBotApi {
         ]);
     }
 
+    public function setMyName($name = null, $language_code = null)
+    {
+        return $this->call('setMyName', [
+            'name' => $name,
+            'language_code' => $language_code
+        ]);
+    }
+
     public function tryToSetMessageReaction($chatId, $messageId, $emoji = null) {
         try {
             return $this->setMessageReaction($chatId, $messageId, $emoji);
