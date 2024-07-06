@@ -17,8 +17,12 @@ class OfficialGroupOnly implements Action {
         $settings->official_groups_only = !$settings->official_groups_only;
         $settings->save();
 
-        $emoji = $settings->official_groups_only ? '👨‍💻': '🔥';
+        $on = !$settings->official_groups_only;
+
+        $emoji = $on ? '🔥': '👨‍💻';
         $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), $emoji);
+        $bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ manutenção', 'pt');
+        $bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ maintenance');
     }
 
 }
