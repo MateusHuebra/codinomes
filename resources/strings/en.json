@@ -21,7 +21,7 @@
             "Welcome to Codinomes!!\nChoose your language"
         ],
         "questions": [
-            "Have questions? Check out /help\n\nPlay or report bugs in our official group as well @CodinomesGrupo"
+            "Have questions? Check out /help\n\nPlay or report bugs in our official group as well @CodinomesGroup"
         ]
     },
     "mode": {
@@ -121,7 +121,7 @@
             "Game canceled due to inactivity"
         ],
         "try_official_group": [
-            "Consider starting a game in our official group @CodinomesGrupo to find fellow players!"
+            "Consider starting a game in our official group @CodinomesGroup to find fellow players!"
         ],
         "no_game": [
             "No game going on now"
@@ -406,7 +406,7 @@
             "The game needs at least a player for each role to get started"
         ],
         "only_oficial_groups": [
-            "For now, the bot is undergoing testing and therefore is only functioning in official groups\n\nJoin @CodinomesGrupo to play"
+            "For now, the bot is undergoing testing and therefore is only functioning in official groups\n\nJoin @CodinomesGroup to play"
         ],
         "wrong_hint_format_title": [
             "Enter a hint"
@@ -493,7 +493,7 @@
     },
     "help": {
         "base" : [
-            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n• Game modes: /help\\_modes\n\nIf you have any questions, ask in @CodinomesGrupo"
+            "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n• Game modes: /help\\_modes\n\nIf you have any questions, ask in @CodinomesGroup"
         ],
         "roles": [
             "*Master:*\n• See the color of all the cards;\n• Your goal is to give hints that relate as many words as possible of your team's color so that your agents can find them\\.\n\n*Agentes*:\n• Don't see the color of the cards;\n• Your objective is to find the words of your team's color following the hints from your respective master\\."
