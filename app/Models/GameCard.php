@@ -17,6 +17,9 @@ class GameCard extends Model
             $cardsToBeAdded = Card::where('pack_id', 1)->get();
 
         } else {
+            if($game->chat->packs()->count() == 0) {
+                return false;
+            }
             $cardsToBeAdded = $game->chat->packs->getCards();
         }
         
