@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Chat;
 use App\Models\Game;
 use Illuminate\Support\Facades\DB;
 use App\Services\AppString;
@@ -27,6 +28,21 @@ class Status implements Action {
         ]);
 
         $bot->sendMessage($update->getChatId(), $text, null, false, $update->getMessageId(), null, false, null, null, true);
+
+        if($playingCount>0) {
+            $playingGroups = Chat::leftJoin('games', 'chats.id', '=', 'games.chat_id')
+                                 ->where('games.status', 'playing')
+                                 ->select('chats.title')
+                                 ->distinct()
+                                 ->get()
+                                 ->pluck('title')
+                                 ->toArray();
+                                 
+            $text = AppString::get('stats.playing', [
+                'list' => implode('\n', $playingGroups)
+            ]);
+            $bot->sendMessage($update->getChatId(), $text);
+        }
     }
 
 }

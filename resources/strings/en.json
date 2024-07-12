@@ -489,6 +489,9 @@
         ],
         "status": [
             "Games going on: {playingCount}\nGames in lobby: {lobbyCount}\nEnded games today: {endedCount}"
+        ],
+        "playing": [
+            "Groups playing right now:\n{list}"
         ]
     },
     "help": {

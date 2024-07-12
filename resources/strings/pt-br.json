@@ -489,6 +489,9 @@
         ],
         "status": [
             "Partidas rolando: {playingCount}\nPartidas em lobby: {lobbyCount}\nPartidas finalizadas hoje: {endedCount}"
+        ],
+        "playing": [
+            "Grupos jogando agora:\n{list}"
         ]
     },
     "help": {
