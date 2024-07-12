@@ -39,7 +39,7 @@ class Status implements Action {
                                  ->toArray();
                                  
             $text = AppString::get('stats.playing', [
-                'list' => implode('\n', $playingGroups)
+                'list' => implode(PHP_EOL, $playingGroups)
             ]);
             $bot->sendMessage($update->getChatId(), $text);
         }
