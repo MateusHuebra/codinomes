@@ -20,12 +20,12 @@ class Create implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         if(
-            (GlobalSettings::first()->official_groups_only || $this->mode == Game::COOP)
-            &&
-            (
+            GlobalSettings::first()->official_groups_only
+            || $this->mode == Game::COOP
+            || in_array($update->getChatId(), explode(',', env('TG_BANNED_GROUPS_IDS')))
+            && (
                 !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
-                &&
-                $update->getChatId() != env('TG_MY_ID')
+                && $update->getChatId() != env('TG_MY_ID')
             )
         ) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
