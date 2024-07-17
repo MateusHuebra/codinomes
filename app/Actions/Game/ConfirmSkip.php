@@ -78,19 +78,20 @@ class ConfirmSkip implements Action {
         if($adm) {
             $text = '⚠️ Admin '.$text;
         }
-        
-        try {
-            $bot->sendMessage($game->creator->id, $text, 'MarkdownV2');
-            $bot->sendMessage($game->getPartner()->id, $text, 'MarkdownV2');
-        } catch(Exception $e) {}
 
         if($game->mode == Game::COOP) {
+            try {
+                $bot->sendMessage($game->creator->id, $text, 'MarkdownV2');
+                $bot->sendMessage($game->getPartner()->id, $text, 'MarkdownV2');
+            } catch(Exception $e) {}
+
             $game->attempts_left--;
             $game->role = null;
             $game->save();
             
             $title = AppString::get('game.skipped', null, $chatLanguage);
         } else {
+            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
             $currentPlayer = $game->users()->fromTeamRole($game->team, 'agent')->first();
     
             if($game->mode == Game::EIGHTBALL && $game->cards->where('team', $currentPlayer->getEnemyTeam())->where('revealed', false)->count() == 0) {
