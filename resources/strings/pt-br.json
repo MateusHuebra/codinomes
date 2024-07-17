@@ -199,13 +199,22 @@
             "Envie sua dica   /ajuda_dicas"
         ],
         "coop_waiting": [
-            "Envie sua dica ou espere uma do seu parceito"
+            "Envie sua dica ou espere"
         ],
         "open_dm": [
             "Abrir PV"
         ],
         "turn": [
             "É a vez de {role} {team}\n{players}"
+        ],
+        "turn_coop": [
+            "É a vez de {role} {team}"
+        ],
+        "sudden_death": [
+            "morte súbita"
+        ],
+        "sudden_death_info": [
+            "Chutem até perder ou ganhar"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
@@ -234,14 +243,26 @@
         "win": [
             "A equipe {team} venceu o jogo!"
         ],
+        "lost": [
+            "A equipe {team} perdeu o jogo!"
+        ],
         "won": [
             "VENCEU! 🏆"
+        ],
+        "team_lost": [
+            "PERDEU! ❌"
         ],
         "win_black": [
             "Oponente tentou uma carta preta"
         ],
+        "win_black_coop": [
+            "Tentou uma carta preta"
+        ],
         "win_color": [
             "Todas as cartas foram encontradas"
+        ],
+        "rounds_over": [
+            "Acabaram as rodadas"
         ],
         "correct": [
             "Tentativa correta!"
@@ -278,6 +299,12 @@
         ],
         "hinted": [
             "{user} deu a dica {hint}"
+        ],
+        "dm_start": [
+            "Conexão entre PVs aberta"
+        ],
+        "dm_stop": [
+            "Conexão entre PVs fechada"
         ]
     },
     "color": {

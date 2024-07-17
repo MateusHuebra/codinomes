@@ -199,13 +199,22 @@
             "Send your hint   /help_hints"
         ],
         "coop_waiting": [
-            "Send your hint or wait one from your partner"
+            "Send your hint or wait"
         ],
         "open_dm": [
             "Open DM"
         ],
         "turn": [
             "It's turn of {role} {team}\n{players}"
+        ],
+        "turn_coop": [
+            "It's turn of {role} {team}"
+        ],
+        "sudden_death": [
+            "sudden death"
+        ],
+        "sudden_death_info": [
+            "Try to guess until you win or lose"
         ],
         "mention": [
             "[{name}](tg://user?id={id})"
@@ -234,14 +243,26 @@
         "win": [
             "Team {team} won the game!"
         ],
+        "lost": [
+            "Team {team} lost the game!"
+        ],
         "won": [
             "WON! 🏆"
+        ],
+        "team_lost": [
+            "LOST! ❌"
         ],
         "win_black": [
             "Opponent guessed a black card"
         ],
+        "win_black_coop": [
+            "Guessed a black card"
+        ],
         "win_color": [
             "Guessed all cards"
+        ],
+        "rounds_over": [
+            "The rounds are over"
         ],
         "correct": [
             "Correct guess!"
@@ -278,6 +299,12 @@
         ],
         "hinted": [
             "{user} hinted {hint}"
+        ],
+        "dm_start": [
+            "Connection between DMs open"
+        ],
+        "dm_stop": [
+            "Connection between DMs closed"
         ]
     },
     "color": {
