@@ -21,8 +21,10 @@ class Create implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         if(
             GlobalSettings::first()->official_groups_only
-            &&
-            $update->getFromId() != env('TG_MY_ID')
+            && (
+                !in_array($update->getChatId(), explode(',', env('TG_OFICIAL_GROUPS_IDS')))
+                && !$update->getFromId() == env('TG_MY_ID')
+            )
         ) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.only_oficial_groups'), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
