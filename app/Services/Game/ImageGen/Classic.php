@@ -245,8 +245,8 @@ class Classic {
             $textColor = imagecolorallocate($images->agentsImage, 255, 255, 255);
         }
 
-        $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, 'a', $textColor);
-        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, 'b', $textColor);
+        $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, $textColor, 'a');
+        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, $textColor, 'b');
         
         if($images->masterImage) {
             $this->AddCardsLeftToSingleImage($images->masterImage, $squareA, $squareB);
@@ -259,10 +259,12 @@ class Classic {
         imagedestroy($squareB);
     }
 
-    protected function getCardsLeftSquare(Game $game, $cardsLeft, string $team, $textColor) {
-        $square = imagecreatefrompng(public_path('images/'.$game->getColor($team).'_square.png'));
-        $axisA = self::getAxisToCenterText(65, $cardsLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
-        imagefttext($square, 65, 0, $axisA['x'], $axisA['y'], $textColor, $this->fontPath, $cardsLeft);
+    protected function getCardsLeftSquare(Game $game, $cardsLeft, $textColor, string $team = null) {
+        $color = $team ? $game->getColor($team) : 'white';
+        $size = strlen($cardsLeft) > 1 ? 50 : 65;
+        $square = imagecreatefrompng(public_path('images/'.$color.'_square.png'));
+        $axis = self::getAxisToCenterText($size, $cardsLeft, self::CARD_WIDTH, self::CARD_HEIGHT);
+        imagefttext($square, $size, 0, $axis['x'], $axis['y'], $textColor, $this->fontPath, $cardsLeft);
         return $square;
     }
 

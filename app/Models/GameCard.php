@@ -15,7 +15,6 @@ class GameCard extends Model
     public static function set(Game $game, string $firstTeam) : Bool {
         if($game->mode == Game::COOP) {
             $cardsToBeAdded = Card::where('pack_id', 1)->get();
-
         } else {
             if($game->chat->packs()->count() == 0) {
                 return false;
@@ -41,7 +40,9 @@ class GameCard extends Model
             $gameCard->game_id = $game->id;
             $gameCard->position = $position;
             $gameCard->text = $card->text;
-            $gameCard->revealed = (env('APP_ENV')=='local') ? rand(0,1) : false;
+            $gameCard->revealed = false;// TODO env('APP_ENV')=='local' ? (bool) rand(0,1) : false;
+            $gameCard->coop_revealed = $game->mode == Game::COOP ? false : null;
+            $gameCard->coop_team = $game->mode == Game::COOP ? 'w' : null;
             $gameCards->add($gameCard);
             $position++;
         }
@@ -53,6 +54,10 @@ class GameCard extends Model
         $gameCards = self::setColors($gameCards, $teamCount['c'], 'c');
         $gameCards = self::setColors($gameCards, $teamCount['w'], 'w');
         $gameCards = self::setColors($gameCards, $teamCount['x'], 'x');
+
+        if($game->mode == Game::COOP) {
+            self::setCoopColors($game->id);
+        }
 
         return true;
     }
@@ -144,6 +149,15 @@ class GameCard extends Model
                     'max' => 24
                 ];
                 break;
+
+            case Game::COOP:
+                self::$cardsCounts = [
+                    'base' => 8,
+                    'black' => 3,
+                    'white' => 12,
+                    'max' => 24
+                ];
+                break;
             
             default:
                 self::$cardsCounts = [
@@ -188,6 +202,41 @@ class GameCard extends Model
                 break;
         }
         return $teams;
+    }
+
+    private static function setCoopColors(int $gameId) {
+        $cards = self::where('game_id', $gameId)->get();
+        $blackCards = $cards->where('team', 'x');
+        $whiteCards = $cards->where('team', 'w');
+        $coloredCards = $cards->where('team', 'a');
+
+        self::setCoopColorForCollection($blackCards, 1);
+        self::setCoopColorForCollection($whiteCards, 5);
+        self::setCoopColorForCollection($coloredCards, 3);
+    }
+
+    private static function setCoopColorForCollection(Collection $cards, int $coloredCards) {
+        $i = 0;
+        foreach($cards as $card) {
+            $card = $cards->random();
+            $card->coop_team = self::getColorOrBlackByLimit($i, $coloredCards);
+            $key = $cards->search($card);
+            $cards->forget($key);
+            $card->save();
+            $i++;
+            if($i == $coloredCards+1) {
+                break;
+            }
+        }
+    }
+
+    private static function getColorOrBlackByLimit(int $number, int $limit) {
+        if($number < $limit) {
+            return 'a';
+
+        } else {
+            return 'x';
+        }
     }
 
 }

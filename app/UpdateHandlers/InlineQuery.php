@@ -35,7 +35,11 @@ class InlineQuery implements UpdateHandler {
                 return null;
             //} else if($game->role == 'master' && $player->role == 'master' && $player->team == $game->team) {
             //    return 'hint';
-            } else if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
+            } else if(
+                ($game->mode != Game::COOP && $game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)
+                ||
+                ($game->mode == Game::COOP && ($game->role == $player->role || $game->attempts_left == 0))
+            ) {
                 return 'guess';
             } else {
                 return null;

@@ -20,13 +20,14 @@ class Hint implements Action {
     public function run(Update $update, BotApi $bot, string $forceText = null) {
         $query = mb_strtoupper($forceText??$update->getQuery(), 'UTF-8');
         $game = $update->findUser()->currentGame();
-        $cardsLeft = $game->mode == Game::MYSTERY ? 9 : $game->cards->where('team', $game->team)->where('revealed', false)->count();
+        $cardsLeft = in_array($game->mode, [Game::MYSTERY, Game::COOP]) ? 9 : $game->cards->where('team', $game->team)->where('revealed', false)->count();
 
         $results = [];
         if($game->mode == Game::EMOJI) {
             $regex = self::REGEX_HINT_EMOJI;
         } else {
-            $regex = $game->chat->compound_words ? self::REGEX_HINT_NUMBER_COMPOUND : self::REGEX_HINT_NUMBER;
+            $canCompoudWord = $game->chat ? $game->chat->compound_words : true;
+            $regex = $canCompoudWord ? self::REGEX_HINT_NUMBER_COMPOUND : self::REGEX_HINT_NUMBER;
         }
         if(
             preg_match($regex, $query, $matches)

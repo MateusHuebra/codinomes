@@ -23,9 +23,13 @@ class Classic implements Action {
         $user = $update->findUser();
         $game = $user->currentGame();
         $player = $game->player;
-        $chatLanguage = $game->chat->language;
-
-        if(!($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)) {
+        $chatLanguage = ($game->chat??$game->creator)->language;
+        
+        if(
+            !($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)
+            &&
+            !($game->mode == Game::COOP && ($player->role == $game->role || $game->attempts_left == 0))
+        ) {
             return;
         }
         if($game->attempts_left < 0) {
@@ -33,42 +37,45 @@ class Classic implements Action {
         }
 
         $card = $this->getChosenCard($update, $game->id);
-
         if(!$card) {
             return;
         }
-        if($card->revealed) {
+        if(($game->role == 'agent' && $card->revealed) || ($game->mode == Game::COOP && $game->role == 'master' && $card->coop_revealed)) {
             return;
         }
-        $card->revealed = true;
-        $card->save();
 
         $emojis = $this->getEmojis($game);
-        $emoji = $emojis[$card->team];
+        $emoji = $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
 
-        if($game->attempts_left!==null) {
-            $game->attempts_left--;
-        }
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
 
-        $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
-        $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
-
-        if($card->team == $player->team) {
-            $guessData = $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, $opponentCardsLeft);
-
-        } else if($card->team == 'x') {
-            $guessData = $this->handleBlackGuess($game, $cardsLeft, $update, $user, $card, $emoji, $bot, $player, $chatLanguage);
-
-        } else {
-            $guessData = $this->handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player);
-        }
+        $guessData = $this->handle($update, $game, $user, $player, $card, $emoji, $bot, $chatLanguage);
 
         $caption = $this->getCaption($guessData, $game);
         
         Table::send($game, $bot, $caption, $card->position, $guessData->winner);
         UserStats::addAttempt($game, $player->team, $guessData->attemptType, $bot);
+    }
 
+    protected function handle(Update $update, Game $game, User $user, $player, $card, $emoji, BotApi $bot, $chatLanguage) {
+        $card->revealed = true;
+        $card->save();
+
+        if($game->attempts_left!==null) {
+            $game->attempts_left--;
+        }
+        $cardsLeft = $game->cards->where('team', $player->team)->where('revealed', false)->count();
+        $opponentCardsLeft = $game->cards->where('team', $user->getEnemyTeam())->where('revealed', false)->count();
+
+        if($card->team == $player->team) {
+            return $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, $opponentCardsLeft);
+
+        } else if($card->team == 'x') {
+            return $this->handleBlackGuess($game, $cardsLeft, $update, $user, $card, $emoji, $bot, $player, $chatLanguage);
+
+        } else {
+            return $this->handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player);
+        }
     }
 
     protected function getChosenCard(Update $update, int $gameId) {

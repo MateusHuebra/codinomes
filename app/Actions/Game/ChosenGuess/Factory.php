@@ -18,6 +18,9 @@ class Factory {
         
         } else if($gameMode == Game::TRIPLE) {
             return new Triple;
+        
+        } else if($gameMode == Game::COOP) {
+            return new Coop;
         }
         
         return new Classic;

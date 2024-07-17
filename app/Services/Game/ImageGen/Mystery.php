@@ -16,12 +16,12 @@ class Mystery Extends Classic {
             $textColor = imagecolorallocate($images->agentsImage, 255, 255, 255);
         }
         if($images->masterImage) {
-            $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, 'a', $textColor);
-            $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, 'b', $textColor);
+            $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, $textColor, 'a');
+            $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, $textColor, 'b');
         }
         
-        $mysterySquareA = $this->getCardsLeftSquare($game, '?', 'a', $textColor);
-        $mysterySquareB = $this->getCardsLeftSquare($game, '?', 'b', $textColor);
+        $mysterySquareA = $this->getCardsLeftSquare($game, '?', $textColor, 'a');
+        $mysterySquareB = $this->getCardsLeftSquare($game, '?', $textColor, 'b');
         
         if($images->masterImage) {
             $this->AddCardsLeftToSingleImage($images->masterImage, $squareA, $squareB);

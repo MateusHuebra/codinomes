@@ -20,9 +20,7 @@ class Stop implements Action {
                 return;
             }
             if($game->mode == Game::COOP && $game->creator_id == $user->id) {
-                $partner = $game->users()
-                                    ->where('id', '!=', $user->id)
-                                    ->first();
+                $partner = $game->getPartner();
                 $game->stop($bot);
                 $bot->sendMessage($user->id, AppString::get('game.stopped'));
                 if($partner) {

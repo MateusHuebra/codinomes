@@ -4,6 +4,7 @@ namespace App\Actions\Game;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Models\Game;
 use App\Services\AppString;
 use Exception;
 use TelegramBot\Api\BotApi;
@@ -25,12 +26,15 @@ class Skip implements Action {
         }
         $player = $game->player;
 
-        if($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team) {
+        if(
+            ($game->mode != Game::COOP && $game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)
+            || ($game->mode == Game::COOP && $game->role == $player->role)
+        ) {
             $text = AppString::get('game.sure_skip');
             $keyboard = new InlineKeyboardMarkup([
                 [
                     [
-                        'text' => AppString::get('game.cancel', null, $game->chat->language),
+                        'text' => AppString::get('game.cancel', null, ($game->chat??$game->creator)->language),
                         'callback_data' => CDM::toString([
                             CDM::EVENT => CDM::CANCEL_SKIP
                         ])
@@ -38,14 +42,14 @@ class Skip implements Action {
                 ],
                 [
                     [
-                        'text' => AppString::get('game.confirm', null, $game->chat->language),
+                        'text' => AppString::get('game.confirm', null, ($game->chat??$game->creator)->language),
                         'callback_data' => CDM::toString([
                             CDM::EVENT => CDM::CONFIRM_SKIP
                         ])
                     ]
                 ]
             ]);
-            $bot->editMessageCaption($game->chat_id, $update->getMessageId(), $text, $keyboard);
+            $bot->editMessageCaption($update->getChatId(), $update->getMessageId(), $text, $keyboard);
         }
         
     }

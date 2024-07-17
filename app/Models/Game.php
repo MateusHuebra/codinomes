@@ -75,6 +75,7 @@ class Game extends Model
     private $agentsB;
     private $masterC;
     private $agentsC;
+    private $partner;
     private $colors = [];
     private $hasRequiredPlayers = null; 
 
@@ -142,7 +143,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            $regex = '/\*['.implode('', self::COLORS).']+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
+            $regex = '/\*['.implode('', self::COLORS).'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
             if(preg_match($regex, $this->history, $matches)) {
                 $this->lastHint = $matches['hint'];
             } else {
@@ -157,16 +158,46 @@ class Game extends Model
         return substr_count($matches[0], "\n");
     }
 
-    public function getPhotoCaption() {
-        $role = $this->role=='master' ? 'game.master' : 'game.agents';
-        $teamColor = $this->getColor($this->team);
-        $playersList = $this->users()->fromTeamRole($this->team, $this->role)->get()->getStringList(true, PHP_EOL);
+    public function getPartner() {
+        if(!isset($this->partner)) {
+            $this->partner = $this->users()
+                                  ->where('id', '!=', $this->creator_id)
+                                  ->first();
+        }
+        return $this->partner;
+    }
 
-        return AppString::get('game.turn', [
-            'role' => AppString::get($role, null, $this->chat->language),
-            'team' =>  Game::COLORS[$teamColor],
-            'players' => $playersList
-        ], $this->chat->language);
+    public function getPhotoCaption() {
+        $teamColor = $this->getColor($this->team);
+        if($this->mode == self::COOP) {
+            switch ($this->role) {
+                case 'master':
+                    $name = $this->creator->name;
+                    $team = Game::COLORS[$teamColor];
+                    break;
+                case 'agent':
+                    $name = $this->getPartner()->name;
+                    $team = '👥';
+                    break;
+                default:
+                    return AppString::get('game.coop_waiting', null, $this->creator->language);
+            }
+            return AppString::get('game.turn_coop', [
+                'role' => AppString::parseMarkdownV2($name),
+                'team' => $team,
+                'players' => ''
+            ], $this->creator->language);
+
+        } else {
+            $role = $this->role=='master' ? 'game.master' : 'game.agents';
+            $playersList = $this->users()->fromTeamRole($this->team, $this->role)->get()->getStringList(true, PHP_EOL);
+    
+            return AppString::get('game.turn', [
+                'role' => AppString::get($role, null, $this->chat->language),
+                'team' =>  Game::COLORS[$teamColor],
+                'players' => $playersList
+            ], $this->chat->language);
+        }
     }
 
     public function isMenu(String $menu, String $subMenu = null) {
@@ -233,7 +264,11 @@ class Game extends Model
             $callbackId ? $bot->sendAlertOrMessage($callbackId, $this->chat_id??$this->creator_id, 'error.no_enough_cards') : null;
             return false;
         }
-        $this->updateStatus('playing', $firstTeam, 'master');
+        if($this->mode == self::COOP) {
+            $this->updateStatus('playing', $firstTeam, null, 9);
+        } else {
+            $this->updateStatus('playing', $firstTeam, 'master');
+        }
 
         $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, ($this->chat??$this->creator)->language);
         try {
@@ -260,26 +295,29 @@ class Game extends Model
             $bot->tryToUnpinChatMessage($this->chat_id??$this->creator_id, $this->lobby_message_id);
         }
         
-        UserStats::addGame($this, $winner);
+        if($this->mode != self::COOP) {
+            UserStats::addGame($this, $winner);
+        }
         
         $this->cards()->delete();
-
-        $this->team = $winner;
-        $this->role = null;
-        $this->attempts_left = null;
-        $this->save();
 
         if($this->status == 'canceled') {
             $this->users()->detach();
             $this->teamColors()->delete();
             parent::delete();
+        } else {
+            $this->team = $winner;
+            $this->role = null;
+            $this->attempts_left = null;
+            $this->save();
         }
     }
 
-    public function updateStatus(string $status = null, string $team = null, string $role = null) {
+    public function updateStatus(string $status = null, string $team = null, string $role = null, int $attempts_left = null) {
         $this->status = $status??$this->status;
         $this->team = $team??$this->team;
         $this->role = $role??$this->role;
+        $this->attempts_left = $attempts_left??$this->attempts_left;
         $this->status_updated_at = date('Y-m-d H-i-s');
         $this->save();
     }
@@ -294,6 +332,12 @@ class Game extends Model
 
         $this->updateStatus('playing', $nextTeam, 'master');
         $this->attempts_left = null;
+        $this->save();
+    }
+
+    public function nextStatusCoop() {
+        $this->updateStatus('playing', null, null, $this->attempts_left-1);
+        $this->role = null;
         $this->save();
     }
 
@@ -365,8 +409,7 @@ class Game extends Model
         $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
         $vars = [
             'master_a' => $this->masterA->get()->getStringList()??$empty,
-            'agents_a' => $this->agentsA->get()->getStringList()??$empty,
-            'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : '')
+            'agents_a' => $this->agentsA->get()->getStringList()??$empty
         ];
 
         if($this->mode != self::COOP) {
@@ -374,10 +417,23 @@ class Game extends Model
             $vars+= [
                 'master_b' => $this->masterB->get()->getStringList()??$empty,
                 'agents_b' => $this->agentsB->get()->getStringList()??$empty,
+                'a' => $teamA . ($winner == 'a' ? ' '.AppString::getParsed('game.won') : ''),
                 'b' => $teamB . ($winner == 'b' ? ' '.AppString::getParsed('game.won') : '')
             ];
             $string = 'teams_lists';
         } else {
+            switch ($winner) {
+                case 'a':
+                    $a = ' '.AppString::getParsed('game.won');
+                    break;
+                case 'x':
+                    $a = ' '.AppString::getParsed('game.team_lost');
+                    break;
+                default:
+                    $a = '';
+                    break;
+            }
+            $vars+= ['a' => $teamA . $a];
             $string = 'teams_lists_coop';
         }
 

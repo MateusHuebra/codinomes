@@ -20,9 +20,9 @@ class Triple Extends Classic {
             $textColor = imagecolorallocate($images->agentsImage, 255, 255, 255);
         }
 
-        $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, 'a', $textColor);
-        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, 'b', $textColor);
-        $squareC = $this->getCardsLeftSquare($game, $cardsLeft->C, 'c', $textColor);
+        $squareA = $this->getCardsLeftSquare($game, $cardsLeft->A, $textColor, 'a');
+        $squareB = $this->getCardsLeftSquare($game, $cardsLeft->B, $textColor, 'b');
+        $squareC = $this->getCardsLeftSquare($game, $cardsLeft->C, $textColor, 'c');
         
         if($images->masterImage) {
             $this->AddCardsLeftToSingleImage($images->masterImage, $squareA, $squareB, $squareC);

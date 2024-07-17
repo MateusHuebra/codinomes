@@ -37,7 +37,11 @@ class Table implements Action {
                         &&
                         $user->currentGame()->player->role == 'master'
                         &&
-                        $user->currentGame()->player->team == $game->team
+                        (
+                            $user->currentGame()->player->team == $game->team
+                            ||
+                            $user->currentGame()->mode == Game::COOP
+                        )
                     )
                 ) {
                     \App\Services\Game\Table::send($game, $bot, New Caption($game->getLastHint(), null, 40, $game->mode==Game::EMOJI));

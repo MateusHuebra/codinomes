@@ -154,7 +154,7 @@
             "⬆️ Play Codinomes Coop with me!"
         ],
         "invite_coop_accepted": [
-            "You have joined the match of {name}"
+            "You have joined the match of {name}\nIt is possible to /leave"
         ],
         "leave": [
             "Leave"

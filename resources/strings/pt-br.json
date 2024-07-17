@@ -154,7 +154,7 @@
             "⬆️ Jogue Codinomes Coop comigo!"
         ],
         "invite_coop_accepted": [
-            "Você entrou na partida de {name}"
+            "Você entrou na partida de {name}\nÉ possível /sair"
         ],
         "leave": [
             "Sair"

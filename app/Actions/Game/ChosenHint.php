@@ -19,7 +19,11 @@ class ChosenHint implements Action {
         $game = $user->currentGame();
         $player = $game->player;
         
-        if(!($game->role == 'master' && $player->role == 'master' && $player->team == $game->team)) {
+        if(
+            !($game->mode != Game::COOP && $game->role == 'master' && $player->role == 'master' && $player->team == $game->team)
+            && 
+            !($game->mode == Game::COOP && $game->role == null)
+        ) {
             return;
         }
 
@@ -35,18 +39,22 @@ class ChosenHint implements Action {
                 $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👎');
                 return;
             }
+            $bot->tryToSetMessageReaction($update->getChatId(), $update->getMessageId(), '👍');
         } else if ($update->isType(Update::CHOSEN_INLINE_RESULT)) {
             $data = CDM::toArray($update->getResultId());
         }
         
+        $nextRole = $player->role == 'agent' ? 'master' : 'agent';
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
         $color = $game->getColor($player->team);
-        $emoji = Game::COLORS[$color];
+        $emoji = $player->role == 'master' ? Game::COLORS[$color] : '👥';
         $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $game->updateStatus('playing', $player->team, 'agent');
-        if(in_array($data[CDM::NUMBER], ['∞', 0])) {
+        $game->updateStatus('playing', $player->team, $nextRole);
+        if($game->mode == Game::COOP) {
+            //nothing
+        } else if(in_array($data[CDM::NUMBER], ['∞', 0])) {
             $game->attempts_left = null;
         } else {
             $game->attempts_left = $data[CDM::NUMBER];
@@ -78,10 +86,16 @@ class ChosenHint implements Action {
         */
         
         try {
-            $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
-            if($isEmoji) {
-                $bot->sendMessage($game->chat_id, $data[CDM::TEXT]);
+            if($game->mode == Game::COOP) {
+                $partner = $nextRole == 'agent' ? $game->getPartner() : $game->creator;
+                $bot->sendMessage($partner->id, $text, 'MarkdownV2', false, null, null, true);
+            } else {
+                $bot->sendMessage($game->chat_id, $text, 'MarkdownV2', false, null, null, true);
+                if($isEmoji) {
+                    $bot->sendMessage($game->chat_id, $data[CDM::TEXT]);
+                }
             }
+            
         } catch(Exception $e) {}
         Table::send($game, $bot, $caption);
     }

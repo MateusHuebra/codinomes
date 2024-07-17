@@ -9,12 +9,10 @@ use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Aux\CardsLeft;
 use App\Services\Game\Aux\Images;
-use App\Services\ServerLog;
 use TelegramBot\Api\BotApi;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use App\Services\CallbackDataManager as CDM;
-use TelegramBot\Api\Types\InputMedia\InputMediaPhoto;
 
 class Table {
 
@@ -34,7 +32,7 @@ class Table {
 
         if($game->mode == Game::COOP) {
             if($winner) {
-
+                self::handleCoopWithWinner($game, $images, $winner, $bot);
             } else {
                 self::handleCoopNoWinner($game, $images, $chatLanguage, $bot);
             }
@@ -80,16 +78,27 @@ class Table {
     }
     
     private static function handleCoopNoWinner(Game $game, Images $images, string $chatLanguage, BotApi $bot) {
-        $keyboard = self::getKeyboard($game, $chatLanguage);
+        $keyboards = self::getCoopKeyboard($game, $chatLanguage);
         $text = $game->getPhotoCaption();
         if($game->history !== null) {
             $text.= PHP_EOL.$game->getHistory($game->mode == Game::MYSTERY);
         }
+
+        $creator = User::find($game->creator_id);
+        $partner = $game->getPartner();
         
-        $bot->sendPhoto($game->creator_id, $images->masterCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
+        $creatorMessageId = $bot->sendPhoto($creator->id, $images->masterCURLImage, $text, null, $keyboards['creator'], false, 'MarkdownV2')->getMessageId();
         unlink($images->masterTempImageFileName);
-        $bot->sendPhoto($game->getPartner()->id, $images->agentsCURLImage, $text, null, $keyboard, false, 'MarkdownV2');
+        $partnerMessageId = $bot->sendPhoto($partner->id, $images->agentsCURLImage, $text, null, $keyboards['partner'], false, 'MarkdownV2')->getMessageId();
         unlink($images->agentsTempImageFileName);
+
+        self::deleteCurrentUserMessage($creator->id, $bot, $creator->message_id);
+        self::deleteCurrentUserMessage($partner->id, $bot, $partner->message_id);
+        
+        $creator->message_id = $creatorMessageId;
+        $partner->message_id = $partnerMessageId;
+        $creator->save();
+        $partner->save();
 
         $game->save();
     }
@@ -106,6 +115,27 @@ class Table {
         $game->stop($bot, $winner);
 
         UserAchievement::testEndGame($game->users, $bot, $game->chat_id);
+    }
+
+    private static function handleCoopWithWinner(Game $game, Images $images, string $winner, BotApi $bot) {
+        $text = Menu::getLobbyText($game, false, $winner);
+        $text.= $game->getHistory();
+
+        $creator = User::find($game->creator_id);
+        $partner = $game->getPartner();
+        
+        $bot->sendPhoto($creator->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2')->getMessageId();
+        $bot->sendPhoto($partner->id, $images->agentsCURLImage, $text, null, null, false, 'MarkdownV2')->getMessageId();
+        $bot->sendPhoto(env('TG_LOG_ID'), $images->masterCURLImage, $text, null, null, false, 'MarkdownV2');
+        unlink($images->masterTempImageFileName);
+
+        $game->stop($bot, $winner);
+
+        $bot->sendMessage($creator->id, AppString::get('game.dm_stop', null, $creator->language));
+        $bot->sendMessage($partner->id, AppString::get('game.dm_stop', null, $partner->language));
+
+        self::deleteCurrentUserMessage($creator->id, $bot, $creator->message_id);
+        self::deleteCurrentUserMessage($partner->id, $bot, $partner->message_id);
     }
 
     private static function deleteCurrentChatMessage(Game $game, BotApi $bot) {
@@ -126,34 +156,65 @@ class Table {
         } else {
             return $game->cards;
         }
+    }    
+
+    private static function getCoopKeyboard(Game $game, string $chatLanguage) {
+        switch ($game->role) {
+            case 'master':
+                $creator = self::getKeyboardAgentTurn($chatLanguage);
+                $partner = null;
+                break;
+            
+            case 'agent':
+                $creator = null;
+                $partner = self::getKeyboardAgentTurn($chatLanguage);
+                break;
+            default:
+
+                $creator = null;
+                $partner = null;
+                break;
+        }
+        return [
+            'creator' => $creator,
+            'partner' => $partner
+        ];
     }
 
     private static function getKeyboard(Game $game, string $chatLanguage) {
         if($game->role=='master') {
-            return new InlineKeyboardMarkup([
-                [
-                    [
-                        'text' => AppString::get('game.open_dm', null, $chatLanguage),
-                        'url' => 't.me/CodinomesBot'
-                    ]
-                ]
-            ]);
+            return self::getKeyboardMasterTurn($chatLanguage);
         } else {
-            return new InlineKeyboardMarkup([
-                [
-                    [
-                        'text' => AppString::get('game.skip', null, $chatLanguage),
-                        'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::SKIP
-                        ])
-                    ],
-                    [
-                        'text' => AppString::get('game.choose_card', null, $chatLanguage),
-                        'switch_inline_query_current_chat' => ''
-                    ]
-                ]
-            ]);
+            return self::getKeyboardAgentTurn($chatLanguage);
         }
+    }
+
+    private static function getKeyboardMasterTurn(string $chatLanguage) {
+        return new InlineKeyboardMarkup([
+            [
+                [
+                    'text' => AppString::get('game.open_dm', null, $chatLanguage),
+                    'url' => 't.me/CodinomesBot'
+                ]
+            ]
+        ]);
+    }
+
+    private static function getKeyboardAgentTurn(string $chatLanguage) {
+        return new InlineKeyboardMarkup([
+            [
+                [
+                    'text' => AppString::get('game.skip', null, $chatLanguage),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::SKIP
+                    ])
+                ],
+                [
+                    'text' => AppString::get('game.choose_card', null, $chatLanguage),
+                    'switch_inline_query_current_chat' => ''
+                ]
+            ]
+        ]);
     }
     
     private static function getMasterKeyboard(string $chatLanguage) {

@@ -94,13 +94,17 @@ class Start implements Action {
             $user->username = $update->getFrom()->getUsername();
             $user->save();
 
-            Menu::send($game, $bot, true);
+            Menu::send($game, $bot);
             $bot->sendMessage($user->id, AppString::get('game.invite_coop_accepted', [
                 'name' => AppString::get('game.mention', [
                     'id' => $game->creator_id,
                     'name' => $game->creator->name
                 ])
             ]), 'MarkdownV2');
+            
+            $bot->sendMessage($game->creator->id, AppString::get('game.dm_start', null, $game->creator->language));
+            $bot->sendMessage($game->getPartner()->id, AppString::get('game.dm_start', null, $game->getPartner()->language));
+
             return true;
         }
         return false;

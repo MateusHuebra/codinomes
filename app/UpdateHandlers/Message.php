@@ -8,6 +8,7 @@ use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
 use App\Actions\Game\ChosenGuess\Factory as ChosenGuessFactory;
 use App\Actions\Game\ChosenHint;
+use App\Actions\Game\Hint;
 use App\Actions\Game\Info;
 use App\Actions\Game\Leave;
 use App\Actions\Game\SendList;
@@ -74,22 +75,51 @@ class Message implements UpdateHandler {
             if(
                 $update->isChatType('private')
                 &&
-                $game->role == 'master'
-                &&
-                $user->currentGame()->player->role == 'master'
-                &&
-                $game->team == $user->currentGame()->player->team
+                (
+                    $game->mode != Game::COOP
+                    &&
+                    $game->role == 'master'
+                    &&
+                    $user->currentGame()->player->role == 'master'
+                    &&
+                    $game->team == $user->currentGame()->player->team
+                )
+                ||
+                (
+                    $game->mode == Game::COOP
+                    &&
+                    $game->role == null
+                    &&
+                    preg_match(Hint::REGEX_HINT_NUMBER_COMPOUND, mb_strtoupper($update->getMessageText(), 'UTF-8'), $matches)
+                    &&
+                    isset($matches['number'])
+                )
             ) {
                 return new ChosenHint;
 
             } else if (
-                $update->isChatType('supergroup')
-                &&
-                $game->role == 'agent'
-                &&
-                $user->currentGame()->player->role == 'agent'
-                &&
-                $game->team == $user->currentGame()->player->team
+                $update->getMessageText() === mb_strtoupper($update->getMessageText(), 'UTF-8')
+                &&(
+                    (
+                        $game->mode != Game::COOP
+                        &&
+                        $update->isChatType('supergroup')
+                        &&
+                        $game->role == 'agent'
+                        &&
+                        $user->currentGame()->player->role == 'agent'
+                        &&
+                        $game->team == $user->currentGame()->player->team
+                    )
+                    ||
+                    (
+                        $game->mode == Game::COOP
+                        &&
+                        $update->isChatType('private')
+                        &&
+                        ($game->role == $user->currentGame()->player->role || $game->attempts_left == 0)
+                    )
+                )
             ) {
                 return ChosenGuessFactory::build($game->mode);
             }
@@ -157,7 +187,7 @@ class Message implements UpdateHandler {
             return new Create(Game::EMOJI);
 
         } else if(in_array($command, ['new_coop', 'novo_coop'])) {
-            //return new Create(Game::COOP);
+            return new Create(Game::COOP);
 
         } else if(in_array($command, ['new_random', 'novo_aleatorio'])) {
             return new Create('random');

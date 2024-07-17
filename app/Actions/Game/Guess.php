@@ -20,18 +20,21 @@ class Guess implements Action {
         $emojis = [
             'w' => Game::COLORS['white'],
             'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->getColor('a')],
-            'b' => Game::COLORS[$game->getColor('b')]
+            'a' => Game::COLORS[$game->getColor('a')]
         ];
+        if($game->mode != Game::COOP) {
+            $emojis+= ['b' => Game::COLORS[$game->getColor('b')]];
+        }
         if($game->mode == Game::TRIPLE) {
             $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
         }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
+        $revealedField = $game->role == 'agent' ? 'revealed' : 'coop_revealed';
         $cards = $game->cards()
-            ->where('revealed', false)
-            ->orderBy('position')
-            ->get();
+                      ->where($revealedField, false)
+                      ->orderBy('position')
+                      ->get();
 
         $results = [];
         if(preg_match(self::REGEX, $query, $matches)) {
@@ -44,7 +47,7 @@ class Guess implements Action {
                 $results[] = $this->getErrorResult();
             } else {
                 foreach($cards as $card) {
-                    $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$card->team];
+                    $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
                     $title = $card->text;
                     $messageContent = new Text($emoji.' '.$title);
                     $data = CDM::toString([
