@@ -107,8 +107,8 @@ class SendList implements Action {
                                     ->where($otherTeamField, 'w');
                           });
                 })
-                ->orderBy($teamField)
                 ->orderBy('position')
+                ->orderBy($teamField)
                 ->get();
                 $teamField = $coopRole == 'agent' ? 'coop_team' : 'team';
             }

@@ -9,6 +9,7 @@ use App\Models\GameCard;
 use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Aux\GuessData;
+use App\Services\ServerLog;
 use Exception;
 use TelegramBot\Api\BotApi;
 
@@ -33,7 +34,7 @@ class Coop extends Classic implements Action {
                                   ->where('coop_revealed', true);
                           })->count();
         
-
+        ServerLog::log("cardsLeft = $cardsLeft");
         if($cardTeam == $player->team) {
             return $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, null);
 

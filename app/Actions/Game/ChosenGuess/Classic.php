@@ -40,7 +40,23 @@ class Classic implements Action {
         if(!$card) {
             return;
         }
-        if(($game->role == 'agent' && $card->revealed) || ($game->mode == Game::COOP && $game->role == 'master' && $card->coop_revealed)) {
+        if(
+            ($game->mode != Game::COOP && $card->revealed)
+            || 
+            ($game->mode == Game::COOP && $game->role == 'master'
+                && (
+                    $card->coop_revealed
+                    || ($card->revealed && $card->team != 'w')
+                )
+            )
+            || 
+            ($game->mode == Game::COOP && $game->role == 'agent'
+                && (
+                    $card->revealed
+                    || ($card->coop_revealed && $card->coop_team != 'w')
+                )
+            )
+        ) {
             return;
         }
 

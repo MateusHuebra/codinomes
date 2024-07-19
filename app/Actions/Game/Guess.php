@@ -30,11 +30,7 @@ class Guess implements Action {
         }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
-        $revealedField = $game->role == 'agent' ? 'revealed' : 'coop_revealed';
-        $cards = $game->cards()
-                      ->where($revealedField, false)
-                      ->orderBy('position')
-                      ->get();
+        $cards = $this->getCards($game);
 
         $results = [];
         if(preg_match(self::REGEX, $query, $matches)) {
@@ -63,6 +59,31 @@ class Guess implements Action {
         }
 
         $bot->answerInlineQuery($update->getId(), $results, 5, true);
+    }
+
+    private function getCards(Game $game) {
+        if($game->mode != Game::COOP) {
+            return $game->cards()
+                        ->where('revealed', false)
+                        ->orderBy('position')
+                        ->get();
+        }
+
+        $revealedField = $game->role == 'master' ? 'coop_revealed' : 'revealed';
+        $otherTeamField = $game->role == 'agent' ? 'coop_team' : 'team';
+        $otherRevealedField = $game->role == 'agent' ? 'coop_revealed' : 'revealed';
+
+        return $game->cards()
+                ->where($revealedField, false)
+                ->where(function($query) use ($otherTeamField, $otherRevealedField) {
+                    $query->where($otherRevealedField, false)
+                          ->orWhere(function($query) use ($otherTeamField, $otherRevealedField) {
+                              $query->where($otherRevealedField, true)
+                                    ->where($otherTeamField, 'w');
+                          });
+                })
+                ->orderBy('position')
+                ->get();
     }
 
     private function getErrorResult() {
