@@ -69,8 +69,9 @@ class Menu {
             ];
 
         } else if($game->mode == Game::COOP) {
+            $botUsername = env('APP_ENV')=='local' ? 'KianTestsBot' : 'CodinomesBot';
             $url = 'https://t.me/share/url?url='
-                    .rawurlencode("https://t.me/codinomesbot?start=coop_{$game->creator_id}_{$game->id}")
+                    .rawurlencode("https://t.me/$botUsername?start=coop_{$game->creator_id}_{$game->id}")
                     .'&text='
                     .rawurlencode(AppString::get('game.invite_coop_text'));
             $buttonsArray[] = [

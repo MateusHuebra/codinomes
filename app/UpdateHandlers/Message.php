@@ -117,6 +117,8 @@ class Message implements UpdateHandler {
                         &&
                         $update->isChatType('private')
                         &&
+                        !$update->getViaBot()
+                        &&
                         ($game->role == $user->currentGame()->player->role || $game->attempts_left == 0)
                     )
                 )
