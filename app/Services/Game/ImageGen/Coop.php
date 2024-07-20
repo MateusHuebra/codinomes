@@ -43,6 +43,49 @@ class Coop Extends Classic {
 
             $textColor = imagecolorallocate($bothCardImage, $rgbTextColor, $rgbTextColor, $rgbTextColor);
             imagefttext($bothCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $textColor, $this->fontPath, $card->text);
+
+            if($card->team == 'a' && $card->coop_team == 'a') {
+                $doubleImage = imagecreatefrompng(public_path("images/coop_double_card.png"));
+                if($card->revealed) {
+                    $masterCardImage = imagecreatetruecolor(parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    imagealphablending($masterCardImage, false);
+                    imagesavealpha($masterCardImage, true);
+                    imagecopy($masterCardImage, $bothCardImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    imagecopy($bothCardImage, $doubleImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    $agentsCardImage = $bothCardImage;
+                } else {
+                    $agentsCardImage = imagecreatetruecolor(parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    imagealphablending($agentsCardImage, false);
+                    imagesavealpha($agentsCardImage, true);
+                    imagecopy($agentsCardImage, $bothCardImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    imagecopy($bothCardImage, $doubleImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                    $masterCardImage = $bothCardImage;
+                }
+                $bothCardImage = null;
+                imagedestroy($doubleImage);
+            
+            } else if($card->revealed && $card->team == 'a' && $card->coop_team == 'x') {
+                $blackImage = imagecreatefrompng(public_path("images/coop_black_card.png"));
+                $masterCardImage = imagecreatetruecolor(parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                imagealphablending($masterCardImage, false);
+                imagesavealpha($masterCardImage, true);
+                imagecopy($masterCardImage, $bothCardImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                imagecopy($bothCardImage, $blackImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                $agentsCardImage = $bothCardImage;
+                $bothCardImage = null;
+                imagedestroy($blackImage);
+            
+            } else if($card->coop_revealed && $card->team == 'x' && $card->coop_team == 'a') {
+                $blackImage = imagecreatefrompng(public_path("images/coop_black_card.png"));
+                $agentsCardImage = imagecreatetruecolor(parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                imagealphablending($agentsCardImage, false);
+                imagesavealpha($agentsCardImage, true);
+                imagecopy($agentsCardImage, $bothCardImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                imagecopy($bothCardImage, $blackImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
+                $masterCardImage = $bothCardImage;
+                $bothCardImage = null;
+                imagedestroy($blackImage);
+            }
         
         } else {
             $masterCardImage = imagecreatefrompng(public_path("images/{$colorMaster}_card.png"));

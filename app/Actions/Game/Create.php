@@ -28,7 +28,7 @@ class Create implements Action {
         }
 
         if($this->mode == Game::COOP && $update->getFromId() != env('TG_MY_ID')) {
-            return;
+            //return;
         }
 
         if($update->isChatType('supergroup')) {

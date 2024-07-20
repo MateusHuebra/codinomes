@@ -34,7 +34,7 @@ class Coop extends Classic implements Action {
                                   ->where('coop_revealed', true);
                           })->count();
         
-        ServerLog::log("cardsLeft = $cardsLeft");
+        ServerLog::log("chosen $card->text | $card->team x $card->coop_team | cardsLeft = $cardsLeft");
         if($cardTeam == $player->team) {
             return $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, null);
 
