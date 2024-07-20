@@ -293,17 +293,20 @@ class Classic {
         return $result;
     }
 
-    protected function markCardAsRevealedConsideringEasterEgg($image, string $text) {
+    protected function markCardAsRevealedConsideringEasterEgg($image, string $text, bool $isInverted = null) {
         if(in_array($text, self::EASTER_EGGS)) {
             $easterEggImage = imagecreatefrompng(public_path("images/eggs/{$text}.png"));
             imagecopy($image, $easterEggImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
         } else {
-            $this->markCardAsRevealed($image);
+            $this->markCardAsRevealed($image, $isInverted);
         }
     }
 
-    protected function markCardAsRevealed($image) {
+    protected function markCardAsRevealed($image, bool $isInverted = null) {
         $revealedImage = imagecreatefrompng(public_path("images/revealed_card.png"));
+        if ($isInverted) {
+            imageflip($revealedImage, IMG_FLIP_HORIZONTAL);
+        }
         imagecopy($image, $revealedImage, 0, 0, 0, 0, self::CARD_WIDTH, self::CARD_HEIGHT);
         imagedestroy($revealedImage);
     }

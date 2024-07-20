@@ -36,7 +36,7 @@ class Coop Extends Classic {
             $bothCardImage = imagecreatefrompng(public_path("images/{$color}_card.png"));
             $rgbTextColor = $color=='black' ? 255 : 0;
 
-            $this->markCardAsRevealedConsideringEasterEgg($bothCardImage, $card->text);
+            $this->markCardAsRevealedConsideringEasterEgg($bothCardImage, $card->text, $card->coop_revealed);
             if(false === $this->highlightCardIfNeeded($bothCardImage, $card, $highlightCard)) {
                 $rgbTextColor = 150;
             }
