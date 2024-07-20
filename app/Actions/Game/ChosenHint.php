@@ -51,17 +51,16 @@ class ChosenHint implements Action {
         $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
-        $game->updateStatus('playing', $player->team, $nextRole);
         if($game->mode == Game::COOP) {
             if($game->role == $player->role) {
-                $game->attempts_left--;
+                $attemptsLeft = $game->attempts_left - 1;
             }
         } else if(in_array($data[CDM::NUMBER], ['∞', 0])) {
-            $game->attempts_left = null;
+            $attemptsLeft = null;
         } else {
-            $game->attempts_left = $data[CDM::NUMBER];
+            $attemptsLeft = $data[CDM::NUMBER];
         }
-        $game->save();
+        $game->updateStatus('playing', $player->team, $nextRole, $attemptsLeft??null);
 
         $titleSize = strlen($hint) >= 16 ? 40 : 50;
         $mention = AppString::get('game.mention', [
