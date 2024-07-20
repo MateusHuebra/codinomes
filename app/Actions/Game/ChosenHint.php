@@ -22,7 +22,7 @@ class ChosenHint implements Action {
         if(
             !($game->mode != Game::COOP && $game->role == 'master' && $player->role == 'master' && $player->team == $game->team)
             && 
-            !($game->mode == Game::COOP && $game->role == null)
+            !($game->mode == Game::COOP && ($game->role == null || $game->role == $player->role))
         ) {
             return;
         }
@@ -53,7 +53,9 @@ class ChosenHint implements Action {
         
         $game->updateStatus('playing', $player->team, $nextRole);
         if($game->mode == Game::COOP) {
-            //nothing
+            if($game->role == $player->role) {
+                $game->attempts_left--;
+            }
         } else if(in_array($data[CDM::NUMBER], ['∞', 0])) {
             $game->attempts_left = null;
         } else {

@@ -88,7 +88,7 @@ class Message implements UpdateHandler {
                 (
                     $game->mode == Game::COOP
                     &&
-                    $game->role == null
+                    ($game->role == null || $game->role == $user->currentGame()->player->role)
                     &&
                     preg_match(Hint::REGEX_HINT_NUMBER_COMPOUND, mb_strtoupper($update->getMessageText(), 'UTF-8'), $matches)
                     &&
