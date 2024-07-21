@@ -416,7 +416,7 @@
             "❌ Seu pacote *{name}* foi recusado\\!\n\n{text}"
         ],
         "stolen": [
-            "Os packs deste chat foram roubados com sucesso para o seu Coop"
+            "Os packs deste chat foram roubados com sucesso para o seu Coop (envie /roubar no pv para cancelar)"
         ],
         "stop_steal": [
             "Packs para o Coop definidos de volta ao padrão"

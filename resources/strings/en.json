@@ -416,7 +416,7 @@
             "❌ Your pack *{name}* has been denied\\!\n\n{text}"
         ],
         "stolen": [
-            "The packs from this chat have been successfully stolen for your Coop"
+            "The packs from this chat have been successfully stolen for your Coop (send /steal on my DM to cancel)"
         ],
         "stop_steal": [
             "Packs for the Coop set back to default"
