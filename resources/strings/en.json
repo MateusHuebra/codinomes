@@ -646,6 +646,24 @@
         ],
         "kian_knows_info": [
             "Play a match with the developer"
+        ],
+        "thin_ice": [
+            "On Thin Ice"
+        ],
+        "thin_ice_info": [
+            "Win a Coop Mode match in Sudden Death round"
+        ],
+        "lovebirds": [
+            "Lovebirds"
+        ],
+        "lovebirds_info": [
+            "Win a match in Coop Mode as Pink Team"
+        ],
+        "egg_hunt": [
+            "Egg Hunt"
+        ],
+        "egg_hunt_info": [
+            "Find one of the Easter Egg cards"
         ]
     },
     "did_you_know": {
@@ -662,7 +680,8 @@
             "🗒️ The bot can /list all the available words for you",
             "📦 You can create your own word /packs in the bot's private chat and activate them in /settings > My Packs",
             "🛡️ Make the bot an Admin for it to be able to pin the game lobby and clean up game messages from others",
-            "🔤 You can send your guesses as regular uppercase messages LIKE THIS in the group"
+            "🔤 You can send your guesses as regular uppercase messages LIKE THIS in the group",
+            "👥 You can /steal packs from a group to use in your Coop matches"
         ],
         "randomize": [
             "Aleatório ↻"

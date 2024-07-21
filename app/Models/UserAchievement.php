@@ -33,10 +33,13 @@ class UserAchievement extends Model
         'proplayer',
         'pride',
         'kian_knows',
-        'making_friends'
+        'making_friends',
+        'thin_ice',
+        'lovebirds',
+        'egg_hunt'
     ];
 
-    public static function add(Collection $users, string $achievement, BotApi $bot, int $chatId) {
+    public static function add(Collection $users, string $achievement, BotApi $bot, int $chatId = null) {
         $usersNames = [];
 
         foreach($users as $user) {
@@ -69,7 +72,13 @@ class UserAchievement extends Model
             'users' => $usersList
         ]);
 
-        $bot->sendMessage($chatId, $text, 'MarkdownV2');
+        if($chatId) {
+            $bot->sendMessage($chatId, $text, 'MarkdownV2');
+        } else {
+            foreach ($users as $user) {
+                $bot->sendMessage($user->id, $text, 'MarkdownV2');
+            }
+        }
     }
 
     public static function testEndGame(Collection $users, BotApi $bot, int $chatId) {

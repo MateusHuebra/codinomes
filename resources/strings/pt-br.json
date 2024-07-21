@@ -646,6 +646,24 @@
         ],
         "kian_knows_info": [
             "Jogue uma partida com o desenvolvedor"
+        ],
+        "thin_ice": [
+            "Por Um Fio"
+        ],
+        "thin_ice_info": [
+            "Vença o Modo Coop na rodada de Morte Súbita"
+        ],
+        "lovebirds": [
+            "Pombinhos"
+        ],
+        "lovebirds_info": [
+            "Vença uma partida no Modo Coop como Equipe Rosa"
+        ],
+        "egg_hunt": [
+            "Caça Aos Ovos"
+        ],
+        "egg_hunt_info": [
+            "Encontre uma das cartas com Easter Egg"
         ]
     },
     "did_you_know": {
@@ -662,7 +680,8 @@
             "🗒️ O bot pode /listar todas as palavras disponíveis para você",
             "📦 Você pode criar seus próprios /pacotes de palavras no pv do bot e ativá-las em /config > Meus Packs",
             "🛡️ Dê admin para o bot fixar o lobby do jogo e ir limpando mensagens de jogo dos outros",
-            "🔤 Você pode enviar seus chutes como mensagens normais maiúsculas ASSIM no grupo"
+            "🔤 Você pode enviar seus chutes como mensagens normais maiúsculas ASSIM no grupo",
+            "👥 Você pode /roubar os packs de um grupo para usar em suas partidas Coop"
         ],
         "randomize": [
             "Aleatório ↻"

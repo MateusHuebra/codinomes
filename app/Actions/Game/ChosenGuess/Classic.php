@@ -92,6 +92,11 @@ class Classic implements Action {
         } else {
             return $this->handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player);
         }
+
+        if(in_array($card->text, \App\Services\Game\ImageGen\Classic::EASTER_EGGS)) {
+            $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+            UserAchievement::add($agents, 'egg_hunt', $bot, $game->chat_id);
+        }
     }
 
     protected function getChosenCard(Update $update, int $gameId) {

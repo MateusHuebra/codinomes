@@ -7,6 +7,7 @@ use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\User;
+use App\Models\UserAchievement;
 use App\Services\AppString;
 use App\Services\Game\Aux\GuessData;
 use Exception;
@@ -53,6 +54,13 @@ class Coop extends Classic implements Action {
         if($cardsLeft <= 0) {
             $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
             $guessData->attemptType = $attemptType;
+
+            if($game->getColor('a') == 'pink') {
+                UserAchievement::add($game->users, 'lovebirds', $bot);
+            }
+            if($game->attempts_left == 0) {
+                UserAchievement::add($game->users, 'thin_ice', $bot);
+            }
             
         //next
         } else {
