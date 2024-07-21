@@ -86,7 +86,7 @@ class ConfirmSkip implements Action {
 
             } else if($game->attempts_left == 1) {
                 $title = AppString::get('game.sudden_death', null, $chatLanguage);
-                $text = AppString::get('game.sudden_death_info', null, $chatLanguage);
+                $captionText = AppString::get('game.sudden_death_info', null, $chatLanguage);
                 
             } else {
                 $title = AppString::get('game.skipped', null, $chatLanguage);
@@ -119,7 +119,7 @@ class ConfirmSkip implements Action {
             }
         }
 
-        $caption = new Caption($title, $text??$game->getLastHint(), 30, $game->mode==Game::EMOJI);
+        $caption = new Caption($title, $captionText??$game->getLastHint(), 30, $game->mode==Game::EMOJI);
         Table::send($game, $bot, $caption, null);
     }
 
