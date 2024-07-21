@@ -58,17 +58,17 @@ class GameCard extends Model
         if($game->mode == Game::COOP) {
             $coopPacksChatId = $game->creator->coop_packs_chat_id;
             if($coopPacksChatId) {
-                $packs = Chat::find($coopPacksChatId)->packs();
+                $chat = Chat::find($coopPacksChatId);
             }
             return self::getBasePacksByLanguage($game->creator->language);
         } else {
-            $packs = $game->chat->packs();
+            $chat = $game->chat;
         }
 
-        if($packs->count() == 0) {
+        if($chat->packs()->count() == 0) {
             return false;
         }
-        return $packs->getCards();
+        return $chat->packs->getCards();
     }
 
     private static function getBasePacksByLanguage(string $language) {
