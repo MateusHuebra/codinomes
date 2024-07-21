@@ -9,7 +9,6 @@ use App\Models\GameCard;
 use App\Models\User;
 use App\Services\AppString;
 use App\Services\Game\Aux\GuessData;
-use App\Services\ServerLog;
 use Exception;
 use TelegramBot\Api\BotApi;
 
@@ -35,7 +34,6 @@ class Coop extends Classic implements Action {
                           })->where('game_id', $game->id)
                           ->count();
                           
-        $bot->sendMessage($user->id, 'restantes: '.$cardsLeft); //TODO remove later
         if($cardTeam == $player->team) {
             return $this->handleCorrectGuess($update, $user, $card, $game, $emoji, $bot, $cardsLeft, $player, $chatLanguage, null);
 
@@ -77,13 +75,13 @@ class Coop extends Classic implements Action {
 
     protected function handleIncorrectGuess($update, $game, $card, $user, $emoji, $bot, $chatLanguage, $opponentCardsLeft, $player) : GuessData {
         $this->handleMessage($update, $user, $card, $game, $emoji, $bot, false);
-        $attemptType =  'white';
+        $attemptType = 'white';
 
-        if($game->attempts_left == 0) {
+        if($game->attempts_left == 1) {
             $title = AppString::get('game.sudden_death', null, $chatLanguage);
             $text = AppString::get('game.sudden_death_info', null, $chatLanguage);
-        } else if($game->attempts_left < 0) {
-            $guessData = $this->getWinningGuessData($game, 'x', $chatLanguage, 'rounds_over');
+        } else if($game->attempts_left <= 0) {
+            return $this->getWinningGuessData($game, 'x', $chatLanguage, 'rounds_over');
         } else {
             $title = AppString::get('game.incorrect', null, $chatLanguage);
             $text = $game->getLastHint();
@@ -92,7 +90,7 @@ class Coop extends Classic implements Action {
         //skip
         $game->nextStatusCoop();
 
-        $guessData??= new GuessData($title, $attemptType, $text);
+        $guessData = new GuessData($title, $attemptType, $text);
 
         return $guessData;
     }

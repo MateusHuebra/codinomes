@@ -210,6 +210,9 @@
         "turn_coop": [
             "É a vez de {role} {team}"
         ],
+        "turn_sudden_death": [
+            "Morte Súbita: chutem até acabar"
+        ],
         "sudden_death": [
             "morte súbita"
         ],
@@ -497,6 +500,12 @@
         ],
         "your_turn_only": [
             "Você só pode usar esse comando na sua vez de jogar"
+        ],
+        "cannot_skip_sudden_death": [
+            "Você não pode passar a vez na Morte Súbita"
+        ],
+        "not_enough_rounds_to_hint": [
+            "Não há mais rounds para dar dicas"
         ]
     },
     "time": {

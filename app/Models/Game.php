@@ -170,6 +170,9 @@ class Game extends Model
     public function getPhotoCaption() {
         $teamColor = $this->getColor($this->team);
         if($this->mode == self::COOP) {
+            if($this->attempts_left == 0) {
+                return AppString::get('game.turn_sudden_death', null, $this->creator->language);
+            }
             switch ($this->role) {
                 case 'master':
                     $name = $this->creator->name;

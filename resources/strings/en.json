@@ -210,6 +210,9 @@
         "turn_coop": [
             "It's turn of {role} {team}"
         ],
+        "turn_sudden_death": [
+            "Sudden Death: guess until it ends"
+        ],
         "sudden_death": [
             "sudden death"
         ],
@@ -497,6 +500,12 @@
         ],
         "your_turn_only": [
             "You can only use this command on your turn to play"
+        ],
+        "cannot_skip_sudden_death": [
+            "You cannot skip on Sudden Death"
+        ],
+        "not_enough_rounds_to_hint": [
+            "No more rounds to give hints"
         ]
     },
     "time": {

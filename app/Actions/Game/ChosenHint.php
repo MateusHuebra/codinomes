@@ -44,15 +44,12 @@ class ChosenHint implements Action {
             $data = CDM::toArray($update->getResultId());
         }
         
-        $nextRole = $player->role == 'agent' ? 'master' : 'agent';
-        $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
-        $color = $game->getColor($player->team);
-        $emoji = $player->role == 'master' ? Game::COLORS[$color] : '👥';
-        $historyLine = $emoji.' '.$hint;
-        $game->addToHistory('*'.$historyLine.'*');
-        
         if($game->mode == Game::COOP) {
             if($game->role == $player->role) {
+                if($game->attempts_left <= 1) {
+                    $bot->sendMessage($update->getFromId(), AppString::get('error.not_enough_rounds_to_hint'));
+                    return;
+                }
                 $attemptsLeft = $game->attempts_left - 1;
             }
         } else if(in_array($data[CDM::NUMBER], ['∞', 0])) {
@@ -60,6 +57,13 @@ class ChosenHint implements Action {
         } else {
             $attemptsLeft = $data[CDM::NUMBER];
         }
+        
+        $nextRole = $player->role == 'agent' ? 'master' : 'agent';
+        $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
+        $color = $game->getColor($player->team);
+        $emoji = $player->role == 'master' ? Game::COLORS[$color] : '👥';
+        $historyLine = $emoji.' '.$hint;
+        $game->addToHistory('*'.$historyLine.'*');
         $game->updateStatus('playing', $player->team, $nextRole, $attemptsLeft??null);
 
         $titleSize = strlen($hint) >= 16 ? 40 : 50;

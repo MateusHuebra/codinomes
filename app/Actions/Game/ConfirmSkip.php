@@ -80,16 +80,27 @@ class ConfirmSkip implements Action {
         }
 
         if($game->mode == Game::COOP) {
+            if($game->attempts_left <= 0) {
+                $bot->sendMessage($update->getChatId(), AppString::get('error.cannot_skip_sudden_death'));
+                return;
+
+            } else if($game->attempts_left == 1) {
+                $title = AppString::get('game.sudden_death', null, $chatLanguage);
+                $text = AppString::get('game.sudden_death_info', null, $chatLanguage);
+                
+            } else {
+                $title = AppString::get('game.skipped', null, $chatLanguage);
+            }
+
             try {
                 $bot->sendMessage($game->creator->id, $text, 'MarkdownV2');
                 $bot->sendMessage($game->getPartner()->id, $text, 'MarkdownV2');
             } catch(Exception $e) {}
-
+    
             $game->attempts_left--;
             $game->role = null;
             $game->save();
-            
-            $title = AppString::get('game.skipped', null, $chatLanguage);
+
         } else {
             $bot->sendMessage($game->chat_id, $text, 'MarkdownV2');
             $currentPlayer = $game->users()->fromTeamRole($game->team, 'agent')->first();
@@ -108,7 +119,7 @@ class ConfirmSkip implements Action {
             }
         }
 
-        $caption = new Caption($title, $game->getLastHint(), 30, $game->mode==Game::EMOJI);
+        $caption = new Caption($title, $text??$game->getLastHint(), 30, $game->mode==Game::EMOJI);
         Table::send($game, $bot, $caption, null);
     }
 
