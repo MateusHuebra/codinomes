@@ -59,8 +59,9 @@ class GameCard extends Model
             $coopPacksChatId = $game->creator->coop_packs_chat_id;
             if($coopPacksChatId) {
                 $chat = Chat::find($coopPacksChatId);
+            } else {
+                return self::getBasePacksByLanguage($game->creator->language);
             }
-            return self::getBasePacksByLanguage($game->creator->language);
         } else {
             $chat = $game->chat;
         }
