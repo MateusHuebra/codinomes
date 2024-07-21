@@ -61,7 +61,7 @@ class Classic implements Action {
         }
 
         $emojis = $this->getEmojis($game);
-        $emoji = $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
+        $emoji = $emojis[$player->role == 'agent' ? $card->team : $card->coop_team];
 
         $game->addToHistory('  - '.$emoji.' '.mb_strtolower($card->text, 'UTF-8'));
 
