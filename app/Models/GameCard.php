@@ -57,11 +57,10 @@ class GameCard extends Model
     private static function getCardsToBeAdded(Game $game) {
         if($game->mode == Game::COOP) {
             $coopPacksChatId = $game->creator->coop_packs_chat_id;
-            if($coopPacksChatId) {
-                $chat = Chat::find($coopPacksChatId);
-            } else {
+            if(!$coopPacksChatId) {
                 return self::getBasePacksByLanguage($game->creator->language);
             }
+            $chat = Chat::find($coopPacksChatId);
         } else {
             $chat = $game->chat;
         }
