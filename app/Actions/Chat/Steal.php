@@ -9,7 +9,7 @@ use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use App\Actions\Language\Get as GetLanguage;
 
-class Add implements Action {
+class Steal implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
         if($update->isChatType('supergroup')) {

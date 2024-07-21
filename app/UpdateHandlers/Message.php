@@ -6,6 +6,7 @@ use App\Actions\Achievements;
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
+use App\Actions\Chat\Steal;
 use App\Actions\Game\ChosenGuess\Factory as ChosenGuessFactory;
 use App\Actions\Game\ChosenHint;
 use App\Actions\Game\Hint;
@@ -214,6 +215,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['color', 'cor'])) {
             return new GetColors;
+
+        } else if(in_array($command, ['steal', 'roubar'])) {
+            return new Steal;
 
         } else if(in_array($command, ['language', 'idioma'])) {
             return new Get;
