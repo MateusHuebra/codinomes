@@ -414,6 +414,12 @@
         ],
         "pack_denied": [
             "❌ Seu pacote *{name}* foi recusado\\!\n\n{text}"
+        ],
+        "stolen": [
+            "Os packs deste chat foram roubados com sucesso para o seu Coop"
+        ],
+        "stop_steal": [
+            "Packs para o Coop definidos de volta ao padrão"
         ]
     },
     "error": {

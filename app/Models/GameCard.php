@@ -13,15 +13,7 @@ class GameCard extends Model
     private static $cardsCounts = [];
 
     public static function set(Game $game, string $firstTeam) : Bool {
-        if($game->mode == Game::COOP) {
-            $cardsToBeAdded = Card::where('pack_id', 1)->get();
-        } else {
-            if($game->chat->packs()->count() == 0) {
-                return false;
-            }
-            $cardsToBeAdded = $game->chat->packs->getCards();
-        }
-        
+        $cardsToBeAdded = self::getCardsToBeAdded($game);
         self::setCardsCountsByMode($game->mode);
 
         if($cardsToBeAdded->count() < self::$cardsCounts['max']) {
@@ -60,6 +52,36 @@ class GameCard extends Model
         }
 
         return true;
+    }
+
+    private static function getCardsToBeAdded(Game $game) {
+        if($game->mode == Game::COOP) {
+            $coopPacksChatId = $game->creator->coop_packs_chat_id;
+            if($coopPacksChatId) {
+                $packs = Chat::find($coopPacksChatId)->packs();
+            }
+            return self::getBasePacksByLanguage($game->creator->language);
+        } else {
+            $packs = $game->chat->packs();
+        }
+
+        if($packs->count() == 0) {
+            return false;
+        }
+        return $packs->getCards();
+    }
+
+    private static function getBasePacksByLanguage(string $language) {
+        switch ($language) {
+            case 'pt-br':
+                $packId = 1;
+                break;
+            
+            default:
+                $packId = 5;
+                break;
+        }
+        return Card::where('pack_id', $packId)->get();
     }
 
     public static function randomizeUnrevealedCardsWords(Game $game) {
