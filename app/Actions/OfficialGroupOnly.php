@@ -21,8 +21,8 @@ class OfficialGroupOnly implements Action {
 
         $emoji = $on ? '🔥': '👨‍💻';
         $bot->setMessageReaction($update->getChatId(), $update->getMessageId(), $emoji);
-        $bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ manutenção', 'pt');
-        $bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ maintenance');
+        //$bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ manutenção', 'pt');
+        //$bot->setMyName($on ? 'Codinomes' : 'Codinomes ⚠️ maintenance');
     }
 
 }
