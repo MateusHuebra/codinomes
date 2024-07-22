@@ -83,7 +83,7 @@
             "COOP beta"
         ],
         "coop_info": [
-            "Testes"
+            "Modo Coop, funciona no privado para apenas duas pessoas, ambas são mestres e agentes uma da outra\n\nVocês vêem a mesma tabela de palavras mas com cores diferentes, o objetivo é se revezar dando dicas para encontrar todas as 15 coloridas dentro de 9 rodadas\n\nAo fim das 9 rodadas haverá uma rodada de Morte Súbita, onde ambos podem, sem dicas, chutar até ganhar ou perder\n\n- Como são distribuídas as cores:\n\n6 cartas coloridas diferentes pra cada\ne 3 são coloridas compartilhadas \n\n3 cartas pretas sendo 1 preta pra ambos, 1 colorida e 1 branca pro seu parceiro\n\nAo virar uma carta colorida que também é colorida pra você, ela ficará marcada com um pequeno X branco no canto - Caso ela fosse preta pra você, ficará marcada com um pequeno X preto no lugar"
         ],
         "check_other": [
             "Veja outros modos: /ajuda_modos"

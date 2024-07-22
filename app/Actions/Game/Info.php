@@ -10,14 +10,18 @@ use TelegramBot\Api\BotApi;
 class Info implements Action {
 
     public function run(Update $update, BotApi $bot) : Void {
-        if(!$update->isChatType('supergroup')) {
+        if($update->isChatType('supergroup')) {
+            $model = $update->findChat();
+        } else if($update->isChatType('private')) {
+            $model = $update->findUser();
+        } else {
             return;
         }
-        $chat = $update->findChat();
-        if (!$chat) {
+        
+        if (!$model) {
             return;
         }
-        $game = $chat->currentGame();
+        $game = $model->currentGame();
 
         if ($game) {
             $text = AppString::get('mode.'.$game->mode.'_info').PHP_EOL.PHP_EOL.AppString::get('mode.check_other');
@@ -25,7 +29,7 @@ class Info implements Action {
             $text = AppString::get('error.no_game');
         }
         
-        $bot->sendMessage($chat->id, $text, null, false, $update->getMessageId(), null, false, null, null, true);
+        $bot->sendMessage($model->id, $text, null, false, $update->getMessageId(), null, false, null, null, true);
     }
 
 }
