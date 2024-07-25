@@ -110,7 +110,7 @@ class Create implements Action {
         $game->creator_id = $user->id;
         $game->save();
 
-        $this->setGameColors($game);
+        $this->setGameColors($game, $user->default_color);
 
         $user->games()->syncWithoutDetaching([
             $game->id => [
@@ -122,8 +122,15 @@ class Create implements Action {
         return $game;
     }
 
-    private function setGameColors(Game $game) {
-        $primaryColor = $game->mode==Game::COOP ? 'purple' : 'red';
+    private function setGameColors(Game $game, string $defaultColor = null) {
+        if($game->mode != Game::COOP) {
+            $primaryColor = 'red';
+        } else if ($defaultColor) {
+            $primaryColor = $defaultColor;
+        } else {
+            $primaryColor = 'purple';
+        }
+        
         $game->teamColors()->create([
             'team' => 'a',
             'color' => $primaryColor
