@@ -16,7 +16,7 @@ class GameCard extends Model
         $cardsToBeAdded = self::getCardsToBeAdded($game);
         self::setCardsCountsByMode($game->mode);
 
-        if($cardsToBeAdded->count() < self::$cardsCounts['max']) {
+        if(!$cardsToBeAdded || $cardsToBeAdded->count() < self::$cardsCounts['max']) {
             return false;
         } else if($game->mode == Game::SUPER_CRAZY && $cardsToBeAdded->count() < self::$cardsCounts['max']*2) {
             return false;
