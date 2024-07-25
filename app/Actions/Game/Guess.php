@@ -43,14 +43,16 @@ class Guess implements Action {
                 $results[] = $this->getErrorResult();
             } else {
                 foreach($cards as $card) {
-                    $emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
+                    //$emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
                     $title = $card->text;
-                    $messageContent = new Text($emoji.' '.$title);
+                    $messageContent = new Text($title);
+                    /*
                     $data = CDM::toString([
                         CDM::EVENT => CDM::GUESS,
                         CDM::NUMBER => $card->position
                     ]);
-                    $results[] = new Article($data, $title, null, null, null, null, $messageContent);
+                    */
+                    $results[] = new Article($game->id.$card->position, $title, null, null, null, null, $messageContent);
                 }
             }
             
