@@ -43,6 +43,10 @@ class CodinomesController extends Controller
             $errorMessage.= $e->getFile().' line '.$e->getLine().'```';
             ServerLog::log($errorMessage);
             $bot->sendMessage(env('TG_LOG_ID'), $errorMessage, 'MarkdownV2');
+
+            $bot->sendMessage($update->getFromId(), AppString::get('error.report', [
+                'code' => $update->getUpdateId()
+            ]));
         }
         ServerLog::log('end -----> CodinomesController > listen');
     }
