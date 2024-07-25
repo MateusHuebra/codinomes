@@ -44,9 +44,11 @@ class CodinomesController extends Controller
             ServerLog::log($errorMessage);
             $bot->sendMessage(env('TG_LOG_ID'), $errorMessage, 'MarkdownV2');
 
-            $bot->sendMessage($update->getFromId(), AppString::get('error.report', [
-                'code' => $update->getUpdateId()
-            ]));
+            if(!preg_match("/(timed out|timeout|are exactly the same)/u", $e->getMessage())) {
+                $bot->sendMessage($update->getFromId(), AppString::get('error.report', [
+                    'code' => $update->getUpdateId()
+                ]));
+            }
         }
         ServerLog::log('end -----> CodinomesController > listen');
     }
