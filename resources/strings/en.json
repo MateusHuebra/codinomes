@@ -507,6 +507,9 @@
         "not_enough_rounds_to_hint": [
             "No more rounds to give hints"
         ],
+        "guess_or_skip_before_hint": [
+            "You didn't make any guesses for the current hint, skip your turn if you're sure"
+        ],
         "report": [
             "It seems there was an error with you, please report it to @CodinomesGroup with the code {code} and any other possible details"
         ]

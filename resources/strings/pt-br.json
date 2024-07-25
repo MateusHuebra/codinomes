@@ -507,6 +507,9 @@
         "not_enough_rounds_to_hint": [
             "Não há mais rounds para dar dicas"
         ],
+        "guess_or_skip_before_hint": [
+            "Você não deu nenhum chute para a dica atual, pule a vez antes se tiver certeza"
+        ],
         "report": [
             "Parece que houve um erro com você, por favor reporte em @CodinomesGrupo com o código {code} e outros possíveis detalhes"
         ]
