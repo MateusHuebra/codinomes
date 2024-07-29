@@ -43,15 +43,8 @@ class Guess implements Action {
                 $results[] = $this->getErrorResult();
             } else {
                 foreach($cards as $card) {
-                    //$emoji = ($game->mode == Game::MYSTERY) ? '❔' : $emojis[$game->role == 'agent' ? $card->team : $card->coop_team];
                     $title = $card->text;
                     $messageContent = new Text($title);
-                    /*
-                    $data = CDM::toString([
-                        CDM::EVENT => CDM::GUESS,
-                        CDM::NUMBER => $card->position
-                    ]);
-                    */
                     $results[] = new Article($game->id.$card->position, $title, null, null, null, null, $messageContent);
                 }
             }
@@ -71,9 +64,10 @@ class Guess implements Action {
                         ->get();
         }
 
-        $revealedField = $game->role == 'master' ? 'coop_revealed' : 'revealed';
-        $otherTeamField = $game->role == 'agent' ? 'coop_team' : 'team';
-        $otherRevealedField = $game->role == 'agent' ? 'coop_revealed' : 'revealed';
+        $player = $game->player;
+        $revealedField = $player->role == 'master' ? 'coop_revealed' : 'revealed';
+        $otherTeamField = $player->role == 'agent' ? 'coop_team' : 'team';
+        $otherRevealedField = $player->role == 'agent' ? 'coop_revealed' : 'revealed';
 
         return $game->cards()
                 ->where($revealedField, false)
