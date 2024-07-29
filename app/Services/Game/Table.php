@@ -169,22 +169,18 @@ class Table {
     }    
 
     private static function getCoopKeyboard(Game $game, string $chatLanguage) {
-        switch ($game->role) {
-            case 'master':
-                $creator = self::getKeyboardAgentTurn($chatLanguage);
-                $partner = null;
-                break;
-            
-            case 'agent':
-                $creator = null;
-                $partner = self::getKeyboardAgentTurn($chatLanguage);
-                break;
-            default:
-
-                $creator = null;
-                $partner = null;
-                break;
+        if($game->role == 'master' || $game->attempts_left == 0) {
+            $creator = self::getKeyboardAgentTurn($chatLanguage);
+        } else {
+            $creator = null;
         }
+        
+        if($game->role == 'agent' || $game->attempts_left == 0) {
+            $partner = self::getKeyboardAgentTurn($chatLanguage);
+        } else {
+            $partner = null;
+        }
+
         return [
             'creator' => $creator,
             'partner' => $partner
