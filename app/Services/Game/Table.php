@@ -13,6 +13,8 @@ use TelegramBot\Api\BotApi;
 use Exception;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use App\Services\CallbackDataManager as CDM;
+use TelegramBot\Api\Types\InputMedia\ArrayOfInputMedia;
+use TelegramBot\Api\Types\InputMedia\InputMediaPhoto;
 
 class Table {
 
@@ -123,10 +125,18 @@ class Table {
 
         $creator = User::find($game->creator_id);
         $partner = $game->getPartner();
+
+        $media = new ArrayOfInputMedia();
+        $media->addItem(new InputMediaPhoto('attach://master', $text, 'MarkdownV2'));
+        $media->addItem(new InputMediaPhoto('attach://agents'));
+        $attachments = [
+            'master' => $images->masterCURLImage,
+            'agents' => $images->agentsCURLImage
+        ];
         
-        $bot->sendPhoto($creator->id, $images->masterCURLImage, $text, null, null, false, 'MarkdownV2')->getMessageId();
-        $bot->sendPhoto($partner->id, $images->agentsCURLImage, $text, null, null, false, 'MarkdownV2')->getMessageId();
-        $bot->sendPhoto(env('TG_LOG_ID'), $images->masterCURLImage, $text, null, null, false, 'MarkdownV2');
+        $bot->sendMediaGroup($creator->id, $media, false, null, null, null, null, $attachments);
+        $bot->sendMediaGroup($partner->id, $media, false, null, null, null, null, $attachments);
+        $bot->sendMediaGroup(env('TG_LOG_ID'), $media, false, null, null, null, null, $attachments);
         unlink($images->masterTempImageFileName);
 
         $game->stop($bot, $winner);
