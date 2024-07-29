@@ -89,7 +89,9 @@ class Coop extends Classic implements Action {
             $title = AppString::get('game.sudden_death', null, $chatLanguage);
             $text = AppString::get('game.sudden_death_info', null, $chatLanguage);
         } else if($game->attempts_left <= 0) {
-            return $this->getWinningGuessData($game, 'x', $chatLanguage, 'rounds_over');
+            $guessData = $this->getWinningGuessData($game, 'x', $chatLanguage, 'rounds_over');
+            $guessData->attemptType = $attemptType;
+            return $guessData;
         } else {
             $title = AppString::get('game.incorrect', null, $chatLanguage);
             $text = $game->getLastHint();
