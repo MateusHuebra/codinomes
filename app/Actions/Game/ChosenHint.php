@@ -14,7 +14,7 @@ use App\Services\CallbackDataManager as CDM;
 
 class ChosenHint implements Action {
 
-    const REGEX_NO_GUESSES_COOP = "/\*['.implode('', Game::COLORS).'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
+    const REGEX_NO_GUESSES_COOP = "/\*[".implode('', Game::COLORS)."👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
 
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
