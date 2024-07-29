@@ -100,13 +100,13 @@ class Coop Extends Classic {
             imagefttext($agentsCardImage, $textAxis['size'], 0, $textAxis['x'], $textAxis['y'], $agentsTextColor, $this->fontPath, $card->text);
         
             if($card->revealed) {
-                $revealedImage = imagecreatefrompng(public_path("images/coop_white_right.png"));
+                $revealedImage = imagecreatefrompng(public_path("images/coop_white_left.png"));
                 imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
                 imagecopy($agentsCardImage, $revealedImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
                 imagedestroy($revealedImage);
             }
             if($card->coop_revealed) {
-                $revealedImage = imagecreatefrompng(public_path("images/coop_white_left.png"));
+                $revealedImage = imagecreatefrompng(public_path("images/coop_white_right.png"));
                 imagecopy($masterCardImage, $revealedImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
                 imagecopy($agentsCardImage, $revealedImage, 0, 0, 0, 0, parent::CARD_WIDTH, parent::CARD_HEIGHT);
                 imagedestroy($revealedImage);
