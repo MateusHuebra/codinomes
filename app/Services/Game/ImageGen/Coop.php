@@ -30,13 +30,14 @@ class Coop Extends Classic {
         $colorPartner = $this->getColorMaster($card->coop_team, $game);
 
         if(($card->revealed && $card->team!='w') || ($card->coop_revealed && $card->coop_team!='w')) {
-            $color = ($card->revealed && !$card->coop_revealed) || ($card->revealed && $card->coop_revealed && $card->team != 'w')
+            $isMasterRevealed = ($card->revealed && !$card->coop_revealed) || ($card->revealed && $card->coop_revealed && $card->team != 'w');
+            $color = $isMasterRevealed
                     ? $colorMaster
                     : $colorPartner;
             $bothCardImage = imagecreatefrompng(public_path("images/{$color}_card.png"));
             $rgbTextColor = $color=='black' ? 255 : 0;
 
-            $this->markCardAsRevealedConsideringEasterEgg($bothCardImage, $card->text, $card->coop_revealed);
+            $this->markCardAsRevealedConsideringEasterEgg($bothCardImage, $card->text, $isMasterRevealed);
             if(false === $this->highlightCardIfNeeded($bothCardImage, $card, $highlightCard)) {
                 $rgbTextColor = 150;
             }
