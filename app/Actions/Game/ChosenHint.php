@@ -13,9 +13,7 @@ use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
 
 class ChosenHint implements Action {
-
-    const REGEX_NO_GUESSES_COOP = "/\*[".implode('', Game::COLORS)."👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
-
+    
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
         $game = $user->currentGame();
@@ -29,7 +27,8 @@ class ChosenHint implements Action {
             return;
         }
 
-        if($game->mode == Game::COOP && ($game->role != null && !preg_match(self::REGEX_NO_GUESSES_COOP, $game->history))) {
+        $regex = "/\*[".implode('', Game::COLORS)."👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
+        if($game->mode == Game::COOP && ($game->role != null && !preg_match($regex, $game->history))) {
             $bot->sendMessage($update->getFromId(), AppString::get('error.guess_or_skip_before_hint'));
             return;
         }
