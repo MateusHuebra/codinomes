@@ -25,6 +25,8 @@ class Stop implements Action {
                 $bot->sendMessage($user->id, AppString::get('game.stopped'));
                 if($partner) {
                     $bot->sendMessage($partner->id, AppString::get('game.stopped'));
+                    $bot->sendMessage($user->id, AppString::get('game.dm_stop', null, $user->language));
+                    $bot->sendMessage($partner->id, AppString::get('game.dm_stop', null, $partner->language));
                 }
             }
 
