@@ -14,8 +14,16 @@ class CheckTurnLeftTime {
     public function __invoke()
     {
         $bot = new BotApi(env('TG_TOKEN'));
+
+        try {
+            $this->execute($bot);
+        } catch (\Throwable $th) {
+            $bot->sendMessage(env('TG_LOG_ID'), 'CheckTurnLeftTime error: '.$th->getMessage());
+        }
+    }
+
+    private function execute(BotApi $bot) {
         $now = strtotime('now');
-        
         $games = Game::where('status', 'playing')->get();
         foreach ($games as $game) {
             $timer = $game->chat->timer;
@@ -51,7 +59,6 @@ class CheckTurnLeftTime {
                 
             } else if ($timer > 10 && $now - $time >= (60*($timer-10))) {
                 $this->warn($game, 10, $bot);
-                
             }
         }
     }
