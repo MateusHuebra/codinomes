@@ -24,7 +24,7 @@ class CheckTurnLeftTime {
 
     private function execute(BotApi $bot) {
         $now = strtotime('now');
-        $games = Game::where('status', 'playing')->get();
+        $games = Game::where('status', 'playing')->where('mode', '!=', 'coop')->get();
         foreach ($games as $game) {
             $timer = $game->chat->timer;
             if($timer == null) {
