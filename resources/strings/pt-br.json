@@ -444,6 +444,9 @@
         "admin_only": [
             "Apenas administradores do grupo podem fazer isso"
         ],
+        "bot_needs_admin": [
+            "O bot precisa ser um Admin com permissões pra fazer isso"
+        ],
         "no_required_players": [
             "A partida precisa de pelo menos um jogador em cada papel para começar"
         ],

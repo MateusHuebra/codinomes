@@ -444,6 +444,9 @@
         "admin_only": [
             "Only group admins can do that"
         ],
+        "bot_needs_admin": [
+            "Bot needs to be an Admin with permissions to do that"
+        ],
         "no_required_players": [
             "The game needs at least a player for each role to get started"
         ],
