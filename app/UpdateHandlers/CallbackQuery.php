@@ -5,6 +5,7 @@ namespace App\UpdateHandlers;
 use App\Actions\Chat\AdminOnly;
 use App\Actions\Chat\ClickToSave;
 use App\Actions\Chat\CompoundWords;
+use App\Actions\Chat\MuteMasters;
 use App\Actions\Chat\Settings;
 use App\Actions\Chat\Timer;
 use App\Actions\Game\Color;
@@ -71,6 +72,9 @@ class CallbackQuery implements UpdateHandler {
 
         } else if($data[CDM::EVENT] === CDM::CHANGE_ADMIN_ONLY) {
             return new AdminOnly;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_MUTE_MASTERS) {
+            return new MuteMasters;
 
         } else if($data[CDM::EVENT] === CDM::CHANGE_COMPOUND_WORDS) {
             return new CompoundWords;

@@ -36,8 +36,17 @@ class Settings implements Action {
             }
             return;
         }
-        /*
-        if(!$chat->hasPermission($user, $bot)) {
+
+        if($update->isType(Update::CALLBACK_QUERY)) {
+            $data = CDM::toArray($update->getData());
+            try {
+                $bot->answerCallbackQuery($update->getCallbackQueryId());
+            } catch(Exception $e) {}
+        } else {
+            $data = false;
+        }
+
+        if(!(($data && $data[CDM::MENU] == CDM::PACKS_MINE) || $chat->hasPermission($user, $bot))) {
             if($update->isType(Update::CALLBACK_QUERY)) {
                 $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
             } else {
@@ -45,19 +54,12 @@ class Settings implements Action {
             }
             return;
         }
-        */
-        $this->prepareAndSend($update, $bot, $chat, $user);
+        
+        $this->prepareAndSend($update, $bot, $chat, $user, $data);
         
     }
 
-    public function prepareAndSend(Update $update, BotApi $bot, Chat $chat, User $user) {
-        if($update->isType(Update::CALLBACK_QUERY)) {
-            $data = CDM::toArray($update->getData());
-            try {
-                $bot->answerCallbackQuery($update->getCallbackQueryId());
-            } catch(Exception $e) {}
-        }
-
+    public function prepareAndSend(Update $update, BotApi $bot, Chat $chat, User $user, $data) {
         if(!isset($data[CDM::MENU]) || $data[CDM::MENU] == 'main') {
             $text = AppString::get('settings.chat');
             $keyboard = self::getKeyboard($chat);
@@ -113,6 +115,21 @@ class Settings implements Action {
                     'text' => AppString::get('settings.'.($chat->admin_only?'on':'off')),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::CHANGE_ADMIN_ONLY
+                    ])
+                ]
+            ],
+            [
+                [
+                    'text' => AppString::get('settings.mute_masters'),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_MUTE_MASTERS,
+                        CDM::VALUE => CDM::INFO
+                    ])
+                ],
+                [
+                    'text' => AppString::get('settings.'.($chat->mute_masters?'on':'off')),
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_MUTE_MASTERS
                     ])
                 ]
             ],

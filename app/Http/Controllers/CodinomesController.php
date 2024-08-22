@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\TelegramUpdate;
 use App\Services\Telegram\BotApi;
 use App\Services\ServerLog;
+use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Update;
 use Throwable;
 

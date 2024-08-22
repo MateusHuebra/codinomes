@@ -68,7 +68,7 @@
             "Super Crazy Mode, it's like Crazy Mode, but in addition to the colors, the actual words in play are also changed"
         ],
         "triple": [
-            "TRIPLE beta"
+            "TRIPLE"
         ],
         "triple_info": [
             "Triple mode, it's the classic game mode adapted for three teams\n\nEach team gets 8, 6, and 7 cards respectively, with 3 white and 0 black cards"
@@ -80,7 +80,7 @@
             "Emoji mode, it's identical to the classic mode, but the hints must be a single emoji instead of a word"
         ],
         "coop": [
-            "COOP beta"
+            "COOP"
         ],
         "coop_info": [
             "Coop Mode works privately for just two people, both of whom are masters and agents to each other\n\nYou both see the same board of words but with different colors, the objective is to take turns giving hints to find all 15 colored words within 9 rounds\n\nAt the end of the 9 rounds, there will be a Sudden Death round, where both can, without hints, make guesses until they win or lose\n\nHow the colors are distributed:\n6 different colored cards for each player\n3 are shared colored cards\n\n3 black cards: 1 black card for both players, 1 colored card, and 1 white card for your partner\n\nWhen you flip a colored card that is also colored for you, it will be marked with a small white X in the corner - If it was black for you, it will be marked with a small black X instead"
@@ -378,6 +378,12 @@
         ],
         "admin_only_info": [
             "Choose if only group admins can change settings, stop games, etc"
+        ],
+        "mute_masters": [
+            "Mute masters"
+        ],
+        "mute_masters_info": [
+            "Mute masters in the group during matches, preventing them from sending messages"
         ],
         "compound_words": [
             "Compound hints"

@@ -68,7 +68,7 @@
             "Modo super maluco, é como o modo maluco só que além das cores as próprias palavras em jogo são trocadas também"
         ],
         "triple": [
-            "TRIPLO beta"
+            "TRIPLO"
         ],
         "triple_info": [
             "Modo triplo, é o modo clássico de jogo adaptado para três times\n\n8, 6 e 7 cardas pra cada time, 3 brancas e 0 pretas"
@@ -80,7 +80,7 @@
             "Modo emoji, é idêntico ao modo clássico porém as dicas devem ser um emoji único invés de uma palavra"
         ],
         "coop": [
-            "COOP beta"
+            "COOP"
         ],
         "coop_info": [
             "Modo Coop, funciona no privado para apenas duas pessoas, ambas são mestres e agentes uma da outra\n\nVocês vêem a mesma tabela de palavras mas com cores diferentes, o objetivo é se revezar dando dicas para encontrar todas as 15 coloridas dentro de 9 rodadas\n\nAo fim das 9 rodadas haverá uma rodada de Morte Súbita, onde ambos podem, sem dicas, chutar até ganhar ou perder\n\n- Como são distribuídas as cores:\n\n6 cartas coloridas diferentes pra cada\ne 3 são coloridas compartilhadas \n\n3 cartas pretas sendo 1 preta pra ambos, 1 colorida e 1 branca pro seu parceiro\n\nAo virar uma carta colorida que também é colorida pra você, ela ficará marcada com um pequeno X branco no canto - Caso ela fosse preta pra você, ficará marcada com um pequeno X preto no lugar"
@@ -378,6 +378,12 @@
         ],
         "admin_only_info": [
             "Defina se apenas admins do grupo podem mudar as configurações, parar partidas, etc"
+        ],
+        "mute_masters": [
+            "Mutar mestres"
+        ],
+        "mute_masters_info": [
+            "Mutar mestres no grupo durante as partidas, os impedindo de mandar mensagens"
         ],
         "compound_words": [
             "Dicas compostas"

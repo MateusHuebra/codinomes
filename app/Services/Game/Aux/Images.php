@@ -18,7 +18,8 @@ class Images {
 
         imagepng($image, $this->{$fileName.'TempImageFileName'});
         imagedestroy($image);
-        $this->{$fileName.'CURLImage'} = new CURLFile($this->{$fileName.'TempImageFileName'},'image/png', $fileName);
+        $path = $this->{$fileName.'TempImageFileName'};
+        $this->{$fileName.'CURLImage'} = new CURLFile($path,'image/png', $path);
     }
 
     public function makeCURLFilesFromImages() {

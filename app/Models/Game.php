@@ -271,6 +271,7 @@ class Game extends Model
             $this->updateStatus('playing', $firstTeam, null, 9);
         } else {
             $this->updateStatus('playing', $firstTeam, 'master');
+            $this->muteMasters($bot);
         }
 
         $text = Menu::getLobbyText($this) . AppString::getParsed('game.started', null, ($this->chat??$this->creator)->language);
@@ -282,6 +283,22 @@ class Game extends Model
         Table::send($this, $bot, $caption);
 
         return true;
+    }
+
+    private function muteMasters(BotApi $bot, bool $allow = false) {
+        if($this->chat->mute_masters === false) {
+            return;
+        }
+
+        $masters = $this->users()->where('role', 'master')->get();
+        $untilDate = !$allow ? time()+86400 : null;
+        try{
+            foreach($masters as $master) {
+                $bot->restrictChatMember($this->chat_id, $master->id, $untilDate, $allow, $allow, $allow, $allow);
+            }
+        } catch(Exception $e) {
+            $bot->sendMessage(env('TG_LOG_ID'), 'restrictChatMember: '. $e->getMessage());
+        }
     }
 
     public function stop(BotApi $bot, string $winner = null) {
@@ -300,6 +317,7 @@ class Game extends Model
         
         if($this->mode != self::COOP) {
             UserStats::addGame($this, $winner);
+            $this->muteMasters($bot, true);
         }
         
         $this->cards()->delete();

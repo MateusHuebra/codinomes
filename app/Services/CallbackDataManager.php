@@ -23,6 +23,7 @@ class CallbackDataManager {
     const CHANGE_PACK = 'cp';
     const CHANGE_TIMER = 'ct';
     const CHANGE_ADMIN_ONLY = 'cao';
+    const CHANGE_MUTE_MASTERS = 'cmm';
     const CHANGE_COMPOUND_WORDS = 'ccw';
     const CHANGE_CLICK_TO_SAVE = 'ccs';
     const TURN_NOTIFY_OFF = 'tno';
