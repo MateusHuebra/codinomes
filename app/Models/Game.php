@@ -286,7 +286,7 @@ class Game extends Model
     }
 
     private function muteMasters(BotApi $bot, bool $allow = false) {
-        if($this->chat->mute_masters === false) {
+        if(!$this->chat->mute_masters) {
             return;
         }
 
