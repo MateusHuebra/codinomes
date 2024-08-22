@@ -46,7 +46,7 @@ class Settings implements Action {
             $data = false;
         }
 
-        if(!(($data && $data[CDM::MENU] == CDM::PACKS_MINE) || $chat->hasPermission($user, $bot))) {
+        if(!((isset($data[CDM::MENU]) && $data[CDM::MENU] == CDM::PACKS_MINE) || $chat->hasPermission($user, $bot))) {
             if($update->isType(Update::CALLBACK_QUERY)) {
                 $bot->sendAlertOrMessage($update->getCallbackQueryId(), $chat->id, 'error.admin_only');
             } else {
