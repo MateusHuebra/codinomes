@@ -292,12 +292,14 @@ class Game extends Model
 
         $masters = $this->users()->where('role', 'master')->get();
         $untilDate = !$allow ? time()+86400 : null;
+        foreach($masters as $master) {
         try{
-            foreach($masters as $master) {
                 $bot->restrictChatMember($this->chat_id, $master->id, $untilDate, $allow, $allow, $allow, $allow);
+            } catch(Exception $e) {
+                if($e->getMessage() != 'Bad Request: user is an administrator of the chat') {
+                    $bot->sendMessage(env('TG_LOG_ID'), 'restrictChatMember: '. $e->getMessage());
+                }
             }
-        } catch(Exception $e) {
-            $bot->sendMessage(env('TG_LOG_ID'), 'restrictChatMember: '. $e->getMessage());
         }
     }
 
