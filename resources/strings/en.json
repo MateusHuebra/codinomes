@@ -696,7 +696,9 @@
             "📦 You can create your own word /packs in the bot's private chat and activate them in /settings > My Packs",
             "🛡️ Make the bot an Admin for it to be able to pin the game lobby and clean up game messages from others",
             "🔤 You can send your guesses as regular uppercase messages LIKE THIS in the group",
-            "👥 You can /steal packs from a group to use in your Coop matches"
+            "👥 You can /steal packs from a group to use in your Coop matches",
+            "🤫 You can enable the Mute Masters option to avoid masters who talk too much",
+            "👥 Few friends online? Try the Coop Mode in the bot's private chat"
         ],
         "randomize": [
             "Random ↻"

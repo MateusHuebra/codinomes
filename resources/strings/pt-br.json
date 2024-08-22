@@ -696,7 +696,9 @@
             "📦 Você pode criar seus próprios /pacotes de palavras no pv do bot e ativá-las em /config > Meus Packs",
             "🛡️ Dê admin para o bot fixar o lobby do jogo e ir limpando mensagens de jogo dos outros",
             "🔤 Você pode enviar seus chutes como mensagens normais maiúsculas ASSIM no grupo",
-            "👥 Você pode /roubar os packs de um grupo para usar em suas partidas Coop"
+            "👥 Você pode /roubar os packs de um grupo para usar em suas partidas Coop",
+            "🤫 Você pode ativar a opção Mutar Mestres para evitar mestres que falam demais",
+            "👥 Poucos amigos online? Tenta o Modo Coop no privado do bot"
         ],
         "randomize": [
             "Aleatório ↻"
