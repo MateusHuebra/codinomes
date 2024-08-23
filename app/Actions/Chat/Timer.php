@@ -29,32 +29,21 @@ class Timer implements Action {
             return;
         }
 
-        switch ($chat->timer) {
-            case null:
-                $chat->timer = 3;
-                break;
-
-            case 3:
-                $chat->timer = 5;
-                break;
-
-            case 5:
-                $chat->timer = 7;
-                break;
-
-            case 7:
-                $chat->timer = 10;
-                break;
-
-            case 10:
-                $chat->timer = 30;
-                break;
-
-            case 30:
-                $chat->timer = null;
-                break;
+        $values = [3, 5, 7, 10, 30, null];
+        $key = array_search($chat->timer, $values);
+        if($data[CDM::VALUE]==CDM::UP) {
+            $key++;
+        } else {
+            $key--;
         }
 
+        if($key < 0) {
+            $key = 5;
+        } else if ($key > 5) {
+            $key = 0;
+        }
+
+        $chat->timer = $values[$key];
         $chat->save();
 
         $keyboard = Settings::getKeyboard($chat);

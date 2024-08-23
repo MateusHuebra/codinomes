@@ -150,16 +150,24 @@ class Settings implements Action {
             ],
             [
                 [
-                    'text' => AppString::get('settings.timer'),
+                    'text' => AppString::get('settings.timer').': '.($chat->timer ? $chat->timer.' min' : AppString::get('settings.off')),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::CHANGE_TIMER,
                         CDM::VALUE => CDM::INFO
                     ])
                 ],
                 [
-                    'text' => $chat->timer ? $chat->timer.' '.AppString::get('time.minutes') : AppString::get('settings.off'),
+                    'text' => '-',
                     'callback_data' => CDM::toString([
-                        CDM::EVENT => CDM::CHANGE_TIMER
+                        CDM::EVENT => CDM::CHANGE_TIMER,
+                        CDM::VALUE => CDM::DOWN
+                    ])
+                    ],
+                [
+                    'text' => '+',
+                    'callback_data' => CDM::toString([
+                        CDM::EVENT => CDM::CHANGE_TIMER,
+                        CDM::VALUE => CDM::UP
                     ])
                 ]
             ],
