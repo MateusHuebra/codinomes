@@ -50,7 +50,7 @@ class Pack implements Action {
         }
         
         $settings = new Settings();
-        $settings->prepareAndSend($update, $bot, $chat, $user);
+        $settings->prepareAndSend($update, $bot, $chat, $user, $data);
     }
 
     private function view($callbackQueryId, int $chatId, PackModel $pack, BotApi $bot) {

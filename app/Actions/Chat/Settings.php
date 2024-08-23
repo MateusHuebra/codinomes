@@ -43,7 +43,7 @@ class Settings implements Action {
                 $bot->answerCallbackQuery($update->getCallbackQueryId());
             } catch(Exception $e) {}
         } else {
-            $data = false;
+            $data = null;
         }
 
         if(!((isset($data[CDM::MENU]) && $data[CDM::MENU] == CDM::PACKS_MINE) || $chat->hasPermission($user, $bot))) {
@@ -59,7 +59,7 @@ class Settings implements Action {
         
     }
 
-    public function prepareAndSend(Update $update, BotApi $bot, Chat $chat, User $user, $data) {
+    public function prepareAndSend(Update $update, BotApi $bot, Chat $chat, User $user, Array $data = null) {
         if(!isset($data[CDM::MENU]) || $data[CDM::MENU] == 'main') {
             $text = AppString::get('settings.chat');
             $keyboard = self::getKeyboard($chat);

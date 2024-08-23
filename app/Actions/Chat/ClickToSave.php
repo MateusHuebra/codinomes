@@ -33,7 +33,7 @@ class ClickToSave implements Action {
         $chat->save();
 
         $settings = new Settings();
-        $settings->prepareAndSend($update, $bot, $chat, $user);
+        $settings->prepareAndSend($update, $bot, $chat, $user, $data);
     }
 
 }
