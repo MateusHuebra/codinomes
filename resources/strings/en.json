@@ -429,6 +429,9 @@
         ],
         "stop_steal": [
             "Packs for the Coop set back to default"
+        ],
+        "open_manager": [
+            "Open manager"
         ]
     },
     "error": {

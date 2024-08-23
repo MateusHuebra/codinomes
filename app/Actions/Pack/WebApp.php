@@ -4,6 +4,7 @@ namespace App\Actions\Pack;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
+use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
@@ -17,7 +18,7 @@ class WebApp implements Action {
         $keyboard = new InlineKeyboardMarkup([
             [
                 [
-                    'text' => 'Abrir gerenciador',
+                    'text' => AppString::get('settings.open_manager'),
                     'web_app' => ['url' => 'https://codinomesbot.surge.sh/#/packs/yours']
                 ]
             ]
