@@ -432,6 +432,9 @@
         ],
         "open_manager": [
             "Abrir gerenciador"
+        ],
+        "manage_packs": [
+            "Gerenciar Pacotes"
         ]
     },
     "error": {

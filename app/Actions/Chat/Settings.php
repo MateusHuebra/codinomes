@@ -173,7 +173,7 @@ class Settings implements Action {
             ],
             [
                 [
-                    'text' => 'Gerenciar Pacotes',
+                    'text' => AppString::get('settings.manage_packs'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SETTINGS,
                         CDM::MENU => CDM::PACKS

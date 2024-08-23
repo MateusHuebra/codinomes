@@ -432,6 +432,9 @@
         ],
         "open_manager": [
             "Open manager"
+        ],
+        "manage_packs": [
+            "Manage Packs"
         ]
     },
     "error": {
