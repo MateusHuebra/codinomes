@@ -42,6 +42,10 @@ class CallbackDataManager {
     const VALUE = 'vlu';
     const FIRST_TIME = 'ft';
 
+    //VALUES
+    const UP = '+';
+    const DOWN = '-';
+
     //TYPES
     const ROLE = 'r';
     const TEAM = 't';
