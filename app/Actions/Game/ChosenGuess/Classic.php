@@ -133,10 +133,12 @@ class Classic implements Action {
         
         //won
         if($cardsLeft <= 0) {
+            /*
             if($game->mode == Game::FAST && $game->countLastStreak() == $game->cards->where('team', $player->team)->count()) {
                 $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
                 UserAchievement::add($agents, 'hurry', $bot, $game->chat_id);
             }
+            */
 
             $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
             $guessData->attemptType = $attemptType;

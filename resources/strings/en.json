@@ -356,6 +356,15 @@
         "moon" : [
             "Moon"
         ],
+        "pflag" : [
+            "Pennant"
+        ],
+        "canary" : [
+            "Canary"
+        ],
+        "south" : [
+            "Southern Cross"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],
@@ -655,6 +664,12 @@
         ],
         "pride_info": [
             "Play with all June special colors"
+        ],
+        "independence": [
+            "Independence or Death"
+        ],
+        "independence_info": [
+            "Play with all September special colors"
         ],
         "making_friends": [
             "Making Friends"

@@ -194,13 +194,15 @@ class Menu {
         $line = [];
         $i = 0;
         foreach(Game::COLORS as $color => $emoji) {
+            //IGNORE ALWAYS
+            if(in_array($color, ['white', 'black', 'rbow', 'cotton', 'flower', 'dna', 'moon'])) {
+                continue;
+            }
+            //IGNORE OUTSIDE COLORS GAME MENU
+            if($ignoreExtraColors && in_array($color, ['pflag', 'canary', 'south'])) {
+                continue;
+            }
             $i++;
-            if(in_array($color, ['white', 'black'])) {
-                continue;
-            }
-            if($ignoreExtraColors && in_array($color, ['rbow', 'cotton', 'flower', 'dna', 'moon'])) {
-                continue;
-            }
             $line[] = [
                 'text' => $emoji,
                 'callback_data' => CDM::toString([

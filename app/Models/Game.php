@@ -34,6 +34,9 @@ class Game extends Model
         'flower' => '💐',
         'dna' => '🧬',
         'moon' => '🌗',
+        'pflag' => '🇧🇷',
+        'canary' => '🐤',
+        'south' => '🌌',
         'white' => '◽️',
         'black' => '◼️'
     ];

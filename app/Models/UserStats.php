@@ -31,9 +31,11 @@ class UserStats extends Model
         $agents = $game->users()->fromTeamRole($team, 'agent')->get();
         self::setStatsForUsers($agents, 'agent', $type, $streak);
 
+        /*
         if($streak == 6) {
             UserAchievement::add($agents, 'possessed', $bot, $game->chat_id);
         }
+        */
     }
 
     public static function addGame(Game $game, string $winner = null) {

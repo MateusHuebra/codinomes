@@ -32,6 +32,7 @@ class UserAchievement extends Model
         'addicted',
         'proplayer',
         'pride',
+        'independence',
         'kian_knows',
         'making_friends',
         'thin_ice',
@@ -87,6 +88,7 @@ class UserAchievement extends Model
         $usersForAddicted = new Collection();
         $usersForProPlayer = new Collection();
         $usersForPride = new Collection();
+        $usersForIndependence = new Collection();
 
         foreach($users as $user) {
             $winColorStats = $user->colorStats()
@@ -98,6 +100,9 @@ class UserAchievement extends Model
             
             if(self::doesUserHaveAllJuneColors($user->colorStats)) {
                 $usersForPride->add($user);
+            }
+            if(self::doesUserHaveAllSeptemberColors($user->colorStats)) {
+                $usersForIndependence->add($user);
             }
 
             if(self::doesUserHaveAllColors($winColorStats)) {
@@ -142,6 +147,9 @@ class UserAchievement extends Model
         if($usersForPride->count() != 0) {
             self::add($usersForPride, 'pride', $bot, $chatId);
         }
+        if($usersForIndependence->count() != 0) {
+            self::add($usersForIndependence, 'independence', $bot, $chatId);
+        }
 
         if($users->contains('id', env('TG_MY_ID'))) {
             self::add($users, 'kian_knows', $bot, $chatId);
@@ -167,7 +175,7 @@ class UserAchievement extends Model
     private static function doesUserHaveAllColors(Collection $colorStats) {
         $result = true;
         foreach(Game::COLORS as $color => $emoji) {
-            if(in_array($color, ['white', 'black', 'rbow', 'cotton', 'flower', 'dna', 'moon'])) {
+            if(in_array($color, ['white', 'black', 'rbow', 'cotton', 'flower', 'dna', 'moon', 'pflag', 'canary', 'south'])) {
                 continue;
             }
             
@@ -180,8 +188,18 @@ class UserAchievement extends Model
     }
 
     private static function doesUserHaveAllJuneColors(Collection $colorStats) {
+        $colors = ['rbow', 'cotton', 'flower', 'dna', 'moon'];
+        return self::doesUserHaveAllInArrayColors($colorStats, $colors);
+    }
+
+    private static function doesUserHaveAllSeptemberColors(Collection $colorStats) {
+        $colors = ['pflag', 'canary', 'south'];
+        return self::doesUserHaveAllInArrayColors($colorStats, $colors);
+    }
+
+    private static function doesUserHaveAllInArrayColors(Collection $colorStats, Array $colors) {
         $result = true;
-        foreach(['rbow', 'cotton', 'flower', 'dna', 'moon'] as $color) {
+        foreach($colors as $color) {
             if(!$colorStats->contains('color', $color)) {
                 $result = false;
                 break;
