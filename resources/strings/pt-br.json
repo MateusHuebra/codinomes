@@ -365,6 +365,15 @@
         "south" : [
             "Cruzeiro do Sul"
         ],
+        "jacko" : [
+            "Abóbora de Halloween"
+        ],
+        "web" : [
+            "Teia"
+        ],
+        "bat" : [
+            "Morcegos"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],
@@ -665,11 +674,11 @@
         "pride_info": [
             "Jogue com todas as cores especiais de Junho"
         ],
-        "independence": [
-            "Independência ou Morte"
+        "scary": [
+            "Assustador"
         ],
-        "independence_info": [
-            "Jogue com todas as cores especiais de Setembro"
+        "scary_info": [
+            "Jogue com todas as cores especiais de Outubro"
         ],
         "making_friends": [
             "Se Enturmando"

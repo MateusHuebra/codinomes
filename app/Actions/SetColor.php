@@ -4,8 +4,7 @@ namespace App\Actions;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
-use App\Models\Game;
-use App\Services\Game\Menu;
+use App\Models\GameTeamColor;
 use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -24,7 +23,7 @@ class SetColor implements Action {
         $data = CDM::toArray($update->getData());
         if(isset($data[CDM::TEXT])) {
             $user->default_color = $data[CDM::TEXT];
-            $color = Game::COLORS[$data[CDM::TEXT]];
+            $color = GameTeamColor::COLORS[$data[CDM::TEXT]];
         } else {
             $user->default_color = null;
             $color = AppString::get('settings.off', null, $user->language);

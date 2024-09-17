@@ -5,6 +5,7 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
+use App\Models\GameTeamColor;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 use App\Services\CallbackDataManager as CDM;
@@ -18,15 +19,15 @@ class Guess implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         $game = $update->findUser()->currentGame();
         $emojis = [
-            'w' => Game::COLORS['white'],
-            'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->getColor('a')]
+            'w' => GameTeamColor::COLORS['white'],
+            'x' => GameTeamColor::COLORS['black'],
+            'a' => GameTeamColor::COLORS[$game->getColor('a')]
         ];
         if($game->mode != Game::COOP) {
-            $emojis+= ['b' => Game::COLORS[$game->getColor('b')]];
+            $emojis+= ['b' => GameTeamColor::COLORS[$game->getColor('b')]];
         }
         if($game->mode == Game::TRIPLE) {
-            $emojis+= ['c' => Game::COLORS[$game->getColor('c')]];
+            $emojis+= ['c' => GameTeamColor::COLORS[$game->getColor('c')]];
         }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');

@@ -4,7 +4,7 @@ namespace App\Actions;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
-use App\Models\Game;
+use App\Models\GameTeamColor;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -21,7 +21,7 @@ class GetColors implements Action {
         }
 
         if($user->default_color) {
-            $color = Game::COLORS[$user->default_color];
+            $color = GameTeamColor::COLORS[$user->default_color];
         } else {
             $color = '-';
         }

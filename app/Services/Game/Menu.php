@@ -3,6 +3,7 @@
 namespace App\Services\Game;
 
 use App\Models\Game;
+use App\Models\GameTeamColor;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
@@ -89,7 +90,7 @@ class Menu {
         if($game->mode != Game::COOP) {
             $buttonsArray[] = [
                 [
-                    'text' => Game::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
+                    'text' => GameTeamColor::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
@@ -97,7 +98,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('a')],
+                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('a')],
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
@@ -107,7 +108,7 @@ class Menu {
             ];
             $buttonsArray[] = [
                 [
-                    'text' => Game::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
+                    'text' => GameTeamColor::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'b',
@@ -115,7 +116,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('b')],
+                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('b')],
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'b',
@@ -128,7 +129,7 @@ class Menu {
         if($game->mode == Game::TRIPLE) {
             $buttonsArray[] = [
                 [
-                    'text' => Game::COLORS[$game->getColor('c')].' '.AppString::get('game.master'),
+                    'text' => GameTeamColor::COLORS[$game->getColor('c')].' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'c',
@@ -136,7 +137,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.Game::COLORS[$game->getColor('c')],
+                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('c')],
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'c',
@@ -193,18 +194,17 @@ class Menu {
     public static function addColorsToKeyboard(array $buttonsArray = [], string $event = CDM::CHANGE_COLOR, bool $ignoreExtraColors = false) {
         $line = [];
         $i = 0;
-        foreach(Game::COLORS as $color => $emoji) {
-            //IGNORE ALWAYS
-            if(in_array($color, ['white', 'black', 'rbow', 'cotton', 'flower', 'dna', 'moon'])) {
-                continue;
-            }
-            //IGNORE OUTSIDE COLORS GAME MENU
-            if($ignoreExtraColors && in_array($color, ['pflag', 'canary', 'south'])) {
-                continue;
-            }
+        $colors = GameTeamColor::BASE;
+
+        $monthConst = 'App\Models\GameTeamColor::'.strtoupper(date('F'));
+        if(!$ignoreExtraColors && defined($monthConst)) {
+            $colors = [...$colors, ...constant($monthConst)];
+        }
+
+        foreach($colors as $color) {
             $i++;
             $line[] = [
-                'text' => $emoji,
+                'text' => GameTeamColor::COLORS[$color],
                 'callback_data' => CDM::toString([
                     CDM::EVENT => $event,
                     CDM::TEXT => $color

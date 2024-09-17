@@ -365,6 +365,15 @@
         "south" : [
             "Southern Cross"
         ],
+        "jacko" : [
+            "Jack O'Lantern"
+        ],
+        "web" : [
+            "Web"
+        ],
+        "bat" : [
+            "Bats"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],
@@ -670,6 +679,12 @@
         ],
         "independence_info": [
             "Play with all September special colors"
+        ],
+        "scary": [
+            "Scary"
+        ],
+        "scary_info": [
+            "Play with all October special colors"
         ],
         "making_friends": [
             "Making Friends"

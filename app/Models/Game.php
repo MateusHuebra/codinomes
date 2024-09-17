@@ -18,29 +18,6 @@ class Game extends Model
 {
     use HasFactory;
 
-    const COLORS = [
-        'red' => '🔴',
-        'blue' => '🔷',
-        'pink' => '🩷',
-        'orange' => '🔶',
-        'purple' => '🟣',
-        'green' => '♻️',
-        'yellow' => '⭐️',
-        'gray' => '🩶',
-        'brown' => '🍪',
-        'cyan' => '🧩',
-        'rbow' => '🌈',
-        'cotton' => '🏳️‍⚧️',
-        'flower' => '💐',
-        'dna' => '🧬',
-        'moon' => '🌗',
-        'pflag' => '🇧🇷',
-        'canary' => '🐤',
-        'south' => '🌌',
-        'white' => '◽️',
-        'black' => '◼️'
-    ];
-
     const CLASSIC = 'classic';
     const FAST = 'fast';
     const MYSTERY = 'mystery';
@@ -146,7 +123,7 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            $regex = '/\*['.implode('', self::COLORS).'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
+            $regex = '/\*['.implode('', GameTeamColor::COLORS).'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
             if(preg_match($regex, $this->history, $matches)) {
                 $this->lastHint = $matches['hint'];
             } else {
@@ -179,7 +156,7 @@ class Game extends Model
             switch ($this->role) {
                 case 'master':
                     $name = $this->creator->name;
-                    $team = Game::COLORS[$teamColor];
+                    $team = GameTeamColor::COLORS[$teamColor];
                     break;
                 case 'agent':
                     $name = $this->getPartner()->name;
@@ -200,7 +177,7 @@ class Game extends Model
     
             return AppString::get('game.turn', [
                 'role' => AppString::get($role, null, $this->chat->language),
-                'team' =>  Game::COLORS[$teamColor],
+                'team' =>  GameTeamColor::COLORS[$teamColor],
                 'players' => $playersList
             ], $this->chat->language);
         }
@@ -369,7 +346,7 @@ class Game extends Model
 
     public function setEightBallToHistory($player) {
         $color = $this->getColor($player->team == 'a' ? 'b' : 'a');
-        $emoji = self::COLORS[$color];
+        $emoji = GameTeamColor::COLORS[$color];
         $historyLine = $emoji.' '.AppString::get('game.8ball_hint');
         $this->addToHistory('*'.$historyLine.'*');
     }
@@ -388,7 +365,7 @@ class Game extends Model
             return null;
         }
         if($isMystery) {
-            $regex = '/ ['.implode('', self::COLORS).']+/u';
+            $regex = '/ ['.implode('', GameTeamColor::COLORS).']+/u';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
         return str_replace(['.', '-'], ['\.', '\-'], $result??$this->history).'||';
@@ -432,14 +409,14 @@ class Game extends Model
         }
 
         $empty = '_'.AppString::get('game.empty').'_';
-        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.self::COLORS[$this->getColor('a')];
+        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('a')];
         $vars = [
             'master_a' => $this->masterA->get()->getStringList()??$empty,
             'agents_a' => $this->agentsA->get()->getStringList()??$empty
         ];
 
         if($this->mode != self::COOP) {
-            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.self::COLORS[$this->getColor('b')];
+            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('b')];
             $vars+= [
                 'master_b' => $this->masterB->get()->getStringList()??$empty,
                 'agents_b' => $this->agentsB->get()->getStringList()??$empty,
@@ -464,7 +441,7 @@ class Game extends Model
         }
 
         if($this->mode == self::TRIPLE) {
-            $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.self::COLORS[$this->getColor('c')];
+            $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('c')];
             $vars+= [
                 'master_c' => $this->masterC->get()->getStringList()??$empty,
                 'agents_c' => $this->agentsC->get()->getStringList()??$empty,

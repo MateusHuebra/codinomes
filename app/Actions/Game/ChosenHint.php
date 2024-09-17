@@ -5,6 +5,7 @@ namespace App\Actions\Game;
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
+use App\Models\GameTeamColor;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -27,7 +28,7 @@ class ChosenHint implements Action {
             return;
         }
 
-        $regex = "/\*[".implode('', Game::COLORS)."👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
+        $regex = "/\*[".implode('', GameTeamColor::COLORS)."👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)+$/u";
         if($game->mode == Game::COOP && ($game->role != null && !preg_match($regex, $game->history))) {
             $bot->sendMessage($update->getFromId(), AppString::get('error.guess_or_skip_before_hint'));
             return;
@@ -67,7 +68,7 @@ class ChosenHint implements Action {
         $nextRole = $player->role == 'agent' ? 'master' : 'agent';
         $hint = $data[CDM::TEXT].' '.$data[CDM::NUMBER];
         $color = $game->getColor($player->team);
-        $emoji = $player->role == 'master' ? Game::COLORS[$color] : '👥';
+        $emoji = $player->role == 'master' ? GameTeamColor::COLORS[$color] : '👥';
         $historyLine = $emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         $game->updateStatus('playing', $player->team, $nextRole, $attemptsLeft??null);

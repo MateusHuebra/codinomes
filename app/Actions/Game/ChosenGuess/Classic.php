@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
+use App\Models\GameTeamColor;
 use App\Models\User;
 use App\Models\UserAchievement;
 use App\Models\UserStats;
@@ -116,10 +117,10 @@ class Classic implements Action {
 
     protected function getEmojis(Game $game) {
         return [
-            'w' => Game::COLORS['white'],
-            'x' => Game::COLORS['black'],
-            'a' => Game::COLORS[$game->getColor('a')],
-            'b' => Game::COLORS[$game->getColor('b')]
+            'w' => GameTeamColor::COLORS['white'],
+            'x' => GameTeamColor::COLORS['black'],
+            'a' => GameTeamColor::COLORS[$game->getColor('a')],
+            'b' => GameTeamColor::COLORS[$game->getColor('b')]
         ];
     }
 
