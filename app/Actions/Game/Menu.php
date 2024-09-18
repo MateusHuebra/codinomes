@@ -48,7 +48,7 @@ class Menu implements Action {
 
         $game->save();
 
-        MenuService::send($game, $bot);
+        MenuService::send($game, $bot, $user);
     }
 
 }
