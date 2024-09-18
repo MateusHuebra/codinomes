@@ -93,7 +93,7 @@ class User extends Model
         
     }
 
-    public function getEnemyTeams(bool $triple = false) {
+    public function getEnemyTeams(bool $triple = false) : array {
         $array = [];
         if($this->currentGame()->player->team !== 'a') {
             $array[] = 'a';
@@ -105,6 +105,13 @@ class User extends Model
             $array[] = 'c';
         }
         return $array;
+    }
+
+    public function isVip() : bool {
+        if($this->id == env('TG_MY_ID')) {
+            return true;
+        }
+        return false;
     }
 
     static function createFromTGModel(TGUser $tgUser) : User {

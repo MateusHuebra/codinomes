@@ -4,6 +4,7 @@ namespace App\Services\Game;
 
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\User;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
 use Exception;
@@ -11,8 +12,12 @@ use App\Services\CallbackDataManager as CDM;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Menu {
+
+    private static $vip = false;
     
-    static function send(Game $game, BotApi $bot, bool $forceResend = false) : Void {
+    static function send(Game $game, BotApi $bot, User $user = null, bool $forceResend = false) : Void {
+        self::setVipVar($user);
+
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
         $hasRequiredNumberOfPlayers = $hasRequiredPlayers ? true : $game->users->count() >= 4;
@@ -39,6 +44,12 @@ class Menu {
         $bot->tryToPinChatMessage($game->chat_id??$game->creator_id, $message->getMessageId());
         $game->lobby_message_id = $message->getMessageId();
         $game->save();
+    }
+
+    private static function setVipVar(User $user = null) {
+        if($user) {
+            self::$vip = $user->isVip();
+        }
     }
 
     public static function getLobbyText(Game $game, bool $showInfo = false, string $winner = null) {
@@ -191,15 +202,11 @@ class Menu {
         return $buttonsArray;
     }
 
-    public static function addColorsToKeyboard(array $buttonsArray = [], string $event = CDM::CHANGE_COLOR, bool $ignoreExtraColors = false) {
+    public static function addColorsToKeyboard(array $buttonsArray = [], bool $forceVip = false, string $event = CDM::CHANGE_COLOR, bool $ignoreExtraColors = false) {
         $line = [];
         $i = 0;
-        $colors = GameTeamColor::BASE;
 
-        $monthConst = 'App\Models\GameTeamColor::'.strtoupper(date('F'));
-        if(!$ignoreExtraColors && defined($monthConst)) {
-            $colors = [...$colors, ...constant($monthConst)];
-        }
+        $colors = GameTeamColor::getAvailableColors($forceVip || self::$vip, $ignoreExtraColors);
 
         foreach($colors as $color) {
             $i++;
@@ -216,9 +223,11 @@ class Menu {
                 $i = 0;
             }
         }
+
         if(!empty($line)) {
             $buttonsArray[] = $line;
         }
+
         return $buttonsArray;
     }
 

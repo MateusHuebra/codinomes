@@ -48,5 +48,30 @@ class GameTeamColor extends Model
         'team',
         'color'
     ];
+
+    public static function getAvailableColors(bool $isVip = false, bool $ignoreExtraColors = false) {
+        if($isVip) {
+            return [...self::BASE, ...self::JUNE, ...self::SEPTEMBER, ...self::OCTOBER];
+
+        }
+        
+        return self::getNonVipAvailableColors($ignoreExtraColors);
+    }
+
+    private static function getNonVipAvailableColors(bool $ignoreExtraColors = false) {
+        $colors = GameTeamColor::BASE;    
+        $monthConst = 'App\Models\GameTeamColor::'.strtoupper(date('F'));
+        if(!$ignoreExtraColors && defined($monthConst)) {
+            $colors = [...$colors, ...constant($monthConst)];
+        }
+        return $colors;
+    }
+
+    public static function isColorAllowedToUser(User $user, string $color, bool $ignoreExtraColors = false) {
+        if($user->isVip()) {
+            return true;
+        }
+        return in_array($color, self::getNonVipAvailableColors($ignoreExtraColors));
+    }
     
 }

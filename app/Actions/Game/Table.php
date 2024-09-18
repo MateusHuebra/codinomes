@@ -51,7 +51,7 @@ class Table implements Action {
                 }
 
             } else {
-                Menu::send($game, $bot, true);
+                Menu::send($game, $bot, null, true);
             }
 
         } else {

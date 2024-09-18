@@ -8,7 +8,6 @@ use App\Models\GameTeamColor;
 use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
-use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 use App\Services\CallbackDataManager as CDM;
 
 class SetColor implements Action {
@@ -21,6 +20,12 @@ class SetColor implements Action {
         }
 
         $data = CDM::toArray($update->getData());
+        
+        if(!GameTeamColor::isColorAllowedToUser($user, $data[CDM::TEXT], true)) {
+            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getFromId(), 'error.color_taken');
+            return;
+        }
+
         if(isset($data[CDM::TEXT])) {
             $user->default_color = $data[CDM::TEXT];
             $color = GameTeamColor::COLORS[$data[CDM::TEXT]];
