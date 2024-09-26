@@ -20,15 +20,16 @@ class SetColor implements Action {
         }
 
         $data = CDM::toArray($update->getData());
-        
-        if(!GameTeamColor::isColorAllowedToUser($user, $data[CDM::TEXT], true)) {
-            $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getFromId(), 'error.color_taken');
-            return;
-        }
 
         if(isset($data[CDM::TEXT])) {
+            if(!GameTeamColor::isColorAllowedToUser($user, $data[CDM::TEXT], true)) {
+                $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getFromId(), 'error.color_taken');
+                return;
+            }
+
             $user->default_color = $data[CDM::TEXT];
             $color = GameTeamColor::COLORS[$data[CDM::TEXT]];
+            
         } else {
             $user->default_color = null;
             $color = AppString::get('settings.off', null, $user->language);
