@@ -36,6 +36,7 @@ class UserAchievement extends Model
         'scary',
         'kian_knows',
         'making_friends',
+        'every_shot',
         'thin_ice',
         'lovebirds',
         'egg_hunt'

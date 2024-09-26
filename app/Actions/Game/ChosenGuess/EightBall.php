@@ -6,7 +6,6 @@ use App\Actions\Action;
 use App\Models\Game;
 use App\Models\UserAchievement;
 use App\Services\AppString;
-use App\Services\Game\Aux\Caption;
 use App\Services\Game\Aux\GuessData;
 
 class EightBall extends Classic implements Action {
@@ -57,6 +56,9 @@ class EightBall extends Classic implements Action {
         if($isEightBallTime) {
             $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
             $guessData->attemptType = 'ally';
+
+            $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+            UserAchievement::add($agents, 'every_shot', $bot, $game->chat_id);
 
         //black
         } else {

@@ -698,6 +698,12 @@
         "kian_knows_info": [
             "Play a match with the developer"
         ],
+        "every_shot": [
+            "Evert Shot Counts"
+        ],
+        "every_shot_info": [
+            "Win in Eight-Ball mode by flipping all the cards"
+        ],
         "thin_ice": [
             "On Thin Ice"
         ],
