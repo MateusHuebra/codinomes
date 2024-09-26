@@ -57,8 +57,11 @@ class EightBall extends Classic implements Action {
             $guessData = $this->getWinningGuessData($game, $player->team, $chatLanguage);
             $guessData->attemptType = 'ally';
 
-            $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
-            UserAchievement::add($agents, 'every_shot', $bot, $game->chat_id);
+            $notRevealedCards = $game->cards()->where('revealed', false)->count();
+            if($notRevealedCards = 0) {
+                $agents = $game->users()->fromTeamRole($player->team, 'agent')->get();
+                UserAchievement::add($agents, 'every_shot', $bot, $game->chat_id);
+            }
 
         //black
         } else {
