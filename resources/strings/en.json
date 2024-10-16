@@ -374,6 +374,9 @@
         "bat" : [
             "Bats"
         ],
+        "snow" : [
+            "Snow"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

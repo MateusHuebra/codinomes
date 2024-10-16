@@ -374,6 +374,9 @@
         "bat" : [
             "Morcegos"
         ],
+        "snow" : [
+            "Neve"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

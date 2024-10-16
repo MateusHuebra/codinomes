@@ -30,6 +30,7 @@ class GameTeamColor extends Model
         'jacko' => '🎃',
         'web' => '🕸',
         'bat' => '🦇',
+        'snow' => '❄️',
         'white' => '◽️',
         'black' => '◼️'
     ];
@@ -40,6 +41,7 @@ class GameTeamColor extends Model
     const JUNE = ['rbow', 'cotton', 'flower', 'dna', 'moon'];
     const SEPTEMBER = ['pflag', 'canary', 'south'];
     const OCTOBER = ['jacko', 'web', 'bat'];
+    const DECEMBER = ['snow'];
 
     use HasFactory;
     public $timestamps = false;
@@ -51,8 +53,7 @@ class GameTeamColor extends Model
 
     public static function getAvailableColors(bool $isVip = false, bool $ignoreExtraColors = false) {
         if($isVip) {
-            return [...self::BASE, ...self::JUNE, ...self::SEPTEMBER, ...self::OCTOBER];
-
+            return [...self::BASE, ...self::JUNE, ...self::SEPTEMBER, ...self::OCTOBER, ...self::DECEMBER];
         }
         
         return self::getNonVipAvailableColors($ignoreExtraColors);
