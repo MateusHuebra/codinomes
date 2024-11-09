@@ -25,6 +25,7 @@ class Classic implements Action {
         $game = $user->currentGame();
         $player = $game->player;
         $chatLanguage = ($game->chat??$game->creator)->language;
+        $game->triggerLock();
         
         if(
             !($game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)
@@ -72,6 +73,7 @@ class Classic implements Action {
         
         Table::send($game, $bot, $caption, $card->position, $guessData->winner);
         UserStats::addAttempt($game, $player->team, $guessData->attemptType, $bot);
+        $game->unlockGame();
     }
 
     protected function handle(Update $update, Game $game, User $user, $player, $card, $emoji, BotApi $bot, $chatLanguage) {

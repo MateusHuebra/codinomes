@@ -24,6 +24,8 @@ class Start implements Action {
             $bot->deleteMessage($update->getChatId(), $update->getMessageId());
             return;
         }
+        
+        $game->triggerLock();
         if(!in_array($game->status, ['creating', 'lobby'])) {
             return;
         }
@@ -33,6 +35,7 @@ class Start implements Action {
 
         $user = $user??$update->findUser();
         $game->start($bot, $user??$update->findUser(), $update->getId());
+        $game->unlockGame();
     }
 
 }

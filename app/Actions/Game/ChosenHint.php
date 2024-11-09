@@ -19,6 +19,7 @@ class ChosenHint implements Action {
         $user = $update->findUser();
         $game = $user->currentGame();
         $player = $game->player;
+        $game->triggerLock();
         
         if(
             !($game->mode != Game::COOP && $game->role == 'master' && $player->role == 'master' && $player->team == $game->team)
@@ -104,6 +105,7 @@ class ChosenHint implements Action {
             
         } catch(Exception $e) {}
         Table::send($game, $bot, $caption);
+        $game->unlockGame();
     }
 
 }

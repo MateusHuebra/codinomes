@@ -8,6 +8,7 @@ use App\Models\Game;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
+use App\Services\ServerLog;
 use Exception;
 use TelegramBot\Api\BotApi;
 
@@ -47,6 +48,7 @@ class ConfirmSkip implements Action {
         if(!$game) {
             return;
         }
+        $game->triggerLock();
         
         if($user->currentGame()) {
             $player = $user->currentGame()->player;
@@ -55,6 +57,7 @@ class ConfirmSkip implements Action {
                 || ($game->mode == Game::COOP && $game->role == $player->role)
             )) {
                 if($game->mode == Game::COOP || !$game->chat->isAdmin($user, $bot)) {
+                    ServerLog::log('return 1');
                     return;
                 }
                 $adm = true;
@@ -64,6 +67,7 @@ class ConfirmSkip implements Action {
             
         } else {
             if($game->mode == Game::COOP || !$game->chat->isAdmin($user, $bot)) {
+                ServerLog::log('return 2');
                 return;
             }
             $adm = true;
@@ -121,6 +125,7 @@ class ConfirmSkip implements Action {
 
         $caption = new Caption($title, $captionText??$game->getLastHint(), 30, $game->mode==Game::EMOJI);
         Table::send($game, $bot, $caption, null);
+        $game->unlockGame();
     }
 
 }

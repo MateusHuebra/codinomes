@@ -33,6 +33,7 @@ class CheckTurnLeftTime {
             }
             $time = strtotime($game->status_updated_at);
             if($now - $time >= (60*$game->chat->timer)) {
+                $game->triggerLock();
                 try {
                     $bot->deleteMessage($game->chat_id, $game->message_id);
                 } catch(Exception $e) {}
@@ -42,6 +43,7 @@ class CheckTurnLeftTime {
                 } else {
                     $this->skipAgent($game, $bot);
                 }
+                $game->unlockGame();
                 
             } else if ($now - $time >= (60*($timer-1))) {
                 $this->warn($game, 1, $bot);

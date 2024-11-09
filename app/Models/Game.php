@@ -6,6 +6,7 @@ use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Menu;
 use App\Services\Game\Table;
+use App\Services\ServerLog;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,8 @@ class Game extends Model
         self::COOP => '👥'
     ];
 
+    const LOCKING_TIME = 20;
+
     public $timestamps = false;
     public $auxMenu = null;
     public $auxSubMenu = null;
@@ -57,7 +60,37 @@ class Game extends Model
     private $agentsC;
     private $partner;
     private $colors = [];
-    private $hasRequiredPlayers = null; 
+    private $hasRequiredPlayers = null;
+
+    public function triggerLock() {
+        $lockTime = ($this->lock_time !== null) ? strtotime($this->lock_time) + self::LOCKING_TIME : null;
+        $this->refresh();
+        $this->lock_time = date("Y-m-d H:i:s");
+        $this->save();
+        ServerLog::printR('saving: '. strtotime($this->lock_time));
+
+        $wasLocked = false;
+        if ($lockTime !== null) {
+            ServerLog::log('triggered');
+            ServerLog::printR(time() . ' < '. $lockTime);
+            while(time() < $lockTime) {
+                ServerLog::printR(time());
+                ServerLog::log('waiting');
+                sleep(1);
+                $wasLocked = true;
+            }
+            $this->refresh();
+        } else {
+            ServerLog::log('not triggered');
+        }
+        ServerLog::printR($wasLocked ? 'locked' : 'not locked');
+        return $wasLocked;
+    }
+
+    public function unlockGame() {
+        $this->lock_time = null;
+        $this->save();
+    }
 
     public function users()
     {
@@ -273,7 +306,7 @@ class Game extends Model
         $masters = $this->users()->where('role', 'master')->get();
         $untilDate = !$allow ? time()+86400 : null;
         foreach($masters as $master) {
-        try{
+            try{
                 $bot->restrictChatMember($this->chat_id, $master->id, $untilDate, $allow, $allow, $allow, $allow);
             } catch(Exception $e) {
                 if($e->getMessage() != 'Bad Request: user is an administrator of the chat') {
