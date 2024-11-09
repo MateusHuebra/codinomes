@@ -64,7 +64,6 @@ class Game extends Model
 
     public function triggerLock() {
         $lockTime = ($this->lock_time !== null) ? strtotime($this->lock_time) + self::LOCKING_TIME : null;
-        $this->refresh();
         $this->lock_time = date("Y-m-d H:i:s");
         $this->save();
         ServerLog::printR('saving: '. strtotime($this->lock_time));
@@ -84,6 +83,9 @@ class Game extends Model
             ServerLog::log('not triggered');
         }
         ServerLog::printR($wasLocked ? 'locked' : 'not locked');
+        if($wasLocked) {
+            $this->refresh();
+        }
         return $wasLocked;
     }
 
