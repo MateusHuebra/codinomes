@@ -377,6 +377,12 @@
         "snow" : [
             "Neve"
         ],
+        "tree" : [
+            "Árvore de Natal"
+        ],
+        "bonnet" : [
+            "Gorrinho"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

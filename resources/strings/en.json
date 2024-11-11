@@ -377,6 +377,12 @@
         "snow" : [
             "Snow"
         ],
+        "tree" : [
+            "Xmas Tree"
+        ],
+        "bonnet" : [
+            "Bonnet"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

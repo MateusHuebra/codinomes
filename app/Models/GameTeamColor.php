@@ -31,6 +31,8 @@ class GameTeamColor extends Model
         'web' => '🕸',
         'bat' => '🦇',
         'snow' => '❄️',
+        'tree' => '🎄',
+        'bonnet' => '🎅',
         'white' => '◽️',
         'black' => '◼️'
     ];
@@ -41,7 +43,7 @@ class GameTeamColor extends Model
     const JUNE = ['rbow', 'cotton', 'flower', 'dna', 'moon'];
     const SEPTEMBER = ['pflag', 'canary', 'south'];
     const OCTOBER = ['jacko', 'web', 'bat'];
-    const DECEMBER = ['snow'];
+    const DECEMBER = ['snow', 'tree','bonnet'];
 
     use HasFactory;
     public $timestamps = false;
