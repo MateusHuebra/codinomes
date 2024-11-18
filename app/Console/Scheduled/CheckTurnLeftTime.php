@@ -17,13 +17,13 @@ class CheckTurnLeftTime {
         $bot = new BotApi(env('TG_TOKEN'));
 
         try {
-            $this->execute($bot);
+            $this->getAllGamesPlayingAndExecute($bot);
         } catch (\Throwable $th) {
-            $bot->sendMessage(env('TG_LOG_ID'), 'CheckTurnLeftTime error: '.$th->getMessage());
+            $bot->sendMessage(env('TG_LOG_ID'), 'CheckTurnLeftTime getAllGamesPlayingAndExecute error: '.$th->getMessage());
         }
     }
 
-    private function execute(BotApi $bot) {
+    private function getAllGamesPlayingAndExecute(BotApi $bot) {
         $now = strtotime('now');
         $games = Game::where('status', 'playing')->where('mode', '!=', 'coop')->get();
         foreach ($games as $game) {
@@ -32,35 +32,47 @@ class CheckTurnLeftTime {
                 continue;
             }
             $time = strtotime($game->status_updated_at);
-            if($now - $time >= (60*$game->chat->timer)) {
-                try {
-                    $bot->deleteMessage($game->chat_id, $game->message_id);
-                } catch(Exception $e) {}
-                if($game->role == 'master') {
-                    $this->skipMaster($game, $bot);
 
-                } else {
-                    $this->skipAgent($game, $bot);
+            try {
+                $this->execute($game, $timer, $time, $now, $bot);
+            } catch (\Throwable $th) {
+                if($th->getMessage() == "Forbidden: bot was kicked from the supergroup chat") {
+                    $game->stop($bot);
+                    $bot->sendMessage(env('TG_LOG_ID'), "CheckTurnLeftTime game $game->id stopped because bot kicked from chat $game->chat_id");
                 }
-                
-            } else if ($now - $time >= (60*($timer-1))) {
-                $this->warn($game, 1, $bot);
-
-            } else if ($now - $time >= (60*($timer-2))) {
-                $this->warn($game, 2, $bot);
-                
-            } else if ($timer > 3 && $now - $time >= (60*($timer-3))) {
-                $this->warn($game, 3, $bot);
-                
-            } else if ($timer > 5 && $now - $time >= (60*($timer-5))) {
-                $this->warn($game, 5, $bot);
-                
-            } else if ($timer > 7 && $now - $time >= (60*($timer-7))) {
-                $this->warn($game, 7, $bot);
-                
-            } else if ($timer > 10 && $now - $time >= (60*($timer-10))) {
-                $this->warn($game, 10, $bot);
             }
+        }
+    }
+
+    private function execute(Game $game, $timer, $time, $now, BotApi $bot) {
+        if($now - $time >= (60*$game->chat->timer)) {
+            try {
+                $bot->deleteMessage($game->chat_id, $game->message_id);
+            } catch(Exception $e) {}
+            if($game->role == 'master') {
+                $this->skipMaster($game, $bot);
+
+            } else {
+                $this->skipAgent($game, $bot);
+            }
+            
+        } else if ($now - $time >= (60*($timer-1))) {
+            $this->warn($game, 1, $bot);
+
+        } else if ($now - $time >= (60*($timer-2))) {
+            $this->warn($game, 2, $bot);
+            
+        } else if ($timer > 3 && $now - $time >= (60*($timer-3))) {
+            $this->warn($game, 3, $bot);
+            
+        } else if ($timer > 5 && $now - $time >= (60*($timer-5))) {
+            $this->warn($game, 5, $bot);
+            
+        } else if ($timer > 7 && $now - $time >= (60*($timer-7))) {
+            $this->warn($game, 7, $bot);
+            
+        } else if ($timer > 10 && $now - $time >= (60*($timer-10))) {
+            $this->warn($game, 10, $bot);
         }
     }
 
