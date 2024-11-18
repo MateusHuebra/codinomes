@@ -34,6 +34,7 @@ class UserAchievement extends Model
         'pride',
         'independence',
         'scary',
+        'itstime',
         'kian_knows',
         'making_friends',
         'every_shot',
@@ -92,6 +93,7 @@ class UserAchievement extends Model
         $usersForPride = new Collection();
         $usersForIndependence = new Collection();
         $usersForScary = new Collection();
+        $usersForItsTime = new Collection();
 
         foreach($users as $user) {
             $winColorStats = $user->colorStats()
@@ -109,6 +111,9 @@ class UserAchievement extends Model
             }
             if(self::doesUserHaveAllOctoberColors($user->colorStats)) {
                 $usersForScary->add($user);
+            }
+            if(self::doesUserHaveAllOctoberColors($user->colorStats)) {
+                $usersForItsTime->add($user);
             }
 
             if(self::doesUserHaveAllColors($winColorStats)) {
@@ -159,6 +164,9 @@ class UserAchievement extends Model
         if($usersForScary->count() != 0) {
             self::add($usersForScary, 'scary', $bot, $chatId);
         }
+        if($usersForItsTime->count() != 0) {
+            self::add($usersForItsTime, 'itstime', $bot, $chatId);
+        }
 
         if($users->contains('id', env('TG_MY_ID'))) {
             self::add($users, 'kian_knows', $bot, $chatId);
@@ -198,6 +206,11 @@ class UserAchievement extends Model
 
     private static function doesUserHaveAllOctoberColors(Collection $colorStats) {
         $colors = GameTeamColor::OCTOBER;
+        return self::doesUserHaveAllInArrayColors($colorStats, $colors);
+    }
+
+    private static function doesUserHaveAllDecemberColors(Collection $colorStats) {
+        $colors = GameTeamColor::DECEMBER;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
