@@ -112,7 +112,7 @@ class UserAchievement extends Model
             if(self::doesUserHaveAllOctoberColors($user->colorStats)) {
                 $usersForScary->add($user);
             }
-            if(self::doesUserHaveAllOctoberColors($user->colorStats)) {
+            if(self::doesUserHaveAllDecemberColors($user->colorStats)) {
                 $usersForItsTime->add($user);
             }
 
