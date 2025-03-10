@@ -30,7 +30,7 @@ class Skip implements Action {
             ($game->mode != Game::COOP && $game->role == 'agent' && $player->role == 'agent' && $player->team == $game->team)
             || ($game->mode == Game::COOP && $game->role == $player->role)
         ) {
-            $text = AppString::get('game.sure_skip');
+            $text = AppString::get('game.how_to_skip');
             $keyboard = new InlineKeyboardMarkup([
                 [
                     [
@@ -39,17 +39,9 @@ class Skip implements Action {
                             CDM::EVENT => CDM::CANCEL_SKIP
                         ])
                     ]
-                ],
-                [
-                    [
-                        'text' => AppString::get('game.confirm', null, ($game->chat??$game->creator)->language),
-                        'callback_data' => CDM::toString([
-                            CDM::EVENT => CDM::CONFIRM_SKIP
-                        ])
-                    ]
                 ]
             ]);
-            $bot->editMessageCaption($update->getChatId(), $update->getMessageId(), $text, $keyboard);
+            $bot->editMessageCaption($update->getChatId(), $update->getMessageId(), $text, $keyboard, 'MarkdownV2');
         }
         
     }

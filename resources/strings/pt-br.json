@@ -234,6 +234,9 @@
         "skip": [
             "Pular vez"
         ],
+        "how_to_skip": [
+            "Pule a vez enviando `/pular`"
+        ],
         "sure_skip": [
             "Quer mesmo pular a vez?"
         ],

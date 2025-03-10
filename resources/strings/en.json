@@ -234,6 +234,9 @@
         "skip": [
             "Skip turn"
         ],
+        "how_to_skip": [
+            "Skip your turn texting `/skip`"
+        ],
         "sure_skip": [
             "Do you really want to skip?"
         ],
