@@ -31,6 +31,7 @@ class UserAchievement extends Model
         'graduated',
         'addicted',
         'proplayer',
+        'egghunt',
         'pride',
         'independence',
         'scary',
@@ -90,6 +91,7 @@ class UserAchievement extends Model
         $usersForGratuated = new Collection();
         $usersForAddicted = new Collection();
         $usersForProPlayer = new Collection();
+        $usersForEggHunt = new Collection();
         $usersForPride = new Collection();
         $usersForIndependence = new Collection();
         $usersForScary = new Collection();
@@ -103,6 +105,9 @@ class UserAchievement extends Model
                 })
                 ->get();
             
+            if(self::doesUserHaveAllAprilColors($user->colorStats)) {
+                $usersForEggHunt->add($user);
+            }
             if(self::doesUserHaveAllJuneColors($user->colorStats)) {
                 $usersForPride->add($user);
             }
@@ -155,6 +160,9 @@ class UserAchievement extends Model
         if($usersForProPlayer->count() != 0) {
             self::add($usersForProPlayer, 'proplayer', $bot, $chatId);
         }
+        if($usersForEggHunt->count() != 0) {
+            self::add($usersForEggHunt, 'egghunt', $bot, $chatId);
+        }
         if($usersForPride->count() != 0) {
             self::add($usersForPride, 'pride', $bot, $chatId);
         }
@@ -191,6 +199,11 @@ class UserAchievement extends Model
 
     private static function doesUserHaveAllColors(Collection $colorStats) {
         $colors = GameTeamColor::BASE;
+        return self::doesUserHaveAllInArrayColors($colorStats, $colors);
+    }
+
+    private static function doesUserHaveAllAprilColors(Collection $colorStats) {
+        $colors = GameTeamColor::APRIL;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 

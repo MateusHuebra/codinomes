@@ -58,7 +58,7 @@ class GameTeamColor extends Model
 
     public static function getAvailableColors(bool $isVip = false, bool $ignoreExtraColors = false) {
         if($isVip) {
-            return [...self::BASE, ...self::JUNE, ...self::SEPTEMBER, ...self::OCTOBER, ...self::DECEMBER];
+            return [...self::BASE, ...self::APRIL, ...self::JUNE, ...self::SEPTEMBER, ...self::OCTOBER, ...self::DECEMBER];
         }
         
         return self::getNonVipAvailableColors($ignoreExtraColors);
