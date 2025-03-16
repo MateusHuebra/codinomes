@@ -19,6 +19,8 @@ class GameTeamColor extends Model
         'gray' => '🩶',
         'brown' => '🍪',
         'cyan' => '🧩',
+        'easter' => '🥚',
+        'bunny' => '🐰',
         'rbow' => '🌈',
         'cotton' => '🏳️‍⚧️',
         'flower' => '💐',
@@ -40,6 +42,7 @@ class GameTeamColor extends Model
     const OFF = ['white', 'black'];
     const BASE = ['red', 'blue', 'pink', 'orange', 'purple', 'green', 'yellow', 'gray', 'brown', 'cyan'];
 
+    const APRIL = ['easter', 'bunny'];
     const JUNE = ['rbow', 'cotton', 'flower', 'dna', 'moon'];
     const SEPTEMBER = ['pflag', 'canary', 'south'];
     const OCTOBER = ['jacko', 'web', 'bat'];
