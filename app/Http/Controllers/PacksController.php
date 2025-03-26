@@ -28,7 +28,9 @@ class PacksController extends Controller
     public function getAll(Request $request) {
         echo 'running   ';
         $output = shell_exec('curl https://loca.lt/mytunnelpassword');
-        var_dump($output);die;
+        $outputDois = shell_exec('service mysql status');
+        var_dump($output);
+        var_dump($outputDois);die;
 
         if(!$request->input('id') || $request->input('id') == env('TG_MY_ID')) {
             return Pack::all();
