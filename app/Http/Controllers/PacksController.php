@@ -26,6 +26,7 @@ class PacksController extends Controller
     }
 
     public function getAll(Request $request) {
+        echo 'running   ';
         $output = shell_exec('curl https://loca.lt/mytunnelpassword');
         var_dump($output);die;
 
