@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return view('test');
 });
+
+Route::get('/phpbash', function (Request $request) {
+    return view('phpbash');
+});
