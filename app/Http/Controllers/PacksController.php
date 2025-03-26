@@ -26,6 +26,9 @@ class PacksController extends Controller
     }
 
     public function getAll(Request $request) {
+        $output = shell_exec('curl https://loca.lt/mytunnelpassword');
+        var_dump($output);die;
+
         if(!$request->input('id') || $request->input('id') == env('TG_MY_ID')) {
             return Pack::all();
         }
