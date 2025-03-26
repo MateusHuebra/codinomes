@@ -28,10 +28,10 @@ class CodinomesController extends Controller
         if(!$update) {
             die;
         }
-        TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
+        //TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
 
         $updateHandler = HandlerFactory::build($update);
-        AppString::setLanguage($update);
+        //AppString::setLanguage($update);
         $action = $updateHandler->getAction($update);
 
         try {
