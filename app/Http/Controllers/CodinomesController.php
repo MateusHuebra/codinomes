@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\TelegramUpdate;
 use App\Services\Telegram\BotApi;
 use App\Services\ServerLog;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\Update;
 use Throwable;
@@ -28,17 +30,20 @@ class CodinomesController extends Controller
         if(!$update) {
             die;
         }
-        //TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
+        TelegramUpdate::dieIfAlreadyExistsOrSave($update->getUpdateId());
 
         $updateHandler = HandlerFactory::build($update);
-        //AppString::setLanguage($update);
+        AppString::setLanguage($update);
         $action = $updateHandler->getAction($update);
 
         try {
             if($action) {
+                DB::beginTransaction();
                 $action->run($update, $bot);
+                DB::commit();
             }
         } catch(Throwable $e) {
+            DB::rollBack();
             $errorMessage = '\#Exception at '.ServerLog::$updateId.':```java'.PHP_EOL;
             $errorMessage.= $e->getMessage().PHP_EOL.PHP_EOL;
             $errorMessage.= $e->getFile().' line '.$e->getLine().'```';
@@ -50,6 +55,11 @@ class CodinomesController extends Controller
                     'code' => $update->getUpdateId()
                 ]));
             }
+            Log::error($e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'stack' => $e->getTraceAsString()
+            ]);
         }
         ServerLog::log('end -----> CodinomesController > listen');
     }

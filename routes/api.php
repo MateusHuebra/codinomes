@@ -3,6 +3,7 @@
 use App\Http\Controllers\PacksController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CodinomesController;
+use App\Http\Controllers\DatabaseRecoverHelperController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,8 @@ Route::delete('/packs/delete/{id}', [PacksController::class, 'delete']);
 Route::post('/packs/approve/{id}', [PacksController::class, 'approve']);
 Route::post('/packs/deny', [PacksController::class, 'deny']);
 Route::post('/packs/save', [PacksController::class, 'save']);
+
+Route::get('dbrecover/run', [DatabaseRecoverHelperController::class, 'run']);
 
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -3,6 +3,7 @@
 /public/storage
 /public/.htaccess
 /storage/*.key
+/storage/logs
 /vendor
 .env
 .env.backup

@@ -244,8 +244,8 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['help_modes', 'ajuda_modos'])) {
             return new Help('modes');
 
-        } else if(in_array($command, ['packs', 'pacotes'])) {
-            return new WebApp;
+        //} else if(in_array($command, ['packs', 'pacotes'])) {
+        //    return new WebApp;
 
         } else if(in_array($command, ['achievements', 'conquistas'])) {
             return new Achievements;
