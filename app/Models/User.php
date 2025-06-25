@@ -44,7 +44,7 @@ class User extends Model
             $cleanName = 'Sem Nome';
         }
 
-        $activeBadge = UserBadge::EMOJIS[$this->active_badge];
+        $activeBadge = UserBadge::EMOJIS[$this->active_badge] ?? false;
         if ($activeBadge) {
             $cleanName .= ' ' . $activeBadge;
         }
