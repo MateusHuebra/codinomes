@@ -314,82 +314,82 @@
         ]
     },
     "color": {
-        "purple" : [
+        "purple": [
             "Purple"
         ],
-        "orange" : [
+        "orange": [
             "Orange"
         ],
-        "red" : [
+        "red": [
             "Red"
         ],
-        "blue" : [
+        "blue": [
             "Blue"
         ],
-        "green" : [
+        "green": [
             "Green"
         ],
-        "yellow" : [
+        "yellow": [
             "Yellow"
         ],
-        "cyan" : [
+        "cyan": [
             "Cyan"
         ],
-        "pink" : [
+        "pink": [
             "Pink"
         ],
-        "brown" : [
+        "brown": [
             "Brown"
         ],
-        "gray" : [
+        "gray": [
             "Gray"
         ],
-        "easter" : [
+        "easter": [
             "Easter"
         ],
-        "bunny" : [
+        "bunny": [
             "Bunny"
         ],
-        "rbow" : [
+        "rbow": [
             "Rainbow"
         ],
-        "cotton" : [
+        "cotton": [
             "Cotton Candy"
         ],
-        "flower" : [
+        "flower": [
             "Flowers"
         ],
-        "dna" : [
+        "dna": [
             "DNA"
         ],
-        "moon" : [
+        "moon": [
             "Moon"
         ],
-        "pflag" : [
+        "pflag": [
             "Pennant"
         ],
-        "canary" : [
+        "canary": [
             "Canary"
         ],
-        "south" : [
+        "south": [
             "Southern Cross"
         ],
-        "jacko" : [
+        "jacko": [
             "Jack O'Lantern"
         ],
-        "web" : [
+        "web": [
             "Web"
         ],
-        "bat" : [
+        "bat": [
             "Bats"
         ],
-        "snow" : [
+        "snow": [
             "Snow"
         ],
-        "tree" : [
+        "tree": [
             "Xmas Tree"
         ],
-        "bonnet" : [
+        "bonnet": [
             "Bonnet"
         ],
         "default": [
@@ -537,6 +537,9 @@
         "no_achievements": [
             "No achievements"
         ],
+        "no_badges": [
+            "No badges"
+        ],
         "dm_inline": [
             "Don't use inline in the bot's private chat, just send the hint as a simple message"
         ],
@@ -594,7 +597,7 @@
         ]
     },
     "help": {
-        "base" : [
+        "base": [
             "*Codinomes* is a word guessing game, based on hints, divided into two Teams of different colors made up of a Master and several Agents\\.\n\nThe team that finds all cards of their own color first wins\\.\n\n• Roles: /help\\_roles\n• Hints: /help\\_hints\n• Colors: /help\\_colors\n\n• Commands: /help\\_commands\n• Game modes: /help\\_modes\n\nIf you have any questions, ask in @CodinomesGroup"
         ],
         "roles": [
@@ -608,6 +611,44 @@
         ],
         "commands": [
             "*Codinomes Commands:*\n**>• /new creates a new game lobby\n>• /skip skip your turn in the game\n>• /stop interrupts and cancels the match\n>\n>• /notify send it to a group to be notified whenever a new match takes place in it \\(send it again to cancel\\), sending in private will show a list of all enabled notifications for you to disable\n>\n>• /history view the history of hints and attempts from the match, it also works via DM\n>\n>• /settings group settings \\(as timer and word packs\\)\n>\n>• /color choose your default color that will be set automatically when you enter as a master\n>\n>• /packs send it to DM to create and manage your own word packages||"
+        ]
+    },
+    "badges": {
+        "from": [
+            "*🏅 Badges of {user}*"
+        ],
+        "footer": [
+            "Choose a badge to appear beside your name in the game with /badge"
+        ],
+        "dev": [
+            "Dev"
+        ],
+        "dev_info": [
+            "Developer of the bot"
+        ],
+        "mrs_dev": [
+            "Mrs. Dev"
+        ],
+        "mrs_dev_info": [
+            "Developer's baby boo"
+        ],
+        "admin": [
+            "Admin"
+        ],
+        "admin_info": [
+            "Admin of the official group"
+        ],
+        "artist": [
+            "Artist"
+        ],
+        "artist_info": [
+            "Creator of images of colors for the bot"
+        ],
+        "active": [
+            "Choose your active badge:\nCurrent: {badge}"
+        ],
+        "defined": [
+            "Active badge successfully defined to {mention}: {badge}"
         ]
     },
     "achievements": {

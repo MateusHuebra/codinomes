@@ -3,6 +3,7 @@
 namespace App\UpdateHandlers;
 
 use App\Actions\Achievements;
+use App\Actions\Badges;
 use App\Actions\Chat\Add as AddChat;
 use App\Actions\Chat\Delete as DeleteChat;
 use App\Actions\Chat\Settings;
@@ -19,6 +20,7 @@ use App\Actions\Game\ConfirmSkip;
 use App\Actions\Game\Create;
 use App\Actions\Game\History;
 use App\Actions\Game\Stop;
+use App\Actions\GetBadges;
 use App\Actions\Help;
 use App\Actions\Language\Get;
 use App\Actions\LookingForAGame;
@@ -214,6 +216,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['color', 'cor'])) {
             return new GetColors;
 
+        } else if(in_array($command, ['badge', 'insignia'])) {
+            return new GetBadges;
+
         } else if(in_array($command, ['steal', 'roubar'])) {
             return new Steal;
 
@@ -249,6 +254,9 @@ class Message implements UpdateHandler {
 
         } else if(in_array($command, ['achievements', 'conquistas'])) {
             return new Achievements;
+
+        } else if(in_array($command, ['badges', 'insignias'])) {
+            return new Badges;
 
         } else if($command == 'test') {
             return new Test;

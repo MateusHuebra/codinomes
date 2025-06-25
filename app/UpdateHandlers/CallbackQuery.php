@@ -24,6 +24,7 @@ use App\Actions\Ping;
 use App\Actions\Game\Leave;
 use App\Actions\Game\Start as StartGame;
 use App\Actions\Game\SelectTeamAndRole;
+use App\Actions\SetBadge;
 use App\Services\CallbackDataManager as CDM;
 
 class CallbackQuery implements UpdateHandler {
@@ -63,6 +64,9 @@ class CallbackQuery implements UpdateHandler {
         
         } else if($data[CDM::EVENT] === CDM::CHANGE_DEFAULT_COLOR) {
             return new SetColor;
+
+        } else if($data[CDM::EVENT] === CDM::CHANGE_ACTIVE_BADGE) {
+            return new SetBadge;
 
         } else if($data[CDM::EVENT] === CDM::SETTINGS) {
             return new Settings;

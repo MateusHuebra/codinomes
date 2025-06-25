@@ -16,7 +16,7 @@ class GetColors implements Action {
     public function run(Update $update, BotApi $bot) : Void {
         $user = $update->findUser();
         if(!$user) {
-            $bot->sendMessage($update->getChatId(), AppString::get('error.user_not_registered', null, $user->language), null, false, $update->getMessageId(), null, false, null, null, true);
+            $bot->sendMessage($update->getChatId(), AppString::get('error.user_not_registered', null), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
 

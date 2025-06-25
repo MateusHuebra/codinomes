@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class User extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
     public $incrementing = false;
-    
+
     protected $fillable = [
         'id',
         'username',
@@ -23,6 +23,34 @@ class User extends Model
         'language',
         'status'
     ];
+
+    public function getNameAttribute($value)
+    {
+        // Remove emojis using regex
+        $cleanName = preg_replace('/[\x{1F600}-\x{1F64F}'
+            . '\x{1F300}-\x{1F5FF}'
+            . '\x{1F680}-\x{1F6FF}'
+            . '\x{1F1E0}-\x{1F1FF}'
+            . '\x{2600}-\x{26FF}'
+            . '\x{2700}-\x{27BF}'
+            . '\x{FE00}-\x{FE0F}'
+            . '\x{1F900}-\x{1F9FF}'
+            . '\x{1F018}-\x{1F270}'
+            . '\x{238C}-\x{2454}]++/u', '', $value);
+
+        $cleanName = trim($cleanName);
+
+        if ($cleanName === '') {
+            $cleanName = 'Sem Nome';
+        }
+
+        $activeBadge = UserBadge::EMOJIS[$this->active_badge];
+        if ($activeBadge) {
+            $cleanName .= ' ' . $activeBadge;
+        }
+
+        return $cleanName;
+    }
 
     public function stats(): HasOne
     {
@@ -38,7 +66,12 @@ class User extends Model
     {
         return $this->hasMany(UserAchievement::class);
     }
-    
+
+    public function badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
     public function games()
     {
         return $this->belongsToMany(Game::class)->withPivot('team', 'role')->as('player');
@@ -68,17 +101,19 @@ class User extends Model
         return new \App\Collections\User($models);
     }
 
-    public function getEnemyTeam() : String {
-        if($this->currentGame()->player->team == 'a') {
+    public function getEnemyTeam(): String
+    {
+        if ($this->currentGame()->player->team == 'a') {
             return 'b';
         }
         return 'a';
     }
 
-    public function getNextTeam() : String {
+    public function getNextTeam(): String
+    {
         $game = $this->currentGame();
         $isTriple = $game->mode == Game::TRIPLE;
-        if($isTriple) {
+        if ($isTriple) {
             switch ($game->player->team) {
                 case 'a':
                     return 'b';
@@ -90,31 +125,38 @@ class User extends Model
         } else {
             return $this->getEnemyTeam();
         }
-        
     }
 
-    public function getEnemyTeams(bool $triple = false) : array {
+    public function getEnemyTeams(bool $triple = false): array
+    {
         $array = [];
-        if($this->currentGame()->player->team !== 'a') {
+        if ($this->currentGame()->player->team !== 'a') {
             $array[] = 'a';
         }
-        if($this->currentGame()->player->team !== 'b') {
+        if ($this->currentGame()->player->team !== 'b') {
             $array[] = 'b';
         }
-        if($triple && $this->currentGame()->player->team !== 'c') {
+        if ($triple && $this->currentGame()->player->team !== 'c') {
             $array[] = 'c';
         }
         return $array;
     }
 
-    public function isVip() : bool {
-        if($this->id == env('TG_MY_ID')) {
+    public function isVip(): bool
+    {
+        if ($this->id == env('TG_MY_ID')) {
             return true;
         }
         return false;
     }
 
-    static function createFromTGModel(TGUser $tgUser) : User {
+    public function hasBadge(string $badge): bool
+    {
+        return $this->badges()->where('badge_shortname', $badge)->exists();
+    }
+
+    static function createFromTGModel(TGUser $tgUser): User
+    {
         return self::create([
             'id' => $tgUser->getId(),
             'username' => $tgUser->getUsername(),

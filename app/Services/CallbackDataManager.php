@@ -20,6 +20,7 @@ class CallbackDataManager {
     const CANCEL_SKIP = 'nosk';
     const CHANGE_COLOR = 'cc';
     const CHANGE_DEFAULT_COLOR = 'cdc';
+    const CHANGE_ACTIVE_BADGE = 'cab';
     const CHANGE_PACK = 'cp';
     const CHANGE_TIMER = 'ct';
     const CHANGE_ADMIN_ONLY = 'cao';
