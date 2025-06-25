@@ -4,10 +4,8 @@ namespace App\Actions;
 
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
-use App\Models\GameTeamColor;
 use App\Models\User;
 use App\Models\UserBadge;
-use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
@@ -19,6 +17,11 @@ class GetBadges implements Action {
         $user = $update->findUser();
         if(!$user) {
             $bot->sendMessage($update->getChatId(), AppString::get('error.user_not_registered', null), null, false, $update->getMessageId(), null, false, null, null, true);
+            return;
+        }
+
+        if(!$user->badges()->exists()){
+            $bot->sendMessage($update->getChatId(), AppString::get('error.no_badges', null), null, false, $update->getMessageId(), null, false, null, null, true);
             return;
         }
 

@@ -28,17 +28,24 @@ class Badges implements Action
         }
 
         $text = '';
-        foreach ($badges as $badge) {
-            $text .= '>*「 ' . UserBadge::EMOJIS[$badge->badge_shortname] . ' ' . AppString::get('badges.' . $badge->badge_shortname) . ' 」*';
-            $text .= "\n>  \-  " . AppString::get('badges.' . $badge->badge_shortname . '_info') . "\n>\n";
+        $badgeCount = count($badges);
+
+        foreach ($badges as $index => $badge) {
+            $text .= "\n>*「" . UserBadge::EMOJIS[$badge->badge_shortname] . '」 ' . AppString::getParsed('badges.' . $badge->badge_shortname) . '*';
+
+            if ($index !== $badgeCount - 1) {
+                $text .= "\n>  \-  " . AppString::get('badges.' . $badge->badge_shortname . '_info') . "\n>";
+            }
         }
+
+        $text .= "\n>  \-  " . AppString::get('badges.' . $badge->badge_shortname . '_info') . '||';
 
         $title = AppString::get('badges.from', [
             'user' => $user->name,
         ], null, true);
-        $title .= "\n**";
+        $title .= "**";
 
-        $text = $title . $text . '>||' . PHP_EOL . AppString::get('badges.footer');
+        $text = $title . $text . PHP_EOL . AppString::get('badges.footer');
 
         $bot->sendMessage($update->getChatId(), $text, 'MarkdownV2', false, $update->getMessageId(), null, false, null, null, true);
     }

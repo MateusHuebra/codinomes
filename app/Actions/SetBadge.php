@@ -28,11 +28,11 @@ class SetBadge implements Action {
             }
 
             $user->active_badge = $data[CDM::TEXT];
-            $badge = UserBadge::EMOJIS[$data[CDM::TEXT]];
+            $badgeString = 'badges.' . $data[CDM::TEXT];
 
         } else {
             $user->active_badge = null;
-            $badge = AppString::get('settings.off', null, $user->language);
+            $badgeString = 'settings.off';
         }
         $user->save();
 
@@ -42,7 +42,7 @@ class SetBadge implements Action {
         ], $user->language, true);
         $text = AppString::get('badges.defined', [
             'mention' => $mention,
-            'badge' => $badge
+            'badge' => AppString::getParsed($badgeString, null, $user->language)
         ], $user->language);
         
         try {
