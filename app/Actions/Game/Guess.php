@@ -22,7 +22,7 @@ class Guess implements Action {
         $emojis = [
             'w' => GameTeamColor::COLORS['white'],
             'x' => GameTeamColor::COLORS['black'],
-            'a' => TeamColor::where('emoji', $game->getColor('a'))->first()->emoji,
+            'a' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
         ];
         if($game->mode != Game::COOP) {
             $emojis+= ['b' => TeamColor::where('emoji', $game->getColor('b'))->first()->emoji];
