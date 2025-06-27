@@ -4,6 +4,7 @@ namespace App\Services\Game;
 
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Models\User;
 use App\Services\Telegram\BotApi;
 use App\Services\AppString;
@@ -14,6 +15,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 class Menu {
 
     private static $vip = false;
+    private static $user = null;
     
     static function send(Game $game, BotApi $bot, User $user = null, bool $forceResend = false) : Void {
         self::setVipVar($user);
@@ -48,6 +50,7 @@ class Menu {
 
     private static function setVipVar(User $user = null) {
         if($user) {
+            self::$user = $user;
             self::$vip = $user->isVip();
         }
     }
@@ -101,7 +104,7 @@ class Menu {
         if($game->mode != Game::COOP) {
             $buttonsArray[] = [
                 [
-                    'text' => GameTeamColor::COLORS[$game->getColor('a')].' '.AppString::get('game.master'),
+                    'text' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji.' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
@@ -109,7 +112,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('a')],
+                    'text' => AppString::get('game.agents').' '.TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'a',
@@ -119,7 +122,7 @@ class Menu {
             ];
             $buttonsArray[] = [
                 [
-                    'text' => GameTeamColor::COLORS[$game->getColor('b')].' '.AppString::get('game.master'),
+                    'text' => TeamColor::where('shortname', $game->getColor('b'))->first()->emoji.' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'b',
@@ -127,7 +130,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('b')],
+                    'text' => AppString::get('game.agents').' '.TeamColor::where('shortname', $game->getColor('b'))->first()->emoji,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'b',
@@ -140,7 +143,7 @@ class Menu {
         if($game->mode == Game::TRIPLE) {
             $buttonsArray[] = [
                 [
-                    'text' => GameTeamColor::COLORS[$game->getColor('c')].' '.AppString::get('game.master'),
+                    'text' => TeamColor::where('shortname', $game->getColor('c'))->first()->emoji.' '.AppString::get('game.master'),
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'c',
@@ -148,7 +151,7 @@ class Menu {
                     ])
                 ],
                 [
-                    'text' => AppString::get('game.agents').' '.GameTeamColor::COLORS[$game->getColor('c')],
+                    'text' => AppString::get('game.agents').' '.TeamColor::where('shortname', $game->getColor('c'))->first()->emoji,
                     'callback_data' => CDM::toString([
                         CDM::EVENT => CDM::SELECT_TEAM_AND_ROLE,
                         CDM::TEAM => 'c',
@@ -196,38 +199,9 @@ class Menu {
         $buttonsArray[] = $line;
 
         if($game->isMenu('color')) {
-            $buttonsArray = self::addColorsToKeyboard($buttonsArray);
+            $buttonsArray = TeamColor::addColorsToKeyboard(self::$user, $buttonsArray);
         }
         
-        return $buttonsArray;
-    }
-
-    public static function addColorsToKeyboard(array $buttonsArray = [], bool $forceVip = false, string $event = CDM::CHANGE_COLOR, bool $ignoreExtraColors = false) {
-        $line = [];
-        $i = 0;
-
-        $colors = GameTeamColor::getAvailableColors($forceVip || self::$vip, $ignoreExtraColors);
-
-        foreach($colors as $color) {
-            $i++;
-            $line[] = [
-                'text' => GameTeamColor::COLORS[$color],
-                'callback_data' => CDM::toString([
-                    CDM::EVENT => $event,
-                    CDM::TEXT => $color
-                ])
-            ];
-            if($i>=5) {
-                $buttonsArray[] = $line;
-                $line = [];
-                $i = 0;
-            }
-        }
-
-        if(!empty($line)) {
-            $buttonsArray[] = $line;
-        }
-
         return $buttonsArray;
     }
 

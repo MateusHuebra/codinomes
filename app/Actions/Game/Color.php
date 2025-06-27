@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Services\AppString;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
@@ -34,7 +35,7 @@ class Color implements Action {
             return;
         }
 
-        if(!GameTeamColor::isColorAllowedToUser($user, $newColor)) {
+        if(!TeamColor::isColorAllowedToUser($user, $newColor)) {
             $bot->sendAlertOrMessage($update->getCallbackQueryId(), $game->chat_id, 'error.color_taken');
             return;
         }

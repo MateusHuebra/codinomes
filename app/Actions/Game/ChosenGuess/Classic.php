@@ -7,6 +7,7 @@ use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameCard;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Models\User;
 use App\Models\UserAchievement;
 use App\Models\UserStats;
@@ -119,8 +120,8 @@ class Classic implements Action {
         return [
             'w' => GameTeamColor::COLORS['white'],
             'x' => GameTeamColor::COLORS['black'],
-            'a' => GameTeamColor::COLORS[$game->getColor('a')],
-            'b' => GameTeamColor::COLORS[$game->getColor('b')]
+            'a' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
+            'b' => TeamColor::where('shortname', $game->getColor('b'))->first()->emoji,
         ];
     }
 

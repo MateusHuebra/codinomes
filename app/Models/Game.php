@@ -123,7 +123,11 @@ class Game extends Model
 
     public function getLastHint() {
         if(!$this->lastHint) {
-            $regex = '/\*['.implode('', GameTeamColor::COLORS).'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
+            $regex = '/\*['
+            .implode('', GameTeamColor::COLORS)
+            .implode('', TeamColor::all()->pluck('emoji')->toArray())
+            .'👥]+ (?<hint>[\w\S\- ]{1,20} [0-9∞]+)\*(\R>  - .+)*$/u';
+
             if(preg_match($regex, $this->history, $matches)) {
                 $this->lastHint = $matches['hint'];
             } else {
@@ -156,7 +160,7 @@ class Game extends Model
             switch ($this->role) {
                 case 'master':
                     $name = $this->creator->name;
-                    $team = GameTeamColor::COLORS[$teamColor];
+                    $team = TeamColor::where('shortname', $teamColor)->first()->emoji;
                     break;
                 case 'agent':
                     $name = $this->getPartner()->name;
@@ -177,7 +181,7 @@ class Game extends Model
     
             return AppString::get('game.turn', [
                 'role' => AppString::get($role, null, $this->chat->language),
-                'team' =>  GameTeamColor::COLORS[$teamColor],
+                'team' => TeamColor::where('shortname', $teamColor)->first()->emoji,
                 'players' => $playersList
             ], $this->chat->language);
         }
@@ -346,7 +350,7 @@ class Game extends Model
 
     public function setEightBallToHistory($player) {
         $color = $this->getColor($player->team == 'a' ? 'b' : 'a');
-        $emoji = GameTeamColor::COLORS[$color];
+        $emoji = TeamColor::where('shortname', $color)->first()->emoji;
         $historyLine = $emoji.' '.AppString::get('game.8ball_hint');
         $this->addToHistory('*'.$historyLine.'*');
     }
@@ -365,7 +369,10 @@ class Game extends Model
             return null;
         }
         if($isMystery) {
-            $regex = '/ ['.implode('', GameTeamColor::COLORS).']+/u';
+            $regex = '/ ['
+            .implode('', GameTeamColor::COLORS)
+            .implode('', TeamColor::all()->pluck('emoji')->toArray())
+            .']+/u';
             $result = preg_replace($regex, ' ❔', $this->history);
         }
         return str_replace(['.', '-'], ['\.', '\-'], $result??$this->history).'||';
@@ -409,14 +416,14 @@ class Game extends Model
         }
 
         $empty = '_'.AppString::get('game.empty').'_';
-        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('a')];
+        $teamA = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('a')), 'UTF-8').' '.TeamColor::where('shortname', $this->getColor('a'))->first()->emoji;
         $vars = [
             'master_a' => $this->masterA->get()->getStringList()??$empty,
             'agents_a' => $this->agentsA->get()->getStringList()??$empty
         ];
 
         if($this->mode != self::COOP) {
-            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('b')];
+            $teamB = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('b')), 'UTF-8').' '.TeamColor::where('shortname', $this->getColor('b'))->first()->emoji;
             $vars+= [
                 'master_b' => $this->masterB->get()->getStringList()??$empty,
                 'agents_b' => $this->agentsB->get()->getStringList()??$empty,
@@ -441,7 +448,7 @@ class Game extends Model
         }
 
         if($this->mode == self::TRIPLE) {
-            $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.GameTeamColor::COLORS[$this->getColor('c')];
+            $teamC = mb_strtoupper(AppString::getParsed('color.'.$this->getColor('c')), 'UTF-8').' '.TeamColor::where('shortname', $this->getColor('c'))->first()->emoji;
             $vars+= [
                 'master_c' => $this->masterC->get()->getStringList()??$empty,
                 'agents_c' => $this->agentsC->get()->getStringList()??$empty,

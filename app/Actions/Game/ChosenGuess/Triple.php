@@ -5,6 +5,7 @@ namespace App\Actions\Game\ChosenGuess;
 use App\Actions\Action;
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 
 class Triple extends Classic implements Action {
 
@@ -12,9 +13,9 @@ class Triple extends Classic implements Action {
         return [
             'w' => GameTeamColor::COLORS['white'],
             'x' => GameTeamColor::COLORS['black'],
-            'a' => GameTeamColor::COLORS[$game->getColor('a')],
-            'b' => GameTeamColor::COLORS[$game->getColor('b')],
-            'c' => GameTeamColor::COLORS[$game->getColor('c')]
+            'a' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
+            'b' => TeamColor::where('shortname', $game->getColor('b'))->first()->emoji,
+            'c' => TeamColor::where('shortname', $game->getColor('c'))->first()->emoji
         ];
     }
 

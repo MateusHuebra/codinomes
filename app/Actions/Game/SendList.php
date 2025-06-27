@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Services\AppString;
 use TelegramBot\Api\BotApi;
 
@@ -63,13 +64,13 @@ class SendList implements Action {
         $emojis = [
             'w' => GameTeamColor::COLORS['white'],
             'x' => GameTeamColor::COLORS['black'],
-            'a' => GameTeamColor::COLORS[$game->getColor('a')]
+            'a' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
         ];
         if($game->mode != Game::COOP) {
-            $emojis+= ['b' => GameTeamColor::COLORS[$game->getColor('b')]];
+            $emojis+= ['b' => TeamColor::where('shortname', $game->getColor('b'))->first()->emoji];
         }
         if($game->mode == Game::TRIPLE) {
-            $emojis+= ['c' => GameTeamColor::COLORS[$game->getColor('c')]];
+            $emojis+= ['c' => TeamColor::where('shortname', $game->getColor('c'))->first()->emoji];
         }
 
         $text = '**>';

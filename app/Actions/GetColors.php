@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Services\Game\Menu;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -21,12 +22,12 @@ class GetColors implements Action {
         }
 
         if($user->default_color) {
-            $color = GameTeamColor::COLORS[$user->default_color];
+            $color = TeamColor::where('shortname', $user->default_color)->first()->emoji;
         } else {
             $color = '-';
         }
 
-        $buttonsArray = Menu::addColorsToKeyboard([], $user->isVip(), CDM::CHANGE_DEFAULT_COLOR, true);
+        $buttonsArray = TeamColor::addColorsToKeyboard($user, [], CDM::CHANGE_DEFAULT_COLOR);
         $buttonsArray[] = [[
             'text' => AppString::get('settings.turn_off'),
             'callback_data' => CDM::toString([

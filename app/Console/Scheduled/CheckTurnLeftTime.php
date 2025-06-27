@@ -4,6 +4,7 @@ namespace App\Console\Scheduled;
 
 use App\Models\Game;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use App\Services\AppString;
 use App\Services\Game\Aux\Caption;
 use App\Services\Game\Table;
@@ -83,7 +84,7 @@ class CheckTurnLeftTime {
     private function skipMaster(Game $game, BotApi $bot) {
         $hint = AppString::get('error.no_hint', null, $game->chat->language).' ∞';
         $color = $game->getColor($game->team);
-        $historyLine = GameTeamColor::COLORS[$color].' '.$hint;
+        $historyLine = TeamColor::where('shortname', $color)->first()->emoji.' '.$hint;
         $game->addToHistory('*'.$historyLine.'*');
         
         $game->updateStatus('playing', $game->team, 'agent');

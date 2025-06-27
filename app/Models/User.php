@@ -72,6 +72,11 @@ class User extends Model
         return $this->hasMany(UserBadge::class);
     }
 
+    public function vip(): HasOne
+    {
+        return $this->hasOne(UserVip::class);
+    }
+
     public function games()
     {
         return $this->belongsToMany(Game::class)->withPivot('team', 'role')->as('player');
@@ -144,10 +149,35 @@ class User extends Model
 
     public function isVip(): bool
     {
-        if ($this->id == env('TG_MY_ID')) {
-            return true;
+        return $this->vip()
+            ->where('expires_at', '>=', now())
+            ->orWhere('expires_at', null)
+            ->exists();
+    }
+
+    public function getVipType(): string|false
+    {
+        if(!$this->isVip()) {
+            return false;
         }
-        return false;
+
+        return $this->vip->type;
+    }
+
+    public function isVipType(string $type): bool
+    {
+        return $this->getVipType() === $type;
+    }
+
+    public function isVipInArray(array $types): bool
+    {
+        $vipType = $this->getVipType();
+        
+        if ($vipType === false) {
+            return false;
+        }
+
+        return in_array($vipType, $types, true);
     }
 
     public function hasBadge(string $badge): bool

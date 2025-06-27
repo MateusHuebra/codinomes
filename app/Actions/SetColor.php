@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Actions\Action;
 use App\Adapters\UpdateTypes\Update;
 use App\Models\GameTeamColor;
+use App\Models\TeamColor;
 use Exception;
 use TelegramBot\Api\BotApi;
 use App\Services\AppString;
@@ -22,13 +23,13 @@ class SetColor implements Action {
         $data = CDM::toArray($update->getData());
 
         if(isset($data[CDM::TEXT])) {
-            if(!GameTeamColor::isColorAllowedToUser($user, $data[CDM::TEXT], true)) {
+            if(!TeamColor::isColorAllowedToUser($user, $data[CDM::TEXT], true)) {
                 $bot->sendAlertOrMessage($update->getCallbackQueryId(), $update->getFromId(), 'error.color_taken');
                 return;
             }
 
             $user->default_color = $data[CDM::TEXT];
-            $color = GameTeamColor::COLORS[$data[CDM::TEXT]];
+            $color = TeamColor::where('shortname', $data[CDM::TEXT])->first()->emoji;
             
         } else {
             $user->default_color = null;
