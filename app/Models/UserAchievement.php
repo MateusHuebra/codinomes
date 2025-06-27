@@ -198,7 +198,7 @@ class UserAchievement extends Model
     }
 
     private static function doesUserHaveAllColors(Collection $colorStats) {
-        $colors = TeamColor::where('is_free', true)->get();
+        $colors = TeamColor::where('is_free', true)->get()->pluck('shortname')->toArray();
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
