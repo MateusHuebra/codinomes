@@ -25,10 +25,10 @@ class Guess implements Action {
             'a' => TeamColor::where('shortname', $game->getColor('a'))->first()->emoji,
         ];
         if($game->mode != Game::COOP) {
-            $emojis+= ['b' => TeamColor::where('emoji', $game->getColor('b'))->first()->emoji];
+            $emojis+= ['b' => TeamColor::where('shortname', $game->getColor('b'))->first()->emoji];
         }
         if($game->mode == Game::TRIPLE) {
-            $emojis+= ['c' => TeamColor::where('emoji', $game->getColor('c'))->first()->emoji];
+            $emojis+= ['c' => TeamColor::where('shortname', $game->getColor('c'))->first()->emoji];
         }
 
         $query = mb_strtoupper($update->getQuery(), 'UTF-8');
