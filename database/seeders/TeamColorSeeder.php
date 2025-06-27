@@ -155,6 +155,10 @@ class TeamColorSeeder extends Seeder
                 "shortname"  => "wood",
                 "emoji"  => "🪵",
             ],
+            [
+                "shortname"  => "metal",
+                "emoji"  => "🔧",
+            ],
         ];
 
         foreach ($colors as $color) {

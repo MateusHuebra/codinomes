@@ -395,6 +395,9 @@
         "wood": [
             "Wood"
         ],
+        "metal": [
+            "Metal"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

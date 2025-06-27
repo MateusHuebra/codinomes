@@ -395,6 +395,9 @@
         "wood": [
             "Madeira"
         ],
+        "metal": [
+            "Metal"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],
