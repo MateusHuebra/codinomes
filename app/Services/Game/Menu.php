@@ -16,7 +16,7 @@ class Menu {
 
     private static $user = null;
     
-    static function send(Game $game, BotApi $bot, User $user = null, bool $forceResend = false) : Void {
+    static function send(Game $game, BotApi $bot, User|null $user = null, bool $forceResend = false) : Void {
         self::setUserVar($user);
 
         $game->refresh();
@@ -47,10 +47,8 @@ class Menu {
         $game->save();
     }
 
-    private static function setUserVar(User $user = null) {
-        if($user) {
-            self::$user = $user;
-        }
+    private static function setUserVar(User|null $user = null) {
+        self::$user = $user;
     }
 
     public static function getLobbyText(Game $game, bool $showInfo = false, string $winner = null) {
@@ -196,7 +194,7 @@ class Menu {
         ];
         $buttonsArray[] = $line;
 
-        if($game->isMenu('color') && self::$user) {
+        if($game->isMenu('color')) {
             $buttonsArray = TeamColor::addColorsToKeyboard(self::$user, $buttonsArray);
         }
         

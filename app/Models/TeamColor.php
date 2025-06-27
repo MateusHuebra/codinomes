@@ -20,7 +20,7 @@ class TeamColor extends Model
     
     public $timestamps = false;
 
-    public static function addColorsToKeyboard(User $user, array $buttonsArray = [], string $event = CDM::CHANGE_COLOR) {
+    public static function addColorsToKeyboard(User|null $user = null, array $buttonsArray = [], string $event = CDM::CHANGE_COLOR) {
         $line = [];
         $i = 0;
 
@@ -49,18 +49,21 @@ class TeamColor extends Model
         return $buttonsArray;
     }
 
-    public static function getAvailableColors(User $user, bool $ignoreExtraColors = false)
+    public static function getAvailableColors(User|null $user = null, bool $ignoreExtraColors = false)
     {
-        if($user->isVipInArray(['dev', 'ultra_vip'])) {
+        if($user && $user->isVipInArray(['dev', 'ultra_vip'])) {
             return self::all();
         }
 
-        $query = self::where('is_free', true)
-            ->orWhereHas('creator', function ($query) use ($user) {
+        $query = self::where('is_free', true);
+        
+        if ($user) {
+            $query->orWhereHas('creator', function ($query) use ($user) {
                 $query->where('id', $user->id);
             });
+        }
 
-        if($user->isVipType('vip')) {
+        if($user && $user->isVipType('vip')) {
             return $query->orWhereHas('event')->get();
         }
 
