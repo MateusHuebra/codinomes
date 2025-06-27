@@ -392,6 +392,9 @@
         "bonnet" : [
             "Gorrinho"
         ],
+        "wood": [
+            "Madeira"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

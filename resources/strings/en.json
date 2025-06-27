@@ -392,6 +392,9 @@
         "bonnet": [
             "Bonnet"
         ],
+        "wood": [
+            "Wood"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],
