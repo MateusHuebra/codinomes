@@ -151,6 +151,10 @@ class TeamColorSeeder extends Seeder
                 "emoji"  => "🎅",
                 "event_id" => $events->get('christmas')?->id,
             ],
+            [
+                "shortname"  => "wood",
+                "emoji"  => "🪵",
+            ],
         ];
 
         foreach ($colors as $color) {
