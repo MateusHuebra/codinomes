@@ -198,32 +198,32 @@ class UserAchievement extends Model
     }
 
     private static function doesUserHaveAllColors(Collection $colorStats) {
-        $colors = GameTeamColor::BASE;
+        $colors = TeamColor::where('is_free', true)->get();
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
     private static function doesUserHaveAllAprilColors(Collection $colorStats) {
-        $colors = GameTeamColor::APRIL;
+        $colors = Event::where('shortname', 'easter')->first()->colors;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
     private static function doesUserHaveAllJuneColors(Collection $colorStats) {
-        $colors = GameTeamColor::JUNE;
+        $colors = Event::where('shortname', 'pride')->first()->colors;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
     private static function doesUserHaveAllSeptemberColors(Collection $colorStats) {
-        $colors = GameTeamColor::SEPTEMBER;
+        $colors = Event::where('shortname', 'independence')->first()->colors;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
     private static function doesUserHaveAllOctoberColors(Collection $colorStats) {
-        $colors = GameTeamColor::OCTOBER;
+        $colors = Event::where('shortname', 'halloween')->first()->colors;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
     private static function doesUserHaveAllDecemberColors(Collection $colorStats) {
-        $colors = GameTeamColor::DECEMBER;
+        $colors = Event::where('shortname', 'christmas')->first()->colors;
         return self::doesUserHaveAllInArrayColors($colorStats, $colors);
     }
 
