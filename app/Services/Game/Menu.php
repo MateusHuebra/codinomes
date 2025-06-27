@@ -14,11 +14,10 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
 
 class Menu {
 
-    private static $vip = false;
     private static $user = null;
     
     static function send(Game $game, BotApi $bot, User $user = null, bool $forceResend = false) : Void {
-        self::setVipVar($user);
+        self::setUserVar($user);
 
         $game->refresh();
         $hasRequiredPlayers = $game->hasRequiredPlayers();
@@ -48,10 +47,9 @@ class Menu {
         $game->save();
     }
 
-    private static function setVipVar(User $user = null) {
+    private static function setUserVar(User $user = null) {
         if($user) {
             self::$user = $user;
-            self::$vip = $user->isVip();
         }
     }
 
@@ -198,7 +196,7 @@ class Menu {
         ];
         $buttonsArray[] = $line;
 
-        if($game->isMenu('color')) {
+        if($game->isMenu('color') && self::$user) {
             $buttonsArray = TeamColor::addColorsToKeyboard(self::$user, $buttonsArray);
         }
         
