@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\TeamColor;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class TeamColorSeeder extends Seeder
@@ -16,7 +17,7 @@ class TeamColorSeeder extends Seeder
     public function run()
     {
         $events = Event::all()->keyBy('shortname');
-        $users = Event::all()->keyBy('id');
+        $users = User::all()->keyBy('id');
 
         $colors = [
             [
