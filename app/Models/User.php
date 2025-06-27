@@ -150,8 +150,10 @@ class User extends Model
     public function isVip(): bool
     {
         return $this->vip()
-            ->where('expires_at', '>=', now())
-            ->orWhere('expires_at', null)
+            ->where(function ($query) {
+                $query->where('expires_at', '>=', now())
+                ->orWhereNull('expires_at');
+            })
             ->exists();
     }
 
