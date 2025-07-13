@@ -67,6 +67,12 @@
         "sp_crazy_info": [
             "Super Crazy Mode, it's like Crazy Mode, but in addition to the colors, the actual words in play are also changed"
         ],
+        "insane": [
+            "INSANE beta"
+        ],
+        "insane_info": [
+            "Insane mode, it's like Super Crazy mode, but the player roles are also swapped."
+        ],
         "triple": [
             "TRIPLE"
         ],

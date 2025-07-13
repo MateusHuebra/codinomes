@@ -67,6 +67,12 @@
         "sp_crazy_info": [
             "Modo super maluco, é como o modo maluco só que além das cores as próprias palavras em jogo são trocadas também"
         ],
+        "insane": [
+            "INSANO beta"
+        ],
+        "insane_info": [
+            "Modo insano, é como o modo super maluco, só que os papeis de jogador são trocados também."
+        ],
         "triple": [
             "TRIPLO"
         ],
