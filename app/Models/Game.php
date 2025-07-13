@@ -351,16 +351,12 @@ class Game extends Model
     private function swapRoles() {
         $currentMaster = $this->users()->fromTeamRole($this->team, 'master')->first();
 
-        $nextMaster = $this->users()
-            ->fromTeamRole($this->team, 'agent')
-            ->where('user.id', '>', $currentMaster->id)
+        $nextMaster = $this->users()->fromTeamRole($this->team, 'agent')
+            ->where('users.id', '>', $currentMaster->id)
             ->first();
 
         if(!$nextMaster) {
-            $nextMaster = $this->users()
-                ->fromTeamRole($this->team, 'agent')
-                ->orderBy('player.id', 'asc')
-                ->first();
+            $nextMaster = $this->users()->fromTeamRole($this->team, 'agent')->first();
         }
 
         $nextMaster->player->role = 'master';
