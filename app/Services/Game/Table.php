@@ -161,7 +161,7 @@ class Table {
     }
 
     private static function getCards(Game $game) {
-        if(in_array($game->mode, [Game::CRAZY, Game::SUPER_CRAZY])) {
+        if(in_array($game->mode, [Game::CRAZY, Game::SUPER_CRAZY, Game::INSANE])) {
             return $game->cards()->get();
         } else {
             return $game->cards;

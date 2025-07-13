@@ -25,6 +25,7 @@ class Game extends Model
     const EIGHTBALL = '8ball';
     const CRAZY = 'crazy';
     const SUPER_CRAZY = 'sp_crazy';
+    const INSANE = 'insane';
     const EMOJI = 'emoji';
     const TRIPLE = 'triple';
     const COOP = 'coop';
@@ -37,6 +38,7 @@ class Game extends Model
         self::EIGHTBALL => '🎱',
         self::CRAZY => '🤪',
         self::SUPER_CRAZY => '🤯',
+        self::INSANE => '🧨',
         self::EMOJI => '📲',
         self::TRIPLE => '3️⃣',
         self::COOP => '👥'
@@ -335,11 +337,40 @@ class Game extends Model
         } else if($this->mode == self::SUPER_CRAZY) {
             GameCard::randomizeUnrevealedCardsWords($this);
             GameCard::randomizeUnrevealedCardsColors($this);
+        } else if ($this->mode == self::INSANE) {
+            GameCard::randomizeUnrevealedCardsWords($this);
+            GameCard::randomizeUnrevealedCardsColors($this, true);
+            $this->swapRoles($nextTeam);
         }
 
         $this->updateStatus('playing', $nextTeam, 'master');
         $this->attempts_left = null;
         $this->save();
+    }
+
+    private function swapRoles(string $team) {
+        $currentMaster = $this->users()->fromTeamRole($team, 'master')->first();
+
+        $currentMasterPivotId = $currentMaster->player->id ?? null;
+
+        $nextMaster = $this->users()
+            ->fromTeamRole($team, 'agent')
+            ->wherePivot('id', '>', $currentMasterPivotId)
+            ->orderBy('player.id', 'asc')
+            ->first();
+
+        if(!$nextMaster) {
+            $nextMaster = $this->users()
+                ->fromTeamRole($team, 'agent')
+                ->orderBy('player.id', 'asc')
+                ->first();
+        }
+
+        $nextMaster->player->role = 'master';
+        $nextMaster->player->save();
+
+        $currentMaster->player->role = 'agent';
+        $currentMaster->player->save();
     }
 
     public function nextStatusCoop() {

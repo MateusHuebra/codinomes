@@ -186,6 +186,9 @@ class Message implements UpdateHandler {
         } else if(in_array($command, ['new_supercrazy', 'novo_supermaluco'])) {
             return new Create(Game::SUPER_CRAZY);
 
+        } else if(in_array($command, ['new_insane', 'novo_insano'])) {
+            return new Create(Game::INSANE);
+
         } else if(in_array($command, ['new_emoji', 'novo_emoji'])) {
             return new Create(Game::EMOJI);
 
