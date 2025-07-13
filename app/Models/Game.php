@@ -340,7 +340,7 @@ class Game extends Model
         } else if ($this->mode == self::INSANE) {
             GameCard::randomizeUnrevealedCardsWords($this);
             GameCard::randomizeUnrevealedCardsColors($this, true);
-            $this->swapRoles($nextTeam);
+            $this->swapRoles();
         }
 
         $this->updateStatus('playing', $nextTeam, 'master');
@@ -348,20 +348,20 @@ class Game extends Model
         $this->save();
     }
 
-    private function swapRoles(string $team) {
-        $currentMaster = $this->users()->fromTeamRole($team, 'master')->first();
+    private function swapRoles() {
+        $currentMaster = $this->users()->fromTeamRole($this->team, 'master')->first();
 
         $currentMasterPivotId = $currentMaster->player->id ?? null;
 
         $nextMaster = $this->users()
-            ->fromTeamRole($team, 'agent')
+            ->fromTeamRole($this->team, 'agent')
             ->wherePivot('id', '>', $currentMasterPivotId)
             ->orderBy('player.id', 'asc')
             ->first();
 
         if(!$nextMaster) {
             $nextMaster = $this->users()
-                ->fromTeamRole($team, 'agent')
+                ->fromTeamRole($this->team, 'agent')
                 ->orderBy('player.id', 'asc')
                 ->first();
         }
