@@ -404,6 +404,9 @@
         "metal": [
             "Metal"
         ],
+        "leoprd": [
+            "Onça"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

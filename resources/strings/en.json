@@ -404,6 +404,9 @@
         "metal": [
             "Metal"
         ],
+        "leoprd": [
+            "Leopard"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],
