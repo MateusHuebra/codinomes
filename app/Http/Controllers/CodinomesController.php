@@ -38,12 +38,12 @@ class CodinomesController extends Controller
 
         try {
             if($action) {
-                DB::beginTransaction();
+                //DB::beginTransaction();
                 $action->run($update, $bot);
-                DB::commit();
+                //DB::commit();
             }
         } catch(Throwable $e) {
-            DB::rollBack();
+            //DB::rollBack();
             $errorMessage = '\#Exception at '.ServerLog::$updateId.':```java'.PHP_EOL;
             $errorMessage.= $e->getMessage().PHP_EOL.PHP_EOL;
             $errorMessage.= $e->getFile().' line '.$e->getLine().'```';

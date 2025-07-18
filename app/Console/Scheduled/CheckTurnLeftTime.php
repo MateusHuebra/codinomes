@@ -29,7 +29,7 @@ class CheckTurnLeftTime {
         $now = strtotime('now');
         $games = Game::where('status', 'playing')->where('mode', '!=', 'coop')->get();
         foreach ($games as $game) {
-            DB::beginTransaction();
+            //DB::beginTransaction();
             $timer = $game->chat->timer;
             if($timer == null) {
                 continue;
@@ -38,9 +38,9 @@ class CheckTurnLeftTime {
 
             try {
                 $this->execute($game, $timer, $time, $now, $bot);
-                DB::commit();
+                //DB::commit();
             } catch (\Throwable $th) {
-                DB::rollBack();
+                //DB::rollBack();
                 if($th->getMessage() == "Forbidden: bot was kicked from the supergroup chat") {
                     $game->stop($bot);
                     $bot->sendMessage(env('TG_LOG_ID'), "CheckTurnLeftTime game $game->id stopped because bot kicked from chat $game->chat_id");
