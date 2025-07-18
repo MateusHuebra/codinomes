@@ -407,6 +407,10 @@
         "leoprd": [
             "Leopard"
         ],
+        "diamnd":
+        [
+            "Diamond"
+        ],
         "default": [
             "Choose your default color:\nCurrent: {color}"
         ],

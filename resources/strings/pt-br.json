@@ -407,6 +407,10 @@
         "leoprd": [
             "Onça"
         ],
+        "diamnd":
+        [
+            "Diamante"
+        ],
         "default": [
             "Defina sua cor padrão:\nAtual: {color}"
         ],

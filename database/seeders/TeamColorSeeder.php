@@ -164,6 +164,11 @@ class TeamColorSeeder extends Seeder
                 "emoji"  => "🐆",
                 'creator_id' => $users->get(668597631)?->id, // Leticia ADM
             ],
+            [
+                "shortname"  => "diamnd",
+                "emoji"  => "💎",
+                'creator_id' => $users->get(668597631)?->id, // Leticia ADM
+            ],
         ];
 
         foreach ($colors as $color) {
