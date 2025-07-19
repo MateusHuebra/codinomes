@@ -27,16 +27,19 @@ class User extends Model
     public function getNameAttribute($value)
     {
         // Remove emojis using regex
-        $cleanName = preg_replace('/[\x{1F600}-\x{1F64F}'
-            . '\x{1F300}-\x{1F5FF}'
-            . '\x{1F680}-\x{1F6FF}'
-            . '\x{1F1E0}-\x{1F1FF}'
-            . '\x{2600}-\x{26FF}'
-            . '\x{2700}-\x{27BF}'
-            . '\x{FE00}-\x{FE0F}'
-            . '\x{1F900}-\x{1F9FF}'
-            . '\x{1F018}-\x{1F270}'
-            . '\x{238C}-\x{2454}]++/u', '', $value);
+        $cleanName = preg_replace('/[\x{1F600}-\x{1F64F}'  // Emoticons
+            . '\x{1F300}-\x{1F5FF}'                       // Misc Symbols and Pictographs
+            . '\x{1F680}-\x{1F6FF}'                       // Transport and Map
+            . '\x{1F1E0}-\x{1F1FF}'                       // Regional Indicator Symbols
+            . '\x{2600}-\x{26FF}'                         // Misc symbols
+            . '\x{2700}-\x{27BF}'                         // Dingbats
+            . '\x{FE00}-\x{FE0F}'                         // Variation Selectors
+            . '\x{1F900}-\x{1F9FF}'                       // Supplemental Symbols and Pictographs
+            . '\x{1FA70}-\x{1FAFF}'                       // Symbols and Pictographs Extended-A
+            . '\x{1F018}-\x{1F270}'                       // Various Asian characters / games
+            . '\x{238C}-\x{2454}'                         // Misc items
+            . '\x{1FB00}-\x{1FBFF}'                       // Symbols and Pictographs Extended-B (Unicode 15)
+            . ']++/u', '', $value);
 
         $cleanName = trim($cleanName);
 
